@@ -1,0 +1,5 @@
+dataset_id: evalplus
+role: functional_smoke
+revision: 0e26d76e602a07a21b114fadd325f92c9da875e9
+fixed_test_order: true
+evaluator_sidecar: required

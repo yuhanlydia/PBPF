@@ -1,0 +1,76 @@
+name: frozen-7b-16gb
+profile: 16gb
+formal: false
+stage: frozen_prediction
+model:
+  id: Qwen/Qwen2.5-Coder-7B-Instruct
+  revision: c03e6d358207e414f1eca0bb1891e29f1db0e242
+data:
+  id: runbugrun
+  revision: 374251a9d65410f37e1136049cb7ff5dcca3d0ae
+container:
+  image: ghcr.io/pbpf/experiments:2026-09-08
+  digest: sha256:8f7cb447d8e0a8892ab72772647cbe683fdbc8748e2b80ce2454b3434173e12f
+protocol:
+  fixed_test_order: true
+  rounds: 4
+  early_stop: false
+  candidates: 8
+  visible_token_budget: 2048
+feedback_mode: status_only
+budget:
+  max_visible_tokens: 250000
+  max_generated_tokens: 16384
+  max_model_calls: 50
+  max_executions: 4096
+  max_cpu_seconds: 3600.0
+  max_wall_seconds: 3600.0
+  max_gpu_hours: 1.0
+candidate_bank:
+  model_samples: 6
+  deterministic_mutants: 2
+  temperature: 0.8
+  top_p: 0.95
+  mutation_registry_required: true
+filtering:
+  ess_fraction: 0.5
+hardware:
+  context: 2048
+  microbatch: 1
+  accumulation: 32
+  particles: 8
+  particle_chunk: 1
+  conditioned_layers: 4
+  delta_rank: 4
+  precision: nf4_bf16
+baseline:
+  name: pbpf_low_rank_kv
+  provenance_mode: controlled_ablation
+arms:
+  - raw_transcript
+  - last_observation
+  - window_1
+  - window_2
+  - window_4
+  - orderless_set
+  - pass_rate
+  - matched_gru
+  - matched_exchangeable
+  - map
+  - posterior_mean
+  - p_way_ensemble
+  - random_matched_norm
+  - shared_kv_delta
+  - pbpf_soft_prompt
+  - pbpf_low_rank_kv
+  - tokenwise_remixture_fault
+  - independent_sampling
+  - self_debug
+  - rex
+  - rlef_paper_spec
+  - ldb
+  - rollout_roulette
+  - rsp
+  - upskill_optional
+  - ladi_rl_audit_required
+claim_status: preregistered_configuration_only

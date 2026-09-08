@@ -1,0 +1,5 @@
+dataset_id: swebench_verified
+role: repository_final
+revision: 0e26d76e602a07a21b114fadd325f92c9da875e9
+fixed_test_order: true
+evaluator_sidecar: required

@@ -1,0 +1,4 @@
+role: architecture_replication
+model_id: Qwen/Qwen3-8B
+revision: b968826d9c46dd6066d109eabc6255188de91218
+license: Apache-2.0

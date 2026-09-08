@@ -1,0 +1,74 @@
+independent_sampling:
+  provenance_mode: controlled_ablation
+  paper_url: null
+  repository_url: https://github.com/yuhanlydia/PBPF
+  implementation_revision: b91f3d1415981cd4fc59bae9050c9745f24b0d94
+  execution_enabled: false
+  unavailable_reason: standalone independent-sampling runner is not integrated
+  license_hash: 2af71558e438db0b73a20beab92dc278a94e1bbe974c00c1a33e3ab62d53a608
+self_debug:
+  provenance_mode: paper_spec_reimplementation
+  paper_url: https://arxiv.org/abs/2304.05128
+  repository_url: https://github.com/yuhanlydia/PBPF
+  implementation_revision: b91f3d1415981cd4fc59bae9050c9745f24b0d94
+  execution_enabled: false
+  unavailable_reason: Self-Debug paper-spec runtime is not integrated
+  license_hash: 2af71558e438db0b73a20beab92dc278a94e1bbe974c00c1a33e3ab62d53a608
+rex:
+  provenance_mode: official_adapter
+  paper_url: https://arxiv.org/abs/2405.17503
+  repository_url: https://github.com/haotang1995/REx
+  upstream_revision: 371e879da5b1fff0d32a695ad37dcac50f74721b
+  execution_enabled: false
+  unavailable_reason: external REx runtime is not integrated in this repository
+  license_hash: 2af71558e438db0b73a20beab92dc278a94e1bbe974c00c1a33e3ab62d53a608
+rlef:
+  provenance_mode: paper_spec_reimplementation
+  paper_url: https://arxiv.org/abs/2410.02089
+  repository_url: null
+  implementation_revision: b91f3d1415981cd4fc59bae9050c9745f24b0d94
+  execution_enabled: false
+  unavailable_reason: RLEF paper-spec training runtime is not integrated
+  license_hash: e9f024052816d113cb04e350f55c8ecd47b53012c44c8c697bc47b1b9d35254d
+  official: false
+ldb:
+  provenance_mode: official_adapter
+  paper_url: https://arxiv.org/abs/2402.16906
+  repository_url: https://github.com/FloridSleeves/LLMDebugger
+  upstream_revision: 49ac191f181d47911cf38e5b9944fbbe6d4a6e60
+  execution_enabled: false
+  unavailable_reason: external LDB runtime is not integrated in this repository
+  license_hash: 2af71558e438db0b73a20beab92dc278a94e1bbe974c00c1a33e3ab62d53a608
+rollout_roulette:
+  provenance_mode: paper_spec_reimplementation
+  paper_url: https://arxiv.org/abs/2502.01618
+  repository_url: https://probabilistic-inference-scaling.github.io/
+  implementation_revision: b91f3d1415981cd4fc59bae9050c9745f24b0d94
+  execution_enabled: false
+  unavailable_reason: Rollout Roulette paper-spec runtime is not integrated
+  license_hash: 2af71558e438db0b73a20beab92dc278a94e1bbe974c00c1a33e3ab62d53a608
+  particle_semantics: language_trajectories
+rsp:
+  provenance_mode: controlled_ablation
+  paper_url: null
+  repository_url: https://github.com/yuhanlydia/PBPF
+  implementation_revision: b91f3d1415981cd4fc59bae9050c9745f24b0d94
+  execution_enabled: true
+  license_hash: 2af71558e438db0b73a20beab92dc278a94e1bbe974c00c1a33e3ab62d53a608
+upskill:
+  provenance_mode: official_adapter
+  paper_url: null
+  repository_url: null
+  execution_enabled: false
+  unavailable_reason: no verified UpSkill adapter is integrated
+  license_hash: 2af71558e438db0b73a20beab92dc278a94e1bbe974c00c1a33e3ab62d53a608
+  optional: true
+ladi_rl:
+  provenance_mode: official_adapter
+  paper_url: null
+  repository_url: null
+  execution_enabled: false
+  unavailable_reason: independent LaDi-RL code audit has not passed
+  license_hash: 2af71558e438db0b73a20beab92dc278a94e1bbe974c00c1a33e3ab62d53a608
+  optional: true
+  enabled_only_after_independent_code_audit: true

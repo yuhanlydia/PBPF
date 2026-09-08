@@ -1,0 +1,4 @@
+role: primary
+model_id: Qwen/Qwen2.5-Coder-7B-Instruct
+revision: c03e6d358207e414f1eca0bb1891e29f1db0e242
+license: Apache-2.0
