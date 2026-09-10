@@ -1,0 +1,51 @@
+name: local-real-7b-pilot
+profile: 16gb
+formal: false
+stage: frozen_prediction
+model:
+  id: Qwen/Qwen2.5-Coder-7B-Instruct
+  revision: c03e6d358207e414f1eca0bb1891e29f1db0e242
+data:
+  id: runbugrun
+  revision: 837e7006c28153022469fb035a38f4652e3032b6
+container:
+  image: local-python-restricted-pilot
+  digest: sha256:8f7cb447d8e0a8892ab72772647cbe683fdbc8748e2b80ce2454b3434173e12f
+protocol:
+  fixed_test_order: true
+  rounds: 4
+  early_stop: false
+  candidates: 8
+  visible_token_budget: 1024
+feedback_mode: status_only
+budget:
+  max_visible_tokens: 50000
+  max_generated_tokens: 2048
+  max_model_calls: 50
+  max_executions: 16
+  max_cpu_seconds: 1200.0
+  max_wall_seconds: 2400.0
+  max_gpu_hours: 1.0
+candidate_bank:
+  model_samples: 6
+  deterministic_mutants: 2
+  temperature: 0.8
+  top_p: 0.95
+  mutation_registry_required: true
+filtering:
+  ess_fraction: 0.5
+hardware:
+  context: 1024
+  microbatch: 1
+  accumulation: 1
+  particles: 8
+  particle_chunk: 1
+  conditioned_layers: 0
+  delta_rank: 0
+  precision: nf4_bf16
+baseline:
+  name: pbpf_soft_prompt
+  provenance_mode: controlled_ablation
+arms:
+  - pbpf_soft_prompt
+claim_status: local-real-pilot-no-formal-claim

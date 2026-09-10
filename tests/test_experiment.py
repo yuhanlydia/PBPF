@@ -170,6 +170,24 @@ def test_repair_runs_four_rounds_without_early_stop_or_test_reordering():
     assert result.compute_ledger.cpu_seconds > 0
 
 
+def test_fixed_rounds_preserve_passing_elite_and_repair_unsolved_slots():
+    class OnePassSandbox(RecordingSandbox):
+        def execute(self, code, test_id):
+            self.calls.append((code, test_id))
+            return SandboxResult("PASS" if code == "code-0" else "WRONG_OUTPUT", "status")
+
+    class HistoryScorer(RepairBackend):
+        def predict_success(self, task, candidate, history, *, request_text):
+            return float(all(item["outcome"] == "PASS" for item in history))
+
+    result = run_repair(
+        initial_bank(), backend=HistoryScorer(), sandbox=OnePassSandbox(),
+        rounds=4, budget=repair_budget(),
+    )
+    assert result.final_candidate.code == "code-0"
+    assert all(event["selected_candidate"] != initial_bank().candidates[0].content_hash for event in result.events)
+
+
 def test_multiple_arms_receive_the_same_immutable_candidate_bank():
     bank = initial_bank()
     backends = {"pbpf": RepairBackend(), "gru": RepairBackend()}

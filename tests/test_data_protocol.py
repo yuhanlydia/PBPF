@@ -15,7 +15,7 @@ from pbpf.manifest import (
     trainer_view,
     validate_initial_candidate_bank,
 )
-from pbpf.sandbox import FakeSandbox
+from pbpf.sandbox import FakeSandbox, LocalPythonSandbox
 
 
 def task(task_id, groups=("source:1",), test_order=("t1", "t2")):
@@ -264,3 +264,27 @@ def test_fake_sandbox_is_deterministic_and_infrastructure_failure_is_separate():
     result = sandbox.execute("x", "t2")
     assert result.outcome is None
     assert result.infrastructure_failure is True
+
+
+def test_local_python_sandbox_checks_hidden_stdio_and_classifies_failures():
+    sandbox = LocalPythonSandbox(
+        {
+            "double": {"input": "3\n", "output": "6\n"},
+            "empty": {"input": "", "output": "ok\n"},
+        },
+        timeout_seconds=0.2,
+    )
+    assert sandbox.execute("print(int(input()) * 2)", "double").outcome == "PASS"
+    assert sandbox.execute("print(7)", "double").outcome == "WRONG_OUTPUT"
+    assert sandbox.execute("raise RuntimeError('x')", "empty").outcome == "RUNTIME_EXCEPTION"
+    assert sandbox.execute("def broken(:\n pass", "empty").outcome == "COMPILE_ERROR"
+    assert sandbox.execute("while True: pass", "empty").outcome == "TIMEOUT"
+
+
+def test_local_python_sandbox_runs_function_assertion_harness():
+    sandbox = LocalPythonSandbox(
+        {"function": {"harness": "\nassert add_one(2) == 3\n"}},
+        timeout_seconds=0.5,
+    )
+    assert sandbox.execute("def add_one(x):\n    return x + 1\n", "function").outcome == "PASS"
+    assert sandbox.execute("def add_one(x):\n    return x\n", "function").outcome == "WRONG_OUTPUT"

@@ -378,7 +378,7 @@ def run_arm(
         ]
     )
     payload = {
-        "status": "smoke-only-no-claim",
+        "status": validated.get("claim_status", "unlabeled-no-claim"),
         "config_hash": canonical_config_hash(validated),
         "prediction_bank_hash": prediction.bank_hash,
         "evaluator_truth_ref": f"sha256:{evaluator_truth_hash}",

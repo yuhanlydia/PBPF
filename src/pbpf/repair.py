@@ -159,7 +159,7 @@ def _request_text(
     history: Sequence[Mapping[str, Any]],
     round_index: int | None = None,
 ) -> str:
-    return json.dumps(
+    payload = json.dumps(
         {
             "operation": operation,
             "task": dict(task),
@@ -170,6 +170,14 @@ def _request_text(
         sort_keys=True,
         separators=(",", ":"),
     )
+    if operation == "repair":
+        return (
+            "Repair the candidate described in this protocol record. Return only the complete "
+            "corrected Python source, with no Markdown fence or explanation.\n"
+            + payload
+            + "\nCorrected Python source:\n"
+        )
+    return payload
 
 
 def run_repair(
@@ -372,7 +380,20 @@ def run_repair(
 
     for round_index in range(1, rounds + 1):
         scores = {candidate.content_hash: score(candidate) for candidate in slots}
-        active = select_active_slot(slots, scores, generation)
+        unsolved = [
+            candidate
+            for candidate in slots
+            if not (
+                len(histories[candidate.content_hash]) == len(task.test_order)
+                and all(
+                    observation.outcome == "PASS"
+                    for observation in histories[candidate.content_hash]
+                )
+            )
+        ]
+        # Fixed-round evaluation continues after success, but already-correct
+        # candidates remain immutable elites while an unsolved slot exists.
+        active = select_active_slot(unsolved or slots, scores, generation)
         visible_history = feedback_view(histories[active.content_hash], feedback_mode)
         request = _request_text("repair", public_task, active, visible_history, round_index)
         remaining_generated = budget.max_generated_tokens - token_ledger.generated
