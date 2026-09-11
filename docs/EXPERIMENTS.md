@@ -21,14 +21,21 @@ scripts/run_smoke.sh
 
 The smoke runs sequential per-observation particle updates, candidate/test-keyed
 prediction, four conditioned repairs, fail-closed stage gates, and an immutable
-run bundle without a model download. The 7B launchers validate the exact config
-they would hand to an authorized orchestration job:
+run bundle without a model download. The 7B launchers execute the local
+real-model diagnostic runner. They default to all 164 EvalPlus HumanEval tasks;
+set `PBPF_START_INDEX`, `PBPF_NUM_TASKS`, and `PBPF_MAX_NEW_TOKENS` to resume in
+smaller chunks:
 
 ```bash
 scripts/run_frozen_7b.sh configs/experiments/frozen_7b_16gb.yaml
 scripts/run_repair.sh configs/experiments/repair_7b_24gb.yaml
 scripts/run_repair.sh configs/experiments/formal_h200.yaml
 ```
+
+These launchers produce real diagnostic artifacts, but the shipped configs
+remain `claim_status: preregistered_configuration_only`; a local run is not
+formal evidence until the registered evaluator and multi-seed aggregator are
+supplied.
 
 ## Stages and gates
 
