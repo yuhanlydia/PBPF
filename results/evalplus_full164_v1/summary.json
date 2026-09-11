@@ -1,0 +1,26 @@
+{
+  "benchmark": "HumanEval",
+  "benchmark_tasks": 164,
+  "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+  "model_revision": "c03e6d358207e414f1eca0bb1891e29f1db0e242",
+  "initial_solved": 50,
+  "initial_rate": 0.3048780487804878,
+  "final_solved": 84,
+  "final_rate": 0.5121951219512195,
+  "gained": 34,
+  "regressed": 0,
+  "absolute_gain": 0.2073170731707317,
+  "gain_ci95_bootstrap": [0.14634146341463414, 0.27439024390243905],
+  "failure_counts": {
+    "COMPILE_ERROR": 624,
+    "RUNTIME_EXCEPTION": 990,
+    "TIMEOUT": 0,
+    "WRONG_OUTPUT": 225
+  },
+  "batch_artifacts": [
+    "evalplus-full164-v1",
+    "evalplus-full164-v1-part2",
+    "evalplus-full164-v1-part3"
+  ],
+  "evidence_status": "real_repair_diagnostic_not_matched_baseline_evidence"
+}
