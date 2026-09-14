@@ -531,8 +531,12 @@ def test_all_experiment_configs_validate_and_cover_profiles_and_primary_arms():
         "frozen_7b_16gb",
         "repair_7b_24gb",
         "formal_h200",
+        "iclr_pbpf",
     }
-    configs = [validate_experiment(load_experiment(path)) for path in paths]
+    from pbpf.iclr_config import resolve_config
+    matrix = resolve_config(root / "configs/experiments/iclr_pbpf.yaml", "local_cpu")
+    assert matrix.science["protocol"]["initial_origin"] == "actor_sample"
+    configs = [validate_experiment(load_experiment(path)) for path in paths if path.stem != "iclr_pbpf"]
     assert {config["profile"] for config in configs} == {"cpu", "16gb", "24gb", "h200_formal"}
     required = {
         "raw_transcript",

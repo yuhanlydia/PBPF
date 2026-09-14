@@ -1,0 +1,56 @@
+schema: pbpf-development-ablations-v1
+design: one_factor_at_a_time
+tasks: 256
+seeds: [1701, 1702, 1703]
+confirmatory_controls: [shuffled_evidence, wrong_candidate, masked_outcomes, random_latent, faulty_shared_belief]
+factors:
+  particles: [1, 2, 4, 8, 16, 32]
+  memory: [last, window_two, window_four, full_transcript, deepsets]
+  conditioning: [sample_once, map, posterior_mean, token_remix_fault, full_ensemble]
+  prefix_tokens: [2, 4, 8, 16]
+  injection: [noop, random, text, soft_prefix, k, v, kv]
+  proposal: [uniform, learned]
+  likelihood: [uniform, learned]
+  transition: [uniform, learned]
+  proposal_correction: ['on', off_biased]
+  resampling: [never, every_step, ess]
+  rejuvenation: [mala, 'off', jitter_biased]
+nonmatched_information: [exception_trace, full_trace]
+patches:
+  - {particles: 1}
+  - {particles: 2}
+  - {particles: 4}
+  - {particles: 16}
+  - {particles: 32}
+  - {memory: last}
+  - {memory: window_two}
+  - {memory: window_four}
+  - {memory: full_transcript}
+  - {memory: deepsets}
+  - {conditioning: map}
+  - {conditioning: posterior_mean}
+  - {conditioning: token_remix_fault}
+  - {conditioning: full_ensemble}
+  - {prefix_tokens: 2}
+  - {prefix_tokens: 4}
+  - {prefix_tokens: 16}
+  - {injection: noop}
+  - {injection: random}
+  - {injection: text}
+  - {injection: k}
+  - {injection: v}
+  - {injection: kv}
+  - {proposal: uniform}
+  - {likelihood: uniform}
+  - {transition: uniform}
+  - {proposal_correction: off_biased}
+  - {resampling: never}
+  - {resampling: every_step}
+  - {rejuvenation: 'off'}
+  - {rejuvenation: jitter_biased}
+controls:
+  shuffled_evidence: {seed: task_sha256, scope: already_observed_outcome_test_pairings}
+  wrong_candidate: {scope: same_task_same_round, missing_donor: outcome_masked}
+  masked_outcomes: {remove: [outcome, feedback, outcome_derived_features]}
+  random_latent: {radius: sqrt_sum_posterior_weight_times_squared_l2_norm}
+  faulty_shared_belief: {fault: cross_candidate_mass_or_evidence_sharing}

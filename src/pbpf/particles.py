@@ -21,6 +21,11 @@ def _logsumexp(values: np.ndarray) -> float:
     return maximum + float(np.log(np.exp(values - maximum).sum()))
 
 
+def logsumexp(values: np.ndarray | list[float]) -> float:
+    """Stable log total mass, permitting zero-mass (-inf) entries."""
+    return _logsumexp(_as_vector(values, "values"))
+
+
 def normalize_log_weights(log_weights: np.ndarray | list[float]) -> np.ndarray:
     values = _as_vector(log_weights, "log_weights")
     return values - _logsumexp(values)

@@ -1,46 +1,64 @@
 # PBPF
 
-PBPF is a standalone experiment package for execution-conditioned particle
-beliefs in coding repair. It implements the preregistered finite audit, immutable
-trajectory protocol, frozen-prediction interfaces, coherent particle-conditioned
-generation, fixed-order four-round repair, and optional Transformers/PEFT QLoRA
-hooks. This repository contains software and preregistered configurations only;
-it makes no empirical performance or repair-gain claim.
+Candidate-specific particle beliefs for execution-conditioned Python repair.
+This repository contains mathematical/data/arm primitives, an executable synthetic
+runner, and a prospective ICLR 2027 S0–S4 experiment contract. **No formal PBPF
+results are included.** The historical `50 -> 84 / 164` EvalPlus screen is a
+legacy diagnostic, not PBPF evidence.
 
-## Install and validate
+## Install and run offline
+
+After the reviewed feature branch is published:
 
 ```bash
 git clone https://github.com/yuhanlydia/PBPF.git
 cd PBPF
-python -m venv .venv
+git fetch origin codex/pbpf-iclr-formal
+git switch --track origin/codex/pbpf-iclr-formal
+python3.12 -m venv .venv
 . .venv/bin/activate
-python -m pip install --upgrade pip
 python -m pip install -e '.[test]'
-pbpf-run doctor
-pbpf-run plan configs/experiments/exact_smoke.yaml
-scripts/run_smoke.sh
+pbpf-iclr doctor --config configs/experiments/iclr_pbpf.yaml --profile local_cpu --dry-run
+pbpf-iclr prepare --config configs/experiments/iclr_pbpf.yaml --profile local_cpu --resume
+bash scripts/run_iclr.sh --config configs/experiments/iclr_pbpf.yaml --profile local_cpu --resume
+pbpf-iclr aggregate --config configs/experiments/iclr_pbpf.yaml --profile local_cpu
+pbpf-iclr verify --config configs/experiments/iclr_pbpf.yaml --profile local_cpu
+pbpf-iclr package --config configs/experiments/iclr_pbpf.yaml --profile local_cpu
 ```
 
-The default install is CPU-only and never imports or downloads model weights.
-Install `.[ml]` only on an experiment host. `doctor` uses module discovery rather
-than importing Torch, Transformers, PEFT, bitsandbytes, or datasets. The smoke
-launcher executes the full protocol against an in-memory Transformers-compatible
-model; the 7B launchers perform fail-closed plan validation before an operator
-supplies authorized model/data mounts and available baseline adapters.
+An existing reviewed checkout can start at environment creation. Python 3.11 is
+also supported. `local_cpu` runs the complete 15-stage synthetic DAG without
+Torch, Transformers, datasets, sockets, downloads, GPU time, or projected GPU
+cost. Its label is always `smoke-only-no-claim`; synthetic S0–S4 control-flow
+coverage is not an empirical finite audit, training run, or replication.
 
-## Protocol invariants
+## Formal entrypoint and deployment limitation
 
-- The five modeled outcomes are PASS, WRONG_OUTPUT, RUNTIME_EXCEPTION, TIMEOUT,
-  and COMPILE_ERROR; infrastructure failures are separate.
-- Tests execute in manifest order with G=8 shared initial candidates and exactly
-  four repair rounds. Arms cannot skip, repeat, reorder, or early-stop tests.
-- Future outcomes, gold solutions/patches, expected outputs, and SWE-bench
-  `test_patch`, `FAIL_TO_PASS`, and `PASS_TO_PASS` remain evaluator-side.
-- Evaluator outcomes are keyed by candidate content hash and test ID; task-global
-  outcomes are not accepted for prediction scoring.
-- A posterior particle is sampled once per continuation. Token-wise re-mixture is
-  available only as the explicitly faulty `tokenwise_remixture_fault` ablation.
-- Reports and banks are create-once and checksum-verified.
+```bash
+bash scripts/run_iclr.sh --config configs/experiments/iclr_pbpf.yaml --profile slurm_h200x16 --resume
+```
 
-See [EXPERIMENTS](docs/EXPERIMENTS.md), [BASELINES](docs/BASELINES.md),
-[DATA](docs/DATA.md), and [ARTIFACTS](docs/ARTIFACTS.md) for executable protocols.
+This exact command is the single formal launcher, **not a way to bypass cluster
+provisioning**. It fails closed without an audited production `FormalFactory`,
+immutable snapshots, H200 resource/pricing overlay, container, and independently
+provisioned evaluator authority. A complete production scientific factory is not
+shipped yet. The lazy native-chat HF actor/partial-decode adapter, Datasets loader,
+neural/arm primitives and phase-boundary checks are available for integration;
+no formal path falls back to smoke. H200 execution has not been verified here.
+
+See [operator workflow](docs/EXPERIMENTS.md), [data contracts](docs/DATA.md),
+[arms/provenance](docs/BASELINES.md), and [verification](docs/ARTIFACTS.md).
+SWE-bench and trace-rich LDB are outside the core S0–S4 claim.
+
+## Verify the checkout
+
+```bash
+python -m pytest -q -m 'not gpu and not network'
+python -m compileall -q src scripts tests
+for script in scripts/*.sh scripts/slurm/*.sbatch; do bash -n "$script"; done
+git diff --check
+```
+
+CPU CI covers Python 3.11/3.12 and all six local commands. GPU/network tests are
+opt-in. `.[ml,experiment]` is for a provisioned experiment host, not CPU smoke.
+Legacy `pbpf-run` and its configurations remain a separate diagnostic interface.

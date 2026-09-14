@@ -1,0 +1,116 @@
+schema: pbpf-iclr-matrix-v1
+name: pbpf-iclr2027
+claim_status: preregistered-no-results
+models: {$ref: ../iclr/models.yaml}
+datasets: {$ref: ../iclr/datasets.yaml}
+arms: {$ref: ../iclr/arms.yaml}
+ablations: {$ref: ../iclr/ablations.yaml}
+profiles: {$ref: ../iclr/profiles.yaml}
+finite: {$ref: ../iclr/finite.yaml}
+prompts: {$ref: ../iclr/prompts-v1.yaml}
+protocol:
+  initial_actor_samples: 8
+  initial_origin: actor_sample
+  repair_decodes: 4
+  decode_multiplicity: 1
+  early_stop: false
+  visible_tests: 4
+  context_length: 8192
+  max_new_tokens: 1024
+  dtype: bfloat16
+  temperature: 0.8
+  top_p: 0.95
+  particles: 8
+  latent_dimension: 32
+  prefix_tokens: 8
+  condition: sample_once_per_continuation
+  feedback: status_only
+  resampling: {method: systematic, ess_fraction: 0.5, rejuvenation: corrected_mala, move_steps: 1}
+statistics:
+  seeds: [1701, 1702, 1703]
+  bootstrap_replicates: 10000
+  bootstrap_seed: 314159
+  independent_unit: source_problem_cluster
+  reduction_order: [tests_within_candidate, candidates_within_task, seeds_within_task]
+  strata: [dataset, official_split, source_language]
+  shared_resample_indices_across_arms: true
+  confidence: 0.95
+  secondary_correction: holm
+  cross_model_weights: fixed_equal
+development:
+  status: prospective_preregistered_choices_not_measurements
+  rbr_allocation:
+    official_training_cap: 12000
+    fitted_training_tasks: 11000
+    calibration_tasks: 1000
+    allocation: sha256_order_of_leakage_connected_source_component
+    calibration: reserve_last_components_without_splitting_components
+    cap_policy: at_most_caps_never_break_source_components_report_exact_counts
+    development_tune_cap: 1000
+    development_select_cap: 1000
+    test_cap: 2000
+  brier_margin: 0.01
+  brier_margin_rationale: absolute_multiclass_Brier_tolerance_on_0_to_2_scale_not_empirical
+  encoder: {source: frozen_actor_last_hidden_state, pooling: attention_masked_mean, fields: [task, code, diff, test, observation], detach: true}
+  tuning:
+    split: dev-tune
+    optimizer: AdamW
+    learning_rates: [0.0001, 0.0003]
+    effective_batch_sizes: [16, 32]
+    maximum_steps: [2000, 5000]
+    weight_decay: 0.01
+    lambda_future: [0.5, 1.0]
+    mala_step_sizes: [0.01, 0.05, 0.1]
+    gradient_clip_norm: 1.0
+    selection: [minimum_task_macro_prefix4_nll, minimum_brier, fewer_steps, smaller_batch, smaller_learning_rate, smaller_lambda_future, smaller_mala_step]
+    actor_projector: {optimizer: AdamW, learning_rates: [0.0001, 0.0003], effective_batch_sizes: [16, 32], maximum_steps: [2000, 5000]}
+  deterministic_selection:
+    eligible: [full_transcript, window_two, window_four, deepsets, matched_gru, scalar_correctness]
+    split: dev-select
+    ranking: [minimum_task_macro_prefix4_nll, minimum_brier, lexical_arm_name]
+    lock_before: [test_predictions, test_repair, locked_replication]
+    top_two_repair_baselines: {split: dev-select, ranking: [maximum_visible_selected_pass1, minimum_actor_output_tokens, lexical_arm_name]}
+  final_selection:
+    score: visible_pass_fraction
+    tie_break: [lower_round, lower_initial_slot, lexical_source_hash, lexical_version_id]
+    hidden_outcomes_allowed: false
+  retrain_policy:
+    qwen25_7b: refit_selected_hyperparameters_on_train_only_then_calibrate_once_freeze_belief_before_actor
+    qwen3_8b: same_hyperparameters_retrain_model_specific_modules_on_rbr_train_only_calibrate_once_no_locked_test_tuning
+    deepseek_6p7b: same_hyperparameters_retrain_model_specific_modules_on_rbr_train_only_calibrate_once_no_locked_test_tuning
+    dev_select_may_enter_training: false
+    calibration_may_enter_parameter_training: false
+    test_may_enter_training: false
+  causal_controls: [shuffled_evidence, wrong_candidate, masked_outcomes, random_latent, faulty_shared_belief]
+calibration:
+  tasks: 64
+  source_disjoint_from: [train, calibration, dev-tune, dev-select, test]
+  status: mandatory_measured_resource_pilot_before_scaling
+  max_projection_relative_deviation: 0.25
+  max_memory_fraction: 0.9
+  max_infrastructure_fraction: 0.01
+gates:
+  B: {relative_nll_gain: 0.05, paired_lower_bound_above: 0, brier_one_sided: true, gain_removed_by_controls: 0.8, failure_exit: 20}
+  C: {absolute_pass1_gain: 0.03, paired_lower_bound_above: 0, comparators: [self_debug, strongest_deterministic], retain_gate_b: true}
+  S4: {extra_families_direction_agree: true, fixed_equal_cross_model_lower_bound_above: 0}
+matrix:
+  - {id: s0_rbr, stage: S0, phase: integrity, model: qwen25_7b, dataset: PBPF-RBR, tasks: 16, arms: [independent, self_debug, rex, strongest_deterministic, rollout_roulette, pbpf, no_repair]}
+  - {id: s0_codearc, stage: S0, phase: integrity, model: qwen25_7b, dataset: CodeARC-Replay, tasks: 16, arms: [independent, self_debug, rex, strongest_deterministic, rollout_roulette, pbpf, no_repair]}
+  - {id: s0_evalplus, stage: S0, phase: integrity, model: qwen25_7b, dataset: PBPF-EvalPlus, tasks: 16, arms: [independent, self_debug, rex, strongest_deterministic, rollout_roulette, pbpf, no_repair]}
+  - {id: s0_lcb, stage: S0, phase: integrity, model: qwen25_7b, dataset: LiveCodeBench, tasks: 16, arms: [independent, self_debug, rex, strongest_deterministic, rollout_roulette, pbpf, no_repair]}
+  - {id: s1_finite, stage: S1, phase: finite, model: exact_numpy, dataset: finite, tasks: 60000, arms: [exact_bayes, smc_p1, smc_p4, smc_p8, smc_p16, smc_p32]}
+  - {id: s2_training, stage: S2, phase: train, model: qwen25_7b, dataset: PBPF-RBR, tasks: 11000, arms: [prior, last, full_transcript, window_two, window_four, deepsets, matched_gru, scalar_correctness, map, posterior_mean, pbpf]}
+  - {id: s2_development, stage: S2, phase: development, model: qwen25_7b, dataset: PBPF-RBR, tasks: 2000, arms: [full_transcript, window_two, window_four, deepsets, matched_gru, scalar_correctness, pbpf]}
+  - {id: s2_ablations, stage: S2, phase: ablations, model: qwen25_7b, dataset: PBPF-RBR, tasks: 256, arms: [pbpf]}
+  - {id: s2_rbr, stage: S2, phase: prediction, model: qwen25_7b, dataset: PBPF-RBR, tasks: 2000, arms: [prior, last, full_transcript, window_two, window_four, deepsets, matched_gru, scalar_correctness, map, posterior_mean, pbpf, shuffled_evidence, wrong_candidate, masked_outcomes, random_latent, faulty_shared_belief]}
+  - {id: s2_codearc, stage: S2, phase: prediction, model: qwen25_7b, dataset: CodeARC-Replay, tasks: snapshot_inventory, arms: [prior, last, full_transcript, window_two, window_four, deepsets, matched_gru, scalar_correctness, map, posterior_mean, pbpf, shuffled_evidence, wrong_candidate, masked_outcomes, random_latent, faulty_shared_belief]}
+  - {id: s3_rbr, stage: S3, phase: repair, model: qwen25_7b, dataset: PBPF-RBR, tasks: 2000, arms: [independent, self_debug, rex, strongest_deterministic, rollout_roulette, pbpf, no_repair]}
+  - {id: s3_evalplus, stage: S3, phase: repair, model: qwen25_7b, dataset: PBPF-EvalPlus, tasks: 542, arms: [independent, self_debug, rex, strongest_deterministic, rollout_roulette, pbpf, no_repair]}
+  - {id: s3_codearc, stage: S3, phase: repair, model: qwen25_7b, dataset: CodeARC-Replay, tasks: snapshot_inventory, arms: [independent, self_debug, rex, strongest_deterministic, rollout_roulette, pbpf, no_repair]}
+  - {id: s4_qwen3_train, stage: S4, phase: train, model: qwen3_8b, dataset: PBPF-RBR, tasks: 11000, arms: [pbpf, locked_baseline_1, locked_baseline_2]}
+  - {id: s4_deepseek_train, stage: S4, phase: train, model: deepseek_6p7b, dataset: PBPF-RBR, tasks: 11000, arms: [pbpf, locked_baseline_1, locked_baseline_2]}
+  - {id: s4_qwen3_evalplus, stage: S4, phase: replication, model: qwen3_8b, dataset: PBPF-EvalPlus, tasks: 542, arms: [pbpf, locked_baseline_1, locked_baseline_2]}
+  - {id: s4_deepseek_evalplus, stage: S4, phase: replication, model: deepseek_6p7b, dataset: PBPF-EvalPlus, tasks: 542, arms: [pbpf, locked_baseline_1, locked_baseline_2]}
+  - {id: s4_qwen25_codearc, stage: S4, phase: replication, model: qwen25_7b, dataset: CodeARC-Replay, tasks: snapshot_inventory, arms: [pbpf, locked_baseline_1, locked_baseline_2]}
+  - {id: s4_qwen25_lcb, stage: S4, phase: replication, model: qwen25_7b, dataset: LiveCodeBench, tasks: snapshot_inventory, arms: [pbpf, locked_baseline_1, locked_baseline_2]}
+excluded_from_core: [SWE-bench, LDB_enhanced_trace]

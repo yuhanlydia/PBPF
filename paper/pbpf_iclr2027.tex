@@ -1,0 +1,207 @@
+\documentclass{article}
+\usepackage{iclr2027_conference,times}
+\input{math_commands.tex}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{array}
+\hypersetup{hidelinks,pdfauthor={Anonymous authors},pdfsubject={Prospective study; confirmatory results pending}}
+
+% Override from the command line; all 12 x 3 x 3 combinations are supported.
+\providecommand{\TitleVersion}{1}
+\providecommand{\AbstractVersion}{1}
+\providecommand{\IntroVersion}{1}
+\newcommand{\PBPFSelectorError}[2]{\PackageError{PBPF}{Invalid #1 selector}{Use an integer from 1 to #2.}}
+\ifnum\TitleVersion<1 \PBPFSelectorError{title}{12}\fi
+\ifnum\TitleVersion>12 \PBPFSelectorError{title}{12}\fi
+\ifnum\AbstractVersion<1 \PBPFSelectorError{abstract}{3}\fi
+\ifnum\AbstractVersion>3 \PBPFSelectorError{abstract}{3}\fi
+\ifnum\IntroVersion<1 \PBPFSelectorError{introduction}{3}\fi
+\ifnum\IntroVersion>3 \PBPFSelectorError{introduction}{3}\fi
+% Normalize equivalent integer spellings before macro/file-name lookup.
+\edef\TitleVersion{\number\numexpr\TitleVersion\relax}
+\edef\AbstractVersion{\number\numexpr\AbstractVersion\relax}
+\edef\IntroVersion{\number\numexpr\IntroVersion\relax}
+\input{variants/titles}
+\input{results_pending}
+\title{\raggedright\csname PBPFTitle\TitleVersion\endcsname}
+\author{Anonymous authors}
+% \iclrfinalcopy % Never enable for anonymous submission.
+
+\begin{document}
+\maketitle
+\begin{abstract}
+\input{variants/abstract_\AbstractVersion}
+\end{abstract}
+\input{variants/intro_\IntroVersion}
+
+\section{Candidate-specific particle beliefs}
+\label{sec:method}
+Let $x$ be a public task, $c_r$ a candidate version in one repair lineage,
+$\Delta_r$ its patch from the selected parent, and
+$E_r=(e_{r,1},\ldots,e_{r,J})$ its ordered visible outcomes. A diagnostic
+particle $z_r^m$ is not an independently decoded candidate program.
+The model factorizes along a lineage as
+\begin{equation}
+ p(z_0\mid x,c_0)p(E_0\mid z_0,x,c_0)
+ \prod_{r\geq1}p_\psi(z_r\mid z_{r-1},x,c_r,\Delta_r)
+ p_\theta(E_r\mid z_r,x,c_r).
+\end{equation}
+The latent is fixed within each version. We factor the observation likelihood
+over ordered tests into categorical probabilities for \texttt{PASS},
+\texttt{WRONG\_OUTPUT}, \texttt{RUNTIME\_EXCEPTION}, \texttt{TIMEOUT}, and
+\texttt{COMPILE\_ERROR}. Infrastructure failure is recorded separately, not
+learned as a sixth outcome. This conditional-independence model is an
+approximation; correlated tests and misspecified likelihoods remain limitations.
+
+\paragraph{Creation and observation are different operations.}
+At a root, draw $z_0^m\sim q_{\rm root}(z\mid x,c_0,e_{0,1})$ and assign
+unnormalized log mass
+$-\log P+\log p(z_0^m\mid x,c_0)+\log p_\theta(e_{0,1}\mid z_0^m,x,c_0)
+-\log q_{\rm root}(z_0^m\mid x,c_0,e_{0,1})$.
+At a patch boundary, select an ancestor $a_m$ explicitly and sample
+$z_r^m\sim q_\phi(z\mid z_{r-1}^{a_m},x,c_r,\Delta_r,e_{r,1})$.
+The first child log mass is
+\begin{align}
+ \ell_r^m={}&b_m+\log p_\psi(z_r^m\mid z_{r-1}^{a_m},x,c_r,\Delta_r)
+ +\log p_\theta(e_{r,1}\mid z_r^m,x,c_r)\nonumber\\
+ &-\log q_\phi(z_r^m\mid z_{r-1}^{a_m},x,c_r,\Delta_r,e_{r,1}).
+ \label{eq:child}
+\end{align}
+For deterministic enumeration of all parent indices, $b_m=\log w_{r-1}^{a_m}$.
+For sampled ancestors $a_m\sim\rho$, including repeated draws,
+$b_m=-\log P+\log w_{r-1}^{a_m}-\log\rho(a_m)$, with proposal support covering
+the parent target. In particular, $\rho=w_{r-1}$ gives uniform base masses;
+parent weights must not be counted twice. The incremental log normalizer is
+$\log\sum_m\exp\ell_r^m$, before normalization or resampling. We never
+renormalize the sampled-ancestor base masses before this calculation.
+
+For subsequent tests on unchanged code, the update is likelihood-only:
+$\ell_{r,j}^m=\log w_{r,j-1}^m+\log p_\theta(e_{r,j}\mid z_r^m,x,c_r,t_j)$.
+Transition and proposal terms require an actual newly sampled latent and are
+evaluated at that sample. Candidate hashes key independent states; siblings
+inherit only their selected parent. When $\mathrm{ESS}<P/2$, systematic
+resampling is followed by one Metropolis-adjusted Langevin move that includes
+forward and reverse proposal densities~\citep{gilks2001}. Uncorrected jitter
+is a named biased ablation, not the primary filter.
+
+\paragraph{Learning and calibration.}
+The primary model uses a 32-dimensional latent and eight particles. Frozen
+actor hidden states are attention-mask-mean-pooled for semantic features.
+Learned diagonal-Gaussian root, transition, and child-proposal heads accompany
+a five-way likelihood. The belief objective combines an SMC evidence objective
+with a proper future-prediction score~\citep{maddison2017,naesseth2018}:
+\begin{equation}
+ \mathcal L_B=-\mathbb E[\log\widehat Z_{\rm SMC}]
+ +\lambda_{\rm future}\mathcal L_{\rm future},\qquad
+ \mathcal L_{\rm future}=-\sum_{j>k}\log\sum_m w_k^m
+ p_\theta(e_j\mid z^m,x,c,t_j).
+\end{equation}
+Training samples prefixes $k\in\{1,2,4\}$; the primary endpoint fixes $k=4$.
+Discrete ancestor choices are detached. The categorical NLL is unweighted;
+one scalar temperature fitted on source-disjoint calibration data is reused
+in filtering and reported predictions~\citep{guo2017}.
+
+\section{Coherent posterior-conditioned repair}
+\label{sec:action}
+An eight-token learned soft prefix maps one latent to the frozen actor's input
+embeddings~\citep{li2021prefix}. The belief is frozen before training this
+projector. For a target repair $a^*$, the objective is
+\begin{equation}
+ \mathcal L_A=-\log\sum_m\operatorname{stopgrad}(w_m)
+ \exp\left\{\sum_t\log\pi(a_t^*\mid a_{<t}^*,x,c,E,z^m)\right\}.
+ \label{eq:mixture}
+\end{equation}
+Component responsibilities are first computed without gradients; each
+component graph is then replayed serially for bounded-memory gradient
+accumulation. At inference, one component is held fixed for all tokens of a
+repair. Across multiple calls, systematic component sampling allocates
+posterior mass while preserving within-call coherence. A full decode for each
+particle would consume additional actor work and is not our primary method.
+Token-wise remix is explicitly a fault ablation: in general,
+$\sum_m w_m\prod_t\pi_m(a_t\mid a_{<t})$ differs from
+$\prod_t\sum_m w_m\pi_m(a_t\mid a_{<t})$.
+
+\input{experimental_setup}
+
+\section{Results status and interpretation}
+\label{sec:results}
+\textbf{This is a prospective manuscript, not a completed empirical report.}
+No formal learned-model prediction, hidden-test repair, or cross-model
+replication has been established by this package. Software tests and synthetic
+smoke outputs do not establish those claims. The reported result slots are
+\ResultFiniteAudit, \ResultPrediction, \ResultCalibration, \ResultRepair,
+\ResultCoherence, \ResultReplication, and \ResultResources.
+If prediction improves without repair gains, the belief may be informative
+but poorly coupled to the actor. If repair improves without the predictive
+gate or without sensitivity to evidence interventions, that outcome will not
+support the diagnosis claim. Failed gates and forced downstream runs must be
+reported as such; no pending entry may be replaced from legacy diagnostics.
+
+\section{Limitations}
+A learned latent need not correspond to a unique human-interpretable bug, and
+predictive calibration does not identify causal mechanisms. Finite-particle
+approximation, conditional-independence assumptions, and proposal misspecification
+can invalidate a useful posterior interpretation. A frozen actor may ignore
+or misinterpret a prefix, and the method still incurs substantial training
+and inference costs. Public benchmarks may have been seen during pretraining;
+the time-sliced replication reduces but cannot prove the absence of
+contamination. Replay and repair protocols are not interchangeable with
+official interactive or zero-shot leaderboards. Results, once available,
+will not establish applicability to arbitrary repositories, languages,
+security-critical software, or unconstrained execution environments.
+\label{sec:main-end}
+
+\section*{AI use statement}
+Generative AI assistance, including ChatGPT/Codex, was used to propose and
+refine the method and experimental design, develop mathematical formulations
+and derivations, implement and test software, research and summarize related
+literature, format references, and draft and revise this manuscript and its
+artifact documentation. This includes assistance with data-preparation code
+and the design of synthetic audit generators; it does not mean that the
+formal datasets or confirmatory experiments have been executed. No
+confirmatory measurements were generated or inferred for the result slots.
+This statement does not assert that human review of all AI-assisted material
+has been completed. Verification records describe the checks actually run;
+the authors remain responsible for validating the content and completing
+the required submission disclosure before submission.
+
+\section*{Reproducibility statement}
+Sections~\ref{sec:method}--\ref{sec:setup} specify the probability model,
+objectives, information partitions, selection rules, and prospective gates.
+The source package includes switchable narrative variants, unmodified
+conference assets, build instructions, and provenance notes. The associated
+implementation is intended to emit immutable configuration, data, candidate,
+and budget manifests. A buildable paper or a successful offline smoke test
+is not evidence that the external formal backend, dataset preparation,
+training, or GPU experiments have completed. Those artifacts and their
+checks must accompany any future numerical revision.
+
+\section*{Ethics statement}
+Generated programs require isolated execution with restricted privileges,
+resource limits, and no unintended network or filesystem access. Passing
+benchmark tests does not certify code safety or correctness. Dataset access,
+redistribution, and licensing must be checked per upstream source; we do not
+infer permission to redistribute benchmark payloads from a repository's
+software license. The evaluator firewall and explicit pending results are
+intended to reduce leakage and unsupported scientific claims.
+
+\bibliography{references}
+\bibliographystyle{iclr2027_conference}
+\appendix
+\section{Additional protocol details}
+\label{app:details}
+The packaged protocol lock binds the reviewed configuration files and the
+approved design by SHA-256. It is not a claim of a public preregistration and is not
+evidence that the configured immutable revisions resolved successfully.
+Execution manifests must independently verify the revisions actually loaded.
+
+Final selection uses visible pass fraction only, then lower repair round,
+lower initial slot, lexicographic source hash, and lexicographic version ID.
+Source-component caps are upper bounds: components are never split merely to
+hit a nominal count, and actual inclusions and exclusion reasons must be
+reported. Main tables must show every model-by-dataset cell, not only a
+pooled estimate. Any empirical revision must attach the source artifact hash,
+selection lock, denominator, seed set, confidence interval, and budget ledger
+for each numerical claim.
+\end{document}

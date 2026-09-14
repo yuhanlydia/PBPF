@@ -1,0 +1,63 @@
+adapter_version: "1"
+protocols:
+  PBPF-RBR:
+    dataset_id: giganticode/run_bug_run
+    repository: https://github.com/giganticode/run_bug_run
+    revisions:
+      repository: 374251a9d65410f37e1136049cb7ff5dcca3d0ae
+    licenses:
+      dataset: upstream-project-specific
+    eligibility:
+      language: python
+      minimum_active_tests: 10
+      fixed_passes_all: true
+      buggy_fails_at_least_one: true
+      maximum_actor_tokens: 2048
+    visible_tests: 4
+    caps:
+      train: 12000
+      development: 2000
+      test: 2000
+    development_halves: [development_tune, development_select]
+  CodeARC-Replay:
+    dataset_id: anjiangwei/CodeARC-Problems+anjiangwei/CodeARC-Invocations
+    repository: https://github.com/Anjiang-Wei/CodeARC
+    revisions:
+      repository: 32f2a1e1ba3bdf8a7d5057aacbd665edaf441ce0
+      problems_dataset: d2ee0ad485724668eabb893a965c681a9ce78031
+      invocations_dataset: 119512573bf96148cbb95e99cf7cdd21c06153e4
+    licenses:
+      repository: Apache-2.0
+      problems_dataset: Apache-2.0
+      invocations_dataset: Apache-2.0
+    anonymous_only: true
+    visible_invocation_indices: [0, 1, 2, 3]
+    evaluator_invocation_indices: [4, 5, 6, 7, 8, 9]
+    claim_scope: replay-not-official-interactive-leaderboard
+  PBPF-EvalPlus:
+    dataset_id: evalplus/humanevalplus+evalplus/mbppplus
+    repository: https://github.com/evalplus/evalplus
+    revisions:
+      repository: 26d6d00bb1fd0fa37f39c99d5290da67891d1c5e
+    licenses:
+      repository: Apache-2.0
+    task_counts:
+      humaneval_plus: 164
+      mbpp_plus: 378
+    visible_partition: base
+    evaluator_partition: plus-only
+    exact_case_deduplication: true
+    claim_scope: repair-not-zero-shot-leaderboard
+  LiveCodeBench:
+    dataset_id: livecodebench/code_generation_lite
+    repository: https://github.com/LiveCodeBench/LiveCodeBench
+    revisions:
+      repository: 28fef95ea8c9f7a547c8329f2cd3d32b92c1fa24
+      lite_dataset: 0fe84c3912ea0c4d4a78037083943e8f0c4dd505
+    licenses:
+      repository: Apache-2.0
+      lite_dataset: Apache-2.0
+    release_difference:
+      exclude_release: v5
+      include_release: v6
+    split: locked_test

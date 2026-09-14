@@ -1,0 +1,25 @@
+schema: pbpf-finite-generator-v1
+status: preregistered_generator_contract_not_generated_data
+generator_version: finite-family-template-v1
+implementation: pbpf.finite.run_finite_audit
+random_generator: numpy.PCG64
+seed: 1701
+counts: {train: 50000, development: 5000, test: 5000}
+split_unit: disjoint_latent_family_and_generator_template
+tests_per_case: 10
+visible_tests: 4
+future_tests: 6
+outcomes: [PASS, WRONG_OUTPUT, RUNTIME_EXCEPTION, TIMEOUT, COMPILE_ERROR]
+probability_spec:
+  latent_families: 120
+  templates_per_family: 10
+  split_families: {train: [0, 99], development: [100, 109], test: [110, 119]}
+  cases_per_family: 500
+  template_assignment: case_index_modulo_10
+  latent_states: 32
+  prior: symmetric_dirichlet_concentration_1
+  categorical_likelihood: symmetric_dirichlet_concentration_0p5_per_test_and_latent
+  observation_sampling: categorical_from_single_prior_draw_per_case
+  streams: sha256_of_version_seed_family_template_case_index_first_128_bits
+audit_particles: [1, 4, 8, 16, 32]
+gate: {particles: 32, median_kl_max: 0.05, relative_future_nll_gap_max: 0.02, hpd_level: 0.9, hpd_coverage: [0.87, 0.93]}

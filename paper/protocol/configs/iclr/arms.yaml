@@ -1,0 +1,78 @@
+schema: pbpf-formal-arms-v1
+prediction:
+  - prior
+  - last
+  - full_transcript
+  - window_two
+  - window_four
+  - deepsets
+  - matched_gru
+  - scalar_correctness
+  - map
+  - posterior_mean
+  - pbpf
+  - shuffled_evidence
+  - wrong_candidate
+  - masked_outcomes
+  - random_latent
+  - faulty_shared_belief
+parameter_matching:
+  denominator: all_unique_learned_stage_b_parameters_including_frozen
+  includes: [state_encoders, projections, biases, five_way_head]
+  excludes: [shared_frozen_actor, shared_frozen_semantic_encoder, particle_values, buffers, optimizer, stage_c_projector]
+  maximum_relative_error: 0.05
+  integer_width_tiebreak: [relative_error, width]
+repair:
+  independent:
+    mode: controlled
+    url: https://github.com/haotang1995/REx
+    revision: pbpf-formal-arms-v1
+    license: original-local-implementation
+    deviations: Four one-shot repairs of four distinct initial slots; no repair feedback used by later proposals.
+  self_debug:
+    mode: controlled
+    url: https://arxiv.org/abs/2304.05128
+    revision: pbpf-formal-arms-v1
+    license: original-local-implementation
+    deviations: Full-transcript feedback-conditioned repair; explanation occurs inside each of four decodes, never in an extra actor call. No traces or hidden tests.
+  rex:
+    mode: paper_spec_reimplementation
+    url: https://github.com/haotang1995/REx
+    revision: 371e879da5b1fff0d32a695ad37dcac50f74721b
+    license: MIT
+    deviations: Tang et al. Thompson candidate allocation, visible pass-fraction heuristic; four calls and no early stop imposed by matched protocol.
+  strongest_deterministic:
+    mode: controlled
+    url: https://github.com/haotang1995/REx
+    revision: pbpf-formal-arms-v1
+    license: original-local-implementation
+    deviations: Identity and checkpoint must be frozen by source-disjoint development selection before test repair.
+  rollout_roulette:
+    mode: paper_spec_reimplementation
+    url: https://github.com/Red-Hat-AI-Innovation-Team/its_hub
+    revision: e84e6ac21c30384b4b0cd7efd74497d24a82b933
+    license: Apache-2.0
+    deviations: Code-repair PF adaptation resamples four ordered partial trajectories before completion; partial token work and discarded prefixes are separately metered.
+    profile: four_trajectories_two_segments
+    score_transform: exp(score - max_score)
+  pbpf:
+    mode: controlled
+    url: https://github.com/haotang1995/REx
+    revision: pbpf-formal-arms-v1
+    license: original-local-implementation
+    deviations: One candidate-specific posterior component and fixed soft prefix for each whole repair continuation; no actor decode per particle.
+  no_repair:
+    mode: controlled
+    url: https://github.com/haotang1995/REx
+    revision: pbpf-formal-arms-v1
+    license: original-local-implementation
+    deviations: Lower-compute reference; visible-only initial selection, zero repair decodes.
+budget:
+  initial_actor_samples: 8
+  initial_origin: actor_sample
+  repair_decodes: 4
+  decode_multiplicity: 1
+  max_new_tokens: 1024
+  temperature: 0.8
+  top_p: 0.95
+  early_stop: false

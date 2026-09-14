@@ -1,42 +1,47 @@
-# Baselines and ablations
+# Formal arms and ablations
 
-`configs/baselines.yaml` is the machine-readable provenance ledger. Each entry
-records a paper URL, repository URL when verified, pinned upstream or local
-implementation revision, license hash, execution availability, and one of
-`official_adapter`, `paper_spec_reimplementation`, or
-`controlled_ablation`.
+`configs/iclr/arms.yaml` is the executable Task-5 registry, separate from legacy
+diagnostic baselines. Every repair arm has validated provenance mode, URL,
+revision, license and deviations. REx and Rollout Roulette are pinned paper-spec
+reimplementations; others are controlled implementations. None claims official
+upstream execution.
 
-The representation matrix includes raw transcript, last observation, windows
-1/2/4, orderless set, pass rate, equal-parameter GRU and exchangeable encoders,
-MAP, posterior mean, P-way full-forward ensemble, matched-norm random latent,
-single shared KV delta, PBPF soft prompt, and PBPF low-rank KV. State injection
-separates text, soft prompt, K-only, V-only, K+V, active-layer count, prefix reuse,
-rank, and Frobenius norm. The token-wise re-mixture arm is a named fault ablation;
-it is not a PBPF implementation.
+Prediction includes prior, last, full transcript, windows two/four, DeepSets,
+matched GRU, scalar correctness, MAP, posterior mean, PBPF and five causal controls.
+Learned comparators match all unique learned Stage-B parameters within 5%,
+including heads/projections. Shared frozen actor/encoder and particle values are
+excluded. Parameter matching is not a claim of equal FLOPs.
 
-Repair plans name independent sampling, Self-Debug/raw transcript, REx,
-RLEF paper-spec, and LDB under identical feedback, executions, rounds, candidate
-bank, and visible-token budget. REx and LDB are pinned upstream references, but
-their runtime adapters are not integrated and execution validation rejects them.
-They are not results-producing arms in this repository.
-RLEF is training with execution feedback; no verified author repository is
-registered, so it is explicitly a paper-spec reimplementation and never labeled
-official. The LDB paper consumes block-level runtime state; this repository does
-not claim to provide that official adapter.
+Repair compares independent, Self-Debug, REx, development-selected strongest
+deterministic belief, Rollout Roulette, PBPF sample-once, and lower-compute
+no-repair. Matched arms share eight genuine actor samples, four complete repair
+decodes with multiplicity one, four ordered visible tests and no early stop. The
+legacy six-sample/two-mutant bank is prohibited. Roulette's additional partial
+and discarded-prefix work is explicitly metered; four complete continuations do
+not imply identical calls or FLOPs. Task-5 arms exist, but the complete production
+training/evaluation factory remains an integration requirement.
 
-Rollout Roulette is the primary particle-inference neighbor, but its particles
-are language-generation trajectories. PBPF particles represent hidden
-program/failure hypotheses updated by ordered execution evidence, including the
-transition/proposal ratio. RSP is a matched-norm random-latent negative control.
-UpSkill is optional. LaDi-RL remains disabled until an independent code audit.
+The primary actor is frozen BF16, context 8,192/output 1,024, temperature .8 and
+top-p .95. PBPF uses P=8, dz=32 and eight soft-prefix tokens held for an entire
+continuation. Native templates and disabled Qwen3 thinking are mandatory. Final
+selection uses visible pass fraction, then lower round, lower initial slot,
+lexical source hash and version hash, matching Task-5 behavior.
 
-The GRU and exchangeable CPU controls have equal trainable parameter counts but
-different measured matrix-vector operation counts. They are therefore not
-matched-compute baselines: execution validation rejects the legacy
-`matched_gru` and `matched_exchangeable` arm names until an audited compute
-matching protocol is registered.
+`configs/iclr/ablations.yaml` has explicit one-factor patches for 256 RBR
+development tasks and seeds 1701/1702/1703, never Cartesian expansion. Locked
+causal controls are shuffled evidence, wrong candidate, masked outcomes,
+matched-norm random latent and faulty shared belief. Token remix and shared belief
+are explicitly faulty controls. Trace-rich information is a separate secondary
+table, never pooled into the primary comparison.
 
-Filtering ablations cover P=1/4/8/16/32, learned versus uniform weights,
-no/every-step/ESS resampling, rejuvenation off, omitted proposal correction,
-independent/correlated likelihoods, and leave-one-candidate-out. History and
-feedback variants are reported in separate tables; they are never silently pooled.
+The experiment config prospectively declares frozen actor-hidden-state masked-mean
+pooling, AdamW/LR/batch/step/future-loss/MALA grids, deterministic selection ties,
+absolute .01 multiclass Brier non-inferiority margin, bootstrap strata and
+model-specific retrain/freeze policies. These choices are preregistered or later
+development-selected, not measured results. Train, temperature calibration,
+development-select and locked test have distinct roles; actual learned locks must
+be frozen before confirmatory work. No test labels may enter fitting.
+
+Initial selected Pass@1, initial hidden pass@8 oracle and final selected Pass@1
+are separate endpoints. An oracle cannot satisfy a final Pass@1 gate. Legacy
+RLEF/LDB/SWE-agent claims are not part of this core matrix.
