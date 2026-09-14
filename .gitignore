@@ -5,3 +5,6 @@ __pycache__/
 build/
 dist/
 .worktrees/
+results/*/HumanEval-*/
+results/gpu_gate_frozen_1/
+results/runbugrun_real_pilot_6581/

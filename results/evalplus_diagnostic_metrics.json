@@ -1,0 +1,61 @@
+{
+  "evalplus_frozen_7b_full164": {
+    "final_passes": 83,
+    "final_rate": 0.5060975609756098,
+    "lost_despite_initial_pass": 0,
+    "rescued_from_no_initial_pass": 38,
+    "round_pass_counts": [
+      20,
+      14,
+      22,
+      14
+    ],
+    "summary_sha256": "1651e97a781724a48a7194949a8204606e7fc84515714ef1698bda1de4ac46da",
+    "tasks": 164,
+    "tasks_with_any_initial_pass": 45,
+    "tasks_with_any_round_pass": 54,
+    "wilson_95": [
+      0.43032054720255597,
+      0.5815954598081827
+    ]
+  },
+  "evalplus_repair_7b_full164": {
+    "final_passes": 85,
+    "final_rate": 0.5182926829268293,
+    "lost_despite_initial_pass": 0,
+    "rescued_from_no_initial_pass": 39,
+    "round_pass_counts": [
+      21,
+      19,
+      15,
+      20
+    ],
+    "summary_sha256": "32f4f98a0a58ff2b65738e090193c5b2e5254053fd21caff808ee35880f32885",
+    "tasks": 164,
+    "tasks_with_any_initial_pass": 46,
+    "tasks_with_any_round_pass": 56,
+    "wilson_95": [
+      0.4422805390732324,
+      0.5934674819589837
+    ]
+  },
+  "paired_comparison": {
+    "frozen_only_passes": 32,
+    "mcnemar_exact_p": 0.9021585000966994,
+    "paired_bootstrap_95_pp": [
+      -8.536585365853659,
+      10.975609756097562
+    ],
+    "repair_minus_frozen_pp": 1.2195121951219512,
+    "repair_only_passes": 34
+  },
+  "provenance": {
+    "bundle_count_verified": 328,
+    "claim_status": "diagnostic-no-pbpf-claim",
+    "code_commit": "a12542aaa0b0ebc4a990e3a22bba903fca84441e",
+    "date_utc": "2026-09-14",
+    "gpu": "NVIDIA GeForce RTX 4090 24564 MiB",
+    "model_id": "Qwen/Qwen2.5-Coder-7B-Instruct",
+    "model_revision": "c03e6d358207e414f1eca0bb1891e29f1db0e242"
+  }
+}

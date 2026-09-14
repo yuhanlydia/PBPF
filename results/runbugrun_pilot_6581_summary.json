@@ -1,0 +1,41 @@
+{
+  "advance_stage": false,
+  "artifact_manifest_sha256": "3ecb32d4852687a11214a05fe920f5477fff208eee5b0d9ba938bb86e7cc8990",
+  "claim_status": "local-real-pilot-no-formal-claim",
+  "config_hash": "89854de2a87aad3c76322e0535cdea57105d2d357c93e4ab3e02deb7989c8b9d",
+  "final_pass_at_1": 0.0,
+  "initial_candidate_count": 8,
+  "model": {
+    "id": "Qwen/Qwen2.5-Coder-7B-Instruct",
+    "revision": "c03e6d358207e414f1eca0bb1891e29f1db0e242",
+    "smoke_only": false
+  },
+  "particle_ess_trace": [
+    7.9999999999999964,
+    7.9999999999999964,
+    7.9999999999999964,
+    7.9999999999999964,
+    7.9999999999999964,
+    7.9999999999999964,
+    7.9999999999999964,
+    7.9999999999999964,
+    7.9999999999999964,
+    7.9999999999999964,
+    7.9999999999999964,
+    7.9999999999999964
+  ],
+  "prediction_brier": 1.5499999999999998,
+  "prediction_future_nll": 2.995732273553991,
+  "round_pass_at_1": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "rounds_completed": 4,
+  "source_file": "python_train0.jsonl.gz",
+  "source_sha256": "6da3c23fe1fbc156a07a2c7fdbc2aed0c010ddaa1d087030936887e828e92659",
+  "task_id": "runbugrun-6581",
+  "upstream_release": "v0.0.1",
+  "upstream_repository_revision": "374251a9d65410f37e1136049cb7ff5dcca3d0ae"
+}
