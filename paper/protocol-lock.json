@@ -1,0 +1,16 @@
+{
+  "claim_status": "prospective_no_formal_results",
+  "files": {
+    "configs/experiments/iclr_pbpf.yaml": "f0d2ebf30ef54ad8e91830504cd9ba031347baa9137f9a512f544e8cf280212e",
+    "configs/iclr/ablations.yaml": "497218acc5281af35b9c0202bfe5ca83f06d16f538ab6011840059cce0e4625e",
+    "configs/iclr/arms.yaml": "8ed4435fa4d3adb0f443ee6bbe099c5ee4a1dfceb5ff7315f33b4c7d4c8b5737",
+    "configs/iclr/datasets.yaml": "c024b2f5af7ca55163620b71d69279d5f10d2784969f76283a12787cd0ecbefd",
+    "configs/iclr/finite.yaml": "a4944065e96a3fe5c117b2f86d7d50961c7e3d2671a73e19e93e3b31720baea4",
+    "configs/iclr/models.yaml": "c87cb861b0eabcf64b40a261b1473420dcc9b7422319c40eeac8b17479e50149",
+    "configs/iclr/profiles.yaml": "0f8c7ffd9707604990be389cf206cc7faddcf85a09073340425f2cf75e8f5665",
+    "configs/iclr/prompts-v1.yaml": "56679b7d57f159e0ab73066217991568705587cdf10c89981b6b650fdb52f822",
+    "docs/superpowers/specs/2026-09-14-pbpf-iclr2027-design.md": "5ac94608aedece95a656868e17b870a4da004f7ea13406d6c0a2ba6ac66f1113"
+  },
+  "review_status": "explicit_config_review_acknowledgment",
+  "schema": "pbpf-paper-protocol-lock-v1"
+}

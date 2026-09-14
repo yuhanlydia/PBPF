@@ -17,7 +17,18 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -e '.[test]'
-      - run: python -m pytest -q
-      - run: python -m compileall -q src tests
-      - run: bash -n scripts/*.sh
-      - run: for config in configs/experiments/*.yaml; do pbpf-run plan "$config"; done
+      - run: python -m pytest -q -m 'not gpu and not network'
+        env:
+          HF_HUB_OFFLINE: "1"
+          HF_DATASETS_OFFLINE: "1"
+          TRANSFORMERS_OFFLINE: "1"
+      - run: python -m compileall -q src scripts tests
+      - run: for script in scripts/*.sh scripts/slurm/*.sbatch; do bash -n "$script"; done
+      - name: Complete no-download ICLR smoke DAG
+        shell: bash
+        run: |
+          for command in doctor prepare run aggregate verify package; do
+            pbpf-iclr "$command" --config configs/experiments/iclr_pbpf.yaml --profile local_cpu --output-root "$RUNNER_TEMP/pbpf-iclr" --resume
+          done
+          pbpf-iclr doctor --config configs/experiments/iclr_pbpf.yaml --profile local_cpu --dry-run
+      - run: git diff --check

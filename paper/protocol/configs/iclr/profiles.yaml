@@ -1,0 +1,18 @@
+schema: pbpf-profiles-v1
+profiles:
+  local_cpu:
+    backend: synthetic_offline
+    confirmatory: false
+    claim_status: smoke-only-no-claim
+    gpu_count: 0
+    projected_cost: 0
+  slurm_h200x16:
+    backend: external_formal_factory
+    confirmatory: true
+    claim_status: preregistered-no-results
+    gpu_type: h200
+    gpus_per_worker: 1
+    array_concurrency: 16
+    worker_shards: 16
+    allocation: independent_single_gpu_workers
+    site_environment: PBPF_ICLR_SITE

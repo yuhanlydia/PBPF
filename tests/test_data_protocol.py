@@ -1,5 +1,8 @@
 from dataclasses import FrozenInstanceError
 import json
+import os
+import resource
+import sys
 
 import pytest
 
@@ -15,7 +18,7 @@ from pbpf.manifest import (
     trainer_view,
     validate_initial_candidate_bank,
 )
-from pbpf.sandbox import FakeSandbox, LocalPythonSandbox
+from pbpf.sandbox import FakeSandbox, LocalPythonSandbox, SandboxResult
 
 
 def task(task_id, groups=("source:1",), test_order=("t1", "t2")):
@@ -266,7 +269,8 @@ def test_fake_sandbox_is_deterministic_and_infrastructure_failure_is_separate():
     assert result.infrastructure_failure is True
 
 
-def test_local_python_sandbox_checks_hidden_stdio_and_classifies_failures():
+def test_local_python_sandbox_checks_hidden_stdio_and_classifies_failures(monkeypatch):
+    monkeypatch.setattr(os, "getuid", lambda: 1)
     sandbox = LocalPythonSandbox(
         {
             "double": {"input": "3\n", "output": "6\n"},
@@ -281,10 +285,71 @@ def test_local_python_sandbox_checks_hidden_stdio_and_classifies_failures():
     assert sandbox.execute("while True: pass", "empty").outcome == "TIMEOUT"
 
 
-def test_local_python_sandbox_runs_function_assertion_harness():
+def test_local_python_sandbox_runs_function_assertion_harness(monkeypatch):
+    monkeypatch.setattr(os, "getuid", lambda: 1)
     sandbox = LocalPythonSandbox(
         {"function": {"harness": "\nassert add_one(2) == 3\n"}},
         timeout_seconds=0.5,
     )
     assert sandbox.execute("def add_one(x):\n    return x + 1\n", "function").outcome == "PASS"
     assert sandbox.execute("def add_one(x):\n    return x\n", "function").outcome == "WRONG_OUTPUT"
+
+
+def test_sandbox_skips_unsupported_child_limits(monkeypatch):
+    monkeypatch.setattr(os, "getuid", lambda: 1)
+    original_setrlimit = resource.setrlimit
+
+    def selective_permission_error(limit, values):
+        if limit == resource.RLIMIT_NPROC:
+            raise PermissionError("limit unavailable")
+        original_setrlimit(limit, values)
+
+    monkeypatch.setattr(resource, "setrlimit", selective_permission_error)
+    result = LocalPythonSandbox(
+        {"t": {"output": f"{1024 * 1024}\nok\n"}},
+        python_executable=sys.executable,
+    ).execute(
+        "import resource\nprint(resource.getrlimit(resource.RLIMIT_FSIZE)[0])\nprint('ok')",
+        "t",
+    )
+    assert result == SandboxResult("PASS", "pass", False)
+
+
+def test_sandbox_uses_configured_python_executable(monkeypatch):
+    monkeypatch.setattr(os, "getuid", lambda: 1)
+    result = LocalPythonSandbox(
+        {"t": {"output": f"{sys.executable}\n"}},
+        python_executable=sys.executable,
+    ).execute("import sys\nprint(sys.executable)", "t")
+    assert result == SandboxResult("PASS", "pass", False)
+
+
+@pytest.mark.parametrize("operation", ("setgroups", "setgid", "setuid"))
+def test_sandbox_fails_closed_when_privilege_drop_fails(monkeypatch, operation):
+    monkeypatch.setattr(os, "getuid", lambda: 0)
+    for name in ("setgroups", "setgid", "setuid"):
+        monkeypatch.setattr(os, name, lambda *args: None)
+
+    def reject_transition(*args):
+        raise PermissionError("credential transition unavailable")
+
+    monkeypatch.setattr(os, operation, reject_transition)
+    result = LocalPythonSandbox(
+        {"t": {"output": "ok\n"}}, python_executable=sys.executable
+    ).execute("print('ok')", "t")
+    assert result == SandboxResult(
+        None, "Exception occurred in preexec_fn.", True
+    )
+
+
+def test_sandbox_classifies_real_preexec_failure_as_infrastructure(monkeypatch):
+    def fail_preexec(self):
+        raise RuntimeError("preexec failed")
+
+    monkeypatch.setattr(LocalPythonSandbox, "_limits", fail_preexec)
+    result = LocalPythonSandbox(
+        {"t": {"output": "ok\n"}}, python_executable=sys.executable
+    ).execute("print('ok')", "t")
+    assert result == SandboxResult(
+        None, "Exception occurred in preexec_fn.", True
+    )

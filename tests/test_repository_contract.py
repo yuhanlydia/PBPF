@@ -50,6 +50,13 @@ def test_baseline_catalog_has_provenance_and_distinguishes_particle_neighbor():
 
 def test_experiment_configs_are_no_claim_plans_with_fixed_equal_budget_protocol():
     for path in sorted((ROOT / "configs/experiments").glob("*.yaml")):
+        if path.name == "iclr_pbpf.yaml":
+            from pbpf.iclr_config import resolve_config
+            resolved = resolve_config(path, "local_cpu")
+            assert resolved.claim_status == "smoke-only-no-claim"
+            assert resolved.science["protocol"]["initial_actor_samples"] == 8
+            assert resolved.science["protocol"]["initial_origin"] == "actor_sample"
+            continue
         config = validate_experiment(load_experiment(path))
         assert config["claim_status"] == "preregistered_configuration_only"
         assert config["protocol"] == {

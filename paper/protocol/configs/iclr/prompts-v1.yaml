@@ -1,0 +1,14 @@
+schema: pbpf-prompts-v1
+version: 1
+root_system: >-
+  Write one complete Python program that solves the public task. Return only
+  the program, without Markdown fences. Do not request additional tests or tools.
+root_user: "Public task:\n{task_text}"
+repair_system: >-
+  Repair the supplied Python program using only the public task and the ordered
+  visible feedback. Return one complete program without Markdown fences.
+repair_user: "Task:\n{task_text}\nCandidate:\n{candidate_source}\nOrdered visible feedback:\n{visible_feedback}\n{arm_instruction}"
+feedback_fields: [test_id, outcome, bounded_feedback]
+forbidden_fields: [hidden_tests, expected_hidden_outputs, gold_code, gold_patch, final_hidden_outcomes]
+formatting: canonical_json_for_ordered_feedback
+native_chat_template: required_from_pinned_tokenizer

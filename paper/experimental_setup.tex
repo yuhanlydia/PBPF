@@ -1,0 +1,200 @@
+\section{Experimental Setup}
+\label{sec:setup}
+The following protocol is prospective. Configuration values specify intended
+experiments, not measurements or completed runs. The Slurm dispatcher and
+production-factory interface are implemented, but a complete production
+train/select/calibrate/evaluate factory is not shipped. An operator must
+integrate and audit the scientific handlers and live evaluator before launch.
+
+\paragraph{Research questions and stages.}
+RQ1 asks whether particle inference matches exact finite posteriors. RQ2 asks
+whether a candidate-specific belief predicts withheld outcomes beyond matched
+deterministic memories. RQ3 asks whether that predictive value improves
+equal-budget hidden repair. RQ4 tests continuation coherence, and RQ5 tests
+robustness to evidence, model, and benchmark changes. S0 checks integrity on
+16 tasks per dataset; S1 audits exact finite inference; S2 trains and freezes
+beliefs and tests prediction; S3 tests repair only after the predictive gate;
+S4 evaluates locked replications. Synthetic offline execution is smoke-only
+and cannot establish any empirical claim about code actors.
+
+\paragraph{Data and information partitions.}
+The finite audit specifies 50,000 training, 5,000 development, and 5,000 test
+cases with disjoint latent families and generator templates, ten tests per
+case, four visible and six future. Its generator has 120 families, ten
+templates per family, 500 cases per family, and 32 discrete latent states;
+Dirichlet priors and five-way likelihood tables permit exact posterior
+calculation. These are generator-contract counts, not a claim that cases have
+already been generated.
+
+PBPF-RBR adapts RunBugRun~\citep{runbugrun}: eligible Python records have at
+least ten active tests, a fixed version passing all tests, a buggy version
+failing at least one, and code length at most 2,048 actor tokens. Official
+boundaries are preserved and connected leakage components based on problem
+identity and normalized code/test signatures are removed across splits.
+Deterministic caps are 12,000/2,000/2,000 for official training/development/test.
+Training reserves at most 1,000 source-disjoint calibration tasks, leaving at
+most 11,000 for fitting; development is split into tune/select halves of at
+most 1,000 each. SHA-256 ordering selects components without breaking them,
+so actual counts may be below caps. Tests are SHA-256 ordered, with the first
+four visible. Gold fixes and evaluator-only expected outputs never enter
+generator prompts or test-time selection.
+
+CodeARC-Replay uses the anonymous CodeARC variant~\citep{codearc}, fixed
+invocation indices 0--3 as visible and 4--9 as evaluator-only. It is a
+\emph{replay} protocol, not the official interactive leaderboard; the target
+program remains evaluator-only. PBPF-EvalPlus uses all 164 HumanEval+ and
+378 MBPP+ tasks~\citep{evalplus}. Base tests supply visible feedback and
+exactly deduplicated plus-only tests are hidden, run only after final hashes
+are sealed. The four-test prefix is the primary prediction endpoint and the
+RBR/CodeARC visible limit, not permission to relabel EvalPlus base cases as
+hidden. This is a repair protocol, not a zero-shot leaderboard claim.
+The locked LiveCodeBench replication uses the release-v6 tasks absent from
+release-v5~\citep{livecodebench}; its size and CodeARC's size are determined by
+the pinned snapshot inventory, not guessed. SWE-bench is outside the core claim.
+
+\paragraph{Models and inference.}
+Qwen2.5-Coder-7B-Instruct is primary. Qwen3-8B with thinking disabled and
+DeepSeek-Coder-6.7B-Instruct are the additional model replications; the two Qwen
+models are not described as independent model families. The 1.5B Qwen model is
+opt-in plumbing only. Each model and tokenizer uses its separately pinned full
+immutable repository revision and native chat template. Inference uses BF16,
+context length 8,192, output cap 1,024 tokens, temperature
+0.8, and top-$p$ 0.95. Primary conditioning uses $P=8$, $d_z=32$, eight soft
+prefix tokens, systematic resampling at $\mathrm{ESS}<P/2$, and one corrected
+MALA move. Low-rank K, V, K+V injection and QLoRA are secondary ablations or
+replications, not the headline model.
+
+\paragraph{Training and development locks.}
+Frozen actor last-layer features are attention-mask-mean-pooled and detached.
+Stage B uses AdamW, weight decay 0.01, gradient clipping 1.0, learning rates
+$\{10^{-4},3\mathord\times10^{-4}\}$, effective batches $\{16,32\}$,
+maximum steps $\{2000,5000\}$, $\lambda_{\rm future}\in\{0.5,1.0\}$, and
+MALA step sizes $\{0.01,0.05,0.1\}$. The tune split ranks task-macro prefix-four
+NLL, Brier, fewer steps, smaller batch, smaller learning rate, smaller future
+weight, then smaller MALA step. The actor projector uses AdamW with the same
+learning-rate, batch, and maximum-step grids. Beliefs are frozen before actor
+conditioning; trainable module counts and actual optimization work must be
+reported. One scalar temperature is fitted once on calibration data.
+
+The deterministic comparator is selected on development-select from full
+transcript, window-two, window-four, DeepSets, matched GRU, and scalar
+correctness, ranking prefix-four NLL, Brier, then lexical arm name. The two
+replication baselines rank development visible-selected Pass@1, fewer actor
+output tokens, then lexical name. Choices are locked before test prediction,
+test repair, and replication. Selected hyperparameters are refitted on training
+only; neither development-select, calibration, nor test enters parameter
+fitting. Model-specific modules are retrained for each replication under the
+locked hyperparameters and calibrated once without locked-test tuning.
+
+\paragraph{Baselines and budgets.}
+Prediction compares prior, last outcome, full transcript, windows two/four,
+DeepSets, matched GRU, scalar correctness, MAP, posterior mean, PBPF, and five
+controls: shuffled evidence, wrong candidate, masked outcomes, random latent,
+and faulty shared belief. Deterministic parameter matching includes all unique
+learned Stage-B parameters, including frozen learned components, encoders,
+projections, biases, and the five-way head, within 5\%; it excludes the shared
+frozen actor/semantic encoder, particle values, buffers, optimizer, and the
+Stage-C projector. Width ties minimize relative mismatch then width.
+
+Repair compares independent one-shot repairs, a controlled full-transcript
+Self-Debugging adaptation~\citep{selfdebug}, paper-spec REx~\citep{rex}, the
+locked strongest deterministic belief, a paper-spec Rollout Roulette
+adaptation~\citep{roulette}, and PBPF sample-once. These local adaptations are
+not claims of bitwise official reproduction. Self-Debugging explanations must
+fit inside the four allowed decodes. REx uses visible pass-fraction candidate
+allocation. Rollout Roulette resamples four ordered partial trajectories
+before completion under a two-segment profile; partial and discarded prefix
+tokens are metered separately. A no-repair selector has lower compute and is
+not included as an equal-repair-budget baseline. LDB~\citep{ldb} and other
+trace-rich methods belong only to an enhanced-information table. RLEF is
+related actor-training work~\citep{rlef}, not an unimplemented matched arm.
+
+For each task and seed, eight genuine actor samples are generated once and
+their exact hashes shared across arms. Every matched repair arm receives
+exactly four repair decodes, the same ordered visible tests, status-only
+feedback, output limits, and no early stopping. Independent repair uses four
+distinct initial slots without later repair feedback. The initial selected
+Pass@1, hidden pass@8 oracle ceiling, and final hidden Pass@1 are distinct
+metrics. Exactly one final program is chosen by visible pass fraction with
+fixed tie-breaking and sealed before hidden evaluation. Belief calls are not
+actor decodes, but every full particle-conditioned decode increases effective
+decode multiplicity and must be charged as such.
+
+\paragraph{Ablations and controls.}
+Development uses 256 RBR tasks and three seeds, one factor at a time, not a
+Cartesian ablation sweep. Factors cover $P\in\{1,2,4,8,16,32\}$; learned versus
+uniform proposal, likelihood, and transition; proposal correction on/off;
+resampling never/every step/ESS; corrected move/off/biased jitter; evidence
+last/window/full/orderless; sample-once/MAP/mean/token-remix/full ensemble;
+no-op/random/text/soft-prefix/K/V/KV injection; and prefix lengths 2/4/8/16.
+The confirmatory configuration and five causal controls are locked. Shuffling
+permutes observed outcome/test pairings, wrong-candidate feedback uses a
+same-task same-round donor or masked fallback, masking removes outcome-derived
+features, random latents match posterior weighted RMS radius, and shared belief
+is labeled faulty. Full traces are a different information condition.
+
+\paragraph{Metrics, statistical units, and gates.}
+Formal seeds are 1701, 1702, and 1703. The independent unit is a source-problem
+cluster. Metrics aggregate tests within candidate, candidates within task,
+then seeds within task. Inference uses 10,000 paired stratified cluster-bootstrap
+replicates, seed 314159, shared resample indices across arms, strata for dataset,
+official split, and source language, and 95\% intervals. Secondary comparisons
+use Holm correction; cross-model summaries have fixed equal weights and every
+model-by-dataset cell remains visible.
+
+S1 compares exact Bayes with $P\in\{1,4,8,16,32\}$: at 32 particles, median
+posterior KL must be at most 0.05 nat, future NLL within 2\% of exact, and
+randomized 90\% HPD coverage in $[0.87,0.93]$. Gate B requires at least 5\%
+task-macro prefix-four future-NLL improvement over the development-selected
+deterministic comparator and a positive paired 95\% lower bound on log-relative
+improvement. A one-sided Brier non-inferiority check uses absolute margin 0.01
+on the multiclass $[0,2]$ scale, a prospective tolerance rather than an empirical
+estimate. Shuffled, wrong-candidate, and random controls must each remove at
+least 80\% of the gain. Failure stops confirmatory repair. Gate C requires at
+least three absolute percentage points in final hidden Pass@1 over both
+Self-Debugging and the strongest deterministic arm, with both paired lower
+bounds positive and Gate B retained; failure blocks locked confirmatory
+replication. S4 requires agreeing directions for both additional models and
+a positive fixed-equal-weight cross-model lower bound. Main-table eligibility
+requires Gates B and C and the factory-produced locked replication gate.
+
+S2 evaluates the sealed RBR test and CodeARC-Replay. S3 runs primary-model repair
+on RBR, full EvalPlus, and CodeARC-Replay. S4 runs PBPF plus the two preselected
+baselines on full EvalPlus for Qwen3 and DeepSeek, and on CodeARC-Replay plus
+the locked LiveCodeBench slice for Qwen2.5. No model-by-dataset cell is replaced
+by a more favorable pooled result.
+
+\paragraph{Isolation, provenance, and resource accounting.}
+Generator and evaluator are separate processes with separate manifests. The
+generator cannot access hidden test source, expected hidden outputs, gold code,
+gold patches, or final hidden outcomes. Dataset/model/tokenizer/prompt revisions,
+materialized snapshot and weight hashes, native chat-template hashes, split
+seeds, container digests, test order, and clusters are bound to the run identity;
+resume rejects fingerprint mismatches. Stable SHA-256 sharding and private
+atomic shard outputs permit deterministic merge with duplicate, missing-key,
+and checksum rejection. The intended entry point is
+\texttt{bash scripts/run\_iclr.sh} with config
+\texttt{configs/experiments/iclr\_pbpf.yaml}, profile
+\texttt{slurm\_h200x16}, and \texttt{--resume}. Sixteen independent single-GPU
+workers are a launch profile, not a claimed resource measurement.
+
+Formal evaluator authorization additionally requires an independently launched,
+distinct-UID worker, a pre-provisioned evaluator-owned trust anchor, an exact
+signed seal digest, pinned roots, and an external sandbox specification.
+Same-UID and stdio-only evaluation is permanently nonconfirmatory. Stage-B
+future scoring has its own immutable prediction seal; final repair evaluation
+uses a separate exact selection mapping. Accepted receipts are unique per
+sealed work ID, but a crash can cause another physical attempt, so failed and
+retried actor/verifier work is reserved and charged rather than hidden.
+
+Before scaling, a disjoint 64-task resource pilot must measure throughput and
+abort for a projected-cost deviation above 25\%, memory above 90\%, or
+infrastructure failures above 1\%. Ledgers separately report generation calls,
+belief forwards, verifier cases/suites, input/output tokens, CPU seconds, GPU
+hours, wall time, peak allocated memory, and disk bytes. Static actor-token and
+verifier-suite bounds cover one three-seed evaluation sweep per cell, not
+training, grid search, or retries. Full-decode equivalents and invocation
+counts are distinct, including partial-prefix requests. Full-workflow costs
+require operator-approved GPU/CPU budgets and the resource pilot.
+Forced execution after
+a failed gate is explicitly nonconfirmatory and excluded from main tables.

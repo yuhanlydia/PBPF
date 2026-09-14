@@ -1,70 +1,160 @@
-# Experiment execution
+# ICLR operator workflow
 
-## Status boundary
+## Evidence and integration boundary
 
-All shipped YAML files have `claim_status: preregistered_configuration_only`.
-Validating a plan, passing a fake-backend smoke, or completing a pilot does not
-constitute evidence of a 7B prediction or repair gain. Only a frozen formal run
-whose immutable artifacts pass the preregistered gates may be interpreted.
+`configs/experiments/iclr_pbpf.yaml` is a prospective S0–S4 contract, not a result.
+`local_cpu` is synthetic and always `smoke-only-no-claim`. Legacy configs/numbers
+are diagnostics; SWE-bench is excluded from the core claim. No formal results
+exist until real immutable artifacts pass verification and all gates.
 
-## Validation and smoke
+The Slurm dispatcher and production-factory interface are implemented. **A
+complete production train/select/calibrate/evaluate factory is not shipped.**
+The formal command refuses to substitute an offline experiment, local sandbox,
+random model or invented data. An operator must integrate/audit the scientific
+handlers and live Task-6 evaluator authority before useful H200 execution.
 
-From a clean checkout:
+## Environment and preparation
+
+From the reviewed checkout described in README:
 
 ```bash
+python3.12 -m venv .venv
+. .venv/bin/activate
 python -m pip install -e '.[test]'
-pbpf-run doctor
-for config in configs/experiments/*.yaml; do pbpf-run plan "$config"; done
-PYTHONPATH=src python -m pytest -q
-scripts/run_smoke.sh
+pbpf-iclr doctor --config configs/experiments/iclr_pbpf.yaml --profile local_cpu --dry-run
+pbpf-iclr prepare --config configs/experiments/iclr_pbpf.yaml --profile local_cpu --resume
 ```
 
-The smoke runs sequential per-observation particle updates, candidate/test-keyed
-prediction, four conditioned repairs, fail-closed stage gates, and an immutable
-run bundle without a model download. The 7B launchers execute the local
-real-model diagnostic runner. They default to all 164 EvalPlus HumanEval tasks;
-set `PBPF_START_INDEX`, `PBPF_NUM_TASKS`, and `PBPF_MAX_NEW_TOKENS` to resume in
-smaller chunks:
+This prepares synthetic disjoint public/private manifests without credentials
+or downloads. Production preparation consumes already-provisioned exact snapshots
+through `pbpf.data.prepare_dataset`; see DATA.md. The optional Datasets loader
+requires full immutable commits and defaults to local cache.
+
+On the provisioned H200 host only:
 
 ```bash
-scripts/run_frozen_7b.sh configs/experiments/frozen_7b_16gb.yaml
-scripts/run_repair.sh configs/experiments/repair_7b_24gb.yaml
-scripts/run_repair.sh configs/experiments/formal_h200.yaml
+python -m pip install -e '.[test,ml,experiment]'
+export PBPF_ICLR_SITE=/operator/provisioned/pbpf-site.yaml
+pbpf-iclr doctor --config configs/experiments/iclr_pbpf.yaml --profile slurm_h200x16 --dry-run
+pbpf-iclr prepare --config configs/experiments/iclr_pbpf.yaml --profile slurm_h200x16 --resume
 ```
 
-These launchers produce real diagnostic artifacts, but the shipped configs
-remain `claim_status: preregistered_configuration_only`; a local run is not
-formal evidence until the registered evaluator and multi-seed aggregator are
-supplied.
+Replace the example overlay location with the actual operator-created path.
+There is no pretend-valid template with guessed prices, partition, image digest,
+usable H200 memory or trust keys. Schema/pins precede arm compatibility, static
+cost/memory bounds, authority/integration checks and optional package discovery.
+Doctor emits exactly one JSON object on stdout, with diagnostics on stderr.
 
-## Stages and gates
+## Required operational overlay
 
-Stage A runs family-held-out finite programs at P=1/4/8/16/32 and reports future
-NLL after prefix four, Brier, ECE, posterior KL, randomized 90% HPD coverage, ESS,
-and unique ancestors. Stage B freezes the actor and fits belief/adapter modules on
-grouped RunBugRun before transfer to CodeARC and EvalPlus. It advances only when
-future NLL improves by at least 5% over the strongest matched deterministic arm,
-the paired cluster-bootstrap confidence interval is above zero, Brier does not
-regress, and shuffled/random controls remove at least 80% of the gain.
+| Field | Required provisioned meaning |
+|---|---|
+| `partition`, `account` | Authorized Slurm identifiers |
+| `usable_h200_bytes` | Measured usable bytes for one H200 worker |
+| `gpu_price_per_hour`, `cpu_price_per_hour` | Actual billed unit prices |
+| `approved_projection` | Approved total currency-unit ceiling for the explicit matrix |
+| `container_digest` | Immutable `sha256:` image digest covering runtime libraries |
+| `cells` | Every cell ID: exact tasks, hidden-case bound, GPU/CPU hours, memory/disk bounds |
+| `identity.models` | Three formal models: `model_id`/`revision`, `tokenizer_id`/`tokenizer_revision`, `tokenizer_hash`, native `chat_template_hash`, and `weights_hash` |
+| `identity.datasets` | Four protocols: exact IDs/revisions and raw/split/adapter content hashes |
+| `factory`, `factory_sha256` | Absolute audited Python module exporting `create_factory()`, plus exact hash |
+| `public_root`, `private_root` | Independently mounted prepared roots |
+| `trust_anchor` | Existing evaluator/root-owned 0400 secret file >=32 bytes; never generated by CLI |
+| `sandbox_spec` | YAML for `ExternalSandboxSpec(command, dependency_files, container_digest)` |
+| `authority_receipt` | Trusted operator JSON: `schema: pbpf-external-deployment-v1`, distinct `generator_uid`/`evaluator_uid`, container and factory hashes |
 
-Stage C consumes the same immutable G=8 candidate bank in every arm. It always
-executes four repair rounds, selects one active slot by predicted remaining-suite
-success with generation log-probability as the fixed tie-break, and submits one
-program. It advances only at +3 absolute Pass@1 points with a positive paired CI
-and retained future-NLL advantage. Stage D freezes the mini-SWE-agent scaffold,
-uses Lite for development, then runs Verified exactly once.
+The supported launch contract requires the public factory module and every
+sandbox executable/wrapper/dependency, including their non-sticky ancestors, to
+be root-owned and non-generator-writable. Root installs public executable code;
+the designated evaluator may own private roots, keys and authority metadata.
+Evaluator-owned public executable code is intentionally rejected before jobs.
 
-Formal online runs use three seeds and 10,000 paired hierarchical bootstrap
-replicates at the source-task cluster level with one shared resampled seed vector
-per replicate. Secondary comparisons use Holm
-correction. Abort scaling above 90% peak memory, 1% infrastructure failures, or a
-25% projected cost overrun.
+Each `cells.<id>` requires `tasks`, `hidden_cases`, `memory_bytes_bound`,
+`disk_bytes_bound`, `gpu_hours`, and `cpu_hours`. Caps cannot be exceeded;
+`snapshot_inventory` becomes an exact positive immutable inventory count, never
+a successful unresolved placeholder. The site must protect the overlay/factory
+from generator writes. YAML is not proof of isolation: every private request must
+still pass Task-6 live UID/backend/capability checks. Never put hidden labels or
+secrets in the public overlay. Actual paths, authority and snapshot provisioning
+are prerequisites, not services provided by this repository.
 
-## Hardware limits
+Doctor separates `actor_decodes` (1024-token full-decode equivalents),
+`actor_requests_bound` (model invocations, including Roulette prefix/completion
+requests), and `sandbox_suites` (verification suites, not individual test cases).
+Formal token/suite formulas bound one three-seed protocol sweep per cell, with
+both unselected locked comparators conservatively allowed to be Roulette. A
+suite bound allows visible and future-label suites for every candidate, plus a
+selected hidden suite per arm. These formulas do **not** bound training, grid
+search or retries: their full-workflow cost must be included in operator-approved
+GPU/CPU hours and checked by the 64-task pilot and factory preflight. The local
+fixture reports its complete 60 actor requests and 93 verification suites under
+the S3 accounting bucket; the other synthetic stages do not claim empirical work.
 
-The 16GB profile is a smoke profile: NF4/BF16 compute, 2,048 context, microbatch
-1, accumulation 32, sequential P=8, last four layers, rank 4. The 24GB profile is
-an online pilot: 3,072 context, microbatch 1, accumulation 16, P=8 in chunks of 2,
-last eight layers, rank 8. Neither may be marked formal. `h200_formal` is the only
-shipped formal configuration and requires full model/data SHAs and an image
-digest. Model reports remain separate across Qwen 2.5, Qwen 3, and DeepSeek.
+## Calibration, launch, resume and override
+
+A source-disjoint 64-task throughput pilot precedes scaling. Its measured report
+binds the development run ID and contains `expected_work=64`, `failed_work`,
+`projected_cost`, `measured_cost`, `allocated_memory`, `available_memory`, and
+`source_disjoint=true`. The runner rejects >25% relative projection deviation,
+>90% allocated memory or >1% infrastructure failure.
+
+```bash
+pbpf-iclr run --config configs/experiments/iclr_pbpf.yaml --profile slurm_h200x16 --calibration-only --resume
+bash scripts/run_iclr.sh --config configs/experiments/iclr_pbpf.yaml --profile slurm_h200x16 --resume
+```
+
+Without calibration, the full launcher schedules it and makes the matrix depend
+on successful validation. Explicit calibration-only mode allows prior operator
+inspection. Resume may submit fresh Slurm jobs; workers reuse valid leaves and
+rerun only matching corrupt/partial leaves. Scheduler monitoring is an operator
+responsibility. Changed scientific identities are never merged or overwritten.
+
+Gate B failure exits 20 and blocks dependent repair. Exploratory continuation:
+
+```bash
+bash scripts/run_iclr.sh --config configs/experiments/iclr_pbpf.yaml --profile slurm_h200x16 --resume --force-after-failed-gate
+```
+
+The immutable failed decision remains. Every downstream artifact is explicitly
+nonconfirmatory and carries the failed-gate hash; aggregation rejects it. Force
+on a passing B does not relabel the run or override an independently failed C.
+Gate C failure blocks locked confirmatory replication.
+
+## Slurm and two-phase identity
+
+Arrays use one H200 each, concurrency `%16`, not one 16-GPU node. The training
+lock-producing array has one task. Gate B/C, seal and other controllers are
+singleton CPU jobs. Prediction and replication generation each have separate
+CPU evaluator stages. Only evaluator arrays receive the private overlay path.
+All jobs use `--export=NONE`, `afterok`, and `--kill-on-invalid-dep=yes`; argv is
+literal, never `eval`, `--wrap`, or `bash -c`. The interpreter/checkout must be
+available at consistent absolute worker locations. Site policy must enforce the
+distinct evaluator UID; ordinary same-UID Slurm submission cannot provide it.
+
+The explicit `development_inputs` identity binds source/factory bytes, snapshots,
+prompt, scientific procedures/splits and seeds, without fictitious future learned
+hashes. The trainer writes actual checkpoint, comparator-selection and scalar
+temperature artifacts, then one `lock_artifacts` manifest with relative `file` and
+`sha256` records for `checkpoint`, `selection`, and `calibration`. Before sealed
+prediction/repair/hidden/replication, the runner verifies those bytes and freezes
+`ScientificIdentity`. Development identity alone is rejected at that boundary.
+
+The external interface is `FormalFactory.preflight(science, site)`,
+`work_keys(stage)`, and `execute(context, key)`. Preflight must remain lazy;
+handlers consume every declared dependency via `context.input`. Generation must
+use `MeteredActor`; private operations use the trusted evaluator service with
+signed capabilities. `pbpf.runner.hf` supplies exact-revision BF16/native-chat,
+soft-prefix/partial-decode and local Datasets primitives, not a scientific factory.
+
+## Aggregate, verify and package
+
+```bash
+pbpf-iclr aggregate --config configs/experiments/iclr_pbpf.yaml --profile slurm_h200x16
+pbpf-iclr verify --config configs/experiments/iclr_pbpf.yaml --profile slurm_h200x16
+pbpf-iclr package --config configs/experiments/iclr_pbpf.yaml --profile slurm_h200x16
+```
+
+All use the same scientific run ID. Formal main-table eligibility requires B/C
+and the factory-produced locked replication gate. Package verifies first and
+creates a deterministic public metadata/stage bundle, not a paper ZIP or private
+truth/model-weight archive. `--output-root` changes location, not identity.
