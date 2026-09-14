@@ -103,7 +103,10 @@ def main() -> None:
         model_revision=config["model"]["revision"],
     ) for i, code in enumerate(mutant_codes))
     bank = TrajectoryBank((task,), tuple(samples) + mutants, (), tuple(sorted(mutant_registry.items())))
-    sandbox = LocalPythonSandbox({"hidden-stdio-0": {"input": "", "output": expected}})
+    sandbox = LocalPythonSandbox(
+        {"hidden-stdio-0": {"input": "", "output": expected}},
+        python_executable="/usr/bin/python3",
+    )
     truth = {(c.content_hash, "hidden-stdio-0"): sandbox.execute(c.code, "hidden-stdio-0").outcome for c in bank.candidates}
     hidden = int(backend.model.config.hidden_size)
     particle_rng = np.random.default_rng(7)

@@ -48,6 +48,12 @@ def main() -> None:
     parser.add_argument("--max-new-tokens", type=int, default=192)
     args = parser.parse_args()
     config = load_experiment(args.config)
+    if config["data"]["id"] != "evalplus":
+        raise ValueError("EvalPlus screen requires a config whose data.id is evalplus")
+    if config["baseline"]["name"] != "pbpf_soft_prompt" or config["arms"] != ["pbpf_soft_prompt"]:
+        raise ValueError("EvalPlus diagnostic currently implements only the pbpf_soft_prompt arm")
+    from pbpf.config import validate_experiment
+    validate_experiment(config, for_execution=True)
     scorer = Scorer()
     backend = TransformersRepairBackend(
         config["model"]["id"], config["model"]["revision"],
@@ -98,7 +104,11 @@ def main() -> None:
         ) for i, code in enumerate(mutant_codes))
         bank = TrajectoryBank((task,), tuple(samples) + mutants, (), tuple(sorted(registry.items())))
         harness = raw["test"] + f"\ncheck({raw['entry_point']})\n"
-        sandbox = LocalPythonSandbox({"humaneval-base": {"harness": harness}}, timeout_seconds=3)
+        sandbox = LocalPythonSandbox(
+            {"humaneval-base": {"harness": harness}},
+            timeout_seconds=3,
+            python_executable="/usr/bin/python3",
+        )
         truth = {(item.content_hash, "humaneval-base"): sandbox.execute(item.code, "humaneval-base").outcome for item in bank.candidates}
         rng = np.random.default_rng(7000 + task_index)
         hidden = int(backend.model.config.hidden_size)

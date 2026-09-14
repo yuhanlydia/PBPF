@@ -317,6 +317,7 @@ def _formal_site_with_runtime_identities(module, science):
             "revision": revision,
             "tokenizer_id": model_id,
             "tokenizer_revision": revision,
+            "tokenizer_hash": "0" * 64,
             "chat_template_hash": "1" * 64,
             "weights_hash": "2" * 64,
         }

@@ -98,6 +98,34 @@ def test_required_documentation_and_ci_files_exist():
     assert all(path.is_file() and path.stat().st_size > 200 for path in required)
 
 
+def test_cpu_ci_keeps_neural_tests_optional():
+    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    assert "-e '.[test]'" in workflow
+    prediction_tests = (ROOT / "tests/arms/test_prediction_arms.py").read_text()
+    assert 'pytest.importorskip("torch")' in prediction_tests
+
+
+def test_real_evalplus_launchers_use_executable_dataset_matched_configs():
+    root = Path(__file__).parents[1]
+    from pbpf.config import load_experiment, validate_experiment
+
+    for launcher, config_name in (
+        ("run_frozen_7b.sh", "evalplus_frozen_7b_16gb.yaml"),
+        ("run_repair.sh", "evalplus_repair_7b_24gb.yaml"),
+    ):
+        script = (root / "scripts" / launcher).read_text()
+        assert f"configs/diagnostics/{config_name}" in script
+        config = load_experiment(root / "configs" / "diagnostics" / config_name)
+        validated = validate_experiment(config, for_execution=True)
+        assert validated["data"]["id"] == "evalplus"
+        assert validated["baseline"]["name"] == "pbpf_soft_prompt"
+        assert validated["arms"] == ["pbpf_soft_prompt"]
+
+    for runner in ("run_evalplus_screen.py", "run_real_pilot.py"):
+        source = (root / "scripts" / runner).read_text()
+        assert 'python_executable="/usr/bin/python3"' in source
+
+
 def test_smoke_cli_executes_protocol_instead_of_only_planning(tmp_path, capsys):
     from pbpf.cli import main
 

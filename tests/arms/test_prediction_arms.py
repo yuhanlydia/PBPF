@@ -7,7 +7,7 @@ import secrets
 
 import numpy as np
 import pytest
-import torch
+torch = pytest.importorskip("torch")
 
 from pbpf.data.schema import PublicTask, PublicTest
 from pbpf.registry import OUTCOMES
