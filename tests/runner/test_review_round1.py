@@ -169,7 +169,11 @@ def test_over_limit_unit_kills_its_process_group(tmp_path):
     child_pid = int(child_file.read_text())
     status = Path(f"/proc/{child_pid}/stat")
     # An adopted zombie can remain until init reaps it, but cannot execute.
-    assert not status.exists() or status.read_text().rsplit(")", 1)[1].split()[0] == "Z"
+    try:
+        state = status.read_text().rsplit(")", 1)[1].split()[0]
+    except FileNotFoundError:
+        state = None
+    assert state in {None, "Z"}
 
 
 def test_runner_meter_reserves_failed_and_multiple_decodes_with_native_telemetry(tmp_path):
