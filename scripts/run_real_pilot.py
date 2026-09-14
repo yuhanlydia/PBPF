@@ -45,18 +45,19 @@ def main() -> None:
     parser.add_argument("--config", type=Path, default=Path("configs/pilots/local_real_7b.yaml"))
     parser.add_argument("--parquet", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--task-id", type=int, default=6581)
     parser.add_argument("--max-new-tokens", type=int, default=128)
     args = parser.parse_args()
 
     config = load_experiment(args.config)
     rows = pq.read_table(args.parquet).to_pylist()
-    row = next(item for item in rows if int(item["id"]) == 6584)
+    row = next(item for item in rows if int(item["id"]) == args.task_id)
     expected = subprocess.run(
         ["/usr/bin/python3", "-I", "-c", row["fixed_code"]],
         text=True, capture_output=True, timeout=5, check=True,
     ).stdout
     task = TaskRecord(
-        task_id="runbugrun-6584",
+        task_id=f"runbugrun-{args.task_id}",
         dataset="runbugrun",
         public_prompt=(
             "Repair this Python program. It must print the 1 through 9 multiplication table, "

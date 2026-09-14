@@ -125,6 +125,13 @@ def test_real_evalplus_launchers_use_executable_dataset_matched_configs():
         source = (root / "scripts" / runner).read_text()
         assert 'python_executable="/usr/bin/python3"' in source
 
+    pilot = load_experiment(root / "configs" / "pilots" / "local_real_7b.yaml")
+    benchmark = load_yaml(root / "configs" / "benchmarks" / "runbugrun.yaml")
+    assert pilot["data"]["revision"] == benchmark["revision"]
+    assert 'parser.add_argument("--task-id", type=int, default=6581)' in (
+        root / "scripts" / "run_real_pilot.py"
+    ).read_text()
+
 
 def test_smoke_cli_executes_protocol_instead_of_only_planning(tmp_path, capsys):
     from pbpf.cli import main

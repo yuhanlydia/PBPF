@@ -7,7 +7,7 @@ model:
   revision: c03e6d358207e414f1eca0bb1891e29f1db0e242
 data:
   id: runbugrun
-  revision: 837e7006c28153022469fb035a38f4652e3032b6
+  revision: 374251a9d65410f37e1136049cb7ff5dcca3d0ae
 container:
   image: local-python-restricted-pilot
   digest: sha256:8f7cb447d8e0a8892ab72772647cbe683fdbc8748e2b80ce2454b3434173e12f
