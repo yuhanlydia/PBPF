@@ -8,3 +8,6 @@ dist/
 results/*/HumanEval-*/
 results/gpu_gate_frozen_1/
 results/runbugrun_real_pilot_6581/
+results/rbr_real_gate_dataset.json
+results/rbr_gate_b_seed*.pt
+results/rbr_gate_b_seed*.log

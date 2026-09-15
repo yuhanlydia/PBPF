@@ -6,6 +6,14 @@ runner, and a prospective ICLR 2027 S0–S4 experiment contract. **No formal PBP
 results are included.** The historical `50 -> 84 / 164` EvalPlus screen is a
 legacy diagnostic, not PBPF evidence.
 
+The first real-data prediction diagnostic is recorded in
+[`results/RBR_GATE_B_2026-09-15.md`](results/RBR_GATE_B_2026-09-15.md). On
+source-problem-disjoint RunBugRun data, learned candidate-specific states improve
+future-outcome NLL over no evidence, an outcome-rate baseline, wrong-candidate
+evidence, and random latents across three seeds. The stricter causal gate still
+fails because shuffled test/outcome associations retain the gain; actor repair
+conditioning has not yet been tested by this diagnostic.
+
 ## Install and run offline
 
 After the reviewed feature branch is published:

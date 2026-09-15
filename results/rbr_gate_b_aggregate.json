@@ -1,0 +1,124 @@
+{
+  "dataset": {
+    "future_examples": 474,
+    "problems": {
+      "development": 27,
+      "test": 66,
+      "train": 112
+    },
+    "records": {
+      "development": 54,
+      "test": 79,
+      "train": 282
+    }
+  },
+  "full_gate_passes_all_seeds": false,
+  "metrics": {
+    "baseline": {
+      "accuracy_mean": 0.4929676511954993,
+      "accuracy_sample_sd": 0.023238694292346398,
+      "brier_mean": 0.6379428789501012,
+      "brier_sample_sd": 0.007997892013772195,
+      "nll_mean": 1.0938918495962526,
+      "nll_sample_sd": 0.02369537731327753
+    },
+    "history_rate": {
+      "accuracy_mean": 0.820675105485232,
+      "accuracy_sample_sd": 0.0,
+      "brier_mean": 0.3930301609626504,
+      "brier_sample_sd": 0.0,
+      "nll_mean": 0.819200839384974,
+      "nll_sample_sd": 0.0
+    },
+    "pbpf": {
+      "accuracy_mean": 0.7876230661040787,
+      "accuracy_sample_sd": 0.011619347146173197,
+      "brier_mean": 0.3024833974495587,
+      "brier_sample_sd": 0.016875563807743407,
+      "nll_mean": 0.5419391624963456,
+      "nll_sample_sd": 0.043426754180271226
+    },
+    "random": {
+      "accuracy_mean": 0.41139240506329117,
+      "accuracy_sample_sd": 0.03485804143851963,
+      "brier_mean": 0.6685383120248019,
+      "brier_sample_sd": 0.008005729278736893,
+      "nll_mean": 1.1320240885804376,
+      "nll_sample_sd": 0.014120573104275027
+    },
+    "shuffled": {
+      "accuracy_mean": 0.80098452883263,
+      "accuracy_sample_sd": 0.01583450105372391,
+      "brier_mean": 0.2931967869131104,
+      "brier_sample_sd": 0.010490249765271133,
+      "nll_mean": 0.5183610896860419,
+      "nll_sample_sd": 0.012975324511337998
+    },
+    "wrong_candidate": {
+      "accuracy_mean": 0.7257383966244726,
+      "accuracy_sample_sd": 0.00919598933236428,
+      "brier_mean": 0.3997496248654203,
+      "brier_sample_sd": 0.02278135963024148,
+      "nll_mean": 0.7389619400180084,
+      "nll_sample_sd": 0.05231000228389081
+    }
+  },
+  "paired_nll_gain": {
+    "baseline": {
+      "mean": 0.5519526870999072,
+      "per_seed": [
+        0.5296338824497264,
+        0.5587569620968182,
+        0.5674672167531769
+      ],
+      "sample_sd": 0.019813225754640573
+    },
+    "history_rate": {
+      "mean": 0.2772616768886285,
+      "per_seed": [
+        0.22919226198935483,
+        0.28893185878874184,
+        0.31366090988778883
+      ],
+      "sample_sd": 0.043426754180271226
+    },
+    "random": {
+      "mean": 0.5900849260840921,
+      "per_seed": [
+        0.5565719280542996,
+        0.600838788477652,
+        0.6128440617203248
+      ],
+      "sample_sd": 0.029637348466360302
+    },
+    "shuffled": {
+      "mean": -0.02357807281030359,
+      "per_seed": [
+        -0.0662184333926451,
+        -0.002528904390143416,
+        -0.0019868806481222467
+      ],
+      "sample_sd": 0.036928629955338264
+    },
+    "wrong_candidate": {
+      "mean": 0.19702277752166286,
+      "per_seed": [
+        0.20749685823713782,
+        0.19229873776832962,
+        0.19127273655952115
+      ],
+      "sample_sd": 0.009085314785181212
+    }
+  },
+  "per_seed_files": [
+    "results/rbr_gate_b_seed1701_v3.json",
+    "results/rbr_gate_b_seed1702_v3.json",
+    "results/rbr_gate_b_seed1703_v3.json"
+  ],
+  "schema": "pbpf-rbr-gate-b-aggregate-v1",
+  "seeds": [
+    1701,
+    1702,
+    1703
+  ]
+}
