@@ -8,6 +8,7 @@ from pbpf.real_gate import (
     histogram_latent,
     html_to_text,
     render_repair_prompt,
+    selector_bank_audit,
     select_disjoint_problem_ids,
 )
 
@@ -77,3 +78,18 @@ def test_repair_prompt_excludes_future_outcomes_and_is_stable():
 def test_html_problem_description_becomes_bounded_plain_text():
     source = "<h1>A &amp; B</h1><script>SECRET()</script><p>Add <b>two</b> values.</p>"
     assert html_to_text(source) == "A & B\nAdd two values."
+
+
+def test_selector_bank_audit_reports_rankable_space_and_prefix_saturation():
+    outcomes = np.array([
+        [[1, 1, 1, 1], [0, 0, 0, 0]],
+        [[0, 0, 0, 0], [0, 0, 0, 0]],
+        [[1, 0, 0, 0], [0, 1, 1, 1]],
+    ])
+    labels = np.array([[1, 0], [0, 0], [0, 1]])
+    report = selector_bank_audit(outcomes, labels, prefixes=(1, 4))
+    assert report["tasks"] == 3 and report["candidates"] == 6
+    assert report["rankable_tasks"] == 2 and report["all_fail_tasks"] == 1
+    assert report["oracle_pass_at_k"] == 2 / 3
+    assert report["visible_pass_rate_selected_pass_at_1"]["4"] == 2 / 3
+    assert report["rankable_visible_pass_rate_selected_pass_at_1"]["4"] == 1.0

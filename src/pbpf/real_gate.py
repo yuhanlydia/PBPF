@@ -120,6 +120,42 @@ def compare_predictions(labels: np.ndarray, predictions: Mapping[str, np.ndarray
     return reports
 
 
+def selector_bank_audit(visible_outcomes: np.ndarray, trusted_labels: np.ndarray,
+                        *, prefixes=(1, 2, 4, 8)) -> dict:
+    """Measure whether a grouped candidate bank leaves room beyond pass rate."""
+    outcomes = np.asarray(visible_outcomes)
+    labels = np.asarray(trusted_labels)
+    if (outcomes.ndim != 3 or labels.shape != outcomes.shape[:2]
+            or outcomes.shape[0] == 0 or outcomes.shape[1] < 2 or outcomes.shape[2] == 0
+            or not np.isin(outcomes, (0, 1)).all() or not np.isin(labels, (0, 1)).all()):
+        raise ValueError("selector audit requires binary [tasks,candidates,tests] outcomes and labels")
+    prefixes = tuple(prefixes)
+    if (not prefixes or any(type(value) is not int or not 1 <= value <= outcomes.shape[2]
+                            for value in prefixes) or len(set(prefixes)) != len(prefixes)):
+        raise ValueError("selector prefixes must be unique positive integers within the test count")
+    positives = labels.astype(np.int64).sum(1)
+    rankable = (positives > 0) & (positives < labels.shape[1])
+    selected, selected_rankable = {}, {}
+    for prefix in prefixes:
+        indices = outcomes[:, :, :prefix].mean(2).argmax(1)
+        values = labels[np.arange(len(labels)), indices]
+        selected[str(prefix)] = float(values.mean())
+        selected_rankable[str(prefix)] = float(values[rankable].mean()) if rankable.any() else None
+    return {
+        "tasks": int(len(labels)), "candidates": int(labels.size),
+        "candidates_per_task": int(labels.shape[1]), "visible_tests": int(outcomes.shape[2]),
+        "all_fail_tasks": int((positives == 0).sum()),
+        "all_pass_tasks": int((positives == labels.shape[1]).sum()),
+        "rankable_tasks": int(rankable.sum()),
+        "passes_per_task": {str(value): int((positives == value).sum())
+                            for value in sorted(set(positives.tolist()))},
+        "random_selected_pass_at_1": float(labels.mean()),
+        "oracle_pass_at_k": float(labels.max(1).mean()),
+        "visible_pass_rate_selected_pass_at_1": selected,
+        "rankable_visible_pass_rate_selected_pass_at_1": selected_rankable,
+    }
+
+
 def _histogram_features(histories) -> np.ndarray:
     rows = []
     for history in histories:

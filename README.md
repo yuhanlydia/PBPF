@@ -21,6 +21,12 @@ the actor embedding scale, PBPF posterior conditions solved 0/8 candidates
 versus 1/8 for no latent and regressed future-test pass fraction from 35.4% to
 22.9%. This small gate is negative and was not expanded.
 
+The proposed candidate-selector follow-up and its data requirements are recorded
+in [`docs/PBPF_SELECTOR_GATE.md`](docs/PBPF_SELECTOR_GATE.md). An audit of the
+existing 164-task GOAV EvalPlus bank found that four-test pass rate already
+matches Oracle Pass@8, so that bank cannot identify an additional PBPF selector
+gain; a harder grouped candidate bank is required.
+
 ## Install and run offline
 
 After the reviewed feature branch is published:
