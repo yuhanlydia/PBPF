@@ -11,3 +11,6 @@ results/runbugrun_real_pilot_6581/
 results/rbr_real_gate_dataset.json
 results/rbr_gate_b_seed*.pt
 results/rbr_gate_b_seed*.log
+results/rbr_repair_gate_seed*.json
+results/rbr_repair_gate_seed*.log
+results/rbr_soft_prefix_seed*.pt

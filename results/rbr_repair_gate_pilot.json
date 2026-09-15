@@ -1,0 +1,199 @@
+{
+  "actor": {
+    "max_new_tokens": 512,
+    "same_actor": "Qwen/Qwen2.5-Coder-7B-Instruct",
+    "same_decode_policy": "greedy",
+    "same_prefix_tokens": 8,
+    "same_prompt": true,
+    "same_revision": "c03e6d358207e414f1eca0bb1891e29f1db0e242",
+    "same_tasks": true
+  },
+  "claim_status": "negative-small-repair-gate-stop",
+  "dataset": {
+    "description_archive_sha256": "8b631ae168ba84dce69c7d8e1b6c632256e0155858c2664c6493a5f001b45fdd",
+    "problems": {
+      "development": 27,
+      "test": 66,
+      "train": 112
+    },
+    "records": {
+      "development": 54,
+      "test": 79,
+      "train": 282
+    },
+    "schema": "pbpf-rbr-real-gate-v2",
+    "tests_per_candidate": 10,
+    "visible_tests": 4
+  },
+  "date": "2026-09-15",
+  "diagnostic_failure": {
+    "arms": {
+      "no_latent": {
+        "code_sha256": "407ef688ba2f0585c0d3535f87ad4cfc18d3762f306fb8f800ff7ff4ebada7ae",
+        "outcomes": [
+          "PASS",
+          "PASS",
+          "PASS",
+          "PASS",
+          "PASS",
+          "PASS",
+          "PASS",
+          "PASS",
+          "PASS",
+          "PASS"
+        ]
+      },
+      "pbpf": {
+        "code_sha256": "d30f39f93f7da1d13d33ad34c6ed5e05a619dee133baf573f185fbe260764587",
+        "outcomes": [
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT"
+        ]
+      },
+      "posterior_map": {
+        "code_sha256": "d30f39f93f7da1d13d33ad34c6ed5e05a619dee133baf573f185fbe260764587",
+        "outcomes": [
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT"
+        ]
+      },
+      "posterior_mean": {
+        "code_sha256": "d30f39f93f7da1d13d33ad34c6ed5e05a619dee133baf573f185fbe260764587",
+        "outcomes": [
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT",
+          "WRONG_OUTPUT"
+        ]
+      }
+    },
+    "task_id": "36146"
+  },
+  "schema": "pbpf-rbr-repair-pilot-summary-v1",
+  "summary": {
+    "heuristic": {
+      "future_pass_fraction": 0.3541666666666667,
+      "generated_tokens": 1496,
+      "generation_seconds": 42.28992211469449,
+      "solved": 1,
+      "success_rate": 0.125,
+      "tasks": 8
+    },
+    "no_latent": {
+      "future_pass_fraction": 0.3541666666666667,
+      "generated_tokens": 1494,
+      "generation_seconds": 42.498375904979184,
+      "solved": 1,
+      "success_rate": 0.125,
+      "tasks": 8
+    },
+    "pbpf": {
+      "future_pass_fraction": 0.22916666666666669,
+      "generated_tokens": 1490,
+      "generation_seconds": 41.7642742220778,
+      "solved": 0,
+      "success_rate": 0.0,
+      "tasks": 8
+    },
+    "posterior_map": {
+      "future_pass_fraction": 0.22916666666666669,
+      "generated_tokens": 1499,
+      "generation_seconds": 41.86065480904654,
+      "solved": 0,
+      "success_rate": 0.0,
+      "tasks": 8
+    },
+    "posterior_mean": {
+      "future_pass_fraction": 0.22916666666666669,
+      "generated_tokens": 1490,
+      "generation_seconds": 41.49137737590354,
+      "solved": 0,
+      "success_rate": 0.0,
+      "tasks": 8
+    },
+    "random_latent": {
+      "future_pass_fraction": 0.3541666666666667,
+      "generated_tokens": 1497,
+      "generation_seconds": 41.67095698881894,
+      "solved": 1,
+      "success_rate": 0.125,
+      "tasks": 8
+    }
+  },
+  "training": {
+    "development": [
+      {
+        "items": 15,
+        "no_latent": 0.12748845816671392,
+        "pbpf": 0.12984189808925736,
+        "step": 250,
+        "target_tokens": 1177
+      },
+      {
+        "items": 15,
+        "no_latent": 0.10658222874950937,
+        "pbpf": 0.11523827062183857,
+        "step": 500,
+        "target_tokens": 1177
+      },
+      {
+        "items": 15,
+        "no_latent": 0.11173130135695207,
+        "pbpf": 0.11152713260310326,
+        "step": 750,
+        "target_tokens": 1177
+      },
+      {
+        "items": 15,
+        "no_latent": 0.12422128713285406,
+        "pbpf": 0.11759490610283112,
+        "step": 1000,
+        "target_tokens": 1177
+      },
+      {
+        "items": 15,
+        "no_latent": 0.1210626149605469,
+        "pbpf": 0.12381408552852037,
+        "step": 1250,
+        "target_tokens": 1177
+      },
+      {
+        "items": 15,
+        "no_latent": 0.14392522016275885,
+        "pbpf": 0.13260635948829358,
+        "step": 1500,
+        "target_tokens": 1177
+      }
+    ],
+    "development_items": 15,
+    "learning_rate": 3e-05,
+    "maximum_delta_rms": 0.002,
+    "maximum_sequence_tokens": 1024,
+    "maximum_token_rms": 0.02,
+    "selected_step": 750,
+    "steps": 1500,
+    "training_items": 98
+  }
+}

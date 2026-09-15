@@ -37,6 +37,32 @@ def test_prefix_without_labels_and_bad_shapes():
         projector(torch.zeros(1, 4))
 
 
+def test_optional_prefix_rms_bound_keeps_latents_on_actor_embedding_scale():
+    projector = SoftPrefixProjector(3, 5, maximum_token_rms=0.02)
+    with torch.no_grad():
+        projector.network[-1].weight.fill_(1000)
+        projector.network[-1].bias.fill_(1000)
+    value = projector(torch.ones(2, 3))
+    assert torch.all(value.square().mean(-1).sqrt() <= 0.020001)
+    with torch.no_grad():
+        projector.network[-1].weight.zero_()
+        projector.network[-1].bias.zero_()
+    projector(torch.ones(2, 3)).sum().backward()
+    assert all(parameter.grad is not None and torch.isfinite(parameter.grad).all()
+               for parameter in projector.parameters())
+    with pytest.raises(ValueError, match="RMS"):
+        SoftPrefixProjector(3, 5, maximum_token_rms=0)
+
+
+def test_optional_delta_bound_keeps_conditioning_close_to_null_prefix():
+    projector = SoftPrefixProjector(3, 5, maximum_token_rms=0.02, maximum_delta_rms=0.002)
+    null = projector(torch.zeros(2, 3))
+    value = projector(torch.full((2, 3), 1000.0))
+    assert torch.all((value - null).square().mean(-1).sqrt() <= 0.002001)
+    with pytest.raises(ValueError, match="delta RMS"):
+        SoftPrefixProjector(3, 5, maximum_delta_rms=-1)
+
+
 @pytest.mark.parametrize("mode", ["k_only", "v_only", "kv"])
 def test_low_rank_ablation_changes_only_selected_cache_channels(mode):
     torch.manual_seed(5)

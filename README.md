@@ -14,6 +14,13 @@ evidence, and random latents across three seeds. The stricter causal gate still
 fails because shuffled test/outcome associations retain the gain; actor repair
 conditioning has not yet been tested by this diagnostic.
 
+The subsequent frozen-Qwen actor pilot is recorded in
+[`results/RBR_REPAIR_GATE_2026-09-15.md`](results/RBR_REPAIR_GATE_2026-09-15.md).
+After repairing the missing-problem-statement input and bounding the prefix to
+the actor embedding scale, PBPF posterior conditions solved 0/8 candidates
+versus 1/8 for no latent and regressed future-test pass fraction from 35.4% to
+22.9%. This small gate is negative and was not expanded.
+
 ## Install and run offline
 
 After the reviewed feature branch is published:

@@ -6,11 +6,15 @@ and candidate identifiers are intentionally never accepted by this interface.
 from __future__ import annotations
 
 import hashlib
+import json
+from html.parser import HTMLParser
 import math
 import re
 from collections.abc import Mapping
 
 import numpy as np
+
+from .registry import OUTCOMES
 
 
 class FrozenTextEncoder:
@@ -114,3 +118,84 @@ def compare_predictions(labels: np.ndarray, predictions: Mapping[str, np.ndarray
     for name, row in reports.items():
         row["nll_gain_vs_baseline"] = float((baseline - losses[name]).mean())
     return reports
+
+
+def _histogram_features(histories) -> np.ndarray:
+    rows = []
+    for history in histories:
+        if not history or any(value not in OUTCOMES for value in history):
+            raise ValueError("histogram control requires nonempty registered visible outcomes")
+        counts = np.asarray([history.count(value) for value in OUTCOMES], dtype=np.float64)
+        rows.append(np.r_[counts / len(history), 1.0])
+    return np.asarray(rows)
+
+
+def fit_histogram_latent(histories, latents: np.ndarray, *, ridge: float = 1e-3) -> np.ndarray:
+    """Fit the fixed low-capacity outcome-histogram control on training data."""
+    features = _histogram_features(histories)
+    targets = np.asarray(latents, dtype=np.float64)
+    if targets.ndim != 2 or targets.shape[0] != len(features) or not np.isfinite(targets).all():
+        raise ValueError("latents must have finite shape [histories,latent_dim]")
+    if not math.isfinite(ridge) or ridge < 0:
+        raise ValueError("ridge must be finite and nonnegative")
+    gram = features.T @ features + ridge * np.eye(features.shape[1])
+    return np.linalg.pinv(gram) @ features.T @ targets
+
+
+def histogram_latent(histories, coefficients: np.ndarray) -> np.ndarray:
+    features = _histogram_features(histories)
+    coefficients = np.asarray(coefficients, dtype=np.float64)
+    if coefficients.ndim != 2 or coefficients.shape[0] != features.shape[1] or not np.isfinite(coefficients).all():
+        raise ValueError("histogram coefficients have the wrong finite shape")
+    return features @ coefficients
+
+
+class _VisibleHTML(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.rows, self.hidden = [], 0
+
+    def handle_starttag(self, tag, attrs):
+        if tag in {"script", "style"}:
+            self.hidden += 1
+        elif not self.hidden and tag in {"h1", "h2", "h3", "p", "pre", "br", "li"}:
+            self.rows.append("\n")
+
+    def handle_endtag(self, tag):
+        if tag in {"script", "style"} and self.hidden:
+            self.hidden -= 1
+        elif not self.hidden and tag in {"h1", "h2", "h3", "p", "pre", "li"}:
+            self.rows.append("\n")
+
+    def handle_data(self, data):
+        if not self.hidden:
+            self.rows.append(data)
+
+
+def html_to_text(source: str) -> str:
+    if not isinstance(source, str):
+        raise TypeError("HTML description must be text")
+    parser = _VisibleHTML()
+    parser.feed(source)
+    lines = [" ".join(line.split()) for line in "".join(parser.rows).splitlines()]
+    return "\n".join(line for line in lines if line)
+
+
+def render_repair_prompt(candidate: str, tests, outcomes, *, visible: int = 4,
+                         task_text: str = "") -> str:
+    """Render only generator-visible code, inputs and ordered outcome categories."""
+    if not isinstance(candidate, str) or not 1 <= visible <= len(tests) or len(tests) != len(outcomes):
+        raise ValueError("candidate and aligned visible test history are required")
+    evidence = []
+    for index in range(visible):
+        case = tests[index]
+        if not isinstance(case, Mapping) or "input" not in case or outcomes[index] not in OUTCOMES:
+            raise ValueError("visible evidence must contain input text and registered outcomes")
+        evidence.append({"ordinal": index, "input": str(case["input"]), "outcome": outcomes[index]})
+    payload = {"problem": str(task_text), "buggy_python": candidate, "visible_executions": evidence}
+    return (
+        "Repair this Python stdin/stdout program using the visible executions. "
+        "Return only complete executable Python source with no Markdown or explanation.\n"
+        + json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+        + "\nCorrected Python source:\n"
+    )

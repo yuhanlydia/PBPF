@@ -26,7 +26,7 @@ import torch
 
 from pbpf.belief.features import BeliefBatch
 from pbpf.belief.model import NeuralBeliefModel
-from pbpf.real_gate import FrozenTextEncoder, classify_execution, compare_predictions
+from pbpf.real_gate import FrozenTextEncoder, classify_execution, compare_predictions, html_to_text
 from pbpf.registry import OUTCOMES
 from pbpf.train_belief import train_belief_step
 
@@ -42,11 +42,19 @@ EXPECTED_MD5 = {
     "python_test0.jsonl.gz": "375f056565af619146c12e0e63e3974c",
     "tests_all.jsonl.gz": "6eaac2b6a535aa8b5213489c6511cb26",
 }
+DESCRIPTION_SOURCE = "IBM Project CodeNet problem_descriptions.tar.gz"
+DESCRIPTION_ARCHIVE_SHA256 = "8b631ae168ba84dce69c7d8e1b6c632256e0155858c2664c6493a5f001b45fdd"
+DATASET_SCHEMA = "pbpf-rbr-real-gate-v2"
 
 
 def _md5(path: Path) -> str:
     with path.open("rb") as stream:
         return hashlib.file_digest(stream, "md5").hexdigest()
+
+
+def _sha256(path: Path) -> str:
+    with path.open("rb") as stream:
+        return hashlib.file_digest(stream, "sha256").hexdigest()
 
 
 def _rank(seed: int, *values: object) -> bytes:
@@ -106,13 +114,24 @@ def _execute(payload):
     return outcomes
 
 
-def prepare(root: Path, cache: Path, *, train_problems: int, dev_problems: int,
+def prepare(root: Path, descriptions_root: Path, descriptions_archive: Path, cache: Path, *,
+            train_problems: int, dev_problems: int,
             test_problems: int, candidates_per_problem: int, tests_per_candidate: int,
             workers: int, timeout: float, seed: int) -> dict:
     for name, expected in EXPECTED_MD5.items():
         path = root / name
         if not path.is_file() or _md5(path) != expected:
             raise ValueError(f"missing or checksum-mismatched official file: {path}")
+    if (not descriptions_archive.is_file()
+            or _sha256(descriptions_archive) != DESCRIPTION_ARCHIVE_SHA256):
+        raise ValueError(f"missing or checksum-mismatched CodeNet descriptions: {descriptions_archive}")
+    descriptions = {
+        path.stem: html_to_text(path.read_text(errors="replace"))[:6000]
+        for path in descriptions_root.glob("p*.html")
+    }
+    descriptions = {key: value for key, value in descriptions.items() if value.strip()}
+    if not descriptions:
+        raise ValueError(f"no CodeNet problem descriptions found under {descriptions_root}")
     tests = defaultdict(list)
     for row in _load_jsonl(root / "tests_all.jsonl.gz"):
         if len(row["input"]) <= 8192 and len(row["output"]) <= 4096:
@@ -126,7 +145,9 @@ def prepare(root: Path, cache: Path, *, train_problems: int, dev_problems: int,
         rows = []
         for name in names:
             rows.extend(_load_jsonl(root / name))
-        rows = [row for row in rows if len(row["buggy_code"]) <= 8192 and len(tests[row["problem_id"]]) >= tests_per_candidate]
+        rows = [row for row in rows if row["problem_id"] in descriptions
+                and len(row["buggy_code"]) <= 8192
+                and len(tests[row["problem_id"]]) >= tests_per_candidate]
         bugs[split] = rows
         problem_sets[split] = {row["problem_id"] for row in rows}
     train_only = problem_sets["train"] - problem_sets["test"]
@@ -167,14 +188,18 @@ def prepare(root: Path, cache: Path, *, train_problems: int, dev_problems: int,
             continue
         records.append({
             "task_id": str(row["id"]), "problem_id": row["problem_id"], "split": split,
+            "task_text": descriptions[row["problem_id"]],
             "candidate": row["buggy_code"],
             "tests": [{"id": str(case["id"]), "input": case["input"]} for case in cases],
             "outcomes": result,
         })
     cache.parent.mkdir(parents=True, exist_ok=True)
     payload = {
-        "schema": "pbpf-rbr-real-gate-v1", "seed": seed, "tests_per_candidate": tests_per_candidate,
+        "schema": DATASET_SCHEMA, "seed": seed, "tests_per_candidate": tests_per_candidate,
         "official_md5": EXPECTED_MD5, "records": records,
+        "problem_descriptions": {"source": DESCRIPTION_SOURCE,
+                                 "archive_sha256": DESCRIPTION_ARCHIVE_SHA256,
+                                 "maximum_characters": 6000},
         "counts": dict(Counter(row["split"] for row in records)),
         "problem_counts": {split: len({row["problem_id"] for row in records if row["split"] == split}) for split in selected},
         "rejected_fixed_candidates": rejected_fixed,
@@ -184,7 +209,7 @@ def prepare(root: Path, cache: Path, *, train_problems: int, dev_problems: int,
 
 
 def _tensorize(rows, encoder, device):
-    task = np.stack([encoder("Repair this Python stdin/stdout program using observed executions.") for _ in rows])
+    task = np.stack([encoder(row["task_text"]) for row in rows])
     candidate = np.stack([encoder(row["candidate"]) for row in rows])
     tests = np.stack([[encoder(case["input"]) for case in row["tests"]] for row in rows])
     outcomes = np.asarray([[OUTCOMES.index(value) for value in row["outcomes"]] for row in rows])
@@ -363,6 +388,10 @@ def train_and_evaluate(payload: dict, output: Path, *, feature_dim: int, latent_
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data-root", type=Path, default=Path("/root/pbpf_external/runbugrun-v0.0.1"))
+    parser.add_argument("--descriptions-root", type=Path,
+                        default=Path("/root/pbpf_external/project_codenet/problem_descriptions"))
+    parser.add_argument("--descriptions-archive", type=Path,
+                        default=Path("/root/pbpf_external/project_codenet/problem_descriptions.tar.gz"))
     parser.add_argument("--cache", type=Path, default=Path("results/rbr_real_gate_dataset.json"))
     parser.add_argument("--output", type=Path, default=Path("results/rbr_gate_b_result.json"))
     parser.add_argument("--prepare", action="store_true")
@@ -382,10 +411,13 @@ def main():
     parser.add_argument("--learning-rate", type=float, default=3e-4)
     parser.add_argument("--seed", type=int, default=1701)
     args = parser.parse_args()
-    payload = prepare(args.data_root, args.cache, train_problems=args.train_problems,
+    payload = prepare(args.data_root, args.descriptions_root, args.descriptions_archive, args.cache,
+        train_problems=args.train_problems,
         dev_problems=args.dev_problems, test_problems=args.test_problems,
         candidates_per_problem=args.candidates_per_problem, tests_per_candidate=args.tests_per_candidate,
         workers=args.workers, timeout=args.timeout, seed=args.seed) if args.prepare or not args.cache.exists() else json.loads(args.cache.read_text())
+    if payload.get("schema") != DATASET_SCHEMA or any("task_text" not in row for row in payload.get("records", ())):
+        raise ValueError("dataset cache predates CodeNet descriptions; rerun with --prepare")
     train_and_evaluate(payload, args.output, feature_dim=args.feature_dim, latent_dim=args.latent_dim,
         hidden_dim=args.hidden_dim, particles=args.particles, steps=args.steps, batch_size=args.batch_size,
         learning_rate=args.learning_rate, seed=args.seed)
