@@ -1,0 +1,7 @@
+{"config_hash": "852f2ed50636a004cc5f9f7fa53580c17d3c31e226403914446ba9be78332384", "formal": false, "name": "exact-smoke", "profile": "cpu", "status": "validated; no run executed"}
+{"config_hash": "cd4fea4e317db4c1c19e09b54ba88b86a36f28f751fd50bdf0cc2b826cbb3cb5", "formal": false, "name": "frozen-7b-16gb", "profile": "16gb", "status": "validated; no run executed"}
+{"config_hash": "a6a45a93d485ec84e68f46c40c8e2073c9c4c5779f28424a20a2770c9028ac76", "formal": false, "name": "repair-7b-24gb", "profile": "24gb", "status": "validated; no run executed"}
+{"config_hash": "154e37e3c63a685a19623c5edb815942bf72652bf2f4d6ec084410392f7e4df8", "formal": true, "name": "formal-h200", "profile": "h200_formal", "status": "validated; no run executed"}
+{"config_hash": "0e5e34b212a7a7748266ad4f13b67d277011c9f19539e2ea2ed3d0c18d73b3a9", "formal": false, "name": "evalplus-frozen-7b-diagnostic", "profile": "16gb", "status": "validated; no run executed"}
+{"config_hash": "6b8ce95be2bff8e60516ed1048b56d506624e2082b314867d1a1b53ae469ed59", "formal": false, "name": "evalplus-repair-7b-diagnostic", "profile": "24gb", "status": "validated; no run executed"}
+{"config_hash": "89854de2a87aad3c76322e0535cdea57105d2d357c93e4ab3e02deb7989c8b9d", "formal": false, "name": "local-real-7b-pilot", "profile": "16gb", "status": "validated; no run executed"}

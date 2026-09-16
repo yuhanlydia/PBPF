@@ -1,0 +1,6 @@
+{
+  "check": "Qwen2 logits with versus without unused labels",
+  "bitwise_equal": true,
+  "max_abs_difference": 0.0,
+  "scope": "Small CPU Qwen2 fixture; not scientific accuracy evidence"
+}

@@ -1,0 +1,534 @@
+{
+  "scope": "Execute documented experiments; matching published values is not required.",
+  "completed": {
+    "evalplus_frozen_164": {
+      "tasks": 164,
+      "bundles_verified": 164,
+      "rounds_per_task": 4,
+      "initial_tasks_with_passing_candidate": 55,
+      "final_solved": 86.0,
+      "summary_sha256": "745c59a11121d99c30bedf9ba66644aa81cc06014e460894c20e2b3419b92bfe"
+    },
+    "evalplus_repair_164": {
+      "tasks": 164,
+      "bundles_verified": 164,
+      "rounds_per_task": 4,
+      "initial_tasks_with_passing_candidate": 46,
+      "final_solved": 72.0,
+      "summary_sha256": "62932a96299e29ffb8562b568b764ceabea489eeee7a9b952a92d6240eedffd6"
+    },
+    "evalplus_paired_comparison": {
+      "paired_tasks": 164,
+      "repair_minus_frozen_pass_at_1": -0.08536585365853659,
+      "paired_bootstrap_95ci": [
+        -0.17682926829268292,
+        0.006097560975609756
+      ],
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 1701,
+      "repair_only_pass": 24,
+      "frozen_only_pass": 38,
+      "mcnemar_exact_pvalue": 0.09795444051950736,
+      "scope": "Historical heuristic diagnostic; no learned PBPF efficacy claim."
+    },
+    "legacy_exact_smoke": {
+      "bundle_verified": true,
+      "rounds": 4,
+      "final_pass_at_1": 0.0,
+      "manifest_sha256": "92b02b0c2a402efc9ebc6961bb737c415e1b4ef4e7b89257f8fc378e8ceeeb94"
+    },
+    "legacy_rbr_6581": {
+      "bundle_verified": true,
+      "rounds": 4,
+      "final_pass_at_1": 0.0,
+      "manifest_sha256": "061293e94091fffedd102609c4a07a4e7c38be89b4d875f3c818ca4791230a9d"
+    },
+    "finite_contract": {
+      "cases": 60000,
+      "splits": {
+        "train": 50000,
+        "development": 5000,
+        "test": 5000
+      },
+      "test_gate": {
+        "median_kl": 2.1084183269785273,
+        "relative_future_nll_gap": 0.03362606442101663,
+        "hpd_coverage": 0.7994,
+        "passes": false
+      },
+      "scope": "Standalone local generator using repository finite audit; not a sealed formal run."
+    },
+    "selector_bank_audit": {
+      "matches_committed_audit": true,
+      "decision": {
+        "bank_identifies_pbpf_beyond_visible_pass_rate": false,
+        "status": "saturated-baseline-no-pbpf-selector-test"
+      },
+      "source_files": {
+        "bank.jsonl": "a41b71d4e60a6758baeb0f5eb5e31760052d263c78544e616cf5fad51265e758",
+        "bank.npz": "97af7eefcca496c0dbe732b18c9cc31ad75054a445b729803ac9533a5760616a",
+        "sidecar.json": "f1619b7a38b5de0fb8483c951d03c93b0f144443c1e85ea62e47b2f8be31f706"
+      }
+    },
+    "evalplus_evaluator_positive_control": {
+      "passed": 164,
+      "total": 164
+    }
+  },
+  "blocked": {
+    "formal_s0_s4": {
+      "reason": "Repository lacks complete production FormalFactory; operator site, trusted evaluator deployment and approved H200 resources are not provisioned. Exact formal launcher exits 2 before jobs/models start.",
+      "exit_code": 2,
+      "cells": [
+        {
+          "id": "s0_rbr",
+          "stage": "S0",
+          "phase": "integrity",
+          "model": "qwen25_7b",
+          "dataset": "PBPF-RBR",
+          "tasks": 16,
+          "arms": [
+            "independent",
+            "self_debug",
+            "rex",
+            "strongest_deterministic",
+            "rollout_roulette",
+            "pbpf",
+            "no_repair"
+          ]
+        },
+        {
+          "id": "s0_codearc",
+          "stage": "S0",
+          "phase": "integrity",
+          "model": "qwen25_7b",
+          "dataset": "CodeARC-Replay",
+          "tasks": 16,
+          "arms": [
+            "independent",
+            "self_debug",
+            "rex",
+            "strongest_deterministic",
+            "rollout_roulette",
+            "pbpf",
+            "no_repair"
+          ]
+        },
+        {
+          "id": "s0_evalplus",
+          "stage": "S0",
+          "phase": "integrity",
+          "model": "qwen25_7b",
+          "dataset": "PBPF-EvalPlus",
+          "tasks": 16,
+          "arms": [
+            "independent",
+            "self_debug",
+            "rex",
+            "strongest_deterministic",
+            "rollout_roulette",
+            "pbpf",
+            "no_repair"
+          ]
+        },
+        {
+          "id": "s0_lcb",
+          "stage": "S0",
+          "phase": "integrity",
+          "model": "qwen25_7b",
+          "dataset": "LiveCodeBench",
+          "tasks": 16,
+          "arms": [
+            "independent",
+            "self_debug",
+            "rex",
+            "strongest_deterministic",
+            "rollout_roulette",
+            "pbpf",
+            "no_repair"
+          ]
+        },
+        {
+          "id": "s1_finite",
+          "stage": "S1",
+          "phase": "finite",
+          "model": "exact_numpy",
+          "dataset": "finite",
+          "tasks": 60000,
+          "arms": [
+            "exact_bayes",
+            "smc_p1",
+            "smc_p4",
+            "smc_p8",
+            "smc_p16",
+            "smc_p32"
+          ]
+        },
+        {
+          "id": "s2_training",
+          "stage": "S2",
+          "phase": "train",
+          "model": "qwen25_7b",
+          "dataset": "PBPF-RBR",
+          "tasks": 11000,
+          "arms": [
+            "prior",
+            "last",
+            "full_transcript",
+            "window_two",
+            "window_four",
+            "deepsets",
+            "matched_gru",
+            "scalar_correctness",
+            "map",
+            "posterior_mean",
+            "pbpf"
+          ]
+        },
+        {
+          "id": "s2_development",
+          "stage": "S2",
+          "phase": "development",
+          "model": "qwen25_7b",
+          "dataset": "PBPF-RBR",
+          "tasks": 2000,
+          "arms": [
+            "full_transcript",
+            "window_two",
+            "window_four",
+            "deepsets",
+            "matched_gru",
+            "scalar_correctness",
+            "pbpf"
+          ]
+        },
+        {
+          "id": "s2_ablations",
+          "stage": "S2",
+          "phase": "ablations",
+          "model": "qwen25_7b",
+          "dataset": "PBPF-RBR",
+          "tasks": 256,
+          "arms": [
+            "pbpf"
+          ]
+        },
+        {
+          "id": "s2_rbr",
+          "stage": "S2",
+          "phase": "prediction",
+          "model": "qwen25_7b",
+          "dataset": "PBPF-RBR",
+          "tasks": 2000,
+          "arms": [
+            "prior",
+            "last",
+            "full_transcript",
+            "window_two",
+            "window_four",
+            "deepsets",
+            "matched_gru",
+            "scalar_correctness",
+            "map",
+            "posterior_mean",
+            "pbpf",
+            "shuffled_evidence",
+            "wrong_candidate",
+            "masked_outcomes",
+            "random_latent",
+            "faulty_shared_belief"
+          ]
+        },
+        {
+          "id": "s2_codearc",
+          "stage": "S2",
+          "phase": "prediction",
+          "model": "qwen25_7b",
+          "dataset": "CodeARC-Replay",
+          "tasks": "snapshot_inventory",
+          "arms": [
+            "prior",
+            "last",
+            "full_transcript",
+            "window_two",
+            "window_four",
+            "deepsets",
+            "matched_gru",
+            "scalar_correctness",
+            "map",
+            "posterior_mean",
+            "pbpf",
+            "shuffled_evidence",
+            "wrong_candidate",
+            "masked_outcomes",
+            "random_latent",
+            "faulty_shared_belief"
+          ]
+        },
+        {
+          "id": "s3_rbr",
+          "stage": "S3",
+          "phase": "repair",
+          "model": "qwen25_7b",
+          "dataset": "PBPF-RBR",
+          "tasks": 2000,
+          "arms": [
+            "independent",
+            "self_debug",
+            "rex",
+            "strongest_deterministic",
+            "rollout_roulette",
+            "pbpf",
+            "no_repair"
+          ]
+        },
+        {
+          "id": "s3_evalplus",
+          "stage": "S3",
+          "phase": "repair",
+          "model": "qwen25_7b",
+          "dataset": "PBPF-EvalPlus",
+          "tasks": 542,
+          "arms": [
+            "independent",
+            "self_debug",
+            "rex",
+            "strongest_deterministic",
+            "rollout_roulette",
+            "pbpf",
+            "no_repair"
+          ]
+        },
+        {
+          "id": "s3_codearc",
+          "stage": "S3",
+          "phase": "repair",
+          "model": "qwen25_7b",
+          "dataset": "CodeARC-Replay",
+          "tasks": "snapshot_inventory",
+          "arms": [
+            "independent",
+            "self_debug",
+            "rex",
+            "strongest_deterministic",
+            "rollout_roulette",
+            "pbpf",
+            "no_repair"
+          ]
+        },
+        {
+          "id": "s4_qwen3_train",
+          "stage": "S4",
+          "phase": "train",
+          "model": "qwen3_8b",
+          "dataset": "PBPF-RBR",
+          "tasks": 11000,
+          "arms": [
+            "pbpf",
+            "locked_baseline_1",
+            "locked_baseline_2"
+          ]
+        },
+        {
+          "id": "s4_deepseek_train",
+          "stage": "S4",
+          "phase": "train",
+          "model": "deepseek_6p7b",
+          "dataset": "PBPF-RBR",
+          "tasks": 11000,
+          "arms": [
+            "pbpf",
+            "locked_baseline_1",
+            "locked_baseline_2"
+          ]
+        },
+        {
+          "id": "s4_qwen3_evalplus",
+          "stage": "S4",
+          "phase": "replication",
+          "model": "qwen3_8b",
+          "dataset": "PBPF-EvalPlus",
+          "tasks": 542,
+          "arms": [
+            "pbpf",
+            "locked_baseline_1",
+            "locked_baseline_2"
+          ]
+        },
+        {
+          "id": "s4_deepseek_evalplus",
+          "stage": "S4",
+          "phase": "replication",
+          "model": "deepseek_6p7b",
+          "dataset": "PBPF-EvalPlus",
+          "tasks": 542,
+          "arms": [
+            "pbpf",
+            "locked_baseline_1",
+            "locked_baseline_2"
+          ]
+        },
+        {
+          "id": "s4_qwen25_codearc",
+          "stage": "S4",
+          "phase": "replication",
+          "model": "qwen25_7b",
+          "dataset": "CodeARC-Replay",
+          "tasks": "snapshot_inventory",
+          "arms": [
+            "pbpf",
+            "locked_baseline_1",
+            "locked_baseline_2"
+          ]
+        },
+        {
+          "id": "s4_qwen25_lcb",
+          "stage": "S4",
+          "phase": "replication",
+          "model": "qwen25_7b",
+          "dataset": "LiveCodeBench",
+          "tasks": "snapshot_inventory",
+          "arms": [
+            "pbpf",
+            "locked_baseline_1",
+            "locked_baseline_2"
+          ]
+        }
+      ],
+      "log": "local/logs/formal_launch_all_experiments.log"
+    },
+    "formal_h200": {
+      "reason": "Configuration only; no complete execution entrypoint for its entire arm matrix is shipped.",
+      "config": "configs/experiments/formal_h200.yaml",
+      "arms": [
+        "raw_transcript",
+        "last_observation",
+        "window_1",
+        "window_2",
+        "window_4",
+        "orderless_set",
+        "pass_rate",
+        "matched_gru",
+        "matched_exchangeable",
+        "map",
+        "posterior_mean",
+        "p_way_ensemble",
+        "random_matched_norm",
+        "shared_kv_delta",
+        "pbpf_soft_prompt",
+        "pbpf_low_rank_kv",
+        "tokenwise_remixture_fault",
+        "independent_sampling",
+        "self_debug",
+        "rex",
+        "rlef_paper_spec",
+        "ldb",
+        "rollout_roulette",
+        "rsp",
+        "upskill_optional",
+        "ladi_rl_audit_required"
+      ]
+    },
+    "repair_7b_24gb": {
+      "reason": "Configuration only; no complete execution entrypoint for its entire arm matrix is shipped.",
+      "config": "configs/experiments/repair_7b_24gb.yaml",
+      "arms": [
+        "raw_transcript",
+        "last_observation",
+        "window_1",
+        "window_2",
+        "window_4",
+        "orderless_set",
+        "pass_rate",
+        "matched_gru",
+        "matched_exchangeable",
+        "map",
+        "posterior_mean",
+        "p_way_ensemble",
+        "random_matched_norm",
+        "shared_kv_delta",
+        "pbpf_soft_prompt",
+        "pbpf_low_rank_kv",
+        "tokenwise_remixture_fault",
+        "independent_sampling",
+        "self_debug",
+        "rex",
+        "rlef_paper_spec",
+        "ldb",
+        "rollout_roulette",
+        "rsp",
+        "upskill_optional",
+        "ladi_rl_audit_required"
+      ]
+    },
+    "frozen_7b_16gb": {
+      "reason": "Configuration only; no complete execution entrypoint for its entire arm matrix is shipped.",
+      "config": "configs/experiments/frozen_7b_16gb.yaml",
+      "arms": [
+        "raw_transcript",
+        "last_observation",
+        "window_1",
+        "window_2",
+        "window_4",
+        "orderless_set",
+        "pass_rate",
+        "matched_gru",
+        "matched_exchangeable",
+        "map",
+        "posterior_mean",
+        "p_way_ensemble",
+        "random_matched_norm",
+        "shared_kv_delta",
+        "pbpf_soft_prompt",
+        "pbpf_low_rank_kv",
+        "tokenwise_remixture_fault",
+        "independent_sampling",
+        "self_debug",
+        "rex",
+        "rlef_paper_spec",
+        "ldb",
+        "rollout_roulette",
+        "rsp",
+        "upskill_optional",
+        "ladi_rl_audit_required"
+      ]
+    },
+    "exact_smoke": {
+      "reason": "Configuration only; no complete execution entrypoint for its entire arm matrix is shipped.",
+      "config": "configs/experiments/exact_smoke.yaml",
+      "arms": [
+        "raw_transcript",
+        "last_observation",
+        "window_1",
+        "window_2",
+        "window_4",
+        "orderless_set",
+        "pass_rate",
+        "matched_gru",
+        "matched_exchangeable",
+        "map",
+        "posterior_mean",
+        "p_way_ensemble",
+        "random_matched_norm",
+        "shared_kv_delta",
+        "pbpf_soft_prompt",
+        "pbpf_low_rank_kv",
+        "tokenwise_remixture_fault",
+        "independent_sampling",
+        "self_debug",
+        "rex",
+        "rlef_paper_spec",
+        "ldb",
+        "rollout_roulette",
+        "rsp",
+        "upskill_optional",
+        "ladi_rl_audit_required"
+      ]
+    },
+    "proposed_selector_followup": {
+      "reason": "docs/PBPF_SELECTOR_GATE.md proposes a harder grouped candidate bank and selector experiment; no such bank or complete fit/evaluation runner is supplied. The existing published bank audit was executed.",
+      "document": "docs/PBPF_SELECTOR_GATE.md"
+    }
+  },
+  "pending": []
+}

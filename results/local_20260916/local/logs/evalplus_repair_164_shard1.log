@@ -1,0 +1,56 @@
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:04<00:12,  4.05s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:14<00:15,  7.87s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:18<00:06,  6.18s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:26<00:00,  6.74s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:26<00:00,  6.59s/it]
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-55", "final_pass_at_1": 1.0, "initial_passes": 1, "round_pass_at_1": [0.0, 1.0, 1.0, 1.0], "task_id": "HumanEval/55"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-56", "final_pass_at_1": 1.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 1.0, 0.0], "task_id": "HumanEval/56"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-57", "final_pass_at_1": 1.0, "initial_passes": 1, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/57"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-58", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/58"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-59", "final_pass_at_1": 1.0, "initial_passes": 0, "round_pass_at_1": [0.0, 1.0, 0.0, 0.0], "task_id": "HumanEval/59"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-60", "final_pass_at_1": 1.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 1.0], "task_id": "HumanEval/60"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-61", "final_pass_at_1": 1.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 1.0, 0.0], "task_id": "HumanEval/61"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-62", "final_pass_at_1": 1.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 1.0, 0.0], "task_id": "HumanEval/62"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-63", "final_pass_at_1": 1.0, "initial_passes": 3, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/63"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-64", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/64"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-65", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/65"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-66", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/66"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-67", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/67"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-68", "final_pass_at_1": 1.0, "initial_passes": 2, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/68"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-69", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/69"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-70", "final_pass_at_1": 1.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 1.0], "task_id": "HumanEval/70"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-71", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/71"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-72", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/72"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-73", "final_pass_at_1": 1.0, "initial_passes": 0, "round_pass_at_1": [1.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/73"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-74", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/74"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-75", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/75"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-76", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/76"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-77", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/77"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-78", "final_pass_at_1": 1.0, "initial_passes": 1, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/78"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-79", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/79"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-80", "final_pass_at_1": 1.0, "initial_passes": 1, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/80"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-81", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/81"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-82", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/82"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-83", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/83"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-84", "final_pass_at_1": 1.0, "initial_passes": 2, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/84"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-85", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/85"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-86", "final_pass_at_1": 1.0, "initial_passes": 1, "round_pass_at_1": [0.0, 1.0, 0.0, 0.0], "task_id": "HumanEval/86"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-87", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/87"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-88", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/88"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-89", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/89"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-90", "final_pass_at_1": 1.0, "initial_passes": 1, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/90"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-91", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/91"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-92", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/92"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-93", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/93"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-94", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/94"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-95", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/95"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-96", "final_pass_at_1": 1.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 1.0], "task_id": "HumanEval/96"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-97", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/97"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-98", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/98"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-99", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/99"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-100", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/100"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-101", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/101"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-102", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/102"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-103", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/103"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-104", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/104"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-105", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/105"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-106", "final_pass_at_1": 1.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 1.0, 0.0], "task_id": "HumanEval/106"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-107", "final_pass_at_1": 0.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 0.0, 0.0], "task_id": "HumanEval/107"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-108", "final_pass_at_1": 1.0, "initial_passes": 0, "round_pass_at_1": [0.0, 0.0, 1.0, 0.0], "task_id": "HumanEval/108"}
+{"artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard1/HumanEval-109", "final_pass_at_1": 1.0, "initial_passes": 1, "round_pass_at_1": [0.0, 1.0, 0.0, 0.0], "task_id": "HumanEval/109"}

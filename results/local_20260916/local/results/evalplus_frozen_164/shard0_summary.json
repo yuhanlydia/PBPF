@@ -1,0 +1,662 @@
+[
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-0",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 2,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "task_id": "HumanEval/0"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-1",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 5,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/1"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-2",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/2"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-3",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/3"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-4",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "task_id": "HumanEval/4"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-5",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 3,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/5"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-6",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/6"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-7",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 2,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/7"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-8",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 2,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/8"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-9",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/9"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-10",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/10"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-11",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 2,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/11"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-12",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 3,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/12"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-13",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/13"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-14",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 3,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "task_id": "HumanEval/14"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-15",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/15"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-16",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/16"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-17",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/17"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-18",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/18"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-19",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/19"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-20",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/20"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-21",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/21"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-22",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/22"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-23",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/23"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-24",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 2,
+    "round_pass_at_1": [
+      0.0,
+      1.0,
+      1.0,
+      0.0
+    ],
+    "task_id": "HumanEval/24"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-25",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/25"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-26",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/26"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-27",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/27"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-28",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/28"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-29",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/29"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-30",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/30"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-31",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/31"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-32",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/32"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-33",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/33"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-34",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      1.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/34"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-35",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/35"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-36",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/36"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-37",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "task_id": "HumanEval/37"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-38",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 2,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/38"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-39",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/39"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-40",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 3,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/40"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-41",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 2,
+    "round_pass_at_1": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/41"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-42",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      1.0,
+      1.0
+    ],
+    "task_id": "HumanEval/42"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-43",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 5,
+    "round_pass_at_1": [
+      0.0,
+      1.0,
+      0.0,
+      1.0
+    ],
+    "task_id": "HumanEval/43"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-44",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/44"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-45",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/45"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-46",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 3,
+    "round_pass_at_1": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/46"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-47",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 2,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/47"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-48",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/48"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-49",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/49"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-50",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "task_id": "HumanEval/50"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-51",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/51"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-52",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 2,
+    "round_pass_at_1": [
+      1.0,
+      1.0,
+      0.0,
+      1.0
+    ],
+    "task_id": "HumanEval/52"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-53",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      1.0,
+      1.0
+    ],
+    "task_id": "HumanEval/53"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_frozen_164_shard0/HumanEval-54",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/54"
+  }
+]

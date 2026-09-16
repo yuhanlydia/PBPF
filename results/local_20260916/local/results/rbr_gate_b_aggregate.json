@@ -1,0 +1,128 @@
+{
+  "seeds": [
+    1701,
+    1702,
+    1703
+  ],
+  "records": {
+    "development": 89,
+    "test": 94,
+    "train": 353
+  },
+  "problems": {
+    "development": 32,
+    "test": 77,
+    "train": 144
+  },
+  "future_examples": 564,
+  "metrics": {
+    "baseline": {
+      "nll": {
+        "mean": 1.1350975351076549,
+        "sample_std": 0.03583349712599451
+      },
+      "brier": {
+        "mean": 0.6366070366845114,
+        "sample_std": 0.01198395037936863
+      },
+      "accuracy": {
+        "mean": 0.49822695035460995,
+        "sample_std": 0.013386231268210582
+      }
+    },
+    "history_rate": {
+      "nll": {
+        "mean": 0.8229600306702085,
+        "sample_std": 0.0
+      },
+      "brier": {
+        "mean": 0.3965064355135277,
+        "sample_std": 0.0
+      },
+      "accuracy": {
+        "mean": 0.8262411347517731,
+        "sample_std": 0.0
+      }
+    },
+    "pbpf": {
+      "nll": {
+        "mean": 0.5299126051524258,
+        "sample_std": 0.006818041061031401
+      },
+      "brier": {
+        "mean": 0.3100773819205057,
+        "sample_std": 0.002428693769736104
+      },
+      "accuracy": {
+        "mean": 0.7624113475177305,
+        "sample_std": 0.009871922629131273
+      }
+    },
+    "random": {
+      "nll": {
+        "mean": 1.0950056524759813,
+        "sample_std": 0.02090253391358377
+      },
+      "brier": {
+        "mean": 0.6386831635988145,
+        "sample_std": 0.015454025480737496
+      },
+      "accuracy": {
+        "mean": 0.46040189125295505,
+        "sample_std": 0.016088247740917515
+      }
+    },
+    "shuffled": {
+      "nll": {
+        "mean": 0.5274523696459328,
+        "sample_std": 0.018696204132362216
+      },
+      "brier": {
+        "mean": 0.30578221372780895,
+        "sample_std": 0.012470374878655238
+      },
+      "accuracy": {
+        "mean": 0.7700945626477541,
+        "sample_std": 0.014440652154693425
+      }
+    },
+    "wrong_candidate": {
+      "nll": {
+        "mean": 0.6856822818901095,
+        "sample_std": 0.012197411746350762
+      },
+      "brier": {
+        "mean": 0.3835924636437139,
+        "sample_std": 0.006383181677044422
+      },
+      "accuracy": {
+        "mean": 0.7192671394799055,
+        "sample_std": 0.008746246209780584
+      }
+    }
+  },
+  "gate_by_seed": {
+    "1701": {
+      "controls_worse_than_pbpf": false,
+      "full_gate_passes": false,
+      "paired_lower_bound_above_zero": true,
+      "passes_point_estimate": true,
+      "relative_nll_gain": 0.5482473545070239
+    },
+    "1702": {
+      "controls_worse_than_pbpf": true,
+      "full_gate_passes": true,
+      "paired_lower_bound_above_zero": true,
+      "passes_point_estimate": true,
+      "relative_nll_gain": 0.5385363183384937
+    },
+    "1703": {
+      "controls_worse_than_pbpf": false,
+      "full_gate_passes": false,
+      "paired_lower_bound_above_zero": true,
+      "passes_point_estimate": true,
+      "relative_nll_gain": 0.5115264909795282
+    }
+  },
+  "scope": "Current main, description-aware cache generated with CLI defaults; not an exact recreation of unpublished upstream prepared cache."
+}

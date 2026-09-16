@@ -1,0 +1,6 @@
+{
+  "run_id": "6608bcd43f8f407be2cc559caa4f6113187f94c0add5aa5c2464c18cd2ccde35",
+  "archive": "local/results/iclr_verified_after_generation_cap/6608bcd43f8f407be2cc559caa4f6113187f94c0add5aa5c2464c18cd2ccde35/verified-run.zip",
+  "archive_sha256": "203d4f38970fc67d0c6050f71a28ac5768d55439de07baf7072850ba9b191de7",
+  "scope": "smoke-only-no-claim"
+}

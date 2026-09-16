@@ -1,0 +1,55 @@
+{
+  "complete": true,
+  "steps": 1500,
+  "selected_step": 750,
+  "summary": {
+    "heuristic": {
+      "future_pass_fraction": 0.375,
+      "generated_tokens": 1614,
+      "generation_seconds": 53.092674016952515,
+      "solved": 2,
+      "success_rate": 0.25,
+      "tasks": 8
+    },
+    "no_latent": {
+      "future_pass_fraction": 0.25,
+      "generated_tokens": 1619,
+      "generation_seconds": 53.16205292113591,
+      "solved": 1,
+      "success_rate": 0.125,
+      "tasks": 8
+    },
+    "pbpf": {
+      "future_pass_fraction": 0.1875,
+      "generated_tokens": 1614,
+      "generation_seconds": 53.33928880013991,
+      "solved": 1,
+      "success_rate": 0.125,
+      "tasks": 8
+    },
+    "posterior_map": {
+      "future_pass_fraction": 0.1875,
+      "generated_tokens": 1614,
+      "generation_seconds": 52.972439687117,
+      "solved": 1,
+      "success_rate": 0.125,
+      "tasks": 8
+    },
+    "posterior_mean": {
+      "future_pass_fraction": 0.25,
+      "generated_tokens": 1630,
+      "generation_seconds": 53.50718209601473,
+      "solved": 1,
+      "success_rate": 0.125,
+      "tasks": 8
+    },
+    "random_latent": {
+      "future_pass_fraction": 0.25,
+      "generated_tokens": 1619,
+      "generation_seconds": 53.195163849159144,
+      "solved": 1,
+      "success_rate": 0.125,
+      "tasks": 8
+    }
+  }
+}

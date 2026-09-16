@@ -1,0 +1,209 @@
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:07<00:21,  7.19s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:11<00:10,  5.45s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:15<00:04,  4.65s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:15<00:00,  2.88s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:15<00:00,  3.82s/it]
+{"elapsed_seconds": 1.119281025021337, "gradient_norm": 230.00247192382812, "loss": 9.743951797485352, "step": 1, "task_id": "150375"}
+{"elapsed_seconds": 5.611063099000603, "gradient_norm": 1804.4669189453125, "loss": 6.194143295288086, "step": 10, "task_id": "14156"}
+{"elapsed_seconds": 10.601781129022129, "gradient_norm": 246.24014282226562, "loss": 23.378089904785156, "step": 20, "task_id": "24392"}
+{"elapsed_seconds": 15.94701367302332, "gradient_norm": 2958.546630859375, "loss": 4.134366035461426, "step": 30, "task_id": "25206"}
+{"elapsed_seconds": 21.551850453019142, "gradient_norm": 2667.339599609375, "loss": 38.62427520751953, "step": 40, "task_id": "14824"}
+{"elapsed_seconds": 26.62797521299217, "gradient_norm": 1035.001220703125, "loss": 11.75148868560791, "step": 50, "task_id": "24391"}
+{"elapsed_seconds": 31.89191355695948, "gradient_norm": 1373.443359375, "loss": 13.677377700805664, "step": 60, "task_id": "150319"}
+{"elapsed_seconds": 37.18964760995004, "gradient_norm": 714.4552001953125, "loss": 19.304365158081055, "step": 70, "task_id": "24148"}
+{"elapsed_seconds": 42.27022222802043, "gradient_norm": 4412.39892578125, "loss": 32.56864929199219, "step": 80, "task_id": "45520"}
+{"elapsed_seconds": 47.59511917701457, "gradient_norm": 1340.695556640625, "loss": 10.34238338470459, "step": 90, "task_id": "26659"}
+{"elapsed_seconds": 52.88112438295502, "gradient_norm": 5326.8173828125, "loss": 20.083539962768555, "step": 100, "task_id": "14819"}
+{"elapsed_seconds": 58.11153428000398, "gradient_norm": 808.7808227539062, "loss": 11.361006736755371, "step": 110, "task_id": "12678"}
+{"elapsed_seconds": 63.64670574397314, "gradient_norm": 2679.30615234375, "loss": 20.495956420898438, "step": 120, "task_id": "23605"}
+{"elapsed_seconds": 68.40520507004112, "gradient_norm": 238.10272216796875, "loss": 3.2554759979248047, "step": 130, "task_id": "25206"}
+{"elapsed_seconds": 74.09120873000938, "gradient_norm": 677.8521118164062, "loss": 4.323362350463867, "step": 140, "task_id": "26657"}
+{"elapsed_seconds": 79.33126364194322, "gradient_norm": 215.83934020996094, "loss": 17.024810791015625, "step": 150, "task_id": "605871"}
+{"elapsed_seconds": 84.49108350696042, "gradient_norm": 310.4440002441406, "loss": 7.772785663604736, "step": 160, "task_id": "861948"}
+{"elapsed_seconds": 90.11076245096046, "gradient_norm": 1994.1768798828125, "loss": 20.276721954345703, "step": 170, "task_id": "671228"}
+{"elapsed_seconds": 95.19156441104133, "gradient_norm": 899.0310668945312, "loss": 23.04705238342285, "step": 180, "task_id": "85686"}
+{"elapsed_seconds": 100.25380873901304, "gradient_norm": 2522.656005859375, "loss": 12.64583969116211, "step": 190, "task_id": "12707"}
+{"elapsed_seconds": 105.92794754600618, "gradient_norm": 3583.719482421875, "loss": 10.939793586730957, "step": 200, "task_id": "512633"}
+{"elapsed_seconds": 111.37742265395354, "gradient_norm": 461.4315185546875, "loss": 5.157289028167725, "step": 210, "task_id": "13912"}
+{"elapsed_seconds": 116.3627983010374, "gradient_norm": 182.6739044189453, "loss": 2.0252256393432617, "step": 220, "task_id": "851796"}
+{"elapsed_seconds": 121.27394394297153, "gradient_norm": 348.9168395996094, "loss": 5.264336109161377, "step": 230, "task_id": "25202"}
+{"elapsed_seconds": 126.82058898499236, "gradient_norm": 1434.7711181640625, "loss": 32.34322738647461, "step": 240, "task_id": "14824"}
+{"elapsed_seconds": 132.04499191604555, "gradient_norm": 216.43536376953125, "loss": 9.55788803100586, "step": 250, "task_id": "150317"}
+{"validation": {"items": 37, "no_latent": 0.12489482994236234, "pbpf": 0.13885265327257396, "step": 250, "target_tokens": 4627}}
+{"elapsed_seconds": 172.96596056700218, "gradient_norm": 522.796875, "loss": 11.711023330688477, "step": 260, "task_id": "851840"}
+{"elapsed_seconds": 177.67456613504328, "gradient_norm": 294.457763671875, "loss": 15.783527374267578, "step": 270, "task_id": "16563"}
+{"elapsed_seconds": 182.67633589194156, "gradient_norm": 217.03428649902344, "loss": 6.2702836990356445, "step": 280, "task_id": "219946"}
+{"elapsed_seconds": 188.00028813804965, "gradient_norm": 216.16510009765625, "loss": 6.898664474487305, "step": 290, "task_id": "45527"}
+{"elapsed_seconds": 192.90805808501318, "gradient_norm": 3104.462158203125, "loss": 30.014108657836914, "step": 300, "task_id": "861948"}
+{"elapsed_seconds": 198.15728519600816, "gradient_norm": 538.2593994140625, "loss": 6.2853827476501465, "step": 310, "task_id": "12707"}
+{"elapsed_seconds": 203.72007988893893, "gradient_norm": 50.61919403076172, "loss": 0.8737495541572571, "step": 320, "task_id": "14469"}
+{"elapsed_seconds": 209.13288986403495, "gradient_norm": 323.2906188964844, "loss": 5.9581427574157715, "step": 330, "task_id": "150317"}
+{"elapsed_seconds": 214.86106820905115, "gradient_norm": 93.69596099853516, "loss": 2.3571019172668457, "step": 340, "task_id": "512633"}
+{"elapsed_seconds": 220.6197974019451, "gradient_norm": 84.69297790527344, "loss": 2.963881492614746, "step": 350, "task_id": "576534"}
+{"elapsed_seconds": 225.99599632702302, "gradient_norm": 16020.0166015625, "loss": 38.99932861328125, "step": 360, "task_id": "605871"}
+{"elapsed_seconds": 231.74714124796446, "gradient_norm": 1197.928466796875, "loss": 23.24562644958496, "step": 370, "task_id": "14824"}
+{"elapsed_seconds": 236.90378505794797, "gradient_norm": 296.02801513671875, "loss": 15.698463439941406, "step": 380, "task_id": "24147"}
+{"elapsed_seconds": 242.36463605600875, "gradient_norm": 302.6131286621094, "loss": 10.742544174194336, "step": 390, "task_id": "17905"}
+{"elapsed_seconds": 247.82306816696655, "gradient_norm": 195.8160858154297, "loss": 12.043136596679688, "step": 400, "task_id": "15519"}
+{"elapsed_seconds": 253.47328215604648, "gradient_norm": 121.13865661621094, "loss": 1.680332899093628, "step": 410, "task_id": "512633"}
+{"elapsed_seconds": 258.7931267999811, "gradient_norm": 50.958648681640625, "loss": 2.4957101345062256, "step": 420, "task_id": "741145"}
+{"elapsed_seconds": 263.7310796349775, "gradient_norm": 321.4851989746094, "loss": 4.814855575561523, "step": 430, "task_id": "730993"}
+{"elapsed_seconds": 268.9362808399601, "gradient_norm": 218.6274871826172, "loss": 3.9733612537384033, "step": 440, "task_id": "861948"}
+{"elapsed_seconds": 274.16274237504695, "gradient_norm": 72.81814575195312, "loss": 2.001616954803467, "step": 450, "task_id": "150376"}
+{"elapsed_seconds": 279.49091427295934, "gradient_norm": 132.93496704101562, "loss": 18.409711837768555, "step": 460, "task_id": "150417"}
+{"elapsed_seconds": 285.1505514970049, "gradient_norm": 77.71810150146484, "loss": 4.889800071716309, "step": 470, "task_id": "45523"}
+{"elapsed_seconds": 290.7352056959644, "gradient_norm": 58.4073486328125, "loss": 1.3926374912261963, "step": 480, "task_id": "25139"}
+{"elapsed_seconds": 295.82151421904564, "gradient_norm": 105.7776107788086, "loss": 8.833784103393555, "step": 490, "task_id": "879744"}
+{"elapsed_seconds": 300.930446924991, "gradient_norm": 25.03060531616211, "loss": 1.1086105108261108, "step": 500, "task_id": "24153"}
+{"validation": {"items": 37, "no_latent": 0.10629936626979283, "pbpf": 0.10421800755104442, "step": 500, "target_tokens": 4627}}
+{"elapsed_seconds": 341.2960133049637, "gradient_norm": 236.5221405029297, "loss": 20.915660858154297, "step": 510, "task_id": "85686"}
+{"elapsed_seconds": 346.4494050400099, "gradient_norm": 124.23064422607422, "loss": 5.586487770080566, "step": 520, "task_id": "879744"}
+{"elapsed_seconds": 351.8142439009389, "gradient_norm": 96.30611419677734, "loss": 4.620210647583008, "step": 530, "task_id": "325680"}
+{"elapsed_seconds": 356.38528484804556, "gradient_norm": 199.92124938964844, "loss": 20.83721923828125, "step": 540, "task_id": "808441"}
+{"elapsed_seconds": 361.10707007697783, "gradient_norm": 152.20928955078125, "loss": 21.549072265625, "step": 550, "task_id": "730854"}
+{"elapsed_seconds": 366.28454710997175, "gradient_norm": 71.1063232421875, "loss": 4.368130207061768, "step": 560, "task_id": "17905"}
+{"elapsed_seconds": 371.112938735052, "gradient_norm": 71.38394927978516, "loss": 4.6899094581604, "step": 570, "task_id": "12678"}
+{"elapsed_seconds": 376.1051573569421, "gradient_norm": 9.670374870300293, "loss": 0.3473501205444336, "step": 580, "task_id": "730972"}
+{"elapsed_seconds": 381.1701846020296, "gradient_norm": 83.08589935302734, "loss": 1.7827491760253906, "step": 590, "task_id": "20792"}
+{"elapsed_seconds": 386.1983134429902, "gradient_norm": 65.79910278320312, "loss": 3.246314287185669, "step": 600, "task_id": "879744"}
+{"elapsed_seconds": 391.4754454890499, "gradient_norm": 29.62240219116211, "loss": 0.658558189868927, "step": 610, "task_id": "26659"}
+{"elapsed_seconds": 396.25241016503423, "gradient_norm": 28.485095977783203, "loss": 0.5628930330276489, "step": 620, "task_id": "25139"}
+{"elapsed_seconds": 401.32365594699513, "gradient_norm": 259.1166687011719, "loss": 1.8797695636749268, "step": 630, "task_id": "851795"}
+{"elapsed_seconds": 406.7391570809996, "gradient_norm": 49.06571578979492, "loss": 3.782931327819824, "step": 640, "task_id": "512371"}
+{"elapsed_seconds": 411.95449678297155, "gradient_norm": 379.59375, "loss": 7.217995643615723, "step": 650, "task_id": "879291"}
+{"elapsed_seconds": 417.4061896089697, "gradient_norm": 214.20643615722656, "loss": 14.852472305297852, "step": 660, "task_id": "45520"}
+{"elapsed_seconds": 422.69118444703054, "gradient_norm": 215.831787109375, "loss": 14.049699783325195, "step": 670, "task_id": "25869"}
+{"elapsed_seconds": 428.0977032119408, "gradient_norm": 17.54274559020996, "loss": 0.4879392981529236, "step": 680, "task_id": "861936"}
+{"elapsed_seconds": 432.80496042303275, "gradient_norm": 21.12322235107422, "loss": 0.6151678562164307, "step": 690, "task_id": "63037"}
+{"elapsed_seconds": 437.4763556920225, "gradient_norm": 35.32887268066406, "loss": 2.2435343265533447, "step": 700, "task_id": "730859"}
+{"elapsed_seconds": 442.4702650399413, "gradient_norm": 21.632490158081055, "loss": 1.2951335906982422, "step": 710, "task_id": "150375"}
+{"elapsed_seconds": 448.07490013598, "gradient_norm": 170.3389434814453, "loss": 19.650135040283203, "step": 720, "task_id": "808441"}
+{"elapsed_seconds": 453.45988966093864, "gradient_norm": 9.371739387512207, "loss": 0.2374647855758667, "step": 730, "task_id": "26659"}
+{"elapsed_seconds": 459.0387293170206, "gradient_norm": 174.2411651611328, "loss": 8.247025489807129, "step": 740, "task_id": "15519"}
+{"elapsed_seconds": 464.0482694649836, "gradient_norm": 264.4647216796875, "loss": 13.013108253479004, "step": 750, "task_id": "14151"}
+{"validation": {"items": 37, "no_latent": 0.09889606283528773, "pbpf": 0.09598619236604992, "step": 750, "target_tokens": 4627}}
+{"elapsed_seconds": 504.80281248595566, "gradient_norm": 66.1880111694336, "loss": 3.693695306777954, "step": 760, "task_id": "17905"}
+{"elapsed_seconds": 510.3824563929811, "gradient_norm": 109.20951843261719, "loss": 4.089465618133545, "step": 770, "task_id": "150374"}
+{"elapsed_seconds": 515.4661804969655, "gradient_norm": 270.6730651855469, "loss": 4.42665958404541, "step": 780, "task_id": "13912"}
+{"elapsed_seconds": 520.7004713759525, "gradient_norm": 66.81922149658203, "loss": 2.2158362865448, "step": 790, "task_id": "12726"}
+{"elapsed_seconds": 525.9758866450284, "gradient_norm": 56.383445739746094, "loss": 0.3624356985092163, "step": 800, "task_id": "14472"}
+{"elapsed_seconds": 531.0712666939944, "gradient_norm": 10.669371604919434, "loss": 0.26814907789230347, "step": 810, "task_id": "150376"}
+{"elapsed_seconds": 535.8917814119486, "gradient_norm": 177.75421142578125, "loss": 7.180233001708984, "step": 820, "task_id": "879291"}
+{"elapsed_seconds": 541.059607555042, "gradient_norm": 9.24136734008789, "loss": 0.2212170958518982, "step": 830, "task_id": "851796"}
+{"elapsed_seconds": 546.8234792529838, "gradient_norm": 123.98199462890625, "loss": 2.999854803085327, "step": 840, "task_id": "861948"}
+{"elapsed_seconds": 552.1064488569973, "gradient_norm": 71.7442626953125, "loss": 0.9370219707489014, "step": 850, "task_id": "25202"}
+{"elapsed_seconds": 557.358762747026, "gradient_norm": 25.429597854614258, "loss": 0.8983786702156067, "step": 860, "task_id": "12707"}
+{"elapsed_seconds": 562.4094658900285, "gradient_norm": 52.947914123535156, "loss": 1.8561049699783325, "step": 870, "task_id": "730993"}
+{"elapsed_seconds": 567.7977491129423, "gradient_norm": 35.0634880065918, "loss": 1.4654786586761475, "step": 880, "task_id": "20792"}
+{"elapsed_seconds": 572.8442736440338, "gradient_norm": 12.73827075958252, "loss": 0.42286306619644165, "step": 890, "task_id": "671226"}
+{"elapsed_seconds": 577.8887628390221, "gradient_norm": 65.56713104248047, "loss": 2.915412187576294, "step": 900, "task_id": "150317"}
+{"elapsed_seconds": 583.1972838089569, "gradient_norm": 13.185432434082031, "loss": 0.19634085893630981, "step": 910, "task_id": "851796"}
+{"elapsed_seconds": 588.5940209289547, "gradient_norm": 44.63193893432617, "loss": 5.595737457275391, "step": 920, "task_id": "24395"}
+{"elapsed_seconds": 593.5726532719564, "gradient_norm": 4.587515354156494, "loss": 0.7298036813735962, "step": 930, "task_id": "851835"}
+{"elapsed_seconds": 598.8117755859857, "gradient_norm": 7.787500858306885, "loss": 0.15929043292999268, "step": 940, "task_id": "15560"}
+{"elapsed_seconds": 603.9901416399516, "gradient_norm": 58.07797622680664, "loss": 2.513364791870117, "step": 950, "task_id": "150319"}
+{"elapsed_seconds": 609.6000460330397, "gradient_norm": 2.091451644897461, "loss": 0.05136018991470337, "step": 960, "task_id": "851835"}
+{"elapsed_seconds": 614.8285751859657, "gradient_norm": 55.82498550415039, "loss": 1.692655086517334, "step": 970, "task_id": "45523"}
+{"elapsed_seconds": 620.0630243460182, "gradient_norm": 314.85968017578125, "loss": 2.3347318172454834, "step": 980, "task_id": "14819"}
+{"elapsed_seconds": 625.5603876230307, "gradient_norm": 421.1536865234375, "loss": 10.605883598327637, "step": 990, "task_id": "45520"}
+{"elapsed_seconds": 630.3300770550268, "gradient_norm": 22.81007194519043, "loss": 0.4227176904678345, "step": 1000, "task_id": "912633"}
+{"validation": {"items": 37, "no_latent": 0.11178687638022458, "pbpf": 0.10501434647395437, "step": 1000, "target_tokens": 4627}}
+{"elapsed_seconds": 671.092291711946, "gradient_norm": 84.44345092773438, "loss": 1.734513759613037, "step": 1010, "task_id": "26653"}
+{"elapsed_seconds": 676.6992510670098, "gradient_norm": 528.0740356445312, "loss": 10.505444526672363, "step": 1020, "task_id": "15532"}
+{"elapsed_seconds": 681.9162048710277, "gradient_norm": 30.257354736328125, "loss": 0.9478412866592407, "step": 1030, "task_id": "20792"}
+{"elapsed_seconds": 687.4406093090074, "gradient_norm": 93.88191986083984, "loss": 4.159989833831787, "step": 1040, "task_id": "19142"}
+{"elapsed_seconds": 692.7245099180145, "gradient_norm": 113.18223571777344, "loss": 5.990302085876465, "step": 1050, "task_id": "24392"}
+{"elapsed_seconds": 698.2557550769998, "gradient_norm": 123.1063461303711, "loss": 0.8342185020446777, "step": 1060, "task_id": "19148"}
+{"elapsed_seconds": 703.7729423849378, "gradient_norm": 162.26409912109375, "loss": 3.420408248901367, "step": 1070, "task_id": "14474"}
+{"elapsed_seconds": 709.2868179869838, "gradient_norm": 29.38497543334961, "loss": 0.5189745426177979, "step": 1080, "task_id": "671226"}
+{"elapsed_seconds": 714.7163392329821, "gradient_norm": 74.2139663696289, "loss": 1.7853851318359375, "step": 1090, "task_id": "62829"}
+{"elapsed_seconds": 720.242517428007, "gradient_norm": 114.72201538085938, "loss": 7.064183712005615, "step": 1100, "task_id": "15532"}
+{"elapsed_seconds": 725.2781174690463, "gradient_norm": 228.82577514648438, "loss": 6.233994007110596, "step": 1110, "task_id": "25139"}
+{"elapsed_seconds": 730.6828114739619, "gradient_norm": 171.23731994628906, "loss": 8.518762588500977, "step": 1120, "task_id": "671228"}
+{"elapsed_seconds": 736.2553287369665, "gradient_norm": 27.997894287109375, "loss": 0.840540885925293, "step": 1130, "task_id": "20779"}
+{"elapsed_seconds": 741.3891299909446, "gradient_norm": 3.7925639152526855, "loss": 0.058508098125457764, "step": 1140, "task_id": "150376"}
+{"elapsed_seconds": 746.2037482990418, "gradient_norm": 532.95166015625, "loss": 11.571138381958008, "step": 1150, "task_id": "742863"}
+{"elapsed_seconds": 751.542328629992, "gradient_norm": 126.85741424560547, "loss": 8.7230224609375, "step": 1160, "task_id": "879753"}
+{"elapsed_seconds": 756.6975354340393, "gradient_norm": 10.706730842590332, "loss": 0.10197889804840088, "step": 1170, "task_id": "63037"}
+{"elapsed_seconds": 762.0634118890157, "gradient_norm": 386.4246826171875, "loss": 3.4907727241516113, "step": 1180, "task_id": "19147"}
+{"elapsed_seconds": 767.0904806590406, "gradient_norm": 16.882877349853516, "loss": 0.37293362617492676, "step": 1190, "task_id": "24153"}
+{"elapsed_seconds": 772.647667828016, "gradient_norm": 213.6304168701172, "loss": 13.697515487670898, "step": 1200, "task_id": "24148"}
+{"elapsed_seconds": 777.6708547639428, "gradient_norm": 17.291507720947266, "loss": 0.36974114179611206, "step": 1210, "task_id": "22207"}
+{"elapsed_seconds": 783.1319842369994, "gradient_norm": 138.01016235351562, "loss": 13.280010223388672, "step": 1220, "task_id": "14824"}
+{"elapsed_seconds": 788.350126856938, "gradient_norm": 41.784000396728516, "loss": 0.7325505614280701, "step": 1230, "task_id": "12726"}
+{"elapsed_seconds": 793.3769118409837, "gradient_norm": 12.710517883300781, "loss": 0.15475767850875854, "step": 1240, "task_id": "25204"}
+{"elapsed_seconds": 799.2518225930398, "gradient_norm": 39.06095504760742, "loss": 0.41238588094711304, "step": 1250, "task_id": "20792"}
+{"validation": {"items": 37, "no_latent": 0.1101844219556503, "pbpf": 0.10384504749214828, "step": 1250, "target_tokens": 4627}}
+{"elapsed_seconds": 840.6038397769444, "gradient_norm": 416.3541564941406, "loss": 2.943146228790283, "step": 1260, "task_id": "45520"}
+{"elapsed_seconds": 845.9155515149469, "gradient_norm": 115.7252426147461, "loss": 1.071793794631958, "step": 1270, "task_id": "219946"}
+{"elapsed_seconds": 851.0502890000353, "gradient_norm": 332.1935729980469, "loss": 11.6246919631958, "step": 1280, "task_id": "243878"}
+{"elapsed_seconds": 856.4664009299595, "gradient_norm": 94.19520568847656, "loss": 4.304836750030518, "step": 1290, "task_id": "60220"}
+{"elapsed_seconds": 861.8056948350277, "gradient_norm": 39.59177017211914, "loss": 1.0277515649795532, "step": 1300, "task_id": "63045"}
+{"elapsed_seconds": 867.5470551849576, "gradient_norm": 94.36410522460938, "loss": 1.221771001815796, "step": 1310, "task_id": "808435"}
+{"elapsed_seconds": 873.1180554640014, "gradient_norm": 264.7749938964844, "loss": 11.179315567016602, "step": 1320, "task_id": "23611"}
+{"elapsed_seconds": 878.0828418380115, "gradient_norm": 77.09095764160156, "loss": 1.3019565343856812, "step": 1330, "task_id": "852061"}
+{"elapsed_seconds": 883.6391884620534, "gradient_norm": 12.023123741149902, "loss": 0.13340973854064941, "step": 1340, "task_id": "861936"}
+{"elapsed_seconds": 888.4807251229649, "gradient_norm": 7.202852725982666, "loss": 0.18842047452926636, "step": 1350, "task_id": "20792"}
+{"elapsed_seconds": 893.5144768509781, "gradient_norm": 105.85903930664062, "loss": 1.4121484756469727, "step": 1360, "task_id": "24391"}
+{"elapsed_seconds": 898.7128617999842, "gradient_norm": 177.45448303222656, "loss": 10.20728874206543, "step": 1370, "task_id": "243878"}
+{"elapsed_seconds": 904.1279894720064, "gradient_norm": 265.6213073730469, "loss": 1.2252603769302368, "step": 1380, "task_id": "15560"}
+{"elapsed_seconds": 908.901298028999, "gradient_norm": 66.29065704345703, "loss": 4.88289737701416, "step": 1390, "task_id": "60220"}
+{"elapsed_seconds": 914.0043201680528, "gradient_norm": 46.5389289855957, "loss": 2.2099380493164062, "step": 1400, "task_id": "85685"}
+{"elapsed_seconds": 919.2682884850074, "gradient_norm": 6.881412029266357, "loss": 0.10242557525634766, "step": 1410, "task_id": "79607"}
+{"elapsed_seconds": 924.5737308009993, "gradient_norm": 14.687488555908203, "loss": 0.231664776802063, "step": 1420, "task_id": "20792"}
+{"elapsed_seconds": 929.9345117650228, "gradient_norm": 56.77309036254883, "loss": 0.4037495255470276, "step": 1430, "task_id": "905112"}
+{"elapsed_seconds": 935.471632633009, "gradient_norm": 22.431867599487305, "loss": 0.2738991975784302, "step": 1440, "task_id": "22663"}
+{"elapsed_seconds": 940.3937182259979, "gradient_norm": 321.21002197265625, "loss": 9.1751708984375, "step": 1450, "task_id": "812313"}
+{"elapsed_seconds": 945.2873266650131, "gradient_norm": 13.29721450805664, "loss": 0.07916092872619629, "step": 1460, "task_id": "14472"}
+{"elapsed_seconds": 950.1360275000334, "gradient_norm": 351.9610900878906, "loss": 25.824140548706055, "step": 1470, "task_id": "401258"}
+{"elapsed_seconds": 955.1161770280451, "gradient_norm": 136.14378356933594, "loss": 11.988834381103516, "step": 1480, "task_id": "85686"}
+{"elapsed_seconds": 960.4290675210068, "gradient_norm": 214.109619140625, "loss": 3.160256862640381, "step": 1490, "task_id": "62829"}
+{"elapsed_seconds": 965.8011706300313, "gradient_norm": 50.96478271484375, "loss": 0.4726770520210266, "step": 1500, "task_id": "25202"}
+{"validation": {"items": 37, "no_latent": 0.11787699411259064, "pbpf": 0.10926327345720088, "step": 1500, "target_tokens": 4627}}
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:03<00:10,  3.39s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:07<00:07,  3.73s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:10<00:03,  3.60s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:10<00:00,  2.24s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:10<00:00,  2.74s/it]
+The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+{"arm": "no_latent", "future_pass_fraction": 0.0, "generated_tokens": 233, "generation_seconds": 7.492357383016497, "solved": false, "task_id": "30445"}
+{"arm": "random_latent", "future_pass_fraction": 0.0, "generated_tokens": 233, "generation_seconds": 7.547831051051617, "solved": false, "task_id": "30445"}
+{"arm": "heuristic", "future_pass_fraction": 0.0, "generated_tokens": 233, "generation_seconds": 7.606224814080633, "solved": false, "task_id": "30445"}
+{"arm": "posterior_mean", "future_pass_fraction": 0.0, "generated_tokens": 233, "generation_seconds": 7.694818982039578, "solved": false, "task_id": "30445"}
+{"arm": "posterior_map", "future_pass_fraction": 0.0, "generated_tokens": 233, "generation_seconds": 7.594991229008883, "solved": false, "task_id": "30445"}
+{"arm": "pbpf", "future_pass_fraction": 0.0, "generated_tokens": 233, "generation_seconds": 7.666116759064607, "solved": false, "task_id": "30445"}
+{"arm": "no_latent", "future_pass_fraction": 0.0, "generated_tokens": 245, "generation_seconds": 8.06296677107457, "solved": false, "task_id": "54889"}
+{"arm": "random_latent", "future_pass_fraction": 0.0, "generated_tokens": 245, "generation_seconds": 7.958296517026611, "solved": false, "task_id": "54889"}
+{"arm": "heuristic", "future_pass_fraction": 0.0, "generated_tokens": 245, "generation_seconds": 8.124511371017434, "solved": false, "task_id": "54889"}
+{"arm": "posterior_mean", "future_pass_fraction": 0.0, "generated_tokens": 245, "generation_seconds": 8.153139216010459, "solved": false, "task_id": "54889"}
+{"arm": "posterior_map", "future_pass_fraction": 0.0, "generated_tokens": 245, "generation_seconds": 8.062048360006884, "solved": false, "task_id": "54889"}
+{"arm": "pbpf", "future_pass_fraction": 0.0, "generated_tokens": 245, "generation_seconds": 8.098638087045401, "solved": false, "task_id": "54889"}
+{"arm": "no_latent", "future_pass_fraction": 0.0, "generated_tokens": 511, "generation_seconds": 16.372042706003413, "solved": false, "task_id": "867055"}
+{"arm": "random_latent", "future_pass_fraction": 0.0, "generated_tokens": 511, "generation_seconds": 16.44122941198293, "solved": false, "task_id": "867055"}
+{"arm": "heuristic", "future_pass_fraction": 0.0, "generated_tokens": 511, "generation_seconds": 16.315197596908547, "solved": false, "task_id": "867055"}
+{"arm": "posterior_mean", "future_pass_fraction": 0.0, "generated_tokens": 511, "generation_seconds": 16.3739301180467, "solved": false, "task_id": "867055"}
+{"arm": "posterior_map", "future_pass_fraction": 0.0, "generated_tokens": 511, "generation_seconds": 16.49115930404514, "solved": false, "task_id": "867055"}
+{"arm": "pbpf", "future_pass_fraction": 0.0, "generated_tokens": 511, "generation_seconds": 16.698513475013897, "solved": false, "task_id": "867055"}
+{"arm": "no_latent", "future_pass_fraction": 0.5, "generated_tokens": 113, "generation_seconds": 3.8373013209784403, "solved": false, "task_id": "729941"}
+{"arm": "random_latent", "future_pass_fraction": 0.5, "generated_tokens": 113, "generation_seconds": 3.7327602710574865, "solved": false, "task_id": "729941"}
+{"arm": "heuristic", "future_pass_fraction": 0.5, "generated_tokens": 113, "generation_seconds": 3.7956080290023237, "solved": false, "task_id": "729941"}
+{"arm": "posterior_mean", "future_pass_fraction": 0.5, "generated_tokens": 113, "generation_seconds": 3.733076837961562, "solved": false, "task_id": "729941"}
+{"arm": "posterior_map", "future_pass_fraction": 0.0, "generated_tokens": 111, "generation_seconds": 3.744690121966414, "solved": false, "task_id": "729941"}
+{"arm": "pbpf", "future_pass_fraction": 0.0, "generated_tokens": 111, "generation_seconds": 3.7234565359540284, "solved": false, "task_id": "729941"}
+{"arm": "no_latent", "future_pass_fraction": 0.0, "generated_tokens": 87, "generation_seconds": 2.939409057958983, "solved": false, "task_id": "43899"}
+{"arm": "random_latent", "future_pass_fraction": 0.0, "generated_tokens": 87, "generation_seconds": 2.9246809179894626, "solved": false, "task_id": "43899"}
+{"arm": "heuristic", "future_pass_fraction": 0.0, "generated_tokens": 87, "generation_seconds": 2.9160882049473003, "solved": false, "task_id": "43899"}
+{"arm": "posterior_mean", "future_pass_fraction": 0.0, "generated_tokens": 87, "generation_seconds": 2.9759024980012327, "solved": false, "task_id": "43899"}
+{"arm": "posterior_map", "future_pass_fraction": 0.0, "generated_tokens": 87, "generation_seconds": 2.9591360630001873, "solved": false, "task_id": "43899"}
+{"arm": "pbpf", "future_pass_fraction": 0.0, "generated_tokens": 87, "generation_seconds": 3.004314861027524, "solved": false, "task_id": "43899"}
+{"arm": "no_latent", "future_pass_fraction": 0.5, "generated_tokens": 212, "generation_seconds": 7.148040718049742, "solved": false, "task_id": "30386"}
+{"arm": "random_latent", "future_pass_fraction": 0.5, "generated_tokens": 212, "generation_seconds": 7.139146542060189, "solved": false, "task_id": "30386"}
+{"arm": "heuristic", "future_pass_fraction": 0.5, "generated_tokens": 212, "generation_seconds": 7.051772877923213, "solved": false, "task_id": "30386"}
+{"arm": "posterior_mean", "future_pass_fraction": 0.5, "generated_tokens": 212, "generation_seconds": 6.948906544945203, "solved": false, "task_id": "30386"}
+{"arm": "posterior_map", "future_pass_fraction": 0.5, "generated_tokens": 212, "generation_seconds": 6.88358754303772, "solved": false, "task_id": "30386"}
+{"arm": "pbpf", "future_pass_fraction": 0.5, "generated_tokens": 212, "generation_seconds": 6.8904104550601915, "solved": false, "task_id": "30386"}
+{"arm": "no_latent", "future_pass_fraction": 0.0, "generated_tokens": 105, "generation_seconds": 3.5139612019993365, "solved": false, "task_id": "33624"}
+{"arm": "random_latent", "future_pass_fraction": 0.0, "generated_tokens": 105, "generation_seconds": 3.5701667229877785, "solved": false, "task_id": "33624"}
+{"arm": "heuristic", "future_pass_fraction": 1.0, "generated_tokens": 100, "generation_seconds": 3.4101755530573428, "solved": true, "task_id": "33624"}
+{"arm": "posterior_mean", "future_pass_fraction": 0.0, "generated_tokens": 120, "generation_seconds": 4.0163182619726285, "solved": false, "task_id": "33624"}
+{"arm": "posterior_map", "future_pass_fraction": 0.0, "generated_tokens": 102, "generation_seconds": 3.435926164034754, "solved": false, "task_id": "33624"}
+{"arm": "pbpf", "future_pass_fraction": 0.0, "generated_tokens": 102, "generation_seconds": 3.5073926909826696, "solved": false, "task_id": "33624"}
+{"arm": "no_latent", "future_pass_fraction": 1.0, "generated_tokens": 113, "generation_seconds": 3.7959737620549276, "solved": true, "task_id": "36146"}
+{"arm": "random_latent", "future_pass_fraction": 1.0, "generated_tokens": 113, "generation_seconds": 3.8810524150030687, "solved": true, "task_id": "36146"}
+{"arm": "heuristic", "future_pass_fraction": 1.0, "generated_tokens": 113, "generation_seconds": 3.873095570015721, "solved": true, "task_id": "36146"}
+{"arm": "posterior_mean", "future_pass_fraction": 1.0, "generated_tokens": 109, "generation_seconds": 3.6110896370373666, "solved": true, "task_id": "36146"}
+{"arm": "posterior_map", "future_pass_fraction": 1.0, "generated_tokens": 113, "generation_seconds": 3.8009009020170197, "solved": true, "task_id": "36146"}
+{"arm": "pbpf", "future_pass_fraction": 1.0, "generated_tokens": 113, "generation_seconds": 3.7504459359915927, "solved": true, "task_id": "36146"}
+{"heuristic": {"future_pass_fraction": 0.375, "generated_tokens": 1614, "generation_seconds": 53.092674016952515, "solved": 2, "success_rate": 0.25, "tasks": 8}, "no_latent": {"future_pass_fraction": 0.25, "generated_tokens": 1619, "generation_seconds": 53.16205292113591, "solved": 1, "success_rate": 0.125, "tasks": 8}, "pbpf": {"future_pass_fraction": 0.1875, "generated_tokens": 1614, "generation_seconds": 53.33928880013991, "solved": 1, "success_rate": 0.125, "tasks": 8}, "posterior_map": {"future_pass_fraction": 0.1875, "generated_tokens": 1614, "generation_seconds": 52.972439687117, "solved": 1, "success_rate": 0.125, "tasks": 8}, "posterior_mean": {"future_pass_fraction": 0.25, "generated_tokens": 1630, "generation_seconds": 53.50718209601473, "solved": 1, "success_rate": 0.125, "tasks": 8}, "random_latent": {"future_pass_fraction": 0.25, "generated_tokens": 1619, "generation_seconds": 53.195163849159144, "solved": 1, "success_rate": 0.125, "tasks": 8}}
