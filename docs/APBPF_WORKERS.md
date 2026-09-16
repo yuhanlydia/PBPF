@@ -370,6 +370,17 @@ against eight particles. This is an exploratory inference-budget diagnostic,
 not retraining, primary evaluation, or a replacement for the locked eight-particle
 protocol and its failed gates.
 
+After the bounded32-particle development refits, use
+`summarize_apbpf_particle_training.py --training-root /absolute/refits
+--development-root /absolute/codearc-semantic-debug-v1 --sensitivity-root
+/absolute/particle-sensitivity --output /absolute/new-comparison --wait`.
+It waits for every fixed seed, restores the completed checkpoints, verifies
+reproduction of their reported NLLs, and compares both training variants at32
+inference particles using paired source-bootstrap intervals. This separates
+training-budget effects from simply increasing inference computation. It also
+aggregates the new association contrast, retaining original per-seed gates;
+neither comparison evaluates primary sources or changes the original protocol.
+
 `audit_pbpf_finite_support.py --input /absolute/finite_contract --output
 /absolute/support-audit.json` verifies every existing finite-family archive and
 reports posterior mass at the numerical floor for every original particle arm.

@@ -12,10 +12,11 @@ selection are complete for both Qwen and DeepSeek, with negative effects in both
 families. All nine configured prediction controls are now complete for both
 CodeARC families, including the previously missing fixed `history_rate`.
 See `full_pipeline_progress_v2.json`, `ablation_coverage_audit.json` and the final
-sections below. The latest numerical-debug and live-process checkpoint is
-`particle_debug_progress.json`: all 18 inference-particle cells are complete,
-bounded 32-particle development retraining has started, Qwen RBR development
-generation is complete, and CodeARC repair seed1701 has finished training. Earlier
+sections below. The latest checkpoint is
+`generated_rbr_development_progress.json`: all three Qwen RBR development
+prediction seeds are complete and fail association/fairness gates. All 18
+inference-particle cells are complete; bounded 32-particle retraining continues,
+and CodeARC repair seed1701 has finished training. Earlier
 sections are historical checkpoints, not the current running-process inventory.
 
 **RBR protocol correction (2026-09-17):** the RBR results below used literal stdin. The pinned official runner appends a missing terminal newline. A new development control confirms this local discrepancy; those historic results remain diagnostics and require corrected execution/retraining. See `rbr_stdin_protocol_audit.json`. CodeARC results are unaffected.
@@ -886,3 +887,37 @@ and the true latent lies there in16.06% of cases. Their mean KL contribution is
 This describes support loss in the archived discrete problem. It cannot separate
 initial proposal omission from later resampling loss, and does not establish a
 cause for the neural continuous-latent model. No finite gate was changed.
+
+## Generated RBR development completion and matched-budget comparison
+
+Qwen RBR development execution is complete for all 400 sources, 3200 candidates
+and 32000 tests, using the corrected official terminal-newline convention.
+There are 231 mixed-outcome source groups, 82 all-fail and 87 all-pass groups.
+The mixed count is below the required 300; this is a development diagnostic,
+not a completed sealed hard-bank gate. The predictor cache contains 257 fitting,
+64 inner-validation and 400 assessment sources, excludes every original primary
+source, and redacts future expected answers from features.
+
+All three fixed 1000-step prediction fits have completed. Their reports and
+checkpoint/population receipts were verified before this snapshot.
+
+| Seed | Aligned NLL | Association gap | Source-bootstrap 95% CI |
+|---|---:|---:|---|
+| 1701 | 0.419151 | 0.014146 | [−0.002615, 0.031804] |
+| 1702 | 0.407933 | 0.007906 | [−0.002287, 0.018890] |
+| 1703 | 0.432493 | 0.000940 | [−0.008041, 0.009549] |
+
+All three association and strong-baseline fairness gates fail. These are
+individual seed intervals, not a pooled three-seed interval. Complete receipts
+and gate decisions are in `rbr_qwen_generated_development_complete.json`.
+
+The first semantic 32-particle retraining seed also completed: association
+0.003730, CI [−0.005455, 0.012829], with failed association/fairness and passed
+pair invariance. Its aligned NLL is 0.483049. At the same 32-particle inference
+budget, the old eight-particle-trained seed1701 model has NLL 0.481475, so this
+single-seed comparison does not show a training benefit. The remaining refits
+continue. `codearc_semantic_p32_comparison_plan.json` declares an automatic
+comparison of all three old/new models at 32 inference particles, with source
+bootstrap intervals and prediction receipts. It waits for all three refits and
+uses only development assessment sources; it is not additional training or a
+primary evaluation. Training compute is not matched across these models.
