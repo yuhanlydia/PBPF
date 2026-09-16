@@ -1066,3 +1066,15 @@ and an actual likelihood update while the original proposal-head parameters
 remain unused. Checkpoint loading must use the declared `PriorTrainingBelief`
 class and per-seed variant sidecar; the default model has matching tensor shapes
 but different filtering behavior. No efficacy conclusion is available yet.
+
+The post-training comparison is now declared and queued in
+`codearc_prior_comparison_plan.json`. It waits for all three fits and restores
+the declared model variant, rather than inferring behavior from tensor shapes.
+Both the old and new models were trained with 32 particles. Comparing them
+under the same prior/no-resampling inference separates the training change
+from the inference change; a second contrast retains the old standard inference
+to measure the combined procedure change. The comparator must reproduce the
+new per-seed reports and the old standard prediction arrays before pooling
+source-level evidence. `prior_comparison_queue_progress.json` records the
+verified live processes and current training/generation counts. No comparison
+result is available at this checkpoint.

@@ -443,6 +443,19 @@ unused. This bounded development iteration does not alter the original protocol
 or evaluate primary sources. A focused test checks prefix visibility and an
 actual likelihood-parameter update with no proposal-head gradients.
 
+Queue `summarize_apbpf_prior_training.py --training-root /absolute/prior-refits
+--reference-training-root /absolute/semantic-p32-refits --reference-replay-root
+/absolute/p32-training-comparison --development-root /absolute/codearc-semantic-debug-v1
+--output /absolute/new-prior-comparison --wait` to summarize only after all three
+refits complete. It validates variant sidecars, loads the new checkpoints with
+`PriorTrainingBelief`, and reproduces their four reported control NLLs. It also
+reproduces the original 32-particle-trained model's standard predictions before
+replaying that model under prior/no-resampling inference. The first paired
+contrast therefore holds inference fixed; the second compares the new protocol
+to the old standard inference. Both training budgets use 32 particles, but
+compute is not identical. All sources/seeds remain in the source-cluster
+bootstrap and the original seed gates remain attached.
+
 `audit_pbpf_finite_support.py --input /absolute/finite_contract --output
 /absolute/support-audit.json` verifies every existing finite-family archive and
 reports posterior mass at the numerical floor for every original particle arm.

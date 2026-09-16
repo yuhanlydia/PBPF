@@ -1,5 +1,5 @@
 {
-  "README.md": "4f2644aa88db12642f98b7f8e12e6cf178c05308ac7036412cedabce4095f60b",
+  "README.md": "3a983c1c7890fba7162b82d2ebba5c1b7be2d31e1f105f01042a408ea108f91e",
   "ablation_coverage_audit.json": "9e8f4de771739f1983ce5437b106803259234a04b4d5e7936d470f8b04570dc0",
   "acquisition_replay_tests.log": "dc6d1b0c26161b6ba53bc38ea34255b2c7b95db096c25797382b56ce3d2e7cc7",
   "active_diagnostic_launch.json": "28c2508fcf7ba3c9f8e53df804923d4899c2a222cc8c4f1c6716f7be7bd8eec4",
@@ -70,6 +70,7 @@
   "codearc_pooled_proposal_plan.json": "8308da5ae91617ef05cb5b9738ee41c24d51a0039b6dd176eab58d56a4275d9f",
   "codearc_pooled_proposal_results.json": "2ec97cc51c36ddf1a5ba72705dc703af0e47a0b343629f540d2be92b00a94e73",
   "codearc_pooled_proposal_status.json": "f83ec63d0fa62d9421f1389b248049b9ef175b94dee12b48f54209830111e1f7",
+  "codearc_prior_comparison_plan.json": "9d21d5bc817a147372b5e7647d9d8130e71e26a9eb48a1e97605ba5f7011c7a8",
   "codearc_prior_training_plan.json": "0a4187dd8e086ed46bd0a49eb16b04346945cef10fae0b769320ebee0d0a46c6",
   "codearc_qwen_completed_replication_cell.json": "1b42f27eb71ad0d8b3bffb56f57b01e0f6cb5506a4f43b02ddca44b04b0386c2",
   "codearc_qwen_history_rate_ablation.json": "5e2f31c6d4a1a8794828edabb550e5d3f2b03508c3a49f518767f4064ce7a3ce",
@@ -158,6 +159,7 @@
   "pooled_proposal_tests.log": "2f717867ddaaf34abecde809a533c23d67578d2f53678c740b591a5a8f9eaa35",
   "prediction_stage_progress.json": "66d62c2ece4652d72020549dad5e8e53b7957d091c4f7649dd025791c89972c8",
   "prefix_v7_superseded_before_execution.json": "93f8dda9da310a43e14bb9800997d22552200613f61a77e640c1042ddf25160e",
+  "prior_comparison_queue_progress.json": "6ee74101ad2d0c1ca89f4119680a61d4f5dba1d24dd84b4a9c42bf17d2d9c26e",
   "prior_training_debug_tests.log": "207d75cc7cdb9d37eeda57d787b238701f7288959f0c55ac0839b7988e96d460",
   "prompt_and_timeout_recheck.log": "bafe627ee773b314b7b9dff4fffedfa9a1937b69bcd0cda54113c129dfcccac5",
   "query_bundle_stage_tests.log": "5f746ff58bc14d9b699410f5af3575ef0d8563f541ee04e864834e6139a92d5d",
