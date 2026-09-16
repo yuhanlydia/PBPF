@@ -1,0 +1,9 @@
+{
+  "groups": 400,
+  "mixed_groups": 99,
+  "all_fail": 292,
+  "all_pass": 9,
+  "minimum_mixed_groups": 300,
+  "bank_sha256": "91b1229210c20a26c97556fc947742d63a616e0dbf22618823fe7e4dcce50353",
+  "passes": false
+}

@@ -1,15 +1,15 @@
 # A-PBPF stage-worker contract
 
-The repository bundles adapters for the first eighteen real stages: `materialize`,
+The repository bundles adapters for twenty of the twenty-one real stages: `materialize`,
 `hard_bank_lock`, `execution_cache`, `hard_bank`, `hard_bank_gate`,
 `train_baselines`, `train_belief`, `baseline_fairness_gate`, `association`,
 `association_gate`, `pair_invariance_gate`, `oracle_headroom`,
 `oracle_headroom_gate`, `active_testing`, `active_testing_gate`, `selection`,
-`selection_gate`, and `repair`.
+`selection_gate`, `repair`, `replication_gate`, and `paper_tables`.
 Only materialization has completed as a real two-domain stage so far. Public
 candidate import has also been checked on all 1112 CodeARC source groups; worker
 contract fixtures are separate from scientific execution evidence. The other
-3 stages still need real adapters; a complete scientifically validated real-stage
+`replication` still needs its real adapter; a complete scientifically validated real-stage
 pipeline is not bundled.
 The site template intentionally leaves every command unprovisioned. Existing
 research scripts need explicit adapters to satisfy this contract; do not simply
@@ -192,8 +192,8 @@ thresholds remain unchanged and the runner recomputes each gate decision.
 The standalone `run_local_stage_training_diagnostic.py` can exercise these
 trainers and controls on an existing, checksummed full cache while complete
 two-domain generation is pending. Its output is explicitly a standalone
-exploratory diagnostic and never counts as a sealed DAG stage. Replication,
-replication gate and paper tables still require three adapters.
+exploratory diagnostic and never counts as a sealed DAG stage. The replication
+stage still needs its adapter and declared cross-family input provenance.
 
 `--through-stage active_testing_gate` provisions the oracle and active-query
 workers as well. Association produces an evaluator-only assessment bundle with
@@ -296,6 +296,27 @@ entire source/arm inventory, writes a pre-hidden lock, and scores new programs
 under the original six-second evaluator timeout. Small real-data engineering
 smokes are explicitly labeled and never become scientific or stage evidence.
 The staged adapter and standalone runs remain exploratory after failed gates.
+
+`build_apbpf_full_replay_cache.py` verifies all four completed replay banks,
+the pinned generator identity, public/evaluator manifests, phase-specific
+execution records and the primary pre-hidden lock before writing a redacted
+full cache and source proof. `run_local_full_replication_cell.py` waits for one
+complete domain/family replay, then uses the same three-seed training,
+counterfactual replay and utility-selection implementations as the existing
+full-population diagnostics. Each cell retains all500 primary sources and
+4000 candidates. Standalone cells are not sealed replication stages.
+
+The replication gate adapter requires every locked domain/family cell, all
+three seeds and full populations. Its numerical rule remains positive
+association and positive selection advantage in every cell; it does not
+replace stricter upstream margin/CI gates. The paper-tables adapter reads its
+eight direct dependencies and exports gate decisions, unchanged gate metrics,
+per-seed selection/repair results and replication effects. It preserves failed
+gates and permanently marks tables ineligible for confirmatory main-table use.
+Missing confidence bounds are never inferred from lower bounds or averaged
+across seed reports. These two downstream adapters remain unqueued until the
+replication stage can supply a complete, correctly bound matrix. The current
+waiting prefix still provisions eighteen stages through repair.
 
 ## Worker inputs and outputs
 

@@ -705,3 +705,43 @@ seed has a positive confidence lower bound, and all semantic gaps remain below
 aligned NLL improves by0.0314739 across the three fixed seeds;
 this is a descriptive comparison, not a pooled confidence interval or evidence
 of particle necessity. Complete per-seed reports and the comparison are retained.
+
+
+### DeepSeek full-bank outcomes and three remaining replication cells
+
+The DeepSeek CodeARC replay completed all1112 sources. Development has99 mixed,
+292 all-fail and9 all-pass groups, below the fixed300-mixed-group requirement.
+Primary has133 mixed,344 all-fail and23 all-pass groups. Visible-pass-rate
+selection achieves0.27 hidden selected Pass@1; the bank's hidden oracle is0.312,
+a0.042 headroom. The audit remains audit-only because the development pilot
+criterion failed. Its absent-pilot disjointness flag is not evidence of actual
+source overlap; full cache assembly independently checks source disjointness.
+
+The independent development-only prediction seeds1701–1703 also completed.
+Association gaps are-0.0014895,-0.0071972 and-0.0011281; all three confidence
+intervals include zero and all association/fairness/invariance gates fail.
+These development results are not substituted for full-primary replication.
+
+A generic complete-replay cache assembler now verifies generator identity,
+all original splits, evaluator/public manifests and exact primary locks.
+Two independent CodeARC DeepSeek assembly invocations produced byte-identical
+full caches (1696train/3200development/4000primary candidates). A queued
+replication-cell runner fits the original three1000-step seeds, all matched
+baselines, complete association controls and utility selection. DeepSeek CodeARC
+is actively training; RBR Qwen and DeepSeek wait for their complete replays.
+The already-completed Qwen CodeARC cell has association-0.002618 and selection
+advantage-0.012, preserving both negative findings and original source bindings.
+
+Replication-gate and exploratory table-export adapters are implemented. The
+replication gate requires the full2-domain by2-family matrix and unchanged
+positive-direction agreement. Tables retain every failed gate and cannot
+become main-table eligible.20/21 adapters now exist; the actual replication
+adapter and its root-declared input chain remain incomplete. The waiting real
+prefix still covers18 stages through repair, and only1/21 real stages has
+actually completed.156 A-PBPF checks passed.
+
+Full CodeARC repair is still running. At the first250-step development check,
+teacher-forced reference NLL was0.770587 with the prefix versus1.260503 without
+it on394 source representatives/34047 target tokens. This is supervised
+sequence likelihood, not new-program test success or evidence of diagnostic
+particle necessity; the six-arm generation/execution comparison remains pending.
