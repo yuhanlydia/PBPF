@@ -1,0 +1,35 @@
+{
+  "codearc-packet-repair-evaluation-v1": {
+    "pid": 2546736,
+    "command": [
+      "/data/cwj/PBPF/.venv/bin/python",
+      "-u",
+      "scripts/run_local_packet_repair_evaluation.py",
+      "--generation-root",
+      "/data/cwj/PBPF/local/longgoal/codearc-packet-repair-v1",
+      "--packet-root",
+      "/data/cwj/PBPF/local/longgoal/codearc-repair-packets-v1",
+      "--evaluator-root",
+      "/data/cwj/PBPF/local/longgoal/codearc-evaluator-v1",
+      "--output",
+      "/data/cwj/PBPF/local/longgoal/codearc-packet-repair-evaluation-v1"
+    ],
+    "launched_at": "2026-09-16T20:49:15.656566+00:00"
+  },
+  "apbpf-real-bank-prefix-v7": {
+    "pid": 2546737,
+    "command": [
+      "/data/cwj/PBPF/.venv/bin/python",
+      "-u",
+      "scripts/run_local_apbpf_bank_prefix.py",
+      "--run-root",
+      "/data/cwj/PBPF/local/longgoal",
+      "--output",
+      "/data/cwj/PBPF/local/longgoal/apbpf-real-bank-prefix-v7",
+      "--through-stage",
+      "repair",
+      "--continue-exploratory"
+    ],
+    "launched_at": "2026-09-16T20:49:15.657232+00:00"
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "scope": "development-only feature comparison; original primary excluded; no pooled confidence interval inferred from marginal intervals",
+  "feature_dim": 512,
+  "steps": 1000,
+  "original_primary_excluded": true,
+  "seeds": {
+    "1701": {
+      "lexical": {
+        "report_sha256": "87717f1daea2bc660781a29d3191d866a512192de59df1e33047357c84cde72c",
+        "aligned_nll": 0.5418298564789056,
+        "association": {
+          "ci95": [
+            -0.0036625472704569497,
+            0.005914924194415409
+          ],
+          "clusters": 400,
+          "estimand": "future-example-weighted; whole-source-component resampling",
+          "mean_nll_gap": 0.0011261113686487079,
+          "replicates": 10000,
+          "unit": "source_component"
+        },
+        "gate": {
+          "association_passes": false,
+          "association_threshold": 0.03,
+          "baseline_fairness_passes": false,
+          "baseline_margin": 0.02,
+          "baseline_status": "evaluated",
+          "controls_worse_than_aligned": true,
+          "full_gate_passes": false,
+          "max_degradation_fraction": 0.25,
+          "pair_invariance_passes": true,
+          "particles_necessary_claim_allowed": false
+        },
+        "baseline_nll": {
+          "pair_aware": 0.4643098856508152,
+          "deep_sets": 0.47287831655372853,
+          "tuned_dirichlet": 0.5064929115933571,
+          "no_particle_bottleneck": 0.4711543403022093
+        }
+      },
+      "semantic": {
+        "report_sha256": "ff70ce6f031df5ce74c4707fe08fd82cbe94fb43ccffc32f63701d83a338b8af",
+        "aligned_nll": 0.514592728531613,
+        "association": {
+          "ci95": [
+            0.0033526898721853893,
+            0.015406535585721335
+          ],
+          "clusters": 400,
+          "estimand": "future-example-weighted; whole-source-component resampling",
+          "mean_nll_gap": 0.009284175001084805,
+          "replicates": 10000,
+          "unit": "source_component"
+        },
+        "gate": {
+          "association_passes": false,
+          "association_threshold": 0.03,
+          "baseline_fairness_passes": false,
+          "baseline_margin": 0.02,
+          "baseline_status": "evaluated",
+          "controls_worse_than_aligned": true,
+          "full_gate_passes": false,
+          "max_degradation_fraction": 0.25,
+          "pair_invariance_passes": false,
+          "particles_necessary_claim_allowed": false
+        },
+        "baseline_nll": {
+          "pair_aware": 0.43930994688571284,
+          "deep_sets": 0.4418366854905336,
+          "tuned_dirichlet": 0.5064929115933571,
+          "no_particle_bottleneck": 0.44530460074453193
+        }
+      },
+      "descriptive_nll_improvement": 0.027237127947292605
+    },
+    "1702": {
+      "lexical": {
+        "report_sha256": "6a7207c6ae72f425ead67d1661234fb11b9735b9d0e2d1eeeb4a1d549e2936d0",
+        "aligned_nll": 0.5413269139311306,
+        "association": {
+          "ci95": [
+            -0.005281638354063034,
+            0.001991343513131141
+          ],
+          "clusters": 400,
+          "estimand": "future-example-weighted; whole-source-component resampling",
+          "mean_nll_gap": -0.0015974194975569844,
+          "replicates": 10000,
+          "unit": "source_component"
+        },
+        "gate": {
+          "association_passes": false,
+          "association_threshold": 0.03,
+          "baseline_fairness_passes": false,
+          "baseline_margin": 0.02,
+          "baseline_status": "evaluated",
+          "controls_worse_than_aligned": true,
+          "full_gate_passes": false,
+          "max_degradation_fraction": 0.25,
+          "pair_invariance_passes": false,
+          "particles_necessary_claim_allowed": false
+        },
+        "baseline_nll": {
+          "pair_aware": 0.47297159143016815,
+          "deep_sets": 0.47622881520780763,
+          "tuned_dirichlet": 0.5064929115933571,
+          "no_particle_bottleneck": 0.4688998551666492
+        }
+      },
+      "semantic": {
+        "report_sha256": "3459395e43bf51f517a2a47ac70f64f39d4816dc8116c006c534351c589e598a",
+        "aligned_nll": 0.5045107145732235,
+        "association": {
+          "ci95": [
+            -0.0040343100726604455,
+            0.01772547809282938
+          ],
+          "clusters": 400,
+          "estimand": "future-example-weighted; whole-source-component resampling",
+          "mean_nll_gap": 0.0065694330260157585,
+          "replicates": 10000,
+          "unit": "source_component"
+        },
+        "gate": {
+          "association_passes": false,
+          "association_threshold": 0.03,
+          "baseline_fairness_passes": false,
+          "baseline_margin": 0.02,
+          "baseline_status": "evaluated",
+          "controls_worse_than_aligned": true,
+          "full_gate_passes": false,
+          "max_degradation_fraction": 0.25,
+          "pair_invariance_passes": false,
+          "particles_necessary_claim_allowed": false
+        },
+        "baseline_nll": {
+          "pair_aware": 0.441979164934858,
+          "deep_sets": 0.45171803376603853,
+          "tuned_dirichlet": 0.5064929115933571,
+          "no_particle_bottleneck": 0.4434515354529075
+        }
+      },
+      "descriptive_nll_improvement": 0.03681619935790714
+    },
+    "1703": {
+      "lexical": {
+        "report_sha256": "0f8ff02cc3c37aa0b8d73adb2e6befc082095d16db608e0bbbf2bd798d0106e6",
+        "aligned_nll": 0.5317428938423333,
+        "association": {
+          "ci95": [
+            -0.006516582171122233,
+            -0.00016118408367037963
+          ],
+          "clusters": 400,
+          "estimand": "future-example-weighted; whole-source-component resampling",
+          "mean_nll_gap": -0.0032847272232174873,
+          "replicates": 10000,
+          "unit": "source_component"
+        },
+        "gate": {
+          "association_passes": false,
+          "association_threshold": 0.03,
+          "baseline_fairness_passes": false,
+          "baseline_margin": 0.02,
+          "baseline_status": "evaluated",
+          "controls_worse_than_aligned": true,
+          "full_gate_passes": false,
+          "max_degradation_fraction": 0.25,
+          "pair_invariance_passes": false,
+          "particles_necessary_claim_allowed": false
+        },
+        "baseline_nll": {
+          "pair_aware": 0.4614113041456172,
+          "deep_sets": 0.4696624539449767,
+          "tuned_dirichlet": 0.5064929115933571,
+          "no_particle_bottleneck": 0.46585224631886046
+        }
+      },
+      "semantic": {
+        "report_sha256": "363365208f702aa2710572f27237963f08b11822c92c43896f094df89f6cb04c",
+        "aligned_nll": 0.5013744956490825,
+        "association": {
+          "ci95": [
+            -0.009411476373672486,
+            0.01222500975926717
+          ],
+          "clusters": 400,
+          "estimand": "future-example-weighted; whole-source-component resampling",
+          "mean_nll_gap": 0.0014090704498812556,
+          "replicates": 10000,
+          "unit": "source_component"
+        },
+        "gate": {
+          "association_passes": false,
+          "association_threshold": 0.03,
+          "baseline_fairness_passes": false,
+          "baseline_margin": 0.02,
+          "baseline_status": "evaluated",
+          "controls_worse_than_aligned": true,
+          "full_gate_passes": false,
+          "max_degradation_fraction": 0.25,
+          "pair_invariance_passes": false,
+          "particles_necessary_claim_allowed": false
+        },
+        "baseline_nll": {
+          "pair_aware": 0.44299439813433955,
+          "deep_sets": 0.4547472934322972,
+          "tuned_dirichlet": 0.5064929115933571,
+          "no_particle_bottleneck": 0.45539030945575587
+        }
+      },
+      "descriptive_nll_improvement": 0.030368398193250767
+    }
+  },
+  "threshold": 0.03,
+  "mean_nll_improvement_across_fixed_seeds": 0.031473908499483505
+}

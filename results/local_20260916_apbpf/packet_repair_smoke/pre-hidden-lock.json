@@ -1,0 +1,26 @@
+{
+  "schema": "apbpf-repair-pre-hidden-lock-v1",
+  "seed": 1701,
+  "generation_complete_sha256": "8a183b2196e4c3adae72a80b6efdf2356e5967225c45949323ec6c803f13d25c",
+  "packet_manifest_sha256": "9402a4358296777e015e590c0edab11b5fc3b6fd0a4bda1750a1c02d8ddb8ea9",
+  "generated_files": {
+    "1394aa506b38bb9208ddc1321d164f36a37c2451784d25e0a156e8b577d26337.json": "5ce6a98d2ea75afde641bd692e3d1e70461185f4078802ac6aa0a19009f42401",
+    "31a35719aeb1648835d1970902f903bc08e1ce17d0760d926937ffa35cd5fbd4.json": "739927ec0426925fe15c062da4f1506081a4e19f3b81053b2cc7860921f30057",
+    "250cf1f92120cb77cd7671905b194e402492372ea42714f919c4681900c3d246.json": "8a6199cacd996713d0252fdfcb01348bf84157600368bdebf28e6cc0d3ee5d9b",
+    "455ec53fd916f865e19aad173ac6f1262291dfe21a8f9563af837f320624869d.json": "97ce3bd53d3e3e1e5fed67285ca63c2495c1ace4d647dbf4985a4df38b6a4fc9",
+    "cfc3ba243e851145e72ea12a24ab9562bd8e10692bc6e4b509a14803c905b931.json": "24524e5be6a28966d4b34429c748f70bee7d0aeee207b529e8d502ade3ef4edd",
+    "5131fae6421b42bb795a88cd3cfbb96ee06c18648679e06662095f250bfbca62.json": "3472a24ca79000555ff08729b0403ff53785b68e9515f1b93538b74c17a2f5df"
+  },
+  "source_candidate_inventory": {
+    "CodeARC/109/qwen/6": "codearc-component-ca45998c5f1ec1d4b1b9284f"
+  },
+  "arms": [
+    "no_latent",
+    "mean",
+    "map",
+    "random",
+    "sample_once",
+    "token_remix_fault"
+  ],
+  "written_before_private_tests_opened": true
+}

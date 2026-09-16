@@ -1,0 +1,18 @@
+{
+  "pid": 2533538,
+  "command": [
+    "/data/cwj/PBPF/.venv/bin/python",
+    "-u",
+    "scripts/run_local_packet_repair.py",
+    "--packet-root",
+    "/data/cwj/PBPF/local/longgoal/codearc-repair-packets-v1",
+    "--output",
+    "/data/cwj/PBPF/local/longgoal/codearc-packet-repair-v1",
+    "--domain",
+    "codearc",
+    "--gpu",
+    "2"
+  ],
+  "launched_at": "2026-09-16T20:48:17.476345+00:00",
+  "engineering_smoke_completed": true
+}

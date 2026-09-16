@@ -1,15 +1,15 @@
 # A-PBPF stage-worker contract
 
-The repository bundles adapters for the first seventeen real stages: `materialize`,
+The repository bundles adapters for the first eighteen real stages: `materialize`,
 `hard_bank_lock`, `execution_cache`, `hard_bank`, `hard_bank_gate`,
 `train_baselines`, `train_belief`, `baseline_fairness_gate`, `association`,
 `association_gate`, `pair_invariance_gate`, `oracle_headroom`,
 `oracle_headroom_gate`, `active_testing`, `active_testing_gate`, `selection`,
-and `selection_gate`.
+`selection_gate`, and `repair`.
 Only materialization has completed as a real two-domain stage so far. Public
 candidate import has also been checked on all 1112 CodeARC source groups; worker
 contract fixtures are separate from scientific execution evidence. The other
-4 stages still need real adapters; a complete scientifically validated real-stage
+3 stages still need real adapters; a complete scientifically validated real-stage
 pipeline is not bundled.
 The site template intentionally leaves every command unprovisioned. Existing
 research scripts need explicit adapters to satisfy this contract; do not simply
@@ -192,8 +192,8 @@ thresholds remain unchanged and the runner recomputes each gate decision.
 The standalone `run_local_stage_training_diagnostic.py` can exercise these
 trainers and controls on an existing, checksummed full cache while complete
 two-domain generation is pending. Its output is explicitly a standalone
-exploratory diagnostic and never counts as a sealed DAG stage. Repair,
-replication, replication gate and paper tables still require four adapters.
+exploratory diagnostic and never counts as a sealed DAG stage. Replication,
+replication gate and paper tables still require three adapters.
 
 `--through-stage active_testing_gate` provisions the oracle and active-query
 workers as well. Association produces an evaluator-only assessment bundle with
@@ -268,8 +268,34 @@ and computes eight diagnosis-only particles from the original belief checkpoint.
 Training/development rows carry supervised targets; primary rows have none.
 `prepare_apbpf_repair_packets.py` exercises this preparation on completed
 standalone CodeARC evidence. Packet preparation is not projector training,
-repair generation, new execution, or a completed `repair` DAG stage. The actor
-trainer, generator and evaluator adapter remain to be implemented.
+repair generation, new execution, or a completed `repair` DAG stage.
+
+`--through-stage repair` now provisions the real supportive repair worker. It
+checks association/cache/model lineage, builds actor-only packets, trains a
+diagnosis-only eight-token prefix on frozen pinned Qwen, generates all six
+repair arms, seals each seed's complete generated inventory before opening
+private tests, and freshly executes every generated program. Both domains use
+all three seeds and every one of the 500 particle-selected primary sources;
+this is 3000 generated repairs per domain/seed. GPU0 is assigned after Qwen
+bank generation finishes; an occupied device is never preempted.
+
+The fixed projector budget is 1500 steps, AdamW learning rate0.0003, two sampled
+components per training sequence, context cap1536, eight prefix tokens, token
+RMS cap0.02 and diagnosis-dependent delta RMS cap0.002. Normalization is fitted
+on training posteriors only. Checkpoint selection runs every250 steps on the
+lexicographically first candidate per original development source. Oversized
+training/validation sequences are recorded as token-cap exclusions. Primary
+sources are never dropped; generation uses a matched4096-token prompt cap and
+512-token continuation cap, recording original lengths, truncation and actual
+generated token IDs. The token-remix fault remains intentionally incorrect and
+slower than fixed-component decoding. It is not a valid serving comparator.
+
+`run_local_packet_repair.py` runs the same actor in public-only generator
+sandboxes. Its companion `run_local_packet_repair_evaluation.py` verifies the
+entire source/arm inventory, writes a pre-hidden lock, and scores new programs
+under the original six-second evaluator timeout. Small real-data engineering
+smokes are explicitly labeled and never become scientific or stage evidence.
+The staged adapter and standalone runs remain exploratory after failed gates.
 
 ## Worker inputs and outputs
 

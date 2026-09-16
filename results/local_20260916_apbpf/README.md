@@ -661,3 +661,47 @@ adapter count remains17 and real completed-stage count remains1/21. Full A-PBPF
 regression passed145 checks;13 repair checks passed again after strengthening
 the public-context binding checks. Exact executed packet-preparation source is
 retained for the earlier completed run.
+
+
+### Real repair training and six-arm generation connected
+
+A public-only packet actor now trains the actual diagnosis prefix against
+nonprimary reference programs, generates all six declared repair controls,
+and records fixed-component traces, raw token IDs and generated code. CodeARC
+prompts explicitly request the callable solution interface and preserve public
+expected-exception semantics. Primary targets and future tests are absent from
+the actor packet. A separate evaluator seals the entire generated source/arm
+inventory before opening private tests, then freshly executes each program.
+
+A real-data engineering smoke used four short training candidates, two short
+development candidates and one selected primary candidate. Development source
+selection reduced its two candidates from the same source to one validation
+item. One projector step completed with finite loss and gradients; all six
+32-token-budget generations completed and their60 newly executed tests passed.
+This shortest-text engineering fixture establishes executable plumbing only;
+it is not evidence of repair efficacy and does not pass any scientific gate.
+
+The full CodeARC run has started on GPU2 with all three seeds,1500 projector
+steps each and512-token continuations. Each seed retains all500 selected
+primary sources and all six arms. Training uses1672 of1696 candidates and
+validation uses394 of400 source representatives under the fixed1536-token
+context cap;24 training candidates and6 validation representatives exceed that
+cap and are explicitly audited. Primary generation retains all500 sources.
+Normalization uses training posteriors only; checkpoint selection uses
+original development only. The evaluation queue waits for sealed generation
+and does not infer repair scores from the original candidate cache.
+
+A real `repair` stage adapter connects both domains and all three seeds through
+declared direct dependencies. Prefix-v6 was archived while still waiting;
+prefix-v7 provisions18 stages through repair. Replication, replication_gate and
+paper_tables still need adapters, and real completed-stage count remains1/21.
+147 A-PBPF checks passed, in addition to the actual isolated GPU/CPU smoke.
+
+The dimension-matched CodeARC development feature comparison completed all six
+fits. Semantic association gaps for1701–1703 are0.0092842,0.0065694 and0.0014091,
+versus lexical0.0011261,-0.0015974 and-0.0032847. Only the first semantic
+seed has a positive confidence lower bound, and all semantic gaps remain below
+0.03. Every semantic seed fails baseline fairness and pair invariance. Mean
+aligned NLL improves by0.0314739 across the three fixed seeds;
+this is a descriptive comparison, not a pooled confidence interval or evidence
+of particle necessity. Complete per-seed reports and the comparison are retained.

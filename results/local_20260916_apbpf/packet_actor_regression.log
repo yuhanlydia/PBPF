@@ -1,0 +1,10 @@
+........................................................................ [ 48%]
+........................................................................ [ 97%]
+...                                                                      [100%]
+=============================== warnings summary ===============================
+tests/apbpf/test_smc_acquisition.py::test_batched_diagnostic_scores_match_shipped_adapter
+  /data/cwj/PBPF/src/pbpf/apbpf/acquisition.py:340: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
+    diagnosis = torch.as_tensor(state.diagnosis_particles, device=self.device, dtype=self.dtype)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+147 passed, 1 warning in 67.43s (0:01:07)
