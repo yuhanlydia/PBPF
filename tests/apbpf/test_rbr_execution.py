@@ -1,6 +1,7 @@
 import pytest
 import importlib.util
 from pathlib import Path
+import sys
 from pbpf.apbpf.rbr_execution import execute_stdin, output_matches, canonical_stdin
 
 
@@ -27,6 +28,17 @@ def test_legacy_prediction_preparation_uses_same_stdin_protocol():
     results = module._execute(('import sys\nprint(int(sys.stdin.readline()[:-1]))',
                                [{'input': '7', 'output': '7', 'id': 'regression'}], 2))
     assert results[0]['outcome'] == 'PASS'
+
+
+def test_repair_execution_uses_same_stdin_protocol():
+    path = Path(__file__).resolve().parents[2] / 'scripts/run_rbr_repair_gate.py'
+    spec = importlib.util.spec_from_file_location('repair_stdin_contract', path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    outcomes = module._execute('import sys\nprint(int(sys.stdin.readline()[:-1]))',
+                               [{'input': '7', 'output': '7'}])
+    assert outcomes == ['PASS']
 
 
 @pytest.mark.parametrize('code,expected,outcome', [

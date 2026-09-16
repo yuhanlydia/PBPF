@@ -1,0 +1,24 @@
+{
+  "schema": "apbpf-rbr-generated-execution-v1",
+  "phase": "all",
+  "split": "development",
+  "candidate_count": 128,
+  "tests": 1280,
+  "test_passes": 702,
+  "all_pass": 55,
+  "stdin_policy": "official-terminal-newline-if-missing",
+  "bank_complete_sha256": "ab691eb293f91a5e815f41fc61eb96ca725f7a7f691b72fe49815be234c42618",
+  "source_sha256": {
+    "scripts/evaluate_apbpf_rbr_bank.py": "34070f6ab18540e5c9b40c534ee844fff6f07b0d531b5a2c9a9086bb0e063dd1",
+    "src/pbpf/apbpf/rbr_execution.py": "b7f1dfc3044e9d35364a60b68be3a3355db784ab2cf7ad09b16c8bfda880a659",
+    "src/pbpf/apbpf/codearc_execution.py": "e55bbd0fc69e2efb847524932dbf0e6ef0a22d8142dc869ca2c655c2b17d21e9",
+    "src/pbpf/apbpf/codearc_bank.py": "cc479620ee4a4922a060be466092a027881f35ab8203cc5b7f9154d7dc29cdfc"
+  },
+  "groups": 16,
+  "mixed_groups": 9,
+  "all_fail_groups": 5,
+  "all_pass_groups": 2,
+  "constant_visible_histories": 112,
+  "scope": "16-source development pilot only; 300-mixed-group gate not satisfied; no primary efficacy claim",
+  "results_sha256": "ed88817cfe7f2c8d3e9e9afc32414a3a81441603a13cff4a782ded45b9bc379c"
+}

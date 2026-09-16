@@ -1,0 +1,41 @@
+{
+  "scope": "actual full1112source public-generation import; not a completed sealed stage",
+  "banks": [
+    {
+      "domain": "codearc",
+      "directory": "codearc-bank-000",
+      "split": "train",
+      "complete_sha256": "7a138c6aaa5ed6e947b8b1770ebeabbf319540bac739102ce9484acc15779e20",
+      "groups": 212,
+      "source_generation_sha256": "dbda893f72a97d4035e7dea52cf9e520876d808714f9b64774e18ae14f42a4a7"
+    },
+    {
+      "domain": "codearc",
+      "directory": "codearc-bank-001",
+      "split": "development",
+      "complete_sha256": "0ea15b30655142f15f50345da68befb16b6e559621baf753fdb5e94dd3bc9ffb",
+      "groups": 16,
+      "source_generation_sha256": "dbda893f72a97d4035e7dea52cf9e520876d808714f9b64774e18ae14f42a4a7"
+    },
+    {
+      "domain": "codearc",
+      "directory": "codearc-bank-002",
+      "split": "development",
+      "complete_sha256": "8fb5619e0f46103b5b0222d09180ac7809e98ed9afc94d0dab94843bd7d2e04e",
+      "groups": 384,
+      "source_generation_sha256": "f2f064893fdf6a5733174d887e5a568eda07af80afa00dd8a78c32f5b002ef1b"
+    },
+    {
+      "domain": "codearc",
+      "directory": "codearc-bank-003",
+      "split": "primary",
+      "complete_sha256": "fc707e9004b3b56b358d6d09699a4e8eab8e23a87cfd88b4180d6a3df986b5c3",
+      "groups": 500,
+      "source_generation_sha256": "dbda893f72a97d4035e7dea52cf9e520876d808714f9b64774e18ae14f42a4a7"
+    }
+  ],
+  "groups": 1112,
+  "candidates": 8896,
+  "evaluation_files_imported": false,
+  "source_sha256": "ff765cdad00b399fadbc9d9add6e1e76256c84b6b972678270ac23877bb50938"
+}

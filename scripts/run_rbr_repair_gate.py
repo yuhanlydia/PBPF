@@ -22,6 +22,7 @@ from torch.nn import functional as F
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 from pbpf.apbpf.stages import RUNNER_LINEAGE_SCHEMA, load_stage_attempt
+from pbpf.apbpf.rbr_execution import canonical_stdin
 from pbpf.belief.features import BeliefBatch
 from pbpf.belief.model import NeuralBeliefModel
 from pbpf.conditioning.mixture import sample_components_once, whole_sequence_mixture_loss
@@ -705,7 +706,7 @@ def _execute(code, cases, timeout=2.0):
         source.write_text(code)
         for case in cases:
             try:
-                result = subprocess.run(["/usr/bin/python3", "-I", str(source)], input=case["input"],
+                result = subprocess.run(["/usr/bin/python3", "-I", str(source)], input=canonical_stdin(case["input"]),
                     text=True, capture_output=True, timeout=timeout, cwd=directory,
                     env={"PATH": "/usr/bin:/bin", "LANG": "C.UTF-8", "PYTHONHASHSEED": "0"})
                 outcome = "RUNTIME_EXCEPTION" if result.returncode else (
@@ -785,6 +786,8 @@ def evaluate(payload, belief_checkpoint, projector_checkpoint, data_root, output
             "generated_tokens": sum(row["generated_tokens"] for row in values),
             "generation_seconds": sum(row["generation_seconds"] for row in values)}
     result = {"schema": "pbpf-rbr-repair-gate-v2", "seed": seed, "arms": list(arms),
+        "execution_protocol": {"stdin_policy": "official-terminal-newline-if-missing",
+                               "timeout_seconds": 2.0, "numeric_absolute_tolerance": 1e-4},
         "matched": {"same_tasks": True, "same_prompt": True, "same_actor": MODEL_ID,
                     "same_revision": MODEL_REVISION,
                     "prefix_tokens_by_arm": {arm: (0 if arm == "no_latent" else 8) for arm in arms},

@@ -1,0 +1,110 @@
+{
+  "schema": "apbpf-repair-development-literal-stdin-summary-v1",
+  "source_report_sha256": "729fe3701c901f7b079c2cf318fd6aac3cee1f6aca0c7b29dc78b41ca9eb26bf",
+  "claim_status": "exploratory-after-failed-upstream-gate",
+  "matched": {
+    "conditioning_contract": "one-immutable-diagnosis-component-per-continuation-v2",
+    "conditioning_source": "diagnosis_component",
+    "max_new_tokens": 512,
+    "prefix_tokens_by_arm": {
+      "map": 8,
+      "mean": 8,
+      "no_latent": 0,
+      "random": 8,
+      "sample_once": 8,
+      "token_remix_fault": 8
+    },
+    "same_actor": "Qwen/Qwen2.5-Coder-7B-Instruct",
+    "same_decode_policy": "greedy",
+    "same_prompt": true,
+    "same_revision": "c03e6d358207e414f1eca0bb1891e29f1db0e242",
+    "same_tasks": true
+  },
+  "summary": {
+    "map": {
+      "future_pass_fraction": 0.7083333333333334,
+      "generated_tokens": 1148,
+      "generation_seconds": 36.853432269068435,
+      "solved": 4,
+      "success_rate": 0.5,
+      "tasks": 8
+    },
+    "mean": {
+      "future_pass_fraction": 0.7083333333333334,
+      "generated_tokens": 1147,
+      "generation_seconds": 37.23196803196333,
+      "solved": 4,
+      "success_rate": 0.5,
+      "tasks": 8
+    },
+    "no_latent": {
+      "future_pass_fraction": 0.6666666666666667,
+      "generated_tokens": 1148,
+      "generation_seconds": 39.494083230849355,
+      "solved": 4,
+      "success_rate": 0.5,
+      "tasks": 8
+    },
+    "random": {
+      "future_pass_fraction": 0.7083333333333334,
+      "generated_tokens": 1147,
+      "generation_seconds": 36.64073605882004,
+      "solved": 4,
+      "success_rate": 0.5,
+      "tasks": 8
+    },
+    "sample_once": {
+      "future_pass_fraction": 0.7083333333333334,
+      "generated_tokens": 1147,
+      "generation_seconds": 36.68694424780551,
+      "solved": 4,
+      "success_rate": 0.5,
+      "tasks": 8
+    },
+    "token_remix_fault": {
+      "future_pass_fraction": 0.7083333333333334,
+      "generated_tokens": 1173,
+      "generation_seconds": 186.368138454156,
+      "solved": 4,
+      "success_rate": 0.5,
+      "tasks": 8
+    }
+  },
+  "upstream_gate": {
+    "belief_binding": {
+      "artifact_path": null,
+      "bound": false,
+      "checkpoint_sha256": null,
+      "reason": "belief checkpoint was not supplied",
+      "train_belief_completion_sha256": null
+    },
+    "confirmatory": false,
+    "continue_exploratory": true,
+    "fingerprint": null,
+    "gate_sha256": "5747e165010c07e49f750938e19d2795cacf4abf8bdad1a2ced49dcc8f3b57a6",
+    "gates": {
+      "association_gate": {
+        "completion_sha256": null,
+        "confirmatory_attempt": false,
+        "dependencies": null,
+        "fingerprint": null,
+        "passed": false,
+        "path": "/data/cwj/PBPF/local/longgoal/development-sweep-v1/expanded_default.json",
+        "reason": "",
+        "runner_envelope": false,
+        "runner_error": null,
+        "runner_lineage": null,
+        "sha256": "e42166ce6049ce002aca5fe222bf84c8f66e1174f93243fcd9938d400e86f080"
+      }
+    },
+    "reason": "missing ['selection_gate']",
+    "status": "failed_or_incomplete_exploratory_override"
+  },
+  "source_sha256": {
+    "scripts/run_rbr_repair_gate.py": "c8ecd60892cf8cbe33623c228403496f35a0c562c6e813bd9bb85020a95e9304",
+    "src/pbpf/real_gate.py": "33af0b5cd294a24328f10d8df108098cd270b4cca60f5c5ee2f733e6e475117f",
+    "src/pbpf/belief/model.py": "e98fe0f1933233f2c4cf7c86aec1e60c7893a232a6842bd84db3a111c5f376fc"
+  },
+  "execution_protocol": "literal-stdin legacy; archived before correction",
+  "limitation": "8-task development diagnostic; all six arms solved4/8; no selector-gate or method improvement claim"
+}

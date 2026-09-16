@@ -1,8 +1,12 @@
 # A-PBPF stage-worker contract
 
-The repository now bundles a real, two-domain `materialize` adapter, validated
-on pinned local raw data. The other 20 stages still need real adapters; a complete
-scientifically validated real-stage pipeline is not bundled.
+The repository bundles adapters for the first five real stages: `materialize`,
+`hard_bank_lock`, `execution_cache`, `hard_bank`, and `hard_bank_gate`.
+Only materialization has completed as a real two-domain stage so far. Public
+candidate import has also been checked on all 1112 CodeARC source groups; worker
+contract fixtures are separate from scientific execution evidence. The other
+16 stages still need real adapters; a complete scientifically validated real-stage
+pipeline is not bundled.
 The site template intentionally leaves every command unprovisioned. Existing
 research scripts need explicit adapters to satisfy this contract; do not simply
 point a stage at an unrelated script and treat its exit status as evidence.
@@ -87,6 +91,50 @@ pbpf-apbpf run --profile local_exploratory --site /absolute/site.yaml --through-
 
 The completed root stage proves data preparation and provenance only. It does
 not prove generation, execution, hard-bank quality, inference, or efficacy.
+
+## Declared candidate reuse and the first five stages
+
+The materializer optionally accepts `--candidate-cache-manifest PATH` and
+`--candidate-cache-sha256 SHA256`. Both exact values must appear in the frozen
+site command. The manifest has schema `apbpf-public-generation-cache-v1` and a
+`domains` object with `rbr` and `codearc` lists; each entry contains only an
+absolute `path` and the frozen SHA-256 of that bank's `complete.json`.
+
+This is an explicit public candidate-data import at the root of the new run.
+It records `fresh_generation: false`; it does not claim that generation occurred
+again or that previous primary exposure disappeared. The imported generation
+must match the primary model revision, seed, fixed eight-candidate budget,
+decoding parameters, and public task bytes. It must cover every source exactly
+once across train/development/primary. CodeARC uses the first task representative
+of each source in materialized order, matching its original generator; its 1114
+task IDs represent 1112 source components. Uniform syntax-based extraction is
+required. Existing raw and bounded prompt policies remain recorded in each bank.
+
+Only `run.json`, `complete.json` and declared candidate JSON files are copied,
+byte-for-byte, into the materialize evidence inventory. Hidden fields and
+undeclared side files are rejected or excluded. In particular, old evaluation
+reports and gate outcomes are never imported. The candidate manifest's own
+checksum enters the configuration fingerprint through the stage command.
+All four downstream adapters consume only exact same-run stage artifacts.
+
+`run_apbpf_bank_lock_worker.py` executes all 500 primary groups in each domain
+inside the public-only evaluator sandbox. It creates separate domain locks and
+a combined 1000-source v2 lock. `run_apbpf_execution_cache_worker.py` verifies
+both complete primary locks before opening any evaluator task file, then freshly
+executes all training/development candidates and the primary hidden tests.
+`run_apbpf_hard_bank_worker.py` audits all 800 development groups and all 1000
+locked primary groups; domain-level development counts accompany the combined
+pilot. `run_apbpf_hard_bank_gate_worker.py` binds the resulting decision to the
+exact lock dependency. The runner independently recomputes the unchanged gate.
+A failing pilot count remains a sealed negative report and stops ordinary runs.
+
+`scripts/run_local_apbpf_bank_prefix.py --run-root /absolute/local/longgoal
+--output /absolute/new-prefix-attempt` waits for the declared Qwen inventories,
+checks the source files frozen when queued, creates the cache manifest and site
+overlay, then launches real execution through `hard_bank_gate`. It provisions
+only those five stages. A scientific gate failure is retained with exit 20;
+later stages and full-DAG verification remain incomplete. Candidate import and
+the new prefix are always exploratory, including if the hard-bank gate passes.
 
 ## Worker inputs and outputs
 

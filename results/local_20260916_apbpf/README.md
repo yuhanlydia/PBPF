@@ -38,13 +38,14 @@ resources; the user confirmed that only local execution is available.
 ## Running and unresolved
 
 Qwen CodeARC generation, primary audit, three prediction seeds, and three utility
-selection seeds are complete; their scientific gates remain failed. DeepSeek
-primary generation runs on GPU 1 and train/development generation on GPU 2.
-The repair pilot occupies GPU 0; it will hand that GPU to the newly queued RBR
-Qwen banks. GPU 3 belongs to another project. CPU supervisors now rebuild the
-RBR cache, queue three corrected development prediction seeds, and automatically
-execute the forthcoming RBR/DeepSeek banks. These are standalone exploratory
-workflows; only the real materialize stage (1/21) has completed.
+selection seeds are complete; their scientific gates remain failed. All three
+corrected-stdin RBR prediction seeds and the legacy repair pilot are also complete.
+DeepSeek primary generation runs on GPU 1 and development generation on GPU 2;
+its train212 bank is complete. GPU 0 now generates the RBR Qwen bank after the
+repair handoff. GPU 3 belongs to another project. CPU supervisors execute the
+new RBR/DeepSeek banks; a source-frozen queue will run the first five real stages
+once all RBR Qwen candidates are ready. Only materialization (1/21) has actually
+completed as a real stage so far.
 
 One development public prompt (`CodeARC/508`) contains 1,128,840 characters and
 caused a 53.23 GiB allocation on the 24 GiB GPU. The failed 110-group partial run
@@ -320,3 +321,64 @@ programs found timeouts under both literal and normalized stdin for p03298;
 p03458 passed both modes in both repeats. Execution stability is another source
 of fixed-screen variation. The new cache remains frozen; these replays do not
 reintroduce selected successes or tune the scoring deadline.
+
+## Completed corrected seeds and real bank-stage adapters (2026-09-17)
+
+The normalized-stdin RBR prediction replay completed all three fixed seeds.
+Association gaps are 0.0000462, -0.0015569 and 0.0022625 nats for 1701–1703;
+all three confidence intervals cross zero and all three fail association,
+pair-invariance and strong-baseline fairness. Fixing the executor did not
+establish the method claim. All reports retain development-only status.
+
+The 1500-step projector / eight-task repair diagnostic completed under its
+original literal-input protocol. Every arm solved 4/8 programs. The coherent
+sample-once arm's future pass fraction was 0.7083 versus 0.6667 without latent,
+but the random-latent control also reached 0.7083. This does not demonstrate a
+useful conditioning gain. Its exact executed source is archived locally.
+The repair executor now uses the corrected newline protocol for future runs.
+
+Replaying all 48 unchanged completions under the bounded normalized-input
+executor at the same 2-second deadline changed three calls, all PASS→TIMEOUT
+on source p03298/task432870 (mean, MAP, sample-once). The new replay therefore
+has 3/8 all-ten successes for those arms and 4/8 for the other arms. The original
+projector training still used the old cache. These are timing/resource-sensitive
+diagnostics, not paired evidence of an input-normalization or model effect.
+`repair_stdin_rescore_v2.json` counts solved over all ten tests, matching the
+original report; it also separately records future-only all-pass. The local v1
+summary had incorrectly used future-only success and was superseded without
+rerunning or selecting execution outcomes.
+
+Four additional real adapters now implement public locking, execution caching,
+hard-bank auditing and its gate. Explicit candidate reuse is bound by a frozen
+manifest in the root request; only complete public generation bytes are imported.
+All public/hidden executions are fresh, and both primary locks are checked
+before private task data is opened. The CodeARC import was exercised on all
+1112 source components / 8896 candidates. A first import check exposed the two
+extra duplicate-source task IDs and bounded-prompt metadata; it was corrected to
+match the original generator's fixed source representative rule. Twelve focused
+checks passed, including true and false audit-gate worker contract fixtures.
+Those fixtures are not real experimental stages.
+
+The queued `apbpf-real-bank-prefix-v1` will execute through the fifth stage once
+the full RBR Qwen banks finish. At this snapshot only the prior materialize
+stage has actually completed (1/21). Sixteen later stages still lack adapters;
+no complete DAG or passing scientific gate is claimed. DeepSeek train212 has
+finished generation and its development384 generation and public-bank execution
+supervisor continue. RBR Qwen generation now owns GPU0 after repair completion.
+
+The first RBR Qwen generated pilot completed all 16 fixed development source
+groups (128 candidates): 702/1280 individual calls passed and 55 candidates
+passed all ten calls. Nine groups mix successful and unsuccessful candidates;
+five are all-fail and two all-pass. Of 128 candidates, 112 have constant four-test
+visible histories. These descriptive counts do not meet the 300-mixed-group
+pilot threshold or establish association/selection performance. Full generation
+and evaluation continue without changing the locked source population.
+
+Validation of this adapter milestone: the complete invocation had 779 passes and
+3 failures. One new regression fixture failed to register its dynamically loaded
+repair module in `sys.modules`; the fixture was corrected. Two existing legacy
+local-DAG checks hit bounded-verifier deadlines under disk pressure. All three
+passed on the focused rerun (3/3, unchanged runtime deadlines). Thus all 782
+distinct collected tests passed across these invocations. Both full and rerun
+logs are retained; the original full invocation is not described as all green.
+Compilation and `git diff --check` also passed.
