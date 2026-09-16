@@ -284,7 +284,11 @@ class NeuralBeliefModel(nn.Module):
                 resampled = log_weights.exp().square().sum(-1).reciprocal() < ess_fraction * particles
                 indices = torch.arange(particles, device=device).expand(size, -1).clone()
                 if resampled.any():
-                    cdf = log_weights[resampled].double().softmax(-1).cumsum(-1)
+                    # Match the native probability mass used by ESS. Promoting
+                    # logs first can revive underflowed zero-mass particles and
+                    # select them when the systematic offset is exactly zero.
+                    mass = log_weights[resampled].exp().double()
+                    cdf = (mass / mass.sum(-1, keepdim=True)).cumsum(-1)
                     cdf[:, -1] = 1.
                     offset = (torch.rand((int(resampled.sum()), 1), device=device,
                                          dtype=cdf.dtype, generator=generator)

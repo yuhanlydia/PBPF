@@ -228,10 +228,14 @@ def test_torch_resampling_never_selects_underflowed_zero_mass_at_boundary():
     data = BeliefBatch(torch.zeros(2, 3, dtype=torch.float16),
                       torch.zeros(2, 3, dtype=torch.float16),
                       torch.zeros(2, 1, 3, dtype=torch.float16), torch.zeros(2, 1, dtype=torch.long))
+    # Use exact draws and the CDF boundary, not a version-dependent RNG seed.
+    noise = torch.tensor([[[1., 0.], [-1., 0.], [1., 0.], [-1., 0.]]] * 2,
+                         dtype=torch.float16)
+    uniforms = torch.zeros(2, 1, dtype=torch.double)
     plain = model.filter(data, particles=4, visible_steps=1, ess_fraction=0.,
-                         generator=torch.Generator().manual_seed(373))
+                         proposal_noise=noise, resampling_uniforms=uniforms)
     moved = model.filter(data, particles=4, visible_steps=1, ess_fraction=1.,
-                         generator=torch.Generator().manual_seed(373))
+                         proposal_noise=noise, resampling_uniforms=uniforms)
     assert plain.log_weights[0, 0, 0].exp() == 0.
     assert moved.resampled[0, 0]
     selected_mass = plain.log_weights[:, 0].exp().gather(1, moved.resampling_indices[:, 0])
