@@ -1,0 +1,59 @@
+[
+  {
+    "name": "rbr-qwen-generated-prediction-v1",
+    "pid": 1172374,
+    "command": [
+      "/data/cwj/PBPF/.venv/bin/python",
+      "-u",
+      "scripts/run_local_generated_prediction.py",
+      "--domain",
+      "rbr",
+      "--evaluation-root",
+      "/data/cwj/PBPF/local/longgoal/rbr-qwen-full-evaluation-v1",
+      "--public-root",
+      "/data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public",
+      "--evaluator-root",
+      "/data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator",
+      "--output",
+      "/data/cwj/PBPF/local/longgoal/rbr-qwen-generated-prediction-v1"
+    ]
+  },
+  {
+    "name": "rbr-deepseek-generated-prediction-v1",
+    "pid": 1172375,
+    "command": [
+      "/data/cwj/PBPF/.venv/bin/python",
+      "-u",
+      "scripts/run_local_generated_prediction.py",
+      "--domain",
+      "rbr",
+      "--evaluation-root",
+      "/data/cwj/PBPF/local/longgoal/rbr-deepseek-full-evaluation-v1",
+      "--public-root",
+      "/data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public",
+      "--evaluator-root",
+      "/data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator",
+      "--output",
+      "/data/cwj/PBPF/local/longgoal/rbr-deepseek-generated-prediction-v1"
+    ]
+  },
+  {
+    "name": "codearc-deepseek-generated-prediction-v1",
+    "pid": 1172376,
+    "command": [
+      "/data/cwj/PBPF/.venv/bin/python",
+      "-u",
+      "scripts/run_local_generated_prediction.py",
+      "--domain",
+      "codearc",
+      "--evaluation-root",
+      "/data/cwj/PBPF/local/longgoal/codearc-deepseek-full-evaluation-v1",
+      "--public-root",
+      "/data/cwj/PBPF/local/longgoal/codearc-public-v1",
+      "--evaluator-root",
+      "/data/cwj/PBPF/local/longgoal/codearc-evaluator-v1",
+      "--output",
+      "/data/cwj/PBPF/local/longgoal/codearc-deepseek-generated-prediction-v1"
+    ]
+  }
+]

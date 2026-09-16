@@ -382,3 +382,47 @@ passed on the focused rerun (3/3, unchanged runtime deadlines). Thus all 782
 distinct collected tests passed across these invocations. Both full and rerun
 logs are retained; the original full invocation is not described as all green.
 Compilation and `git diff --check` also passed.
+
+
+## Generated-bank replication and memory recovery (2026-09-17)
+
+DeepSeek CodeARC primary generation completed all 500 fixed source groups. GPU1
+then moved to RBR DeepSeek replication: 321 train, 400 development and 500 primary
+sources, eight independently seeded serial decodes per source, at most 4096 input
+and 1024 new tokens per candidate. This serial decoding policy is recorded in the
+new run identity; it is not claimed to be byte-identical to batched Qwen sampling.
+Model revision and publisher weight hashes are pinned, and generation sees only
+the public task materialization. The RBR pilot has started; the full family run
+has not yet completed.
+
+DeepSeek CodeARC development generation exhausted GPU2 memory at source 111
+(CodeARC/508), after completing 110/384 groups. Attempt1 and its downstream
+failures are retained. Attempt2 resumes the same generation configuration with
+`PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`; the previously failing group
+and subsequent groups now complete. The plan freezes the first 110 output hashes
+and the original run identity. This demonstrates progress past the failure,
+not completion of the remaining bank. Evaluation v2 will score the entire fixed
+population again; failed v1 outputs remain available, with no outcome selection.
+
+The new development-cache builder binds complete generation and execution hashes,
+keeps every candidate (including all-fail programs), excludes primary sources,
+and blanks expected-answer text for the six future tests before feature creation.
+RBR retains the four public expected outputs; CodeARC features remain query-input
+only. This is a new generated-bank protocol, distinct from historic RBR expanded
+cache experiments that explicitly declared every expected output public.
+Actual-data checks retained all 4896 Qwen CodeARC candidates and redacted 29376
+future expected slots without changing per-candidate public features or outcomes.
+The 128-candidate RBR pilot check retained every execution and redacted 768 future
+slots. These are cache-contract checks, not new efficacy results.
+
+Three CPU prediction queues (RBR Qwen, RBR DeepSeek, CodeARC DeepSeek) wait for all
+train/development execution steps, then build fresh source-disjoint development
+caches and fit the fixed 1701–1703 seeds for 1000 steps each, with unchanged
+association and baseline gates. Original primary sources are excluded. The
+CodeARC prediction v1 stopped on upstream OOM without fitting; v2 follows the
+restarted evaluation. Five focused tests passed, covering serial seed/resume
+identity and future-answer feature isolation; compilation checks passed.
+
+Only 1/21 real DAG stages has completed. Five stage adapters exist, and sixteen
+are still missing. New standalone generation/evaluation/training queues do not
+increase the completed-stage count or establish a scientific improvement.

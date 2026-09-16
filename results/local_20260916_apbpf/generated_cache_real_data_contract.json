@@ -1,0 +1,21 @@
+{
+  "schema": "apbpf-generated-cache-real-data-contract-v1",
+  "codearc": {
+    "candidates": 4896,
+    "counts": {
+      "development": 336,
+      "test": 3200,
+      "train": 1360
+    },
+    "all_old_public_features_and_outcomes_identical": true,
+    "future_expected_slots_redacted": 29376,
+    "cache_sha256": "988c2549ec45363ba7144afb121c9ca04d1ac73995c7abcb903596b1d845f6b1"
+  },
+  "rbr_pilot": {
+    "candidates": 128,
+    "complete_executions_retained": true,
+    "future_expected_slots_redacted": 768,
+    "public_four_expected_values_preserved": true
+  },
+  "scope": "real cache/feature contract validation; not an efficacy or complete-stage claim"
+}

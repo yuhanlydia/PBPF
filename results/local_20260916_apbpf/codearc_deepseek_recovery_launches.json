@@ -1,0 +1,50 @@
+[
+  {
+    "name": "codearc-deepseek-full-evaluation-v2",
+    "pid": 1234216,
+    "command": [
+      "/data/cwj/PBPF/.venv/bin/python",
+      "-u",
+      "scripts/run_local_bank_evaluation.py",
+      "--domain",
+      "codearc",
+      "--public-root",
+      "/data/cwj/PBPF/local/longgoal/codearc-public-v1",
+      "--evaluator-root",
+      "/data/cwj/PBPF/local/longgoal/codearc-evaluator-v1",
+      "--output",
+      "/data/cwj/PBPF/local/longgoal/codearc-deepseek-full-evaluation-v2",
+      "--generation-status",
+      "/data/cwj/PBPF/local/longgoal/deepseek_remaining_generation_status.json",
+      "--train-bank",
+      "/data/cwj/PBPF/local/longgoal/codearc-deepseek-train212",
+      "--development-pilot-bank",
+      "/data/cwj/PBPF/local/longgoal/codearc-deepseek-pilot16",
+      "--development-remainder-bank",
+      "/data/cwj/PBPF/local/longgoal/codearc-deepseek-development384",
+      "--primary-bank",
+      "/data/cwj/PBPF/local/longgoal/codearc-deepseek-primary500"
+    ],
+    "supersedes_failed_attempt": "codearc-deepseek-full-evaluation-v1",
+    "policy": "fixed entire population reevaluated; old failure and results retained"
+  },
+  {
+    "name": "codearc-deepseek-generated-prediction-v2",
+    "pid": 1234688,
+    "command": [
+      "/data/cwj/PBPF/.venv/bin/python",
+      "-u",
+      "scripts/run_local_generated_prediction.py",
+      "--domain",
+      "codearc",
+      "--evaluation-root",
+      "/data/cwj/PBPF/local/longgoal/codearc-deepseek-full-evaluation-v2",
+      "--public-root",
+      "/data/cwj/PBPF/local/longgoal/codearc-public-v1",
+      "--evaluator-root",
+      "/data/cwj/PBPF/local/longgoal/codearc-evaluator-v1",
+      "--output",
+      "/data/cwj/PBPF/local/longgoal/codearc-deepseek-generated-prediction-v2"
+    ]
+  }
+]
