@@ -223,19 +223,26 @@ def test_torch_resampling_never_selects_underflowed_zero_mass_at_boundary():
         for parameter in model.parameters():
             parameter.zero_()
         model.likelihood_head[0].weight[0, -2] = -100.
-        model.likelihood_head[2].weight[0, 0] = 100.
-        model.likelihood_head[2].weight[1, 0] = -100.
+        model.likelihood_head[2].weight[0, 0] = 1000.
+        model.likelihood_head[2].weight[1, 0] = -1000.
     data = BeliefBatch(torch.zeros(2, 3, dtype=torch.float16),
                       torch.zeros(2, 3, dtype=torch.float16),
                       torch.zeros(2, 1, 3, dtype=torch.float16), torch.zeros(2, 1, dtype=torch.long))
+    # Explicit draws keep this boundary case independent of Torch's RNG version.
+    # Positive first coordinates have log mass near -2000, underflowing even
+    # in the float64 CDF; a zero offset lands exactly on its leading plateau.
+    noise = torch.tensor([[[1., 0.], [-1., 0.], [1., 0.], [-1., 0.]]],
+                         dtype=torch.float16).expand(2, -1, -1)
+    uniforms = torch.zeros(2, 1, dtype=torch.float64)
     plain = model.filter(data, particles=4, visible_steps=1, ess_fraction=0.,
-                         generator=torch.Generator().manual_seed(373))
+                         proposal_noise=noise, resampling_uniforms=uniforms)
     moved = model.filter(data, particles=4, visible_steps=1, ess_fraction=1.,
-                         generator=torch.Generator().manual_seed(373))
+                         proposal_noise=noise, resampling_uniforms=uniforms)
     assert plain.log_weights[0, 0, 0].exp() == 0.
     assert moved.resampled[0, 0]
     selected_mass = plain.log_weights[:, 0].exp().gather(1, moved.resampling_indices[:, 0])
     assert (selected_mass > 0).all()
+    assert torch.equal(moved.resampling_indices[:, 0], torch.tensor([[1, 1, 3, 3]]).expand(2, -1))
 
 
 @pytest.mark.parametrize("scheme, selected, rho, base_mass", [
