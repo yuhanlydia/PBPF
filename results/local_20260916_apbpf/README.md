@@ -13,7 +13,9 @@ families. All nine configured prediction controls are now complete for both
 CodeARC families, including the previously missing fixed `history_rate`.
 See `full_pipeline_progress_v2.json`, `ablation_coverage_audit.json` and the final
 sections below. The latest checkpoint is
-`likelihood_audit_and_refit_progress.json`: a common-particle likelihood audit
+`prior_refit_seed1701_progress.json`: the first prior/no-resampling refit has
+completed and failed the original association/fairness gates; seed1702 is
+running and the all-seed comparison remains queued. A common-particle likelihood audit
 has reproduced all three models' prior/no-resampling predictions and measured
 weak assignment sensitivity on that support. A bounded three-seed prior-proposal,
 no-resampling development refit is now running. All three semantic 32-particle
@@ -1078,3 +1080,15 @@ new per-seed reports and the old standard prediction arrays before pooling
 source-level evidence. `prior_comparison_queue_progress.json` records the
 verified live processes and current training/generation counts. No comparison
 result is available at this checkpoint.
+
+The first prior/no-resampling refit (seed1701) has now completed, with its
+variant sidecar and model/report/population receipts verified. Aligned NLL is
+0.456188; association is −0.00003226, CI [−0.00008408, 0.00002093]. Association,
+strong-baseline fairness and the original pair-invariance gate all fail. The
+pair-aware deterministic baseline has NLL 0.439310 and Deep Sets has 0.441837.
+This is one seed only; the all-seed same-inference comparison is still pending.
+The second seed started automatically. Its report is
+`codearc_prior_training_seed1701.json`, and its mandatory variant binding is
+`codearc_prior_training_seed1701_variant.json`. Observed generation throughput
+and verified live process identities are retained in the progress record;
+throughput measurements do not guarantee future completion times.
