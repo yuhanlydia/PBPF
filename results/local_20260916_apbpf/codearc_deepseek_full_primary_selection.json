@@ -1,0 +1,84 @@
+{
+  "seeds": [
+    1701,
+    1702,
+    1703
+  ],
+  "primary_sources": 500,
+  "primary_candidates": 4000,
+  "comparator": "strongest_cross_fitted_deterministic",
+  "absolute_selected_pass1_advantage": -0.018,
+  "ci95": [
+    -0.02933333333333333,
+    -0.007333333333333334
+  ],
+  "seed_estimand": "mean paired selected-success difference over all fixed seeds; whole-source resampling",
+  "bootstrap_draws": 10000,
+  "per_seed": {
+    "1701": {
+      "advantage": -0.008,
+      "ci95": [
+        -0.024,
+        0.008
+      ],
+      "selected_pass1": {
+        "particle": 0.26600000262260437,
+        "pair_aware": 0.27399998903274536,
+        "deep_sets": 0.27399998903274536,
+        "no_particle_bottleneck": 0.2759999930858612,
+        "pair_aware_pretrained": 0.2759999930858612,
+        "deep_sets_pretrained": 0.27799999713897705,
+        "no_particle_bottleneck_pretrained": 0.27399998903274536,
+        "tuned_dirichlet": 0.27000001072883606,
+        "visible_pass_rate": 0.27000001072883606,
+        "cross_fitted_deterministic": 0.274,
+        "random_expectation": 0.16324999928474426,
+        "oracle": 0.31200000643730164
+      }
+    },
+    "1702": {
+      "advantage": -0.02,
+      "ci95": [
+        -0.036,
+        -0.004
+      ],
+      "selected_pass1": {
+        "particle": 0.25999999046325684,
+        "pair_aware": 0.27799999713897705,
+        "deep_sets": 0.27399998903274536,
+        "no_particle_bottleneck": 0.2800000011920929,
+        "pair_aware_pretrained": 0.2759999930858612,
+        "deep_sets_pretrained": 0.2759999930858612,
+        "no_particle_bottleneck_pretrained": 0.27799999713897705,
+        "tuned_dirichlet": 0.27000001072883606,
+        "visible_pass_rate": 0.27000001072883606,
+        "cross_fitted_deterministic": 0.28,
+        "random_expectation": 0.16324999928474426,
+        "oracle": 0.31200000643730164
+      }
+    },
+    "1703": {
+      "advantage": -0.026,
+      "ci95": [
+        -0.042,
+        -0.012
+      ],
+      "selected_pass1": {
+        "particle": 0.25600001215934753,
+        "pair_aware": 0.2800000011920929,
+        "deep_sets": 0.28200000524520874,
+        "no_particle_bottleneck": 0.28200000524520874,
+        "pair_aware_pretrained": 0.27799999713897705,
+        "deep_sets_pretrained": 0.27799999713897705,
+        "no_particle_bottleneck_pretrained": 0.27799999713897705,
+        "tuned_dirichlet": 0.27000001072883606,
+        "visible_pass_rate": 0.27000001072883606,
+        "cross_fitted_deterministic": 0.282,
+        "random_expectation": 0.16324999928474426,
+        "oracle": 0.31200000643730164
+      }
+    }
+  },
+  "scope": "standalone exploratory full-primary utility selection after failed association and active-testing gates",
+  "cache_sha256": "fbbe930dfa26b7463210d9f21939b6f4f1c5a2b6fea01349f07e53f5bbffce99"
+}

@@ -1,0 +1,29 @@
+{
+  "domain": "codearc_replay",
+  "family": "deepseek",
+  "seeds": [
+    1701,
+    1702,
+    1703
+  ],
+  "primary_sources": 500,
+  "primary_candidates": 4000,
+  "bootstrap_draws": 10000,
+  "association_gap": -0.0024287381675094366,
+  "association_ci95": [
+    -0.004866205967797173,
+    -4.4025909900666416e-05
+  ],
+  "selection_advantage": -0.018,
+  "selection_ci95": [
+    -0.02933333333333333,
+    -0.007333333333333334
+  ],
+  "cache_sha256": "fbbe930dfa26b7463210d9f21939b6f4f1c5a2b6fea01349f07e53f5bbffce99",
+  "bindings": {
+    "cache_proof": "bc3143f9b3f49a9c2078c5f76296217d450c652d385e32bf2cb87461f0a7cfac",
+    "association": "c7767772afd4a91856f0d66fff268f0b0eaf3e6fee442158970ac965bf41a11c",
+    "selection": "03295fbdc4502759cff374ee2092f500eaa4a446a2f93cc73eaf3e03e07de2d5"
+  },
+  "scope": "standalone full-population replication cell; no sealed-stage or scientific-gate pass implied"
+}

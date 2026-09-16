@@ -5,6 +5,13 @@ local workflow remains active. No positive A-PBPF claim or complete real-stage D
 is established by these files. Legacy H200 formal experiments are pending external
 resources; the user confirmed that only local execution is available.
 
+**Latest checkpoint:** all 21 local real-stage adapters are now implemented, but
+only materialization (1/21) has completed as a sealed real stage. The full pipeline
+is queued behind the remaining RBR banks. CodeARC full-primary association and
+selection are complete for both Qwen and DeepSeek, with negative effects in both
+families. See `full_pipeline_progress.json` and the final section below. Earlier
+sections are historical checkpoints, not the current running-process inventory.
+
 **RBR protocol correction (2026-09-17):** the RBR results below used literal stdin. The pinned official runner appends a missing terminal newline. A new development control confirms this local discrepancy; those historic results remain diagnostics and require corrected execution/retraining. See `rbr_stdin_protocol_audit.json`. CodeARC results are unaffected.
 
 ## Completed findings
@@ -745,3 +752,39 @@ teacher-forced reference NLL was0.770587 with the prefix versus1.260503 without
 it on394 source representatives/34047 target tokens. This is supervised
 sequence likelihood, not new-program test success or evidence of diagnostic
 particle necessity; the six-arm generation/execution comparison remains pending.
+
+## Complete local adapter coverage and full DeepSeek cell (2026-09-17)
+
+The final real `replication` adapter is implemented. A separate bridge wraps the
+unchanged materialize, execution-cache, association and association-gate workers.
+Both DeepSeek replay caches must be declared by immutable root manifest. The
+bridge reconstructs each cache from its bound raw candidate executions, checks the
+pinned generator and decoding budget, and compares the materialized public and
+evaluator task inventories. It forwards these inputs only through declared direct
+DAG dependencies. Existing candidate execution is explicitly reused; replication
+belief/baseline/selection fitting is fresh. Qwen cells come from the same run's
+association and selection stages. No standalone trained result is silently imported.
+
+The full 21-stage supervisor is queued as `apbpf-real-full-pipeline-v1`, waiting for
+complete Qwen banks and DeepSeek RBR replay. The old 18-stage prefix was verified
+childless and without any stage attempt, then archived and superseded. GPU0/GPU1
+RBR generation and GPU2 packet repair continue untouched. This is implementation
+coverage and a queued run, **not 21 completed experiments**. The old materialize
+run is still the only sealed real-stage completion. All scientific gates retain
+their original thresholds and all execution remains exploratory.
+
+The actual CodeARC DeepSeek full-primary cell completed all three seeds on 500
+sources and 4000 candidates. Association is **−0.00242874 nats**, source-bootstrap
+95% CI [−0.00486621, −0.00004403]. Selection against the strongest cross-fitted
+deterministic comparator is **−0.018**, CI [−0.0293333, −0.0073333]. Both effects
+are negative, consistent in direction with the earlier negative Qwen CodeARC
+cell. The four-cell replication matrix remains incomplete until RBR finishes;
+these results already fail the required positive direction in every cell.
+All seed reports, cache provenance and aggregate negative results are retained.
+
+Validation: 167 A-PBPF tests passed (one existing read-only NumPy warning), followed
+by 12 final adapter checks after adding bounded retry for partially written legacy
+status files. Root-import validation on the real 8896-candidate DeepSeek CodeARC
+cache reproduced its digest exactly. This engineering check is not a completed
+DAG stage. Repair seed1701 has reached step1000/1500 and is validating; neither its
+teacher-forced loss nor an unfinished generation run is evidence of repair efficacy.
