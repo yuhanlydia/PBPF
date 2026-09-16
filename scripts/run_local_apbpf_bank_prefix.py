@@ -30,7 +30,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-root', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--through-stage', choices=['hard_bank_gate', 'train_belief'], default='hard_bank_gate')
+    parser.add_argument('--through-stage', choices=['hard_bank_gate', 'train_belief', 'pair_invariance_gate'], default='hard_bank_gate')
     parser.add_argument('--continue-exploratory', action='store_true')
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
@@ -74,11 +74,21 @@ def main():
                 'worker_revisions': {stage: file_sha(root/'scripts'/name) for stage, name in WORKERS.items()}}
         site['commands']['materialize'] += ['--candidate-cache-manifest', str(manifest),
                                             '--candidate-cache-sha256', file_sha(manifest)]
-        if args.through_stage == 'train_belief':
+        if args.through_stage in ('train_belief', 'pair_invariance_gate'):
             for kind in ('baselines', 'belief'):
                 stage = 'train_' + kind
                 worker = root/'scripts/run_apbpf_train_worker.py'
                 site['commands'][stage] = [python, str(worker), '--kind', kind]
+                site['worker_files'][stage] = str(worker)
+                site['worker_revisions'][stage] = file_sha(worker)
+        if args.through_stage == 'pair_invariance_gate':
+            for stage, filename, extra in [
+                ('baseline_fairness_gate', 'run_apbpf_fairness_worker.py', []),
+                ('association', 'run_apbpf_association_worker.py', []),
+                ('association_gate', 'run_apbpf_prediction_gate_worker.py', ['--stage', 'association_gate']),
+                ('pair_invariance_gate', 'run_apbpf_prediction_gate_worker.py', ['--stage', 'pair_invariance_gate'])]:
+                worker = root/'scripts'/filename
+                site['commands'][stage] = [python, str(worker), *extra]
                 site['worker_files'][stage] = str(worker)
                 site['worker_revisions'][stage] = file_sha(worker)
         site_path = output/'site.json'; site_path.write_text(json.dumps(site, indent=2)+'\n')

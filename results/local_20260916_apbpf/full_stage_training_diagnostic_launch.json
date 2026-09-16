@@ -1,0 +1,15 @@
+{
+  "pid": 1506995,
+  "command": [
+    "/data/cwj/PBPF/.venv/bin/python",
+    "-u",
+    "scripts/run_local_stage_training_diagnostic.py",
+    "--cache",
+    "/data/cwj/PBPF/local/longgoal/codearc-full-stage-cache-proof-v1.json",
+    "--cache-proof",
+    "/data/cwj/PBPF/local/longgoal/full_stage_cache_real_data_proof.json",
+    "--output",
+    "/data/cwj/PBPF/local/longgoal/codearc-full-stage-training-diagnostic-v1"
+  ],
+  "scope": "standalone exploratory full-cache diagnostic, not completed real stage"
+}

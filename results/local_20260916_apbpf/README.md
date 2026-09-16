@@ -465,3 +465,62 @@ Prefix-v2 is now queued through `train_belief` with explicit exploratory
 continuation after failed gates. Its new source identity is frozen; GPU jobs and
 independent development prediction queues continue. Seven real adapters now
 exist, fourteen are still missing, and only one real stage has completed.
+
+
+## Fairness and association adapters; DeepSeek RBR pilot (2026-09-17)
+
+Four more adapters implement baseline fairness, full-population association
+replay, the association gate and the pair-invariance gate. They validate the
+actual training artifacts, all three fixed seeds, both domains, matched fitting
+budgets and exact 500-source/eight-candidate primary inventories. The replay
+restores actual belief checkpoint bytes and first reproduces aligned predictions
+before computing outcome-shuffle and pair-preserving controls, plus masked,
+wrong-candidate and random-latent diagnostics. Ambiguity strata are descriptive;
+all constant histories and failed candidates remain in the gate population.
+
+The predeclared local aggregation averages paired per-example losses across
+1701–1703. It does not average probabilities or select a best seed. Whole-source
+bootstrap draws keep observations from all seeds in the same source cluster;
+10000 draws and all existing numeric thresholds remain unchanged. Per-seed
+results and raw prediction matrices remain available. Fairness must pass in both
+domains for every baseline; its scalar gate rows use domain-minimum gaps and CI
+lower bounds. The association and invariance gate decisions are recomputed by
+the existing runner.
+
+Eight focused checks passed, including seed-loss aggregation, actual two-domain
+fairness worker success/failure paths, restored-checkpoint controls, and gate
+agreement with the locked runner. The A-PBPF regression suite passed 118 checks
+with one existing read-only NumPy-to-Torch warning in acquisition replay.
+Compilation and whitespace checks passed.
+
+The unstarted seven-stage prefix-v2 was verified childless/waiting and archived.
+Prefix-v3 now queues eleven stages through pair_invariance_gate, retaining failed
+scientific gates under explicit exploratory continuation. Only materialization
+has actually completed as a real stage (1/21); ten adapters remain absent.
+Later acquisition workers will also need verified feature/checkpoint artifacts
+forwarded through their declared gate dependencies; current scalar gate outputs
+alone are not sufficient for those stages.
+
+The new standalone CodeARC full-cache diagnostic is actually fitting all three
+fixed seeds against the full existing train/development/primary split while RBR
+generation proceeds. It saves real baseline and belief checkpoints and replays
+all controls on 500 primary groups. At this snapshot completed fits are baselines-seed1701, belief-seed1701, baselines-seed1702;
+the current task is belief-seed1702. This is permanently exploratory,
+uses the previously assembled execution evidence, and is not a sealed stage or
+a completed three-seed scientific result.
+
+DeepSeek RBR generation completed its 16-source pilot and moved to train321.
+Pilot evaluation retained 128 candidates/1280 calls: 558 calls and 44 complete
+programs passed. Ten source groups are mixed, four all-fail and two all-pass;
+111 candidates have constant four-test categorical histories. The prior Qwen
+pilot on the same source inventory had 702 passing calls, 55 complete successes
+and nine mixed groups. These small pilot counts do not establish a family-level
+benefit or satisfy the full hard-bank gate.
+
+The DeepSeek pilot has five syntax-invalid programs and no token-cap hits. Four
+raw completions already contain malformed Python; one supplies only prose that
+no repair is necessary. All 58 timeout calls occur on p03704, in candidates that
+perform very large integer enumeration or while-loop search. Raw outputs, all
+failures and the six-second scoring deadline remain unchanged. This evidence
+does not support fixing these failures by changing extraction or extending the
+output cap selectively.

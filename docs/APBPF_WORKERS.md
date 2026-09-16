@@ -1,12 +1,13 @@
 # A-PBPF stage-worker contract
 
-The repository bundles adapters for the first seven real stages: `materialize`,
+The repository bundles adapters for the first eleven real stages: `materialize`,
 `hard_bank_lock`, `execution_cache`, `hard_bank`, `hard_bank_gate`,
-`train_baselines`, and `train_belief`.
+`train_baselines`, `train_belief`, `baseline_fairness_gate`, `association`,
+`association_gate`, and `pair_invariance_gate`.
 Only materialization has completed as a real two-domain stage so far. Public
 candidate import has also been checked on all 1112 CodeARC source groups; worker
 contract fixtures are separate from scientific execution evidence. The other
-14 stages still need real adapters; a complete scientifically validated real-stage
+10 stages still need real adapters; a complete scientifically validated real-stage
 pipeline is not bundled.
 The site template intentionally leaves every command unprovisioned. Existing
 research scripts need explicit adapters to satisfy this contract; do not simply
@@ -164,9 +165,34 @@ The baseline stage saves all three neural predictor state dictionaries and the
 tuned Dirichlet parameter. The belief stage saves the factored model checkpoint.
 Both preserve prediction matrices, primary candidate/source order, complete
 training histories, and cache identities. These stages do not decide scientific
-gates or claim cross-fitted selection performance. Fairness, association,
-selection and the other downstream adapters remain to be implemented. Contract
-fixtures exercise both training workers but do not count as real stage runs.
+gates or claim cross-fitted selection performance. Contract fixtures exercise
+both training workers but do not count as real stage runs.
+
+`--through-stage pair_invariance_gate` also provisions the next four adapters.
+The fairness worker compares all four baseline arms against the exact belief
+prediction population and checks matching data, features, optimization budgets,
+development checkpoint selection, and source order. The association worker
+restores each actual belief checkpoint and verifies its aligned predictions,
+then replays outcome-only shuffling, joint reversal, presentation permutation,
+orderless history, masked semantics, wrong-candidate and random-latent controls.
+Every domain retains all 500 primary sources and eight candidates per source.
+Prespecified ambiguity strata are descriptive and cannot replace the population.
+
+The fixed-seed estimand averages paired per-example losses over seeds
+1701–1703, not probabilities or a selected best seed. Each source is one bootstrap
+cluster across all seeds, with 10000 draws; seeds are not independent new sources.
+Per-seed results and all raw prediction arrays remain available. Fairness uses
+the minimum aggregate gap and minimum confidence lower bound across domains for
+each comparator, requiring both domains to pass. Association and pair-invariance
+use each domain's full-population aggregate directly. All original numerical
+thresholds remain unchanged and the runner recomputes each gate decision.
+
+The standalone `run_local_stage_training_diagnostic.py` can exercise these
+trainers and controls on an existing, checksummed full cache while complete
+two-domain generation is pending. Its output is explicitly a standalone
+exploratory diagnostic and never counts as a sealed DAG stage. Oracle headroom,
+active testing, selection, repair, replication and paper tables still require
+their remaining ten adapters.
 
 ## Worker inputs and outputs
 
