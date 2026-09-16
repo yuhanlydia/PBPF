@@ -18,6 +18,7 @@ from .registry import OUTCOMES
 
 
 RBR_CACHE_SCHEMA = "apbpf-rbr-rich-cache-v3"
+CODEARC_CACHE_SCHEMA = "apbpf-codearc-rich-cache-v1"
 EXECUTION_TEXT_LIMIT = 4096
 ASSOCIATION_ARMS = (
     "aligned", "outcome_shuffled", "joint_reversed", "presentation_permuted",
@@ -45,8 +46,10 @@ def bounded_execution_record(case, *, actual="", stderr="", returncode=None,
 
 def validate_rbr_cache(payload):
     """Fail closed on legacy caches, missing evidence, and overlapping sources."""
-    if payload.get("schema") != RBR_CACHE_SCHEMA:
+    if payload.get("schema") not in {RBR_CACHE_SCHEMA, CODEARC_CACHE_SCHEMA}:
         raise ValueError("rich execution cache required; rebuild with --prepare")
+    if payload["schema"] == CODEARC_CACHE_SCHEMA and payload.get("dataset") != "codearc_replay":
+        raise ValueError("CodeARC cache requires an explicit dataset identity")
     rows = payload.get("records")
     if not isinstance(rows, list) or not rows:
         raise ValueError("cache requires nonempty records")

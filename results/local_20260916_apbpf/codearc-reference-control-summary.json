@@ -1,0 +1,14 @@
+{
+  "schema": "apbpf-codearc-evaluation-v2",
+  "reference_control": true,
+  "bank_complete_sha256": null,
+  "candidate_count": 401,
+  "split": "development",
+  "tests": 4010,
+  "all_pass": 396,
+  "test_passes": 3993,
+  "reference_behavior_matches": 4002,
+  "scoring_policy": "exact stripped stdout; version-normalized exception strings; timeouts remain TIMEOUT and never PASS",
+  "execution_source_sha256": "02ca6be188e36e7d906567cb673c878a384a3161a5c570683119f2d2e760a3fb",
+  "scope": "exploratory evaluator diagnostic; not sealed stage evidence"
+}

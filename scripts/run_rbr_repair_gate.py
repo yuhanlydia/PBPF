@@ -429,7 +429,11 @@ def _mixture_nll(model, projector, ids, labels, z, log_weights, *, conditioned=T
     # Keep the full vocabulary tensor in actor dtype. Casting all logits to
     # float32 adds ~1.8 GB at the 1,536-token cap on Qwen and can OOM before CE;
     # PyTorch's fused CE performs its own stable accumulation.
-    logits = model(**actor_inputs, use_cache=False).logits[:, :-1]
+    # We compute the exact mixture loss below. Passing labels here additionally
+    # computes the actor's unused full-vocabulary FP32 CE, which can exhaust a
+    # 24 GB GPU during eight-particle validation without changing the logits.
+    forward_inputs = {key: value for key, value in actor_inputs.items() if key != "labels"}
+    logits = model(**forward_inputs, use_cache=False).logits[:, :-1]
     shifted = actor_inputs["labels"][:, 1:]
     target_mask = shifted[0] != -100
     targets = shifted[0, target_mask]

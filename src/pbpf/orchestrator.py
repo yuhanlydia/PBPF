@@ -98,12 +98,14 @@ class ConditionedRepairBackend:
         max_generated_tokens: int,
     ) -> CandidateProposal:
         self._last_component = self.sequence_backend
+        generation = getattr(self.sequence_backend, "generation", {})
+        per_call_limit = int(generation.get("max_new_tokens", max_generated_tokens))
         generated = self.conditioner.generate(
             request_text,
             particles=self.particles,
             log_weights=self.log_weights,
             rng=self.rng,
-            max_new_tokens=max_generated_tokens,
+            max_new_tokens=min(per_call_limit, max_generated_tokens),
         )
         if self._metadata_backend.last_logprob is None:
             raise ValueError("conditioned generation did not report a sequence log-probability")

@@ -1,0 +1,21 @@
+{
+  "rbr_initial_aggregate.json": "71f73c3fa515b3e20d06fd058e679ab4800d0686706aeea163e5a7cb2c793ee9",
+  "rbr_apbpf_seed1701.json": "fb4c489176f736e73137c942c2d557cc85075d9b08994675c48ccd0aa473470f",
+  "rbr_apbpf_seed1702.json": "b7a54c0a1be627ecb9199c36a6a34049f221119d584657e34ae2cd72e9fdbbd3",
+  "rbr_apbpf_seed1703.json": "31f813097dd9221fc9f896e94f7b2f68a28c0108e42272db2f67058e574d87d7",
+  "rbr_development_diagnosis_v1.json": "28fe646918c8e015b8c2371771c21a59f9d5c9694e22b777869fd2d22c65c2ef",
+  "development-sweep-v1/plan.json": "4ca0b1dc132ed2e436d3a58f217c2a3b6ed0e605d7122a57b0602f4881512110",
+  "development-sweep-v1/status.json": "17f584179f35121ba3b1e63ca6b4a648a2fad7291433f3dd9faa8d2bf88f4118",
+  "development-sweep-v2/plan.json": "ce31cbe692d4f7ee533a4a7fe4ed9c3debe3e98bc1881f7cf4fcf5c12a496a05",
+  "development-sweep-v2/richer_semantics_3000.json": "978a149f36a8b46da0be96d94a3ad34e98af6423f86c56f8fec91295a0189637",
+  "development-sweep-v2/provenance_note.json": "ade38f7130f018131d564511e7e1404cbcca53dd17976069d136062db098e8e8",
+  "phased_execution_tests.log": "106c378ab9713af4ff061bcdaa2e0316f7da9e3856e8c35a22aaec8b9f7fde5b",
+  "execution_v4_tests.log": "efd0460bc64d7d1e49565c4ea3ae25300534009d7b6d0547655681bddffe07f1",
+  "codearc_cache_tests.log": "2fa2d30afad5072e2d3c30c88364b104318fd40bc307145d38991e6d3596e84d",
+  "prompt_and_timeout_recheck.log": "bafe627ee773b314b7b9dff4fffedfa9a1937b69bcd0cda54113c129dfcccac5",
+  "runtime_tests_local_pipeline.log": "cb94fb83f9a095da18daa6280625cffea3f09b4bce7a0e54f479c70e21ca33fa",
+  "codearc-pilot16-summary.json": "8c763462f2592bc2f96faaae5face0159e6aeada6c13e45927f6aa7b48855c15",
+  "codearc-reference-control-summary.json": "231005d1174e3de1cff21f90503f1ae9e4125b1404cf2271916426e942792f61",
+  "development-sweep-v2/default_3000.json": "0ebc6c821e3832a2ea0ab0fb527b858e925b59682054fec80d95a390cd44db95",
+  "deepseek_verified_manifest.json": "d8bb587d950061e60f68f114a82f28bfed2361761c498bab66c4f9b14ed29ac7"
+}

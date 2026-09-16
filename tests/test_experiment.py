@@ -17,6 +17,28 @@ from pbpf.statistics import paired_cluster_bootstrap, paired_seed_task_bootstrap
 from pbpf.config import load_experiment, validate_experiment
 
 
+@pytest.mark.parametrize("configured,remaining,expected", [(192, 16000, 192), (192, 17, 17), (None, 17, 17)])
+def test_conditioned_repair_respects_per_call_cap_and_remaining_budget(configured, remaining, expected):
+    from pbpf.orchestrator import ConditionedRepairBackend
+
+    class SequenceBackend:
+        generation = {} if configured is None else {"max_new_tokens": configured}
+
+        def generate_with_logprob(self, prompt, *, particle_state, **generation):
+            assert generation["max_new_tokens"] == expected
+            return "pass", -0.5
+
+        def generated_tokens_for_last_call(self):
+            return 1
+
+    backend = ConditionedRepairBackend(
+        scorer=None, sequence_backend=SequenceBackend(), particles=({},),
+        log_weights=np.zeros(1), rng=np.random.default_rng(0),
+    )
+    proposal = backend.repair(None, None, (), 0, request_text="repair", max_generated_tokens=remaining)
+    assert proposal.code == "pass"
+
+
 def repair_task():
     return TaskRecord(
         task_id="task-a",

@@ -1,0 +1,108 @@
+{
+  "scope": "standalone diagnostic; all seeds negative; no confirmatory claim",
+  "seeds": [
+    {
+      "seed": 1701,
+      "gate": {
+        "association_passes": false,
+        "association_threshold": 0.03,
+        "baseline_fairness_passes": false,
+        "baseline_margin": 0.02,
+        "baseline_status": "evaluated",
+        "controls_worse_than_aligned": true,
+        "full_gate_passes": false,
+        "max_degradation_fraction": 0.25,
+        "pair_invariance_passes": true,
+        "particles_necessary_claim_allowed": false
+      },
+      "aligned_nll": 0.5590707667060739,
+      "tuned_dirichlet_nll": 0.3721967142455255,
+      "association": {
+        "ci95": [
+          -0.01877054463520832,
+          0.021893997899921292
+        ],
+        "clusters": 92,
+        "estimand": "future-example-weighted; whole-source-component resampling",
+        "mean_nll_gap": 0.001959729939699173,
+        "replicates": 10000,
+        "unit": "source_component"
+      },
+      "best_development_nll": 0.5543035483483738,
+      "candidate_counts": {
+        "development": 97,
+        "test": 115,
+        "train": 439
+      }
+    },
+    {
+      "seed": 1702,
+      "gate": {
+        "association_passes": false,
+        "association_threshold": 0.03,
+        "baseline_fairness_passes": false,
+        "baseline_margin": 0.02,
+        "baseline_status": "evaluated",
+        "controls_worse_than_aligned": true,
+        "full_gate_passes": false,
+        "max_degradation_fraction": 0.25,
+        "pair_invariance_passes": false,
+        "particles_necessary_claim_allowed": false
+      },
+      "aligned_nll": 0.5143193468795024,
+      "tuned_dirichlet_nll": 0.3721967142455255,
+      "association": {
+        "ci95": [
+          -0.06587685151669964,
+          0.04832718223897084
+        ],
+        "clusters": 92,
+        "estimand": "future-example-weighted; whole-source-component resampling",
+        "mean_nll_gap": -0.000966558582149446,
+        "replicates": 10000,
+        "unit": "source_component"
+      },
+      "best_development_nll": 0.52477753012499,
+      "candidate_counts": {
+        "development": 97,
+        "test": 115,
+        "train": 439
+      }
+    },
+    {
+      "seed": 1703,
+      "gate": {
+        "association_passes": false,
+        "association_threshold": 0.03,
+        "baseline_fairness_passes": false,
+        "baseline_margin": 0.02,
+        "baseline_status": "evaluated",
+        "controls_worse_than_aligned": true,
+        "full_gate_passes": false,
+        "max_degradation_fraction": 0.25,
+        "pair_invariance_passes": false,
+        "particles_necessary_claim_allowed": false
+      },
+      "aligned_nll": 0.5696885947714121,
+      "tuned_dirichlet_nll": 0.3721967142455255,
+      "association": {
+        "ci95": [
+          -0.02325861296719975,
+          0.020181220475847462
+        ],
+        "clusters": 92,
+        "estimand": "future-example-weighted; whole-source-component resampling",
+        "mean_nll_gap": -0.0015534072881564498,
+        "replicates": 10000,
+        "unit": "source_component"
+      },
+      "best_development_nll": 0.5259954779574115,
+      "candidate_counts": {
+        "development": 97,
+        "test": 115,
+        "train": 439
+      }
+    }
+  ],
+  "conclusion": "association and baseline fairness gates fail for all three seeds"
+}

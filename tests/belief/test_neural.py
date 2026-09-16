@@ -217,14 +217,28 @@ def test_calibration_rejects_empty_source_identifiers():
                           calibration_source_ids={""}, training_source_ids={"train"})
 
 
-def test_torch_resampling_never_selects_underflowed_zero_mass_at_boundary():
+def test_torch_resampling_never_selects_underflowed_zero_mass_at_boundary(monkeypatch):
+    # Seeded half-precision normal draws differ between Torch versions. Build
+    # leading zero-mass particles explicitly and exercise the exact CDF boundary.
+    def fixed_noise(shape, *, device, dtype, generator):
+        assert tuple(shape) == (2, 4, 2)
+        return torch.tensor([[[1., 0.], [-1., 0.], [-1., 0.], [-1., 0.]],
+                             [[1., 0.], [1., 0.], [-1., 0.], [-1., 0.]]],
+                            device=device, dtype=dtype)
+
+    def zero_offset(shape, *, device, dtype, generator):
+        return torch.zeros(shape, device=device, dtype=dtype)
+
+    monkeypatch.setattr(torch, "randn", fixed_noise)
+    monkeypatch.setattr(torch, "rand", zero_offset)
     model = NeuralBeliefModel(3, 2, 7).half()
     with torch.no_grad():
         for parameter in model.parameters():
             parameter.zero_()
         model.likelihood_head[0].weight[0, -2] = -100.
-        model.likelihood_head[2].weight[0, 0] = 100.
-        model.likelihood_head[2].weight[1, 0] = -100.
+        # Also underflow in the float64 CDF used by the resampler.
+        model.likelihood_head[2].weight[0, 0] = 1000.
+        model.likelihood_head[2].weight[1, 0] = -1000.
     data = BeliefBatch(torch.zeros(2, 3, dtype=torch.float16),
                       torch.zeros(2, 3, dtype=torch.float16),
                       torch.zeros(2, 1, 3, dtype=torch.float16), torch.zeros(2, 1, dtype=torch.long))
