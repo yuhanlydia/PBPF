@@ -80,10 +80,48 @@ class ActorRequest:
     temperature: float = FORMAL_BUDGET["temperature"]
     top_p: float = FORMAL_BUDGET["top_p"]
     num_return_sequences: int = FORMAL_BUDGET["decode_multiplicity"]
+    continuation_fingerprint: str = ""
 
 
 def _belief_digest(belief):
     return belief_digest(belief)
+
+
+def continuation_fingerprint(request: ActorRequest) -> str:
+    """Bind one complete decode to the exact immutable condition presented.
+
+    Repair adapters receive an ``ActorRequest`` once, before decoding.  The
+    fingerprint includes the selected particle/latent/prefix and deliberately
+    has no token cursor, so an adapter cannot truthfully reuse it for a
+    token-wise conditioning schedule.
+    """
+    if type(request) is not ActorRequest:
+        raise TypeError("continuation fingerprint requires an ActorRequest")
+    condition = None if request.condition is None else asdict(request.condition)
+    return source_hash(canonical({"task_id": request.parent.task_id,
+                                  "parent_version_id": request.parent.version_id,
+                                  "round": request.round,
+                                  "rng_seed": request.rng_seed,
+                                  "condition": condition,
+                                  "max_new_tokens": request.max_new_tokens,
+                                  "temperature": request.temperature,
+                                  "top_p": request.top_p,
+                                  "num_return_sequences": request.num_return_sequences}))
+
+
+def continuation_trace(request: ActorRequest) -> dict:
+    """Public audit record proving a repair used one fixed condition."""
+    fingerprint = continuation_fingerprint(request)
+    if request.continuation_fingerprint and request.continuation_fingerprint != fingerprint:
+        raise ValueError("repair request continuation fingerprint does not match its immutable condition")
+    condition = request.condition
+    return {"schema": "pbpf-repair-continuation-v1", "continuation_fingerprint": fingerprint,
+            "parent_version_id": request.parent.version_id,
+            "particle_index": None if condition is None else condition.particle_index,
+            "latent": None if condition is None else list(condition.latent or ()),
+            "soft_prefix": None if condition is None or condition.soft_prefix is None else [list(row) for row in condition.soft_prefix],
+            "immutable_component_for_full_continuation": True,
+            "tokenwise_remix": False}
 
 
 @dataclass(frozen=True)
@@ -278,9 +316,10 @@ class RepairArm:
         instruction = ("Explain the observed failure and repair the complete program in this single response."
                        if self.name == "self_debug" else "Repair the complete program using only the supplied visible evidence.")
         self._sync_belief()
-        return ActorRequest(self.task.task_text, parent, self._events[parent.version_id], tuple(transcript),
+        request = ActorRequest(self.task.task_text, parent, self._events[parent.version_id], tuple(transcript),
             instruction, self._count + 1 if round_index is None else round_index,
             derived_seed(self.seed, self.task.task_id, self.name, "decode", str(self._count if round_index is None else round_index)), condition)
+        return replace(request, continuation_fingerprint=continuation_fingerprint(request))
 
     def _prepare_roulette(self):
         partials = []
@@ -300,10 +339,15 @@ class RepairArm:
         weights = np.exp(scores - scores.max())
         weights /= weights.sum()
         indices = systematic_resample(weights, rng=self.rng)
-        self._roulette = [(replace(partials[index][0], round=i + 1,
-                           rng_seed=derived_seed(self.seed, self.task.task_id, "roulette-completion", str(i))),
-                           tuple(partials[index][1].prefix), partials[index][1].output_tokens)
-                          for i, index in enumerate(indices)]
+        self._roulette = []
+        for i, index in enumerate(indices):
+            completion_request = replace(partials[index][0], round=i + 1,
+                rng_seed=derived_seed(self.seed, self.task.task_id, "roulette-completion", str(i)),
+                continuation_fingerprint="")
+            completion_request = replace(completion_request,
+                continuation_fingerprint=continuation_fingerprint(completion_request))
+            self._roulette.append((completion_request, tuple(partials[index][1].prefix),
+                                  partials[index][1].output_tokens))
         self.accounting["discarded_prefix_tokens"] = sum(partial.output_tokens for i, (_, partial, _) in enumerate(partials) if i not in indices)
         self.decisions.append({"algorithm": "rollout_roulette_partial_pf", "ancestors": indices.tolist(),
             "scores": scores.tolist(), "weights": weights.tolist(), "score_transform": "exp(score - max_score)",
@@ -350,7 +394,8 @@ class RepairArm:
         self._pending = child
         completion = {"algorithm": self.name, "repair_index": self._count,
             "selected_parent": parent.version_id, "child_version_id": child.version_id,
-            "particle_index": request.condition.particle_index if request.condition else None}
+            "particle_index": request.condition.particle_index if request.condition else None,
+            "continuation_trace": continuation_trace(request)}
         if self.name == "rex":
             completion.pop("algorithm")
             self.decisions[-1].update(completion)

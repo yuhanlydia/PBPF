@@ -5,6 +5,7 @@ No tokenizer, pretrained weights, arbitrary likelihood callbacks or ID features.
 """
 
 from dataclasses import dataclass
+import copy
 import math
 
 import numpy as np
@@ -74,16 +75,32 @@ def _mlp(input_dim, hidden_dim, output_dim):
 
 
 class NeuralBeliefModel(nn.Module):
-    def __init__(self, feature_dim: int, latent_dim: int = 32, hidden_dim: int = 128):
+    def __init__(self, feature_dim: int, latent_dim: int = 32, hidden_dim: int = 128,
+                 *, difficulty_dim: int | None = None):
+        """Set difficulty_dim (e.g. 8) to opt into A-PBPF factorization.
+
+        The default keeps the legacy architecture and state-dict keys unchanged.
+        """
         super().__init__()
         if min(feature_dim, latent_dim, hidden_dim) <= 0:
             raise ValueError("model dimensions must be positive")
+        if difficulty_dim is not None and (isinstance(difficulty_dim, bool)
+                or not isinstance(difficulty_dim, int) or not 0 < difficulty_dim < latent_dim):
+            raise ValueError("difficulty_dim must be an integer strictly between zero and latent_dim")
         self.feature_dim, self.latent_dim = feature_dim, latent_dim
+        self.hidden_dim = hidden_dim
+        self.difficulty_dim = difficulty_dim
+        self.diagnosis_dim = None if difficulty_dim is None else latent_dim - difficulty_dim
         self.root_head = _mlp(2 * feature_dim, hidden_dim, 2 * latent_dim)
         self.transition_head = _mlp(3 * feature_dim + latent_dim, hidden_dim, 2 * latent_dim)
         self.root_proposal_head = _mlp(3 * feature_dim + 5, hidden_dim, 2 * latent_dim)
         self.child_proposal_head = _mlp(4 * feature_dim + latent_dim + 5, hidden_dim, 2 * latent_dim)
-        self.likelihood_head = _mlp(3 * feature_dim + latent_dim, hidden_dim, 5)
+        if difficulty_dim is None:
+            self.likelihood_head = _mlp(3 * feature_dim + latent_dim, hidden_dim, 5)
+        else:
+            self.difficulty_head = _mlp(2 * feature_dim + difficulty_dim, hidden_dim, 5)
+            self.diagnosis_head = _mlp(3 * feature_dim + self.diagnosis_dim, hidden_dim, 5)
+            self.apbpf_training_state = None
         self.register_buffer("temperature", torch.tensor(1.))
         self.calibration_split_hash = None
         self.training_split_hash = None
@@ -118,9 +135,33 @@ class NeuralBeliefModel(nn.Module):
         """Calibrated log probabilities, ordered as registry.OUTCOMES."""
         if class_weights is not None:
             raise ValueError("class weights are forbidden for a proper likelihood")
-        features = self._expand(torch.cat([task, candidate, test], -1), z)
-        logits = self.likelihood_head(torch.cat([features, z], -1))
+        if self.difficulty_dim is None:
+            features = self._expand(torch.cat([task, candidate, test], -1), z)
+            logits = self.likelihood_head(torch.cat([features, z], -1))
+        else:
+            difficulty, diagnosis = self.likelihood_components(z, task, candidate, test)
+            logits = difficulty + diagnosis
         return F.log_softmax(logits / self.temperature, dim=-1)
+
+    def split_latent(self, z):
+        if self.difficulty_dim is None:
+            raise ValueError("split_latent requires a factored model")
+        if z.ndim not in (2, 3) or z.shape[-1] != self.latent_dim:
+            raise ValueError("latent must have shape [B,D] or [B,P,D] matching latent_dim")
+        return z[..., :self.difficulty_dim], z[..., self.difficulty_dim:]
+
+    def difficulty_logits(self, z, task, candidate):
+        """Test-invariant logits; neither tests nor diagnosis enter this head."""
+        difficulty, _ = self.split_latent(z)
+        features = self._expand(torch.cat([task, candidate], -1), z)
+        return self.difficulty_head(torch.cat([features, difficulty], -1))
+
+    def likelihood_components(self, z, task, candidate, test):
+        """Raw additive difficulty and test-specific diagnosis logits."""
+        _, diagnosis = self.split_latent(z)
+        features = self._expand(torch.cat([task, candidate, test], -1), z)
+        return (self.difficulty_logits(z, task, candidate),
+                self.diagnosis_head(torch.cat([features, diagnosis], -1)))
 
     def future_predict(self, task, candidate, tests, z, log_weights):
         if (tests.ndim != 3 or z.ndim != 3 or log_weights.shape != z.shape[:2]
@@ -139,10 +180,19 @@ class NeuralBeliefModel(nn.Module):
         self.training_split_hash = calibration.training_split_hash
 
     def get_extra_state(self):
-        return {"calibration_split_hash": self.calibration_split_hash,
-                "training_split_hash": self.training_split_hash}
+        state = {"calibration_split_hash": self.calibration_split_hash,
+                 "training_split_hash": self.training_split_hash}
+        if self.difficulty_dim is not None:
+            state.update(difficulty_dim=self.difficulty_dim, diagnosis_dim=self.diagnosis_dim,
+                         apbpf_training_state=copy.deepcopy(self.apbpf_training_state))
+        return state
 
     def set_extra_state(self, state):
+        if self.difficulty_dim is not None:
+            if (state.get("difficulty_dim") != self.difficulty_dim
+                    or state.get("diagnosis_dim") != self.diagnosis_dim):
+                raise ValueError("checkpoint factor dimensions do not match the factored model")
+            self.apbpf_training_state = copy.deepcopy(state.get("apbpf_training_state"))
         calibration_hash = state["calibration_split_hash"]
         training_hash = state["training_split_hash"]
         if calibration_hash is not None or training_hash is not None:
@@ -153,12 +203,15 @@ class NeuralBeliefModel(nn.Module):
 
     def filter(self, batch: BeliefBatch, *, particles=8, visible_steps=4, ess_fraction=.5,
                parents: list[ParticleSet] | None = None, ancestor_scheme=None,
-               ancestors=None, log_ancestor_proposal=None, generator=None) -> FilterTrace:
+               ancestors=None, log_ancestor_proposal=None, generator=None,
+               proposal_noise=None, resampling_uniforms=None) -> FilterTrace:
         """Training SMC with actual Gaussian draws; no transitions within a candidate.
 
         Child ancestors are caller-selected, exactly as in BeliefStore. Sampled
         ancestry requires evaluated categorical proposal masses, including -log P.
         Systematic resampling decisions and indices are detached (no score term).
+        Explicit noise [B,P,D] and uniforms [B,steps] enable paired paths whose
+        random draws stay aligned even when their resampling decisions differ.
         """
         batch.validate(self.feature_dim)
         if not 1 <= visible_steps <= batch.tests.shape[1] or not 0 <= ess_fraction <= 1:
@@ -205,7 +258,17 @@ class NeuralBeliefModel(nn.Module):
             prior = self.transition(parent_z, task, candidate, batch.diff)
             q = self.proposal(task, candidate, batch.tests[:, 0], batch.outcomes[:, 0],
                               parent_z=parent_z, diff=batch.diff)
-        noise = torch.randn(q.mean.shape, device=device, dtype=dtype, generator=generator)
+        noise = (torch.randn(q.mean.shape, device=device, dtype=dtype, generator=generator)
+                 if proposal_noise is None else proposal_noise)
+        if noise.device != device or noise.dtype != dtype:
+            raise ValueError("proposal_noise must share batch device and dtype")
+        if resampling_uniforms is not None and (
+                resampling_uniforms.shape != (size, visible_steps)
+                or resampling_uniforms.device != device
+                or not resampling_uniforms.is_floating_point()
+                or not torch.isfinite(resampling_uniforms).all()
+                or ((resampling_uniforms < 0) | (resampling_uniforms >= 1)).any()):
+            raise ValueError("resampling_uniforms must be finite [B,steps] values in [0,1)")
         z = q.rsample(noise=noise)
         log_weights = base + prior.log_prob(z) - q.log_prob(z)
         all_z, all_w, all_normalizers, all_indices, all_resampled = [], [], [], [], []
@@ -223,7 +286,10 @@ class NeuralBeliefModel(nn.Module):
                 if resampled.any():
                     cdf = log_weights[resampled].double().softmax(-1).cumsum(-1)
                     cdf[:, -1] = 1.
-                    offset = torch.rand((int(resampled.sum()), 1), device=device, dtype=cdf.dtype, generator=generator)
+                    offset = (torch.rand((int(resampled.sum()), 1), device=device,
+                                         dtype=cdf.dtype, generator=generator)
+                              if resampling_uniforms is None else
+                              resampling_uniforms[resampled, j, None].to(cdf.dtype))
                     positions = (offset + torch.arange(particles, device=device, dtype=cdf.dtype)) / particles
                     indices[resampled] = torch.searchsorted(cdf.contiguous(), positions.contiguous(), right=True).clamp_max(particles - 1)
             z = z.gather(1, indices[..., None].expand(-1, -1, self.latent_dim))

@@ -1,0 +1,10 @@
+qwen25_7b:
+  id: Qwen/Qwen2.5-Coder-7B-Instruct
+  revision: c03e6d358207e414f1eca0bb1891e29f1db0e242
+  family: qwen
+  role: primary
+deepseek_6p7b:
+  id: deepseek-ai/deepseek-coder-6.7b-instruct
+  revision: e5d64addd26a6a1db0f9b863abf6ee3141936807
+  family: deepseek
+  role: replication

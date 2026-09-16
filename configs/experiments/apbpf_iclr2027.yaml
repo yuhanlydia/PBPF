@@ -1,0 +1,9 @@
+schema: apbpf-iclr-v1
+name: apbpf-iclr2027
+includes:
+  models: ../apbpf/models.yaml
+  datasets: ../apbpf/datasets.yaml
+  protocol: ../apbpf/protocol.yaml
+  gates: ../apbpf/gates.yaml
+  ablations: ../apbpf/ablations.yaml
+  profiles: ../apbpf/profiles.yaml

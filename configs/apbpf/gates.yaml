@@ -1,0 +1,36 @@
+baseline_fairness:
+  minimum_nll_advantage: 0.02
+  clustered_lower_bound_positive: true
+  baselines: [pair_aware_deterministic, exchangeable_deep_sets, tuned_dirichlet_rate, no_particle_bottleneck]
+hard_bank:
+  minimum_mixed_pilot_groups: 300
+  minimum_confirmatory_groups: 500
+  maximum_confirmatory_groups: 1000
+  visible_selection_below_hidden_oracle: true
+  requires_pre_hidden_lock: true
+  requires_source_disjointness: true
+  requires_candidate_and_source_inventory: true
+association:
+  minimum_gap_nats_per_test: 0.03
+  clustered_lower_bound_positive: true
+  every_confirmatory_domain: true
+pair_invariance:
+  maximum_joint_reversal_fraction_of_shuffle_gap: 0.25
+  required_controls: [joint_reversal, presentation_permutation]
+oracle_headroom:
+  minimum_nll_advantage_over_fixed_and_random: 0.03
+active_testing:
+  minimum_test_reduction_at_matched_hidden_quality: 0.25
+  minimum_nll_advantage_at_four_tests: 0.03
+  decision: either
+selection:
+  minimum_absolute_selected_pass1_advantage: 0.03
+  clustered_lower_bound_positive: true
+  comparator: strongest_cross_fitted_deterministic
+repair:
+  requires: [association_gate, selection_gate]
+  role: supportive_not_primary
+replication:
+  minimum_data_protocols: 2
+  minimum_model_families: 2
+  direction_agreement: true

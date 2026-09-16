@@ -40,6 +40,65 @@ def fivo_future_loss(log_normalizers: torch.Tensor,
 
 
 @dataclass(frozen=True)
+class AssociationAwareBeliefLoss(BeliefLoss):
+    association: torch.Tensor
+    invariance: torch.Tensor
+    association_gap: torch.Tensor
+    eligible_gap: torch.Tensor | None
+
+
+def association_aware_belief_loss(
+        log_normalizers, future_nll, aligned_nll, shuffled_nll,
+        difficulty_aligned, difficulty_shuffled, eligible, *, future_weight=1.,
+        association_weight=1., invariance_weight=1., margin=.03):
+    """Aligned FIVO/future loss plus eligible-only association and symmetric KL.
+
+    Auxiliary NLL vectors are per-candidate *per-future-test* values evaluated
+    against the same untouched future labels. Difficulty inputs are categorical
+    posterior-predictive probabilities [B,C], not particle-weight entropies.
+    The primary gap always averages the full batch, including constant histories.
+    """
+    for name, value in (("association_weight", association_weight),
+                        ("invariance_weight", invariance_weight), ("margin", margin)):
+        if not math.isfinite(value) or value < 0:
+            raise ValueError(f"{name} must be finite and non-negative")
+    base = fivo_future_loss(log_normalizers, future_nll, future_weight=future_weight)
+    shape = log_normalizers.shape[:1]
+    if (aligned_nll.shape != shape or shuffled_nll.shape != shape
+            or eligible.shape != shape or eligible.dtype != torch.bool):
+        raise ValueError("auxiliary NLL vectors and boolean eligibility must have shape [batch]")
+    tensors = (aligned_nll, shuffled_nll, difficulty_aligned, difficulty_shuffled, eligible)
+    if any(value.device != log_normalizers.device for value in tensors):
+        raise ValueError("loss tensors must share a device")
+    if not all(torch.isfinite(value).all() for value in tensors[:-1]):
+        raise ValueError("auxiliary values must be finite")
+    if (difficulty_aligned.ndim != 2 or difficulty_aligned.shape[0] != shape[0]
+            or difficulty_aligned.shape[1] < 2 or difficulty_shuffled.shape != difficulty_aligned.shape):
+        raise ValueError("difficulty probabilities must have matching [batch,classes] shapes")
+    for value in (difficulty_aligned, difficulty_shuffled):
+        if (not value.is_floating_point() or (value < 0).any()
+                or not torch.allclose(value.sum(-1), torch.ones_like(value[:, 0]), atol=1e-5)):
+            raise ValueError("difficulty probabilities must be non-negative and normalized")
+    gap = shuffled_nll - aligned_nll
+    if eligible.any():
+        association = F.relu(margin - gap[eligible]).mean()
+        # Clamp only for logarithms so exact zeros do not create 0 * log(0).
+        p, q = difficulty_aligned[eligible], difficulty_shuffled[eligible]
+        epsilon = torch.finfo(p.dtype).tiny
+        invariance = (.5 * (p - q) * (p.clamp_min(epsilon).log()
+                                     - q.clamp_min(epsilon).log())).sum(-1).mean()
+        eligible_gap = gap[eligible].mean()
+    else:
+        association = (aligned_nll.sum() + shuffled_nll.sum()) * 0.
+        invariance = (difficulty_aligned.sum() + difficulty_shuffled.sum()) * 0.
+        eligible_gap = None
+    return AssociationAwareBeliefLoss(
+        base.total + association_weight * association + invariance_weight * invariance,
+        base.fivo, base.future, base.prefix4_nll, association, invariance,
+        gap.mean(), eligible_gap)
+
+
+@dataclass(frozen=True)
 class TemperatureCalibration:
     temperature: float
     split_hash: str

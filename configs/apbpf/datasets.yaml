@@ -1,0 +1,19 @@
+runbugrun:
+  id: giganticode/run_bug_run
+  revision: 374251a9d65410f37e1136049cb7ff5dcca3d0ae
+  revision_kind: repository
+  role: confirmatory
+  cache_schema: apbpf-rbr-rich-cache-v3
+codearc_replay:
+  id: anjiangwei/CodeARC-Problems+anjiangwei/CodeARC-Invocations
+  revision: 32f2a1e1ba3bdf8a7d5057aacbd665edaf441ce0
+  revision_kind: repository
+  problems_revision: d2ee0ad485724668eabb893a965c681a9ce78031
+  invocations_revision: 119512573bf96148cbb95e99cf7cdd21c06153e4
+  role: confirmatory
+  claim_scope: replay-not-official-interactive-leaderboard
+evalplus:
+  id: evalplus/humanevalplus+evalplus/mbppplus
+  revision: 26d6d00bb1fd0fa37f39c99d5290da67891d1c5e
+  revision_kind: repository
+  role: saturated_audit_only

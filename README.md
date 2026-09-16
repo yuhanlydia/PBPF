@@ -71,6 +71,35 @@ See [operator workflow](docs/EXPERIMENTS.md), [data contracts](docs/DATA.md),
 [arms/provenance](docs/BASELINES.md), and [verification](docs/ARTIFACTS.md).
 SWE-bench and trace-rich LDB are outside the core S0–S4 claim.
 
+## A-PBPF information-inference workflow
+
+A-PBPF is a separate prospective experiment path with its own
+`apbpf-iclr-v1` identity. It does not change the frozen `pbpf-iclr` contract or
+turn the historical prediction/repair diagnostics into positive evidence. The
+feature branch can be checked out with:
+
+```bash
+git fetch origin codex/apbpf-information-inference
+git switch --track origin/codex/apbpf-information-inference
+```
+
+After provisioning the real stage-worker overlay described in
+[`docs/APBPF_WORKERS.md`](docs/APBPF_WORKERS.md), the resumable launcher is:
+
+```bash
+bash scripts/run_apbpf_iclr.sh --config configs/experiments/apbpf_iclr2027.yaml --profile local_24gb --site /path/to/apbpf-site.yaml --output-root runs/apbpf --resume
+```
+
+This command requires an audited real `local_24gb` site overlay; the example
+overlay deliberately contains null commands and therefore fails closed. A
+provisioned profile must first pass the association and selection gates. A failed upstream
+gate blocks repair; an explicit
+`--continue-exploratory` records downstream output as nonconfirmatory rather
+than bypassing the failure. The explicit `local_smoke` profile is smoke-only and
+cannot make an empirical claim. See [A-PBPF experiments](docs/APBPF_EXPERIMENTS.md)
+and [A-PBPF artifacts](docs/APBPF_ARTIFACTS.md) for the exact command set,
+conditioning controls, and verification inventory.
+
 ## Verify the checkout
 
 ```bash

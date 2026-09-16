@@ -17,6 +17,126 @@ import numpy as np
 from .registry import OUTCOMES
 
 
+RBR_CACHE_SCHEMA = "apbpf-rbr-rich-cache-v3"
+EXECUTION_TEXT_LIMIT = 4096
+ASSOCIATION_ARMS = (
+    "aligned", "outcome_shuffled", "joint_reversed", "presentation_permuted",
+    "orderless", "semantics_masked", "wrong_candidate", "random_latent", "history_rate",
+)
+
+
+def bounded_execution_record(case, *, actual="", stderr="", returncode=None,
+                             timed_out=False, outcome):
+    """Cache evaluator-side execution evidence, never an actor-facing payload."""
+    def bounded(value):
+        if isinstance(value, bytes):
+            value = value.decode("utf-8", errors="replace")
+        return str(value or "")[:EXECUTION_TEXT_LIMIT]
+    if outcome not in OUTCOMES:
+        raise ValueError("unregistered execution outcome")
+    expected = case.get("expected", case.get("output"))
+    if not isinstance(expected, str) or len(expected) > EXECUTION_TEXT_LIMIT:
+        raise ValueError("expected output must be present and bounded")
+    return {"expected": expected, "actual": bounded(actual), "stderr": bounded(stderr),
+            "returncode": returncode, "timed_out": bool(timed_out), "outcome": outcome,
+            "actual_truncated": len(actual or "") > EXECUTION_TEXT_LIMIT,
+            "stderr_truncated": len(stderr or "") > EXECUTION_TEXT_LIMIT}
+
+
+def validate_rbr_cache(payload):
+    """Fail closed on legacy caches, missing evidence, and overlapping sources."""
+    if payload.get("schema") != RBR_CACHE_SCHEMA:
+        raise ValueError("rich execution cache required; rebuild with --prepare")
+    rows = payload.get("records")
+    if not isinstance(rows, list) or not rows:
+        raise ValueError("cache requires nonempty records")
+    owners, problem_owners, seen = {}, {}, set()
+    width = payload.get("tests_per_candidate")
+    if type(width) is not int or width <= 4:
+        raise ValueError("cache requires four visible and at least one future test")
+    for row in rows:
+        if not all(isinstance(row.get(key), str) and row[key]
+                   for key in ("task_id", "problem_id", "task_text", "candidate", "split")):
+            raise ValueError("cache is missing candidate/source metadata")
+        if row["split"] not in {"train", "development", "test"}:
+            raise ValueError("invalid cache split")
+        source = row.get("source_component_id", row["problem_id"])
+        if not isinstance(source, str) or not source:
+            raise ValueError("source components must be nonempty strings")
+        if ((source in owners and owners[source] != row["split"])
+                or (row["problem_id"] in problem_owners
+                    and problem_owners[row["problem_id"]] != row["split"])):
+            raise ValueError("source component crosses training/evaluation splits")
+        owners[source] = row["split"]
+        problem_owners[row["problem_id"]] = row["split"]
+        if row["task_id"] in seen:
+            raise ValueError("duplicate candidate identity")
+        seen.add(row["task_id"])
+        if len(row.get("tests", ())) != width or len(row.get("outcomes", ())) != width:
+            raise ValueError("cache histories must match the declared test count")
+        for case, outcome in zip(row["tests"], row["outcomes"], strict=True):
+            if (outcome not in OUTCOMES or case.get("outcome") != outcome
+                    or not isinstance(case.get("input"), str)
+                    or len(case["input"]) > 8192
+                    or any(not isinstance(case.get(key), str) or len(case[key]) > EXECUTION_TEXT_LIMIT
+                           for key in ("expected", "actual", "stderr"))
+                    or type(case.get("timed_out")) is not bool
+                    or "returncode" not in case
+                    or (case["returncode"] is not None and type(case["returncode"]) is not int)):
+                raise ValueError("missing or invalid bounded execution record")
+    return payload
+
+
+def public_test_text(case, *, expected_is_public=False):
+    """Whitelist semantic features; observed/future execution evidence stays hidden."""
+    if type(expected_is_public) is not bool:
+        raise TypeError("expected-output visibility must be explicitly boolean")
+    value = {"input": case["input"]}
+    if expected_is_public:
+        value["expected"] = case["expected"]
+    return json.dumps(value, sort_keys=True, ensure_ascii=False)
+
+
+def clustered_nll_gap(labels, aligned, comparator, clusters, *, seed=0, replicates=10000):
+    """Example-weighted gap, bootstrapping complete source components."""
+    labels = np.asarray(labels, dtype=np.int64)
+    clusters = np.asarray(clusters)
+    if labels.ndim != 1 or not len(labels) or clusters.shape != labels.shape:
+        raise ValueError("nonempty labels and one source cluster per example required")
+    # Reuse strict normalization checks before indexing probability matrices.
+    compare_predictions(labels, {"baseline": comparator, "aligned": aligned})
+    index = np.arange(len(labels))
+    gap = (-np.log(np.clip(np.asarray(comparator)[index, labels], 1e-12, 1.0))
+           + np.log(np.clip(np.asarray(aligned)[index, labels], 1e-12, 1.0)))
+    keys = sorted(set(clusters.tolist()))
+    sums = np.asarray([gap[clusters == key].sum() for key in keys])
+    counts = np.asarray([(clusters == key).sum() for key in keys])
+    if type(replicates) is not int or replicates < 1:
+        raise ValueError("replicates must be positive")
+    rng = np.random.default_rng(seed)
+    draws = []
+    for start in range(0, replicates, 256):
+        indices = rng.integers(0, len(keys), size=(min(256, replicates - start), len(keys)))
+        draws.extend((sums[indices].sum(1) / counts[indices].sum(1)).tolist())
+    return {"unit": "source_component", "clusters": len(keys), "replicates": replicates,
+            "mean_nll_gap": float(gap.mean()),
+            "ci95": [float(np.quantile(draws, .025)), float(np.quantile(draws, .975))],
+            "estimand": "future-example-weighted; whole-source-component resampling"}
+
+
+def association_strata(outcomes, *, visible_steps=4):
+    """Locked full population plus prespecified descriptive ambiguity strata."""
+    from .apbpf.counterfactual import association_eligibility
+    values = np.asarray(outcomes)
+    if values.ndim != 2 or values.shape[1] <= visible_steps:
+        raise ValueError("outcomes require visible and future histories")
+    eligible = association_eligibility(values, visible_steps)
+    future = values[:, visible_steps:]
+    return {"full": np.ones(len(values), dtype=bool), "eligible": eligible,
+            "constant_visible": ~eligible,
+            "future_variable": np.any(future != future[:, :1], axis=1)}
+
+
 class FrozenTextEncoder:
     """Deterministic signed feature hashing over source text tokens/ngrams."""
 

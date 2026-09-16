@@ -1,6 +1,6 @@
 """Semantic tensor inputs; identifiers are metadata, never numeric features."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import torch
 from torch import nn
@@ -34,6 +34,21 @@ class BeliefBatch:
     tests: torch.Tensor
     outcomes: torch.Tensor
     diff: torch.Tensor | None = None
+
+    def outcome_counterfactual(self, *, visible_steps: int, seed: int):
+        """Shuffle visible labels only; preserve semantics and all future targets.
+
+        Constant visible histories are retained for base loss and reporting, but
+        marked ineligible for the auxiliary association/invariance objectives.
+        """
+        from pbpf.apbpf.counterfactual import association_eligibility, outcome_derangement
+
+        self.validate(self.task.shape[-1])
+        outcomes = self.outcomes.detach().cpu().numpy()
+        shuffled = outcome_derangement(outcomes, visible_steps, seed)
+        eligible = association_eligibility(outcomes, visible_steps)
+        return (replace(self, outcomes=torch.as_tensor(shuffled, device=self.outcomes.device)),
+                torch.as_tensor(eligible, device=self.outcomes.device, dtype=torch.bool))
 
     def validate(self, feature_dim: int):
         if (self.task.ndim != 2 or self.task.shape[1] != feature_dim

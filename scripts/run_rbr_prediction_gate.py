@@ -26,7 +26,10 @@ import torch
 
 from pbpf.belief.features import BeliefBatch
 from pbpf.belief.model import NeuralBeliefModel
-from pbpf.real_gate import FrozenTextEncoder, classify_execution, compare_predictions, html_to_text
+from pbpf.real_gate import (FrozenTextEncoder, classify_execution, compare_predictions, html_to_text,
+                           RBR_CACHE_SCHEMA, bounded_execution_record, validate_rbr_cache,
+                           public_test_text, clustered_nll_gap, association_strata)
+from pbpf.apbpf.counterfactual import outcome_derangement, joint_permutation
 from pbpf.registry import OUTCOMES
 from pbpf.train_belief import train_belief_step
 
@@ -44,7 +47,7 @@ EXPECTED_MD5 = {
 }
 DESCRIPTION_SOURCE = "IBM Project CodeNet problem_descriptions.tar.gz"
 DESCRIPTION_ARCHIVE_SHA256 = "8b631ae168ba84dce69c7d8e1b6c632256e0155858c2664c6493a5f001b45fdd"
-DATASET_SCHEMA = "pbpf-rbr-real-gate-v2"
+DATASET_SCHEMA = RBR_CACHE_SCHEMA
 
 
 def _md5(path: Path) -> str:
@@ -93,12 +96,13 @@ def _execute(payload):
     outcomes = []
     try:
         compile(code, "candidate.py", "exec")
-    except (SyntaxError, ValueError, TypeError):
-        return ["COMPILE_ERROR"] * len(cases)
+    except (SyntaxError, ValueError, TypeError) as error:
+        return [bounded_execution_record(case, stderr=str(error), outcome="COMPILE_ERROR") for case in cases]
     with tempfile.TemporaryDirectory(prefix="pbpf-rbr-") as directory:
         source = Path(directory) / "candidate.py"
         source.write_text(code)
         for case in cases:
+            actual, stderr, returncode, timed_out = "", "", None, False
             try:
                 result = subprocess.run(
                     ["/usr/bin/python3", "-I", str(source)], input=case["input"], text=True,
@@ -106,11 +110,14 @@ def _execute(payload):
                     env={"PATH": "/usr/bin:/bin", "LANG": "C.UTF-8", "PYTHONHASHSEED": "0"},
                 )
                 outcome = classify_execution(result.returncode, result.stdout, result.stderr, case["output"])
+                actual, stderr, returncode = result.stdout, result.stderr, result.returncode
                 if result.returncode == 0:
                     outcome = "PASS" if _output_matches(result.stdout, case["output"]) else "WRONG_OUTPUT"
-            except subprocess.TimeoutExpired:
+            except subprocess.TimeoutExpired as error:
+                actual, stderr, timed_out = error.stdout or "", error.stderr or "", True
                 outcome = classify_execution(None, "", "", case["output"], timed_out=True)
-            outcomes.append(outcome)
+            outcomes.append(bounded_execution_record(case, actual=actual, stderr=stderr,
+                returncode=returncode, timed_out=timed_out, outcome=outcome))
     return outcomes
 
 
@@ -181,17 +188,17 @@ def prepare(root: Path, descriptions_root: Path, descriptions_archive: Path, cac
     paired_outcomes = zip(outcomes[::2], outcomes[1::2])
     rejected_fixed = 0
     for (split, row, cases), (result, fixed_result) in zip(jobs, paired_outcomes):
-        if any(value != "PASS" for value in fixed_result):
+        if any(value["outcome"] != "PASS" for value in fixed_result):
             rejected_fixed += 1
-            continue
-        if all(value == "PASS" for value in result):
             continue
         records.append({
             "task_id": str(row["id"]), "problem_id": row["problem_id"], "split": split,
+            "source_component_id": row["problem_id"],
             "task_text": descriptions[row["problem_id"]],
             "candidate": row["buggy_code"],
-            "tests": [{"id": str(case["id"]), "input": case["input"]} for case in cases],
-            "outcomes": result,
+            "tests": [{"id": str(case["id"]), "input": case["input"], **execution}
+                      for case, execution in zip(cases, result, strict=True)],
+            "outcomes": [value["outcome"] for value in result],
         })
     cache.parent.mkdir(parents=True, exist_ok=True)
     payload = {
@@ -203,15 +210,18 @@ def prepare(root: Path, descriptions_root: Path, descriptions_archive: Path, cac
         "counts": dict(Counter(row["split"] for row in records)),
         "problem_counts": {split: len({row["problem_id"] for row in records if row["split"] == split}) for split in selected},
         "rejected_fixed_candidates": rejected_fixed,
+        "population_policy": "all selected buggy candidates, including all-pass; fixed-program validity screen",
+        "execution_fields_visibility": "evaluator-only unless explicitly whitelisted by protocol",
     }
     cache.write_text(json.dumps(payload, sort_keys=True) + "\n")
     return payload
 
 
-def _tensorize(rows, encoder, device):
+def _tensorize(rows, encoder, device, *, expected_is_public=False):
     task = np.stack([encoder(row["task_text"]) for row in rows])
     candidate = np.stack([encoder(row["candidate"]) for row in rows])
-    tests = np.stack([[encoder(case["input"]) for case in row["tests"]] for row in rows])
+    tests = np.stack([[encoder(public_test_text(case, expected_is_public=expected_is_public))
+                       for case in row["tests"]] for row in rows])
     outcomes = np.asarray([[OUTCOMES.index(value) for value in row["outcomes"]] for row in rows])
     return BeliefBatch(
         torch.tensor(task, device=device), torch.tensor(candidate, device=device),
@@ -227,10 +237,33 @@ def _subset(batch, indices):
 def _predict(model, batch, *, particles, seed, mode, problem_ids=None):
     generator = torch.Generator(device=batch.task.device).manual_seed(seed)
     source = batch
-    if mode == "shuffled":
-        outcomes = batch.outcomes.clone()
-        outcomes[:, :4] = outcomes[:, :4].flip(1)
+    mode = {"pbpf": "aligned", "shuffled": "outcome_shuffled", "random": "random_latent"}.get(mode, mode)
+    if mode not in {"baseline", "aligned", "outcome_shuffled", "joint_reversed", "presentation_permuted",
+                    "orderless", "semantics_masked", "wrong_candidate", "random_latent"}:
+        raise ValueError(f"unknown prediction control: {mode}")
+    if mode == "outcome_shuffled":
+        outcomes = torch.as_tensor(outcome_derangement(batch.outcomes.cpu().numpy(), 4, seed),
+                                   device=batch.task.device, dtype=torch.long)
         source = BeliefBatch(batch.task, batch.candidate, batch.tests, outcomes)
+    elif mode in {"joint_reversed", "presentation_permuted", "orderless"}:
+        indices = np.tile(np.arange(batch.tests.shape[1]), (len(batch.task), 1))
+        if mode == "joint_reversed":
+            indices[:, :4] = indices[:, :4][:, ::-1]
+        elif mode == "presentation_permuted":
+            indices, _ = joint_permutation(indices, batch.outcomes.cpu().numpy(), 4, seed)
+        else:
+            # Canonical ordering is based solely on public semantic features,
+            # never on outcomes, IDs, or evaluator-hidden execution strings.
+            for i, tests in enumerate(batch.tests[:, :4].cpu().numpy()):
+                indices[i, :4] = sorted(range(4), key=lambda j: tuple(tests[j].tolist()))
+        order = torch.as_tensor(indices, device=batch.task.device)
+        tests = batch.tests.gather(1, order[..., None].expand_as(batch.tests))
+        outcomes = batch.outcomes.gather(1, order)
+        source = BeliefBatch(batch.task, batch.candidate, tests, outcomes)
+    elif mode == "semantics_masked":
+        tests = batch.tests.clone()
+        tests[:, :4] = 0
+        source = BeliefBatch(batch.task, batch.candidate, tests, batch.outcomes)
     elif mode == "wrong_candidate":
         if problem_ids is None or len(problem_ids) != len(batch.task):
             raise ValueError("wrong-candidate control requires one problem ID per candidate")
@@ -245,14 +278,20 @@ def _predict(model, batch, *, particles, seed, mode, problem_ids=None):
         outcomes = batch.outcomes.clone()
         outcomes[:, :4] = batch.outcomes[torch.tensor(donor, device=batch.task.device), :4]
         source = BeliefBatch(batch.task, batch.candidate, batch.tests, outcomes)
-    trace = model.filter(source, particles=particles, visible_steps=4, ess_fraction=0.5, generator=generator)
+    # Explicit arrays keep common noise aligned even when controls trigger
+    # different resampling decisions or numbers of resampled candidates.
+    noise = torch.randn((len(batch.task), particles, model.latent_dim), device=batch.task.device,
+                        dtype=batch.task.dtype, generator=generator)
+    uniforms = torch.rand((len(batch.task), 4), device=batch.task.device,
+                          dtype=batch.task.dtype, generator=generator)
+    trace = model.filter(source, particles=particles, visible_steps=4, ess_fraction=0.5, generator=generator,
+                         proposal_noise=noise, resampling_uniforms=uniforms)
     z, weights = trace.latents[:, 3], trace.log_weights[:, 3]
     if mode == "baseline":
         prior = model.root(batch.task, batch.candidate)
-        noise = torch.randn((len(batch.task), particles, model.latent_dim), device=batch.task.device, generator=generator)
         z = prior.mean[:, None] + prior.std[:, None] * noise
         weights = batch.task.new_full((len(batch.task), particles), -math.log(particles))
-    elif mode == "random":
+    elif mode == "random_latent":
         radius = torch.sqrt((weights.exp() * z.square().sum(-1)).sum(-1, keepdim=True))
         z = torch.randn(z.shape, device=z.device, generator=generator)
         z = z / z.norm(dim=-1, keepdim=True).clamp_min(1e-8) * radius[:, None]
@@ -260,57 +299,151 @@ def _predict(model, batch, *, particles, seed, mode, problem_ids=None):
     return model.future_predict(batch.task, batch.candidate, future, z, weights).exp().reshape(-1, 5).cpu().numpy()
 
 
-def _history_rate(batch):
+def _history_rate(batch, alpha=1.0):
     visible = batch.outcomes[:, :4].cpu().numpy()
     rows = []
     for outcomes in visible:
-        counts = np.bincount(outcomes, minlength=5).astype(np.float64) + 1.0
+        counts = np.bincount(outcomes, minlength=5).astype(np.float64) + alpha
         rows.extend([counts / counts.sum()] * (batch.outcomes.shape[1] - 4))
     return np.asarray(rows)
 
 
 def _cluster_bootstrap(labels, predictions, problem_ids, *, comparator="baseline", seed, replicates=10_000):
-    labels = np.asarray(labels)
-    per_example = {}
-    for name, probabilities in predictions.items():
-        per_example[name] = -np.log(np.clip(probabilities[np.arange(len(labels)), labels], 1e-12, 1.0))
+    if not problem_ids:
+        raise ValueError("source clusters are required")
     width = len(labels) // len(problem_ids)
     if width * len(problem_ids) != len(labels):
         raise ValueError("future examples must have a fixed count per candidate")
-    groups = defaultdict(list)
-    for index, problem_id in enumerate(problem_ids):
-        groups[problem_id].extend(range(index * width, (index + 1) * width))
-    keys = sorted(groups)
-    gains = np.asarray([
-        np.mean(per_example[comparator][groups[key]] - per_example["pbpf"][groups[key]])
-        for key in keys
-    ])
-    rng = np.random.default_rng(seed)
-    draws = gains[rng.integers(0, len(gains), size=(replicates, len(gains)))].mean(1)
-    return {
-        "unit": "problem_id", "problems": len(keys), "replicates": replicates,
-        "comparator": comparator, "mean_nll_gain": float(gains.mean()),
-        "ci95": [float(np.quantile(draws, 0.025)), float(np.quantile(draws, 0.975))],
-    }
+    aligned = predictions["aligned"] if "aligned" in predictions else predictions["pbpf"]
+    result = clustered_nll_gap(labels, aligned, predictions[comparator], np.repeat(problem_ids, width),
+                               seed=seed, replicates=replicates)
+    return {**result, "comparator": comparator, "mean_nll_gain": result["mean_nll_gap"]}
+
+
+class _DeterministicPredictor(torch.nn.Module):
+    """Matched semantic inputs, deterministic pair-aware and exchangeable controls."""
+
+    def __init__(self, feature_dim, hidden_dim, latent_dim, arm):
+        super().__init__()
+        self.arm = arm
+        self.pair = torch.nn.Sequential(torch.nn.Linear(feature_dim + 5, hidden_dim), torch.nn.Tanh())
+        width = 4 * hidden_dim if arm == "pair_aware" else hidden_dim
+        bottleneck = latent_dim if arm == "no_particle_bottleneck" else hidden_dim
+        self.context = torch.nn.Sequential(torch.nn.Linear(2 * feature_dim + width, bottleneck), torch.nn.Tanh())
+        self.head = torch.nn.Sequential(torch.nn.Linear(bottleneck + feature_dim, hidden_dim),
+                                        torch.nn.Tanh(), torch.nn.Linear(hidden_dim, 5))
+
+    def forward(self, batch):
+        pairs = self.pair(torch.cat([batch.tests[:, :4],
+            torch.nn.functional.one_hot(batch.outcomes[:, :4], 5).to(batch.task.dtype)], -1))
+        history = pairs.flatten(1) if self.arm == "pair_aware" else pairs.mean(1)
+        context = self.context(torch.cat([batch.task, batch.candidate, history], -1))
+        future = batch.tests[:, 4:]
+        return self.head(torch.cat([context[:, None].expand(-1, future.shape[1], -1), future], -1))
+
+
+def _fit_strong_baselines(batches, *, feature_dim, hidden_dim, latent_dim, steps,
+                          batch_size, learning_rate, seed):
+    """Fit only train; choose checkpoints/smoothing only on development."""
+    predictions, metadata = {}, {}
+    for offset, arm in enumerate(("pair_aware", "deep_sets", "no_particle_bottleneck")):
+        torch.manual_seed(seed + offset)
+        model = _DeterministicPredictor(feature_dim, hidden_dim, latent_dim, arm).to(batches["train"].task.device)
+        optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=.01)
+        rng = np.random.default_rng(seed)
+        best, state = float("inf"), None
+        for step in range(1, steps + 1):
+            indices = torch.tensor(rng.integers(0, len(batches["train"].task), size=batch_size),
+                                   device=batches["train"].task.device)
+            batch = _subset(batches["train"], indices)
+            optimizer.zero_grad(set_to_none=True)
+            loss = torch.nn.functional.cross_entropy(model(batch).reshape(-1, 5), batch.outcomes[:, 4:].reshape(-1))
+            loss.backward()
+            optimizer.step()
+            if step == 1 or step % max(1, steps // 20) == 0:
+                with torch.no_grad():
+                    nll = float(torch.nn.functional.cross_entropy(model(batches["development"]).reshape(-1, 5),
+                        batches["development"].outcomes[:, 4:].reshape(-1)))
+                if nll < best:
+                    best, state = nll, copy.deepcopy(model.state_dict())
+        model.load_state_dict(state)
+        with torch.no_grad():
+            predictions[arm] = model(batches["test"]).softmax(-1).reshape(-1, 5).cpu().numpy()
+        metadata[arm] = {"steps": steps, "parameters": sum(p.numel() for p in model.parameters()),
+                         "development_nll": best, "checkpoint_selection_split": "development"}
+    labels = batches["development"].outcomes[:, 4:].reshape(-1).cpu().numpy()
+    grid = (.01, .1, .25, .5, 1., 2., 5., 10.)
+    alpha = min(grid, key=lambda a: compare_predictions(labels, {"baseline": _history_rate(batches["development"], a)})["baseline"]["nll"])
+    predictions["tuned_dirichlet"] = _history_rate(batches["test"], alpha)
+    metadata["tuned_dirichlet"] = {"alpha": alpha, "grid": grid, "selection_split": "development"}
+    return predictions, metadata
+
+
+def _apbpf_step(model, batch, optimizer, *, particles, association_weight,
+                invariance_weight, association_margin, shuffle_seed):
+    from pbpf.train_belief import train_apbpf_step
+    return train_apbpf_step(model, batch, optimizer, particles=particles, visible_steps=4,
+        association_weight=association_weight, invariance_weight=invariance_weight,
+        margin=association_margin, shuffle_seed=shuffle_seed)
 
 
 def train_and_evaluate(payload: dict, output: Path, *, feature_dim: int, latent_dim: int,
                        hidden_dim: int, particles: int, steps: int, batch_size: int,
-                       learning_rate: float, seed: int) -> dict:
+                       learning_rate: float, seed: int, apbpf: bool = False,
+                       difficulty_dim: int = 8, association_weight: float = 1.,
+                       invariance_weight: float = .1, association_margin: float = .03,
+                       expected_is_public: bool = False, strong_baselines: bool = True,
+                       bootstrap_replicates: int = 10000) -> dict:
+    validate_rbr_cache(payload)
+    if output.exists() or output.with_suffix(".pt").exists():
+        raise FileExistsError("gate outputs are create-once; use a new output path")
+    if min(steps, batch_size, particles) < 1:
+        raise ValueError("steps, batch size, and particles must be positive")
+    config = {"feature_dim": feature_dim, "latent_dim": latent_dim, "hidden_dim": hidden_dim,
+              "particles": particles, "steps": steps, "batch_size": batch_size,
+              "learning_rate": learning_rate, "seed": seed, "apbpf": apbpf,
+              "difficulty_dim": difficulty_dim if apbpf else None,
+              "diagnosis_dim": latent_dim - difficulty_dim if apbpf else None,
+              "association_weight": association_weight, "invariance_weight": invariance_weight,
+              "association_margin": association_margin, "expected_is_public": expected_is_public,
+              "strong_baselines": strong_baselines, "bootstrap_replicates": bootstrap_replicates}
+    config_hash = hashlib.sha256(json.dumps(config, sort_keys=True).encode()).hexdigest()
     torch.manual_seed(seed)
     np.random.seed(seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     encoder = FrozenTextEncoder(feature_dim)
     rows = payload["records"]
     by_split = {name: [row for row in rows if row["split"] == name] for name in ("train", "development", "test")}
-    batches = {name: _tensorize(values, encoder, device) for name, values in by_split.items()}
-    model = NeuralBeliefModel(feature_dim, latent_dim, hidden_dim).to(device)
+    if any(not values for values in by_split.values()):
+        raise ValueError("train, development, and test splits must all be nonempty")
+    # Seal the supplied full test inventory and configuration before fitting or
+    # computing any model's held-out metrics. No ambiguity stratum is selectable.
+    population = [{"task_id": row["task_id"],
+                   "source_component_id": row.get("source_component_id", row["problem_id"])}
+                  for row in by_split["test"]]
+    population_hash = hashlib.sha256(json.dumps(population, sort_keys=True).encode()).hexdigest()
+    cache_hash = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with output.with_suffix(".population.json").open("x") as stream:
+        stream.write(json.dumps({"schema": "apbpf-association-population-lock-v1", "population": population,
+            "population_sha256": population_hash, "cache_sha256": cache_hash, "config_sha256": config_hash},
+            sort_keys=True, indent=2) + "\n")
+    batches = {name: _tensorize(values, encoder, device, expected_is_public=expected_is_public)
+               for name, values in by_split.items()}
+    options = {"difficulty_dim": difficulty_dim} if apbpf else {}
+    model = NeuralBeliefModel(feature_dim, latent_dim, hidden_dim, **options).to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=0.01)
     rng = np.random.default_rng(seed)
     best, best_state, history = float("inf"), None, []
     for step in range(1, steps + 1):
         indices = torch.tensor(rng.integers(0, len(by_split["train"]), size=batch_size), device=device)
-        metrics = train_belief_step(model, _subset(batches["train"], indices), optimizer, particles=particles)
+        if apbpf:
+            metrics = _apbpf_step(model, _subset(batches["train"], indices), optimizer,
+                particles=particles, association_weight=association_weight,
+                invariance_weight=invariance_weight, association_margin=association_margin,
+                shuffle_seed=seed + step)
+        else:
+            metrics = train_belief_step(model, _subset(batches["train"], indices), optimizer, particles=particles)
         if step == 1 or step % max(1, steps // 20) == 0:
             model.eval()
             labels = batches["development"].outcomes[:, 4:].reshape(-1).cpu().numpy()
@@ -333,54 +466,87 @@ def train_and_evaluate(payload: dict, output: Path, *, feature_dim: int, latent_
     model.eval()
     batch = batches["test"]
     labels = batch.outcomes[:, 4:].reshape(-1).cpu().numpy()
-    problem_ids = [row["problem_id"] for row in by_split["test"]]
+    problem_ids = [row.get("source_component_id", row["problem_id"]) for row in by_split["test"]]
     predictions = {mode: _predict(model, batch, particles=particles, seed=seed + 100_000, mode=mode,
                                   problem_ids=problem_ids)
-                   for mode in ("baseline", "pbpf", "shuffled", "wrong_candidate", "random")}
+                   for mode in ("baseline", "aligned", "outcome_shuffled", "joint_reversed",
+                                "presentation_permuted", "orderless", "semantics_masked",
+                                "wrong_candidate", "random_latent")}
     predictions["history_rate"] = _history_rate(batch)
+    baseline_metadata = {}
+    if strong_baselines:
+        strong_predictions, baseline_metadata = _fit_strong_baselines(batches, feature_dim=feature_dim,
+            hidden_dim=hidden_dim, latent_dim=latent_dim, steps=steps, batch_size=batch_size,
+            learning_rate=learning_rate, seed=seed)
+        predictions.update(strong_predictions)
     metrics = compare_predictions(labels, predictions)
-    bootstrap = {
-        comparator: _cluster_bootstrap(labels, predictions, problem_ids, comparator=comparator,
-                                       seed=seed + 200_000 + index)
-        for index, comparator in enumerate(("baseline", "history_rate"))
-    }
-    wrong_eligible = sum(count > 1 for count in Counter(problem_ids).values())
     future_width = batch.outcomes.shape[1] - 4
-    nonconstant_candidates = np.asarray([len(set(row["outcomes"][:4])) > 1 for row in by_split["test"]])
-    multi_candidate = np.asarray([Counter(problem_ids)[problem_id] > 1 for problem_id in problem_ids])
-    subset_metrics = {}
-    for name, candidate_mask in (("nonconstant_visible", nonconstant_candidates),
-                                 ("multi_candidate_problem", multi_candidate)):
+    clusters = np.repeat(problem_ids, future_width)
+    bootstrap = {comparator: clustered_nll_gap(labels, predictions["aligned"], values, clusters,
+        seed=seed + 200000, replicates=bootstrap_replicates)
+        for comparator, values in predictions.items() if comparator != "aligned"}
+    strata = {}
+    for name, candidate_mask in association_strata(batch.outcomes.cpu().numpy()).items():
         example_mask = np.repeat(candidate_mask, future_width)
-        subset_metrics[name] = {
+        strata[name] = {
             "candidates": int(candidate_mask.sum()), "future_examples": int(example_mask.sum()),
+            "status": "evaluated" if example_mask.any() else "empty_prespecified_stratum",
             "metrics": compare_predictions(labels[example_mask],
-                {arm: values[example_mask] for arm, values in predictions.items()}),
+                {arm: values[example_mask] for arm, values in predictions.items()}) if example_mask.any() else None,
+            "association_gap": clustered_nll_gap(labels[example_mask], predictions["aligned"][example_mask],
+                predictions["outcome_shuffled"][example_mask], clusters[example_mask], seed=seed + 200000,
+                replicates=bootstrap_replicates) if example_mask.any() else None,
         }
-    controls_worse = all(metrics["pbpf"]["nll"] < metrics[name]["nll"]
-                         for name in ("shuffled", "wrong_candidate", "random"))
-    paired_positive = all(row["ci95"][0] > 0 for row in bootstrap.values())
+    association = bootstrap["outcome_shuffled"]
+    association_passes = association["mean_nll_gap"] >= .03 and association["ci95"][0] > 0
+    reversal_degradation = max(0., bootstrap["joint_reversed"]["mean_nll_gap"])
+    invariance_passes = (association["mean_nll_gap"] > 0 and
+        reversal_degradation <= .25 * association["mean_nll_gap"] and
+        max(0., bootstrap["presentation_permuted"]["mean_nll_gap"]) <= .25 * association["mean_nll_gap"])
+    controls_worse = all(bootstrap[name]["mean_nll_gap"] > 0
+                         for name in ("semantics_masked", "wrong_candidate", "random_latent"))
+    required_baselines = ("pair_aware", "deep_sets", "tuned_dirichlet", "no_particle_bottleneck")
+    baseline_passes = strong_baselines and all(bootstrap[name]["mean_nll_gap"] >= .02
+                                              and bootstrap[name]["ci95"][0] > 0 for name in required_baselines)
     report = {
-        "schema": "pbpf-rbr-gate-b-result-v1", "device": str(device), "seed": seed,
+        "schema": "apbpf-rbr-association-gate-v1", "device": str(device), "seed": seed,
+        "config": config, "config_sha256": config_hash,
+        "cache_sha256": cache_hash,
+        "locked_population": population,
+        "population_sha256": population_hash,
+        "model_parameters": sum(p.numel() for p in model.parameters()),
+        "baseline_matching": "same semantic inputs, train/dev splits, optimizer, steps, batch size, and checkpoint schedule; parameter counts reported",
+        "primary_estimand": "full-population NLL(outcome_shuffled) - NLL(aligned)",
+        "visibility": {"input": "public", "expected": "public" if expected_is_public else "hidden",
+                       "actual_stderr_returncode": "cached evaluator-only; not predictor features"},
         "records": {name: len(values) for name, values in by_split.items()},
         "problems": {name: len({row["problem_id"] for row in values}) for name, values in by_split.items()},
         "future_examples": len(labels), "best_validation_nll": best, "metrics": metrics,
         "gate": {
-            "relative_nll_gain": (metrics["baseline"]["nll"] - metrics["pbpf"]["nll"]) / metrics["baseline"]["nll"],
-            "passes_point_estimate": metrics["pbpf"]["nll"] < min(metrics["baseline"]["nll"], metrics["history_rate"]["nll"]),
-            "paired_lower_bound_above_zero": paired_positive,
-            "controls_worse_than_pbpf": controls_worse,
-            "full_gate_passes": paired_positive and controls_worse,
+            "association_passes": association_passes, "association_threshold": .03,
+            "pair_invariance_passes": invariance_passes, "max_degradation_fraction": .25,
+            "controls_worse_than_aligned": controls_worse,
+            "baseline_fairness_passes": baseline_passes, "baseline_margin": .02,
+            "baseline_status": "evaluated" if strong_baselines else "missing_fail_closed",
+            "particles_necessary_claim_allowed": bool(apbpf and baseline_passes),
+            "full_gate_passes": bool(apbpf and association_passes and invariance_passes and controls_worse and baseline_passes),
         },
         "cluster_bootstrap": bootstrap,
-        "wrong_candidate_multi_candidate_problems": wrong_eligible,
-        "subset_metrics": subset_metrics,
+        "wrong_candidate_multi_candidate_problems": sum(count > 1 for count in Counter(problem_ids).values()),
+        "wrong_candidate_singletons_unchanged": sum(count == 1 for count in Counter(problem_ids).values()),
+        "strata": strata, "strong_baselines": baseline_metadata,
         "training_history": history,
     }
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(report, sort_keys=True, indent=2) + "\n")
-    torch.save({"model": best_state, "feature_dim": feature_dim, "latent_dim": latent_dim,
-                "hidden_dim": hidden_dim, "seed": seed}, output.with_suffix(".pt"))
+    with output.open("x") as stream:
+        stream.write(json.dumps(report, sort_keys=True, indent=2) + "\n")
+    with output.with_suffix(".pt").open("xb") as stream:
+        torch.save({"model": best_state, **config, "config_sha256": config_hash,
+                    "shuffle_seed_schedule": "seed + training_step",
+                    "training_eligibility_mask": association_strata(batches["train"].outcomes.cpu().numpy())["eligible"].tolist()}, stream)
+    with output.with_suffix(".checksums.json").open("x") as stream:
+        stream.write(json.dumps({path.name: _sha256(path) for path in
+            (output, output.with_suffix(".pt"), output.with_suffix(".population.json"))}, sort_keys=True) + "\n")
     print(json.dumps({key: value for key, value in report.items() if key != "training_history"}, sort_keys=True), flush=True)
     return report
 
@@ -410,17 +576,30 @@ def main():
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--learning-rate", type=float, default=3e-4)
     parser.add_argument("--seed", type=int, default=1701)
+    parser.add_argument("--apbpf", action="store_true", help="enable factored association-trained belief")
+    parser.add_argument("--difficulty-dim", type=int, default=8)
+    parser.add_argument("--association-weight", type=float, default=1.)
+    parser.add_argument("--invariance-weight", type=float, default=.1)
+    parser.add_argument("--association-margin", type=float, default=.03)
+    parser.add_argument("--expected-is-public", action="store_true",
+                        help="explicitly declare expected outputs public for this protocol")
+    parser.add_argument("--skip-strong-baselines", action="store_true",
+                        help="exploratory only: baseline fairness fails closed")
+    parser.add_argument("--bootstrap-replicates", type=int, default=10000)
     args = parser.parse_args()
     payload = prepare(args.data_root, args.descriptions_root, args.descriptions_archive, args.cache,
         train_problems=args.train_problems,
         dev_problems=args.dev_problems, test_problems=args.test_problems,
         candidates_per_problem=args.candidates_per_problem, tests_per_candidate=args.tests_per_candidate,
         workers=args.workers, timeout=args.timeout, seed=args.seed) if args.prepare or not args.cache.exists() else json.loads(args.cache.read_text())
-    if payload.get("schema") != DATASET_SCHEMA or any("task_text" not in row for row in payload.get("records", ())):
-        raise ValueError("dataset cache predates CodeNet descriptions; rerun with --prepare")
+    validate_rbr_cache(payload)
     train_and_evaluate(payload, args.output, feature_dim=args.feature_dim, latent_dim=args.latent_dim,
         hidden_dim=args.hidden_dim, particles=args.particles, steps=args.steps, batch_size=args.batch_size,
-        learning_rate=args.learning_rate, seed=args.seed)
+        learning_rate=args.learning_rate, seed=args.seed, apbpf=args.apbpf,
+        difficulty_dim=args.difficulty_dim, association_weight=args.association_weight,
+        invariance_weight=args.invariance_weight, association_margin=args.association_margin,
+        expected_is_public=args.expected_is_public, strong_baselines=not args.skip_strong_baselines,
+        bootstrap_replicates=args.bootstrap_replicates)
 
 
 if __name__ == "__main__":

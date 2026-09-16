@@ -19,6 +19,7 @@ test = ["pytest>=8,<9"]
 [project.scripts]
 pbpf-run = "pbpf.cli:main"
 pbpf-iclr = "pbpf.iclr_cli:main"
+pbpf-apbpf = "pbpf.apbpf.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

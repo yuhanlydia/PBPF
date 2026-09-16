@@ -1,0 +1,26 @@
+seeds: [1701, 1702, 1703]
+visible_tests: 4
+future_tests: 6
+particles: 8
+split_unit: source_problem_component
+bootstrap_unit: source_problem_component
+bootstrap_draws: 10000
+confidence_level: 0.95
+association_population: full_locked_population
+association_strata: [full, eligible, future_variable]
+fixed_budgets: [1, 2, 4]
+threshold_stopping: separate_development_locked_curve
+diagnostic_information: mutual_information
+repair_component: sample_once
+expected_observed_semantics_public: true
+generator_feedback: public_only
+hidden_labels: evaluator_only
+counterfactual: outcome_only_histogram_preserving_derangement
+common_proposal_noise: true
+constant_histories_auxiliary_loss: zero
+difficulty_dim: 8
+diagnosis_dim: 24
+association_margin: 0.03
+lambda_future: 1.0
+lambda_assoc: 1.0
+lambda_inv: 0.1

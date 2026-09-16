@@ -1,0 +1,14 @@
+real:
+  backend: real
+  claim_status: prospective-gated
+local_24gb:
+  backend: real
+  claim_status: prospective-gated
+  device_budget: single_24gb_gpu
+slurm_h200x16:
+  backend: real
+  claim_status: prospective-gated
+  device_budget: operator_provisioned_16_h200
+local_smoke:
+  backend: fake
+  claim_status: smoke-only-no-claim

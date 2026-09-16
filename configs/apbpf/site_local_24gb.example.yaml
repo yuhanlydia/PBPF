@@ -1,0 +1,66 @@
+# Copy this file outside the repository and provision all null values.
+# No model download, experiment, cluster submission, or fake fallback is implied.
+# Relative directories resolve against this site's directory.
+working_directory: /absolute/path/to/PBPF-apbpf
+timeout_seconds: 86400
+paths:
+  dataset_root: null
+  model_cache: null
+  artifact_cache: null
+# Each command is an argv array, not shell text. For example:
+# materialize: [/absolute/python, /absolute/materialize_worker.py, --request, "{request}", --result, "{result}"]
+# {request}/{result} are substituted only when they occupy an entire argv item.
+# Workers also receive APBPF_REQUEST, APBPF_RESULT, and APBPF_OUTPUTS.
+# Workers must implement docs/APBPF_WORKERS.md; the existing research scripts
+# are not directly interchangeable with these stage-result adapters.
+commands:
+  materialize: null
+  hard_bank_lock: null
+  execution_cache: null
+  hard_bank: null
+  hard_bank_gate: null
+  train_baselines: null
+  train_belief: null
+  baseline_fairness_gate: null
+  association: null
+  association_gate: null
+  pair_invariance_gate: null
+  oracle_headroom: null
+  oracle_headroom_gate: null
+  active_testing: null
+  active_testing_gate: null
+  selection: null
+  selection_gate: null
+  repair: null
+  replication: null
+  replication_gate: null
+  paper_tables: null
+# Bind each external adapter/container to an immutable content identity. Use the
+# adapter file SHA-256, immutable container digest, or a canonical bundle digest.
+# A command without its corresponding revision is not doctor-ready.
+worker_revisions:
+  materialize: null
+  hard_bank_lock: null
+  execution_cache: null
+  hard_bank: null
+  hard_bank_gate: null
+  train_baselines: null
+  train_belief: null
+  baseline_fairness_gate: null
+  association: null
+  association_gate: null
+  pair_invariance_gate: null
+  oracle_headroom: null
+  oracle_headroom_gate: null
+  active_testing: null
+  active_testing_gate: null
+  selection: null
+  selection_gate: null
+  repair: null
+  replication: null
+  replication_gate: null
+  paper_tables: null
+# Optional for local adapter files: doctor computes each file SHA-256 and
+# requires it to equal worker_revisions. Container workers may instead use an
+# immutable image digest as the declared revision.
+worker_files: {}
