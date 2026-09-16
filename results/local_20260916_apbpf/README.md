@@ -13,7 +13,8 @@ families. All nine configured prediction controls are now complete for both
 CodeARC families, including the previously missing fixed `history_rate`.
 See `full_pipeline_progress_v2.json`, `ablation_coverage_audit.json` and the final
 sections below. The latest checkpoint is
-`prior_refit_and_repair_training_complete.json`: all three prior/no-resampling
+`refit_assignment_progress.json`: the six-cell before/after likelihood audit
+is complete (see the final section). All three prior/no-resampling
 refits and their paired comparison are complete. Mean development NLL is
 0.452309; improvement over the old model under the same prior inference is
 0.041393 (95% CI 0.029057–0.054459). Association is −0.00003386
@@ -1158,3 +1159,33 @@ checkpoint restores the best development projector, selected at step 1000
 best-checkpoint restoration and exclude primary data from training/selection.
 Generation proceeds across 500 sources × six arms × three seeds, followed by
 fresh hidden-test execution. Teacher-forced NLL is not a repair-success result.
+
+## Refit likelihood-assignment and history-use audit (2026-09-17)
+
+`scripts/audit_apbpf_refit_assignment.py` evaluates old/new 32-trained models
+for all three seeds on the same 400 development sources. Within each model,
+aligned and shuffled histories use identical 32 prior draws. Across models the
+standard-normal noise matches, but the learned prior transforms differ.
+Every direct-likelihood prediction reproduces the completed comparison archive
+within 5.82e-7; all six diagnostic archives and their descriptive means were
+independently verified. No fitting or primary assessment was added.
+
+| Three-seed descriptive mean | Old | Prior refit |
+| --- | ---: | ---: |
+| Prior-only future NLL, all candidates | 0.738804 | 0.759330 |
+| History-conditioned future NLL, all candidates | 0.493701 | 0.452309 |
+| History NLL gain, all candidates | 0.245102 | 0.307021 |
+| Assignment log-likelihood ratio RMS, mixed histories | 0.005453 | 0.018701 |
+| Aligned/shuffled posterior total variation, mixed histories | 0.001573 | 0.003480 |
+| Per-candidate max future-probability change, mixed histories | 0.000270 | 0.000783 |
+
+The static-only improvement hypothesis is not supported: both models use history
+substantially, and prior-only prediction is worse after refitting. Assignment
+sensitivity increased but remains small on this sampled support; the original
+association gates still fail. These descriptive values have no new significance
+claim, and do not prove count-only dependence or characterize the exact continuous
+posterior. There are 1025 mixed and 2175 constant visible histories; the latter
+have zero assignment effect. Evidence is in `codearc_refit_assignment_results.json`
+and `codearc_refit_assignment_verified.json`. Next debugging should inspect
+interactions between test features and diagnosis latents, or gradient allocation,
+before increasing training duration. GPU generation continues independently.
