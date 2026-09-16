@@ -626,3 +626,38 @@ running; development generation has begun. RBR DeepSeek training generation
 and the resumed CodeARC DeepSeek development generation continue unchanged.
 The full A-PBPF regression passed 131 checks; the additional public-text
 isolation check passed separately. One existing read-only NumPy warning remains.
+
+
+### DeepSeek CodeARC generation complete; actual repair inputs prepared
+
+DeepSeek generation has completed all 1112 CodeARC sources: 212 training,
+400 development and 500 primary, with eight candidates each (8896 total).
+A completion audit verifies source disjointness and checksummed banks. All110
+completed groups retained after the CUDA OOM are byte-identical, and the
+original run identity is unchanged. Only the previously declared expandable
+allocator setting changed. Development execution has started automatically;
+this generation completion does not establish a replication gate result.
+
+The execution-cache adapter now exports separated repair targets, evaluator
+tests and public context. Training/development reference programs are retained
+for supervision; all primary reference programs are excluded. Hidden tests
+remain evaluator-only and CodeARC exception semantics are preserved. The
+selection gate forwards the exact selected-candidate reports to its direct
+repair dependency without exposing those label-bearing reports to the actor.
+
+Actual CodeARC repair packets have been prepared for all three seeds. Each
+contains1696 training candidates,3200 development candidates and the actual
+particle-selected candidate for each of500 primary sources. Every actor row
+has exactly four public observations. Eight24-dimensional diagnosis particles
+and their weights were recomputed from each seed's actual belief checkpoint;
+the8-dimensional difficulty component is excluded. No future invocation,
+future execution evidence, primary reference target or primary success label
+is included in these actor packets. Packet preparation is not repair training,
+generation or scoring. Those remaining steps still need implementation.
+
+Prefix-v5 was archived while waiting, without executing any stage. Prefix-v6
+now declares the changed execution-cache and selection-gate contracts. The
+adapter count remains17 and real completed-stage count remains1/21. Full A-PBPF
+regression passed145 checks;13 repair checks passed again after strengthening
+the public-context binding checks. Exact executed packet-preparation source is
+retained for the earlier completed run.

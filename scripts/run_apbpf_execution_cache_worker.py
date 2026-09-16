@@ -6,6 +6,7 @@ from pbpf.apbpf.codearc_bank import file_sha, load_bank, verify_hidden_lock
 from pbpf.apbpf.worker_io import WorkerIO, bank_inventory
 from pbpf.apbpf.stage_cache import build_stage_cache, join_primary_executions
 from pbpf.apbpf.development import development_cache
+from pbpf.apbpf.repair_materials import build_repair_materials
 
 
 def main():
@@ -13,7 +14,8 @@ def main():
         'scripts/run_apbpf_execution_cache_worker.py', 'scripts/evaluate_apbpf_codearc_bank.py',
         'scripts/evaluate_apbpf_rbr_bank.py', 'src/pbpf/apbpf/codearc_execution.py',
         'src/pbpf/apbpf/rbr_execution.py', 'src/pbpf/apbpf/stage_cache.py',
-        'src/pbpf/apbpf/development.py', 'src/pbpf/apbpf/codearc_prompt.py', 'src/pbpf/real_gate.py'])
+        'src/pbpf/apbpf/development.py', 'src/pbpf/apbpf/codearc_prompt.py', 'src/pbpf/real_gate.py',
+        'src/pbpf/apbpf/repair_materials.py'])
     imported = bank_inventory(io)
     locks = json.loads(io.artifact('hard_bank_lock', 'locks.json').read_text())
     if set(locks) != {'rbr', 'codearc'}:
@@ -76,7 +78,7 @@ def main():
         evaluations.append({**entry, 'evaluation_directory': name,
             'results_sha256': file_sha(output/'results.json'),
             'phase': result['phase'], 'tests': result['tests'], 'test_passes': result['test_passes']})
-    caches = {}
+    caches, repair = {}, {}
     for domain, inputs in cache_inputs.items():
         task_sets = []
         for kind in ('public', 'evaluator'):
@@ -90,6 +92,16 @@ def main():
         full.update(execution_bindings=inputs['bindings'],
                     pre_hidden_lock_sha256=file_sha(lock_paths[domain]),
                     lock_stage_completion_sha256=io.request['dependencies']['hard_bank_lock'])
+        materials = build_repair_materials(full, *task_sets, domain=domain)
+        repair[domain] = {}
+        directory = io.outputs/'repair-materials'/domain
+        directory.mkdir(parents=True)
+        for role, payload in zip(('training-targets', 'evaluator-tests', 'public-context'), materials, strict=True):
+            path = directory/f'{role}.json'
+            with path.open('x') as stream:
+                json.dump(payload, stream, sort_keys=True); stream.write('\n')
+            repair[domain][role] = {'path': str(path.relative_to(io.outputs)), 'sha256': file_sha(path),
+                                     'sources': len(payload['records']), 'usage': payload['usage']}
         development = development_cache(full)
         development['derivation'] = 'primary excluded from source-bound full stage cache'
         caches[domain] = {}
@@ -103,10 +115,12 @@ def main():
     (io.outputs/'execution-index.json').write_text(json.dumps({
         'schema': 'apbpf-generated-execution-cache-v1', 'evaluations': evaluations,
         'training_caches': caches,
+        'repair_materials': repair,
         'lock_stage_completion_sha256': io.request['dependencies']['hard_bank_lock'],
         'pre_hidden_locks': {d: file_sha(p) for d, p in lock_paths.items()}}, indent=2)+'\n')
     io.finish({'actual_candidate_execution': True, 'evaluation_runs': len(evaluations),
                'training_caches': caches,
+               'repair_materials': repair,
                'tests': sum(e['tests'] for e in evaluations),
                'hidden_access_after_both_primary_locks': True,
                'scope': 'exploratory execution evidence; no hard-bank gate decision'})

@@ -250,6 +250,27 @@ and 1000-step training budget. Only verified label-free public text is mounted
 in the feature extractor sandbox; execution evidence and reference answers are
 excluded. GPU2 extraction waits for the declared generation process to finish.
 
+Repair prerequisites are now emitted by `execution_cache` as three separate
+artifacts per domain under `repair-materials/`: `training-targets.json` contains
+reference programs for original training and development sources only;
+`evaluator-tests.json` preserves the exact ten-test execution protocol, including
+CodeARC expected exceptions; `public-context.json` contains four public examples
+only. No primary reference program is exported. Targets are used for training
+gradients or development checkpoint selection according to their recorded split.
+The evaluator artifact must never be mounted in an actor process.
+
+The selection gate forwards original per-domain/per-seed selection reports as
+declared artifacts, so repair can use the actual selected candidate per source
+without reading an undeclared ancestor. These reports contain evaluator labels
+and also must never be mounted in the actor. `repair_packets` whitelists four
+public observations, keeps the selected candidate for every primary source,
+and computes eight diagnosis-only particles from the original belief checkpoint.
+Training/development rows carry supervised targets; primary rows have none.
+`prepare_apbpf_repair_packets.py` exercises this preparation on completed
+standalone CodeARC evidence. Packet preparation is not projector training,
+repair generation, new execution, or a completed `repair` DAG stage. The actor
+trainer, generator and evaluator adapter remain to be implemented.
+
 ## Worker inputs and outputs
 
 The `hard_bank_lock` stage receives only public materialization and must finish

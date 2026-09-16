@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Apply the unchanged selected-Pass@1 gate to all source-cross-fitted evidence."""
 import json
+import shutil
 
 from pbpf.apbpf.stage_prediction import DOMAINS
 from pbpf.apbpf.worker_io import WorkerIO
@@ -28,6 +29,16 @@ def main():
     io=WorkerIO('selection_gate',['scripts/run_apbpf_selection_gate_worker.py','src/pbpf/apbpf/stage_prediction.py'])
     evidence=json.loads(io.artifact('selection','selection.json').read_text());gate=decision(evidence,io.config)
     (io.outputs/'gate-evidence.json').write_text(json.dumps(gate,indent=2)+'\n')
+    # Repair may read only direct dependencies. Preserve the actual selected
+    # candidates and source order, rather than inventing a new selection rule.
+    directory=io.outputs/'selection-reports';directory.mkdir()
+    for domain in DOMAINS:
+        for seed in io.config['protocol']['seeds']:
+            source=io.artifact('selection',f'{domain}-seed{seed}/results.json')
+            shutil.copyfile(source,directory/f'{domain}-seed{seed}.json')
+    (directory/'origin.json').write_text(json.dumps({
+        'selection_completion_sha256':io.request['dependencies']['selection'],
+        'visibility':'evaluator-only; contains assessment labels; build an actor-only packet before generation'},indent=2)+'\n')
     io.finish({'actual_selection_evidence':True,'scope':'exploratory fixed selection gate'},gate=gate)
 
 
