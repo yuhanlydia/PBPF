@@ -36,8 +36,9 @@ resources; the user confirmed that only local execution is available.
 ## Running and unresolved
 
 Qwen primary500 and training212 generation are complete; bounded development384
-is finishing on GPU 2. DeepSeek primary500 generation is running on GPU 1; a
-corrected repair pilot uses GPU 0. GPU 3 belongs to another project. The
+is complete and executing its 3072 candidates. DeepSeek primary500 generation is running on GPU 1; a
+corrected repair pilot trains on GPU 0. The CodeARC prediction queue will use
+GPU 2, followed by the remaining DeepSeek train/development generation. GPU 3 belongs to another project. The
 complete primary population will be evaluated visibly, sealed using the public
 candidate inventory, and only then evaluated on hidden calls. A local supervisor
 implements this sequence. It does **not** represent the sealed 21-stage DAG.
@@ -126,7 +127,7 @@ strong baselines and validated the exact source-population digest. Three feature
 repair checks and a small training-integration check passed. Seed 1701 (1000 steps)
 achieved aligned NLL 0.45434 and association gap 0.00633, CI [−0.00252, 0.01530].
 Association and baseline fairness still failed. Deep Sets and pair-aware baseline
-NLLs were 0.35331 and 0.35414. Seeds 1702–1703 are queued with the same recipe;
+NLLs were 0.35331 and 0.35414. Seeds 1702–1703 also completed with the same recipe;
 this result does not establish that changing the encoder fixes the mechanism.
 
 The latest full regression invocation had 745 passes and three bounded-verifier
@@ -137,3 +138,36 @@ Compileall, shell syntax checks and git diff checks also passed.
 The first corrected repair-pilot launch failed because `HF_HOME` was unset inside
 the offline sandbox (`HOME=/tmp`). It was restarted with the existing verified
 model cache explicitly configured; no source or experiment budget was changed.
+
+
+## Three-seed semantic features and threshold stopping (2026-09-17)
+
+The semantic-feature association gaps were 0.00633, 0.00260, and 0.01581 for
+seeds 1701–1703. Seed 1703 had a positive CI [0.00477, 0.02947], but all three
+still failed the required 0.03 effect size and strong-baseline fairness. These
+are complete development-only results; no seed was discarded.
+
+The threshold-stopping diagnostic split the 200 development-assessment sources
+into 100 calibration sources (602 candidates) and 100 assessment sources
+(662 candidates) using a prespecified source hash order. The original held-out
+population is absent. The rule stops when maximum remaining public-test
+diagnostic MI falls below a calibration-locked threshold. All four prefixes use
+the trained SMC path; future labels enter evaluator NLLs only.
+
+Requiring calibration NLL no worse than the same diagnostic-MI policy at four
+tests selected threshold 0. The assessment used 3.99849 tests on average: only
+0.03776% savings, with unchanged NLL. Threshold 0.1 saved 38.82% but worsened
+NLL by 0.04367 (paired source-bootstrap CI for the advantage
+[−0.05488, −0.03271]); it was not selected. The entire prespecified curve is
+retained. These are cached observation counts, not measured physical execution
+savings, and do not pass or establish a confirmatory active-testing gate.
+
+The CodeARC prediction queue exposed a concurrent status-file read failure before
+any training began. A persistent supervisor now retries partial JSON snapshots,
+publishes its own status atomically, and preserves source identities and failures.
+The failed queue attempt is retained locally. Eleven focused checks passed for
+stopping, unchanged default SMC acquisition, and supervisor recovery behavior.
+`run_apbpf_stopping_replay.py` reproduces the stopping experiment;
+`run_local_codearc_prediction.py` waits for the completed development-only
+CodeARC executions and the GPU handoff, then builds the cache and runs all three
+prediction seeds. It remains a standalone workflow, not a complete real DAG worker.

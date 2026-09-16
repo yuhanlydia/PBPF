@@ -68,7 +68,10 @@ def filter_history(model, task, candidate, tests, outcomes, selected, noise, uni
 
 
 @torch.no_grad()
-def acquire(model, task, candidate, public_tests, public_outcomes, *, policy, noise, uniforms, random_order):
+def acquire(model, task, candidate, public_tests, public_outcomes, *, policy, noise, uniforms, random_order,
+            budgets=(1, 2, 4)):
+    if not budgets or any(type(b) is not int or b not in (1, 2, 3, 4) for b in budgets):
+        raise ValueError('snapshot budgets must be nonempty public prefix lengths')
     if policy not in {'fixed', 'random', 'diagnostic_mi', 'predictive_entropy', 'joint_particle_mi'}:
         raise ValueError('unknown public acquisition policy')
     if (random_order.shape != (len(task), 4) or random_order.dtype != torch.long
@@ -91,6 +94,6 @@ def acquire(model, task, candidate, public_tests, public_outcomes, *, policy, no
         selected = torch.cat((selected, choice[:, None]), 1)
         z, log_weights = filter_history(model, task, candidate, public_tests, public_outcomes,
                                         selected, noise, uniforms)
-        if step + 1 in (1, 2, 4):
+        if step + 1 in budgets:
             snapshots[step + 1] = (z, log_weights, selected.clone())
     return snapshots

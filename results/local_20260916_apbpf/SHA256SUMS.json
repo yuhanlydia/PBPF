@@ -22,8 +22,12 @@
   "rbr-acquisition-development-v1.json": "10908ccf9cb30acf092ae0d399b5a94c460c662252d1a9d5377f5bf1470178b4",
   "rbr-acquisition-next-plan.json": "e5e7744fbce51464b534fcf1198e0cfa7a1285614b3c31d84909f4c5d26da52a",
   "rbr-semantic-development-seed1701.json": "a6926b21f758cd2e485f74fd827f4240bd0a2eccf5ecff86fba724d3f3623b18",
+  "rbr-semantic-development-seed1702.json": "7c27214431e87e060a3956b1059d112a350a5d0982ead2b17ac32ca724c3290e",
+  "rbr-semantic-development-seed1703.json": "4c18776ff48510a32ce30d5fd7149c5df3e6097ebc20e90277c87e0e1c6303c4",
   "rbr-semantic-features-manifest.json": "7c5a2257076c5f066f8700505d5871e25a9043e13227564da63c1f5a3c4370bb",
   "rbr-smc-acquisition-development-v1.json": "02734bb6259595173ca12318dbc22e3d009e0f7901c41a0e72aabc718f646f8d",
+  "rbr-stopping-development-threshold-lock.json": "d3a1e68fd29879ebbce558a5c22fc8749542f1469b5343f3b1c01eea92994b80",
+  "rbr-stopping-development-v1.json": "39fd33c49421a08e3df133b78a53dbda8d600f70492d9dec7916e05d140fe03e",
   "rbr_apbpf_seed1701.json": "fb4c489176f736e73137c942c2d557cc85075d9b08994675c48ccd0aa473470f",
   "rbr_apbpf_seed1702.json": "b7a54c0a1be627ecb9199c36a6a34049f221119d584657e34ae2cd72e9fdbbd3",
   "rbr_apbpf_seed1703.json": "31f813097dd9221fc9f896e94f7b2f68a28c0108e42272db2f67058e574d87d7",
@@ -38,5 +42,6 @@
   "smc_executed_source/model.py": "e98fe0f1933233f2c4cf7c86aec1e60c7893a232a6842bd84db3a111c5f376fc",
   "smc_executed_source/real_gate.py": "33af0b5cd294a24328f10d8df108098cd270b4cca60f5c5ee2f733e6e475117f",
   "smc_executed_source/run_apbpf_smc_acquisition_replay.py": "5b886f3a529f8883c89837538bef1434a56a458e0ca9117e0c6b30282fb427ef",
-  "smc_executed_source/smc_acquisition.py": "fcadc1528530684d40ab1ee97a0bdb4a33aa86c991a7d32fa8613be203852299"
+  "smc_executed_source/smc_acquisition.py": "fcadc1528530684d40ab1ee97a0bdb4a33aa86c991a7d32fa8613be203852299",
+  "stopping_and_supervisor_tests.log": "8e6e4b888eff523e881a5823c5db88ef45a5ffd98a0e774aad2741c8a2b12318"
 }
