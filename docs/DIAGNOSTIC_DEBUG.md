@@ -77,3 +77,51 @@ are necessary without outperforming the deterministic interaction control.
 Feature hashing remains a substantial limitation of these real-data ablations;
 a frozen semantic encoder and a new locked test population are subsequent
 experiments, not implicit properties of this run.
+
+## Real-data representation and query-memory follow-up
+
+`--eval-particles 64` separates evaluation accuracy from the training budget.
+`--shuffle-train-tests` uniformly permutes complete training test/outcome pairs,
+changing which four are visible while preserving pairing. Development prefixes
+stay fixed. All deterministic baselines now use the same candidate minibatch
+schedule as the particle model and report shuffle/pair-preserving controls.
+This changes their sampling schedule relative to the earlier debug runner;
+source snapshots identify the exact version of every old run.
+
+`prepare_semantic_features.py` freezes pinned CodeBERT and caches only public
+train/development fields. The semantic treatment includes contextual test
+encoding, input-token pooling, training-only centering, a fixed Gaussian
+projection and normalization. It does not isolate pretrained weights from
+context representation. Long code/context truncation remains a limitation.
+Requires `transformers==4.51.3` and pinned local Hugging Face model files, with
+their download revision metadata. The `neural` dependencies alone do not include
+this optional encoder.
+
+```bash
+PYTHONPATH=src python scripts/prepare_semantic_features.py \
+  --cache /absolute/path/to/rich-cache-v3.json \
+  --model-dir /absolute/path/to/codebert-base-3b0952f \
+  --output runs/debug/codebert-features.npz
+
+PYTHONPATH=src python scripts/run_association_debug.py \
+  --source runbugrun --cache /absolute/path/to/rich-cache-v3.json \
+  --arm interaction --feature-cache runs/debug/codebert-features.npz \
+  --eval-particles 64 --shuffle-train-tests \
+  --output runs/debug/semantic-views-1701
+
+PYTHONPATH=src python scripts/run_kernel_association_probe.py \
+  --cache /absolute/path/to/rich-cache-v3.json \
+  --feature-cache runs/debug/codebert-features.npz \
+  --output runs/debug/kernel-probe.json
+```
+
+The last command is a separate deterministic control: retain individual visible
+pairs, then use each future test to weight their outcomes through cosine
+similarity. Mix these weights with uniform history counts and add calibrated
+Dirichlet pseudocounts. The grid is selected using training NLL only. Its API
+accepts visible labels only; future labels are used solely by the scoring code.
+It is neither a particle posterior nor an interpretable bug classifier and
+cannot directly justify diagnosis mutual information or latent-conditioned
+repair. Report both shuffle gaps and paired source-bootstrap comparisons to the
+histogram control. Four corruption seeds are sensitivity checks, not four
+independent data replications. See the follow-up results for the actual outcomes.

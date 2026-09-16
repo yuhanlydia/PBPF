@@ -23,6 +23,7 @@ from pbpf.belief.diagnostic import (HistoryISBeliefModel, InteractionHistoryISBe
                                     train_diagnostic_step)
 from pbpf.belief.features import BeliefBatch
 from pbpf.belief.model import NeuralBeliefModel
+from pbpf.belief.semantic_features import load_features, training_view
 from pbpf.real_gate import FrozenTextEncoder, association_strata, clustered_nll_gap, validate_rbr_cache
 from pbpf.train_belief import train_apbpf_step
 
@@ -56,18 +57,34 @@ def controlled_batches(train_size, dev_size, feature_dim, seed, device):
         histogram_oracle_nll=math.log(2), paired_oracle_nll=0.)
 
 
-def real_batches(cache, feature_dim, device):
+def real_batches(cache, feature_dim, device, feature_cache=None):
     payload = validate_rbr_cache(json.loads(cache.read_text()))
     # The test inventory is never tensorized, scored, or used for selection.
     rows = {split: [r for r in payload['records'] if r['split'] == split]
             for split in ('train', 'development')}
     if any(not values for values in rows.values()):
         raise ValueError('nonempty train and development splits required')
-    batches = {split: legacy._tensorize(values, FrozenTextEncoder(feature_dim), device,
-                                        expected_is_public=False) for split, values in rows.items()}
+    digest = hashlib.sha256(cache.read_bytes()).hexdigest()
+    feature_metadata = None
+    if feature_cache is None:
+        batches = {split: legacy._tensorize(values, FrozenTextEncoder(feature_dim), device,
+                                            expected_is_public=False) for split, values in rows.items()}
+    else:
+        ids = {split: [r['task_id'] for r in values] for split, values in rows.items()}
+        features, feature_metadata = load_features(feature_cache, digest, ids, feature_dim)
+        batches = {}
+        for split, values in rows.items():
+            f = features[split]
+            outcomes = [[legacy.OUTCOMES.index(y) for y in r['outcomes']] for r in values]
+            if f['tests'].shape[1] != len(outcomes[0]):
+                raise ValueError('feature test count mismatch')
+            batches[split] = BeliefBatch(*(torch.tensor(f[k], device=device)
+                for k in ('task', 'candidate', 'tests')), torch.tensor(outcomes, device=device))
     return batches, dict(scientific_claim='real_development_only',
         cache_sha256=hashlib.sha256(cache.read_bytes()).hexdigest(),
-        encoder='frozen_lexical_hash', expected_is_public=False,
+        encoder='frozen_codebert' if feature_cache else 'frozen_lexical_hash', expected_is_public=False,
+        feature_metadata=feature_metadata,
+        feature_sha256=hashlib.sha256(feature_cache.read_bytes()).hexdigest() if feature_cache else None,
         counts={k: len(v) for k, v in rows.items()},
         source_ids={k: [r.get('source_component_id', r['problem_id']) for r in v] for k, v in rows.items()})
 
@@ -90,7 +107,30 @@ def evaluate(model, batch, *, particles, seed):
     return row, predictions
 
 
-def fit_development_baselines(batches, args, output):
+@torch.no_grad()
+def evaluate_deterministic(model, batch, seed):
+    model.eval()
+    sources = {'aligned': batch,
+               'outcome_shuffled': batch.outcome_counterfactual(visible_steps=4, seed=seed)[0]}
+    for arm in ('joint_reversed', 'presentation_permuted'):
+        indices = np.tile(np.arange(batch.tests.shape[1]), (len(batch.task), 1))
+        if arm == 'joint_reversed':
+            indices[:, :4] = indices[:, :4][:, ::-1]
+        else:
+            indices, _ = legacy.joint_permutation(indices, batch.outcomes.cpu().numpy(), 4, seed)
+        order = torch.tensor(indices, device=batch.task.device)
+        sources[arm] = BeliefBatch(batch.task, batch.candidate,
+            batch.tests.gather(1, order[..., None].expand_as(batch.tests)), batch.outcomes.gather(1, order))
+    predictions = {arm: model(source).softmax(-1).reshape(-1, 5).cpu().numpy()
+                   for arm, source in sources.items()}
+    labels = batch.outcomes[:, 4:].reshape(-1).cpu().numpy()
+    nll = {arm: mean_nll(labels, value) for arm, value in predictions.items()}
+    return dict(aligned_nll=nll['aligned'], association_gap=nll['outcome_shuffled']-nll['aligned'],
+                pair_order_effect=max(abs(nll[a]-nll['aligned']) for a in
+                                      ('joint_reversed', 'presentation_permuted')), nll=nll), predictions
+
+
+def fit_development_baselines(batches, args, output, source_ids):
     """Same features and optimizer; report *development*, not held-out claims."""
     train, dev = batches['train'], batches['development']
     labels = dev.outcomes[:, 4:].reshape(-1).cpu().numpy()
@@ -106,11 +146,13 @@ def fit_development_baselines(batches, args, output):
                  if arm == 'deterministic_interaction' else
                  legacy._DeterministicPredictor(args.feature_dim, args.hidden_dim, args.latent_dim, arm)).to(dev.task.device)
         optimizer = torch.optim.AdamW(model.parameters(), lr=args.learning_rate, weight_decay=.01)
-        rng = np.random.default_rng(args.seed + offset + 1000)
+        rng = np.random.default_rng(args.seed)
         best, best_step, best_state, history = math.inf, None, None, []
         for step in range(1, args.steps + 1):
             index = torch.tensor(rng.integers(0, len(train.task), size=args.batch_size), device=train.task.device)
             b = legacy._subset(train, index)
+            if args.shuffle_train_tests:
+                b = training_view(b, args.seed + 1000000 + step)
             optimizer.zero_grad(set_to_none=True)
             loss = torch.nn.functional.cross_entropy(model(b).reshape(-1, 5), b.outcomes[:, 4:].reshape(-1))
             loss.backward()
@@ -125,7 +167,12 @@ def fit_development_baselines(batches, args, output):
         torch.save(dict(model=best_state, arm=arm, selected_step=best_step,
                         feature_dim=args.feature_dim, hidden_dim=args.hidden_dim,
                         latent_dim=args.latent_dim, seed=args.seed + offset + 1000), baseline_dir / f'{arm}.pt')
-        results[arm] = dict(nll=best, parameters=sum(p.numel() for p in model.parameters()),
+        model.load_state_dict(best_state)
+        metrics, predictions = evaluate_deterministic(model, dev, args.seed + 50000)
+        bootstrap = clustered_nll_gap(labels, predictions['aligned'], predictions['outcome_shuffled'],
+            np.repeat(source_ids, dev.tests.shape[1] - 4), seed=args.seed + 200000,
+            replicates=args.bootstrap_replicates)
+        results[arm] = dict(nll=best, development=metrics, development_bootstrap=bootstrap, parameters=sum(p.numel() for p in model.parameters()),
                             selection_split='development', selected_step=best_step,
                             checkpoint=f'baselines/{arm}.pt', validation_history=history)
     return results
@@ -133,7 +180,7 @@ def fit_development_baselines(batches, args, output):
 
 def source_hashes():
     root = Path(__file__).resolve().parents[1]
-    files = sorted((root / 'src/pbpf').rglob('*.py')) + [Path(__file__).resolve(), Path(legacy.__file__).resolve()]
+    files = sorted((root / 'src/pbpf').rglob('*.py')) + [Path(__file__).resolve(), Path(legacy.__file__).resolve(), root / 'scripts/prepare_semantic_features.py']
     return {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
 
 
@@ -141,6 +188,11 @@ def run(args):
     start = time.monotonic()
     if args.arm == 'legacy' and (args.association_weight, args.evidence_weight, args.invariance_weight) != (1., 1., .1):
         raise ValueError('legacy arm freezes its coefficients; nondefault overrides are not supported')
+    evaluation_particles = args.eval_particles if args.eval_particles is not None else args.particles
+    if evaluation_particles < 1:
+        raise ValueError('positive evaluation particle count required')
+    if args.feature_cache and args.source != 'runbugrun':
+        raise ValueError('feature cache requires real data')
     if min(args.steps, args.particles, args.batch_size, args.bootstrap_replicates) < 1:
         raise ValueError('steps, particles, batch size and bootstrap replicates must be positive')
     output = args.output
@@ -165,7 +217,7 @@ def run(args):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(raw)
         batches, metadata = (controlled_batches(args.train_size, args.dev_size, args.feature_dim, args.seed, device)
-                             if args.source == 'controlled' else real_batches(args.cache, args.feature_dim, device))
+                             if args.source == 'controlled' else real_batches(args.cache, args.feature_dim, device, args.feature_cache))
         torch.manual_seed(args.seed)
         np.random.seed(args.seed)
         cls = {'history_is': HistoryISBeliefModel, 'interaction': InteractionHistoryISBeliefModel}.get(args.arm, NeuralBeliefModel)
@@ -181,6 +233,8 @@ def run(args):
         for step in range(1, args.steps + 1):
             index = torch.tensor(rng.integers(0, len(train.task), size=args.batch_size), device=device)
             b = legacy._subset(train, index)
+            if args.shuffle_train_tests:
+                b = training_view(b, args.seed + 1000000 + step)
             if args.arm == 'legacy':
                 metrics = train_apbpf_step(model, b, optimizer, particles=args.particles,
                     shuffle_seed=args.seed + step, invariance_weight=.1)
@@ -190,7 +244,7 @@ def run(args):
                     evidence_weight=args.evidence_weight, invariance_weight=args.invariance_weight,
                     measure_gradients=(step == 1))
             if step == 1 or step % max(1, args.steps // 20) == 0 or step == args.steps:
-                dev_row, _ = evaluate(model, dev, particles=args.particles, seed=args.seed + 50000)
+                dev_row, _ = evaluate(model, dev, particles=evaluation_particles, seed=args.seed + 50000)
                 row = dict(step=step, training=metrics, development=dev_row)
                 history.append(row)
                 validation.append(dev_row)
@@ -214,16 +268,18 @@ def run(args):
         saved = torch.load(checkpoint, map_location=device, weights_only=False)
         model.load_state_dict(saved['model'])
         shutil.copyfile(checkpoint, output / 'model.pt')
-        selected_metrics, predictions = evaluate(model, dev, particles=args.particles, seed=args.seed + 50000)
+        selected_metrics, predictions = evaluate(model, dev, particles=evaluation_particles, seed=args.seed + 50000)
         labels = dev.outcomes[:, 4:].reshape(-1).cpu().numpy()
         clusters = np.repeat(metadata['source_ids']['development'], dev.tests.shape[1] - 4)
         bootstrap = clustered_nll_gap(labels, predictions['aligned'], predictions['outcome_shuffled'], clusters,
                                       seed=args.seed + 200000, replicates=args.bootstrap_replicates)
-        mc_repeats = [evaluate(model, dev, particles=args.particles, seed=args.seed + offset)[0]
+        mc_repeats = [evaluate(model, dev, particles=evaluation_particles, seed=args.seed + offset)[0]
                       for offset in (70000, 80000, 90000)]
-        baselines = fit_development_baselines(batches, args, output)
+        baselines = fit_development_baselines(batches, args, output, metadata['source_ids']['development'])
         result = dict(schema='apbpf-diagnostic-debug-v1', scope='development_only_exploratory',
             test_evaluated=False, config=config, data=metadata, eligible=eligibility,
+            evaluation_particles=evaluation_particles,
+            training_views='uniform_pair_permutation' if args.shuffle_train_tests else 'fixed_prefix',
             parameters=sum(p.numel() for p in model.parameters()), device=str(device),
             inference='prefix_is' if isinstance(model, HistoryISBeliefModel) else 'legacy_smc',
             selection={**selection, 'step': selected_step}, development=selected_metrics,
@@ -248,6 +304,9 @@ def main():
     parser.add_argument('--arm', choices=['legacy', 'objective', 'history_is', 'interaction'], required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--cache', type=Path, default=Path('/root/pbpf-runs/association-20260916-seed1701/dataset.json'))
+    parser.add_argument('--feature-cache', type=Path)
+    parser.add_argument('--eval-particles', type=int)
+    parser.add_argument('--shuffle-train-tests', action='store_true')
     parser.add_argument('--steps', type=int, default=1000)
     parser.add_argument('--seed', type=int, default=1701)
     parser.add_argument('--train-size', type=int, default=512)

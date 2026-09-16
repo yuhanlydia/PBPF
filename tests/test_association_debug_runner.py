@@ -39,7 +39,7 @@ def test_driver_writes_auditable_failed_or_passed_development_result(tmp_path):
                '--steps', '2', '--train-size', '16', '--dev-size', '8',
                '--feature-dim', '16', '--hidden-dim', '12', '--latent-dim', '4',
                '--difficulty-dim', '2', '--particles', '4', '--device', 'cpu',
-               '--bootstrap-replicates', '20']
+               '--bootstrap-replicates', '20', '--eval-particles', '8', '--shuffle-train-tests']
     completed = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, timeout=90)
     assert completed.returncode == 0, completed.stderr
     report = json.loads((output / 'result.json').read_text())
@@ -47,12 +47,16 @@ def test_driver_writes_auditable_failed_or_passed_development_result(tmp_path):
     assert report['data']['scientific_claim'] == 'controlled_learnability_only'
     assert report['test_evaluated'] is False
     assert report['device'] == 'cpu'
+    assert report['evaluation_particles'] == 8
+    assert report['training_views'] == 'uniform_pair_permutation'
     assert report['selection']['development_gate_passed'] in (True, False)
     assert report['training_history'][-1]['step'] == 2
     assert (output / 'model.pt').is_file()
     assert (output / 'checksums.json').is_file()
     assert (output / 'baselines/pair_aware.pt').is_file()
     assert report['baselines']['pair_aware']['selected_step'] in (1, 2)
+    assert 'association_gap' in report['baselines']['deterministic_interaction']['development']
+    assert 'development_bootstrap' in report['baselines']['deterministic_interaction']
     assert (output / 'source/src/pbpf/belief/diagnostic.py').is_file()
     # Re-running cannot overwrite a previous result or silently resume it.
     second = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, timeout=30)
@@ -65,3 +69,21 @@ def test_legacy_nondefault_coefficients_are_not_silently_mislabeled(tmp_path):
         output=tmp_path / 'bad'))()
     with pytest.raises(ValueError, match='legacy'):
         driver().run(args)
+
+
+def test_deterministic_controls_detect_pair_signal_without_order_signal():
+    module = driver()
+    batches, _ = module.controlled_batches(32, 64, 16, 17, torch.device('cpu'))
+
+    class SignOracle(torch.nn.Module):
+        def forward(self, batch):
+            evidence = (batch.tests[:, :4, 0].sign() * (2 * batch.outcomes[:, :4] - 1)).mean(1)
+            score = 5 * evidence[:, None] * batch.tests[:, 4:, 0].sign()
+            logits = torch.full((*score.shape, 5), -20.)
+            logits[:, :, 0], logits[:, :, 1] = -score, score
+            return logits
+
+    metrics, _ = module.evaluate_deterministic(SignOracle(), batches['development'], 13)
+    assert metrics['aligned_nll'] < .001
+    assert metrics['association_gap'] > 1.
+    assert metrics['pair_order_effect'] < 1e-6
