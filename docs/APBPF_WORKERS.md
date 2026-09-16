@@ -1,14 +1,15 @@
 # A-PBPF stage-worker contract
 
-The repository bundles adapters for the first fifteen real stages: `materialize`,
+The repository bundles adapters for the first seventeen real stages: `materialize`,
 `hard_bank_lock`, `execution_cache`, `hard_bank`, `hard_bank_gate`,
 `train_baselines`, `train_belief`, `baseline_fairness_gate`, `association`,
 `association_gate`, `pair_invariance_gate`, `oracle_headroom`,
-`oracle_headroom_gate`, `active_testing`, and `active_testing_gate`.
+`oracle_headroom_gate`, `active_testing`, `active_testing_gate`, `selection`,
+and `selection_gate`.
 Only materialization has completed as a real two-domain stage so far. Public
 candidate import has also been checked on all 1112 CodeARC source groups; worker
 contract fixtures are separate from scientific execution evidence. The other
-6 stages still need real adapters; a complete scientifically validated real-stage
+4 stages still need real adapters; a complete scientifically validated real-stage
 pipeline is not bundled.
 The site template intentionally leaves every command unprovisioned. Existing
 research scripts need explicit adapters to satisfy this contract; do not simply
@@ -191,9 +192,8 @@ thresholds remain unchanged and the runner recomputes each gate decision.
 The standalone `run_local_stage_training_diagnostic.py` can exercise these
 trainers and controls on an existing, checksummed full cache while complete
 two-domain generation is pending. Its output is explicitly a standalone
-exploratory diagnostic and never counts as a sealed DAG stage. Selection,
-repair, replication and paper tables still require their remaining
-six adapters.
+exploratory diagnostic and never counts as a sealed DAG stage. Repair,
+replication, replication gate and paper tables still require four adapters.
 
 `--through-stage active_testing_gate` provisions the oracle and active-query
 workers as well. Association produces an evaluator-only assessment bundle with
@@ -226,6 +226,29 @@ fewer observations and no worse primary NLL than fixed, random and same-policy
 four-test references, with nonnegative source-cluster lower bounds. All budgets
 count cached public observations; no wall-clock or physical execution savings
 are claimed. Failed upstream gates continue to block confirmatory claims.
+
+`--through-stage selection_gate` additionally provisions actual utility fitting
+and candidate selection. It binds the original hard-bank hidden success labels,
+full training cache and all three belief/baseline checkpoints. Utility heads
+consume candidate/task text and four public observations only. The six future
+outcomes supply fitting labels on training sources, checkpoint selection on
+development sources, and final scoring on primary sources. Primary labels never
+enter model fitting. All 500 sources and eight candidates per source are retained
+for each domain. The comparator is selected using five source folds, with no
+overlap between comparator-choice and assessment sources. It includes fresh and
+pretrained deterministic neural heads, tuned Dirichlet and visible pass rate.
+Each neural head gets the same 1000-step utility budget; checkpoint selection
+uses original development sources only. Three-seed paired differences receive
+10000 whole-source bootstrap draws. Both domains must exceed the unchanged
+0.03 absolute Pass@1 threshold with positive confidence lower bounds.
+
+`run_local_selection_diagnostic.py` can exercise selection on completed standalone
+model outputs while the full two-domain bank is pending. It remains exploratory.
+`run_local_codearc_semantic_debug.py` separately excludes all original primary
+sources and compares lexical and frozen Qwen features at the same 512 dimensions
+and 1000-step training budget. Only verified label-free public text is mounted
+in the feature extractor sandbox; execution evidence and reference answers are
+excluded. GPU2 extraction waits for the declared generation process to finish.
 
 ## Worker inputs and outputs
 

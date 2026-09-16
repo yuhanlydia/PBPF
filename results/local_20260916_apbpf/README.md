@@ -581,3 +581,48 @@ adapters remain absent and only1/21 real stages has actually completed.
 Seventeen focused query/bundle/prediction checks passed. Full A-PBPF regression
 passed127 checks with the pre-existing read-only NumPy-to-Torch warning in the
 legacy diagnostic adapter. Compilation and whitespace checks passed.
+
+
+### Completed active testing and selection; development representation debug queued
+
+The full CodeARC active replay completed all three seeds, each with 4000 primary
+candidates from 500 sources. At four observations, diagnostic MI has NLL
+0.5455255 versus fixed 0.5451005: advantage -0.0004250, 95% CI
+[-0.0027857, 0.0020009]. Its advantage over random order is 0.0002127,
+CI [-0.0016743, 0.0020902]. The original 0.03 threshold is not met.
+Development-calibrated stopping uses 3.998833 observations on average, a
+0.02917% reduction, and fails the hidden-quality matching check. The positive
+oracle upper bound has not become an effective executable acquisition policy.
+
+Full-bank utility selection also completed three seeds with 1000-step fitting
+budgets. All primary sources and candidates were retained. The three particle
+Pass@1 values are 0.268, 0.274 and 0.266; the cross-fitted deterministic
+comparators are 0.282, 0.280 and 0.282. The aggregate paired advantage is
+-0.012, CI [-0.022, -0.002], below the unchanged +0.03 requirement. Fresh and
+pretrained deterministic heads, tuned Dirichlet and visible-pass-rate controls
+are retained. The candidate-bank oracle is 0.30 and visible-pass-rate selection
+is 0.28, leaving only two percentage points of oracle headroom relative to that
+specific control. This ceiling is descriptive, not a new criterion or permission
+to filter the primary bank. Original development alone chooses neural utility
+checkpoints; source-disjoint folds choose the deterministic comparator.
+
+The selection worker and gate bring implemented adapters to 17/21. The previous
+waiting prefix-v4 was archived before executing any stage; prefix-v5 declares
+all stages through selection_gate, with failed gates preserved in exploratory
+lineage. Only 1/21 stages has actually completed as a real DAG stage. Repair,
+replication, replication_gate and paper_tables still need adapters.
+
+A new CodeARC development-only diagnostic compares lexical hashing against
+frozen Qwen representations at the same 512 feature dimensions, three seeds,
+1000 training steps and four strong baseline controls. It uses 170 fitting,
+42 inner-validation and 400 original-development sources; all 500 original
+primary sources are excluded. Public text extraction receives no execution
+outputs, reference answers or labels. GPU2 extraction is queued after the live
+DeepSeek generation finishes; lexical controls run on CPU meanwhile. This is
+an exploratory representation hypothesis, with no primary re-evaluation.
+
+RBR Qwen training generation completed all 321 sources and its execution is
+running; development generation has begun. RBR DeepSeek training generation
+and the resumed CodeARC DeepSeek development generation continue unchanged.
+The full A-PBPF regression passed 131 checks; the additional public-text
+isolation check passed separately. One existing read-only NumPy warning remains.

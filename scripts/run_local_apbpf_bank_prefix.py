@@ -30,7 +30,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-root', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--through-stage', choices=['hard_bank_gate', 'train_belief', 'pair_invariance_gate', 'active_testing_gate'], default='hard_bank_gate')
+    parser.add_argument('--through-stage', choices=['hard_bank_gate', 'train_belief', 'pair_invariance_gate', 'active_testing_gate', 'selection_gate'], default='hard_bank_gate')
     parser.add_argument('--continue-exploratory', action='store_true')
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
@@ -81,7 +81,7 @@ def main():
                 site['commands'][stage] = [python, str(worker), '--kind', kind]
                 site['worker_files'][stage] = str(worker)
                 site['worker_revisions'][stage] = file_sha(worker)
-        if args.through_stage in ('pair_invariance_gate', 'active_testing_gate'):
+        if args.through_stage in ('pair_invariance_gate', 'active_testing_gate', 'selection_gate'):
             for stage, filename, extra in [
                 ('baseline_fairness_gate', 'run_apbpf_fairness_worker.py', []),
                 ('association', 'run_apbpf_association_worker.py', []),
@@ -91,10 +91,16 @@ def main():
                 site['commands'][stage] = [python, str(worker), *extra]
                 site['worker_files'][stage] = str(worker)
                 site['worker_revisions'][stage] = file_sha(worker)
-        if args.through_stage == 'active_testing_gate':
+        if args.through_stage in ('active_testing_gate', 'selection_gate'):
             for stage in ('oracle_headroom', 'oracle_headroom_gate', 'active_testing', 'active_testing_gate'):
                 worker = root/'scripts'/('run_apbpf_query_gate_worker.py' if stage.endswith('_gate') else 'run_apbpf_query_worker.py')
                 site['commands'][stage] = [python, str(worker), '--stage', stage]
+                site['worker_files'][stage] = str(worker)
+                site['worker_revisions'][stage] = file_sha(worker)
+        if args.through_stage == 'selection_gate':
+            for stage in ('selection', 'selection_gate'):
+                worker = root/'scripts'/f'run_apbpf_{stage}_worker.py'
+                site['commands'][stage] = [python, str(worker)]
                 site['worker_files'][stage] = str(worker)
                 site['worker_revisions'][stage] = file_sha(worker)
         site_path = output/'site.json'; site_path.write_text(json.dumps(site, indent=2)+'\n')

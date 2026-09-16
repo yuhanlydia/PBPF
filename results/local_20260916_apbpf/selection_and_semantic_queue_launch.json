@@ -1,0 +1,33 @@
+{
+  "codearc-semantic-debug-v1": {
+    "pid": 2130846,
+    "command": [
+      "/data/cwj/PBPF/.venv/bin/python",
+      "-u",
+      "scripts/run_local_codearc_semantic_debug.py",
+      "--cache",
+      "/data/cwj/PBPF/local/longgoal/codearc-full-stage-cache-proof-v1.json",
+      "--upstream-generation-status",
+      "/data/cwj/PBPF/local/longgoal/deepseek_remaining_generation_status.json",
+      "--output",
+      "/data/cwj/PBPF/local/longgoal/codearc-semantic-debug-v1"
+    ],
+    "launched_at": "2026-09-16T20:20:25.384098+00:00"
+  },
+  "apbpf-real-bank-prefix-v5": {
+    "pid": 2130847,
+    "command": [
+      "/data/cwj/PBPF/.venv/bin/python",
+      "-u",
+      "scripts/run_local_apbpf_bank_prefix.py",
+      "--run-root",
+      "/data/cwj/PBPF/local/longgoal",
+      "--output",
+      "/data/cwj/PBPF/local/longgoal/apbpf-real-bank-prefix-v5",
+      "--through-stage",
+      "selection_gate",
+      "--continue-exploratory"
+    ],
+    "launched_at": "2026-09-16T20:20:25.385165+00:00"
+  }
+}
