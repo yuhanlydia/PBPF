@@ -35,7 +35,9 @@ resources; the user confirmed that only local execution is available.
 
 ## Running and unresolved
 
-Qwen generation is running on GPUs 0–2; GPU 3 belongs to another project. The
+Qwen primary500 and training212 generation are complete; bounded development384
+is finishing on GPU 2. DeepSeek primary500 generation is running on GPU 1; a
+corrected repair pilot uses GPU 0. GPU 3 belongs to another project. The
 complete primary population will be evaluated visibly, sealed using the public
 candidate inventory, and only then evaluated on hidden calls. A local supervisor
 implements this sequence. It does **not** represent the sealed 21-stage DAG.
@@ -90,3 +92,48 @@ checks verified exact public budgets and rejection of a hidden query.
 The next predeclared diagnostic compares the trained SMC posterior updates with
 the adapter's fixed-particle mean-field updates using the same development cache
 and checkpoint. The mismatch is a hypothesis, not a demonstrated cause.
+
+## SMC comparison and extraction corrections (2026-09-17)
+
+The SMC replay comparison completed on the same 1264 development candidates,
+including a joint-particle-MI ablation. Diagnostic-MI advantages over fixed were
+0.00568, −0.00659, and −0.00198 at budgets 1, 2, and 4; every CI crosses zero.
+Changing inference alone did not establish active-selection gains. Seven checks
+passed, including agreement with the existing diagnostic-MI adapter, selected-only
+feedback, exact budgets, and first-choice independence from all test outcomes.
+Exact executed source files are archived in `smc_executed_source/`.
+
+DeepSeek's initial pilot had a parsing defect: choosing the longest fenced block
+often extracted example calls instead of the shorter `solution` definition.
+Reextracting all 128 unchanged raw completions by a deterministic, syntax-based
+rule changed 75 candidates and increased all-ten passing candidates from 3 to 16
+and successful calls from 83 to 254. Qwen remains 19/128 and 328/1280. These are
+small development pilots; they do not establish a replication gate. All original
+results are retained. Full banks are now uniformly reextracted before evaluation
+and primary pre-hidden locking. Three extraction regression checks passed.
+
+A separate repair integration defect used raw test-input features for newer
+checkpoints trained with JSON public-test features. The repair path now follows
+the checkpoint visibility setting, preserving raw features for the actual legacy
+format verified in commit `64b6032`. A regression test checks equality with the
+prediction encoder and exclusion of actual output/stderr.
+
+A frozen-code-model feature experiment completed: 20629 distinct public texts
+from the development-only RBR cache, Qwen last-hidden-state mean pooling, fixed
+512-dimensional projection, no label fitting. The extractor runs with only this
+public inventory mounted. Predictor training used the same features for all
+strong baselines and validated the exact source-population digest. Three feature/
+repair checks and a small training-integration check passed. Seed 1701 (1000 steps)
+achieved aligned NLL 0.45434 and association gap 0.00633, CI [−0.00252, 0.01530].
+Association and baseline fairness still failed. Deep Sets and pair-aware baseline
+NLLs were 0.35331 and 0.35414. Seeds 1702–1703 are queued with the same recipe;
+this result does not establish that changing the encoder fixes the mechanism.
+
+The latest full regression invocation had 745 passes and three bounded-verifier
+timeouts. All three passed in a focused rerun with no code or deadline changes
+(two pytest-cache warnings reflect the read-only sandbox). Both logs are retained (copied log trailing whitespace is normalized; raw logs
+remain in `local/longgoal/`).
+Compileall, shell syntax checks and git diff checks also passed.
+The first corrected repair-pilot launch failed because `HF_HOME` was unset inside
+the offline sandbox (`HOME=/tmp`). It was restarted with the existing verified
+model cache explicitly configured; no source or experiment budget was changed.

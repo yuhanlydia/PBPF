@@ -36,8 +36,8 @@ def main():
         raise FileExistsError('supervisor state already exists; inspect before resuming')
     python = str(root / '.venv/bin/python')
     sources = [root / 'scripts' / name for name in ('evaluate_apbpf_codearc_bank.py',
-               'build_apbpf_hard_bank.py', 'apbpf_visible_evaluator_sandbox.sh', 'run_local_codearc_pipeline.py')]
-    sources += [root / 'src/pbpf/apbpf' / name for name in ('codearc_execution.py', 'codearc_bank.py', 'hard_bank.py')]
+               'build_apbpf_hard_bank.py', 'apbpf_visible_evaluator_sandbox.sh', 'run_local_codearc_pipeline.py', 'reextract_apbpf_codearc_bank.py')]
+    sources += [root / 'src/pbpf/apbpf' / name for name in ('codearc_execution.py', 'codearc_bank.py', 'hard_bank.py', 'code_extraction.py')]
     source_hashes = {str(path): sha(path) for path in sources}
     state = {'status': 'running', 'scope': 'exploratory replay; all original gate thresholds retained',
              'started_at': datetime.datetime.now().astimezone().isoformat(), 'pid': os.getpid(),
@@ -72,21 +72,25 @@ def main():
     save()
     try:
         pending = {
-            'codearc-train212-evaluation-v4': 'codearc-generation-train212',
-            'codearc-development384-evaluation-v4': 'codearc-generation-development-bounded384',
+            'codearc-pilot16-evaluation-v5': 'codearc-generation-pilot16',
+            'codearc-train212-evaluation-v5': 'codearc-generation-train212',
+            'codearc-development384-evaluation-v5': 'codearc-generation-development-bounded384',
         }
         while pending:
             for output, bank in list(pending.items()):
                 if (run / bank / 'complete.json').exists():
-                    execute(output, evaluate(bank, output))
+                    corrected = bank + '-extracted-v2'
+                    execute('reextract-' + bank, [python, 'scripts/reextract_apbpf_codearc_bank.py',
+                        '--input', str(run / bank), '--output', str(run / corrected)])
+                    execute(output, evaluate(corrected, output))
                     del pending[output]
             if pending:
                 time.sleep(5)
-        pilot_path = run / 'codearc-pilot16-evaluation-v4/results.json'
+        pilot_path = run / 'codearc-pilot16-evaluation-v5/results.json'
         while not pilot_path.exists():
             time.sleep(5)
         development = []
-        for name in ('codearc-pilot16-evaluation-v4', 'codearc-development384-evaluation-v4'):
+        for name in ('codearc-pilot16-evaluation-v5', 'codearc-development384-evaluation-v5'):
             development += json.loads((run / name / 'bank_groups.json').read_text())
         if len(development) != 400 or len({r['source_component_id'] for r in development}) != 400:
             raise ValueError('development inventory is not the complete disjoint 400-group population')
@@ -109,7 +113,11 @@ def main():
         primary = run / 'codearc-generation-primary500'
         while not (primary / 'complete.json').exists():
             time.sleep(5)
-        visible_root = run / 'codearc-primary-visible-v4'
+        corrected_primary = run / 'codearc-generation-primary500-extracted-v2'
+        execute('reextract-primary500', [python, 'scripts/reextract_apbpf_codearc_bank.py',
+            '--input', str(primary), '--output', str(corrected_primary)])
+        primary = corrected_primary
+        visible_root = run / 'codearc-primary-visible-v5'
         visible_root.mkdir()
         execute('codearc-primary-visible', ['bash', 'scripts/apbpf_visible_evaluator_sandbox.sh',
             str(run / 'codearc-public-v1'), str(primary), str(visible_root), python, '-u',
@@ -122,9 +130,9 @@ def main():
         execute('codearc-primary-hidden', [python, '-u', 'scripts/evaluate_apbpf_codearc_bank.py',
             '--evaluator-root', str(run / 'codearc-evaluator-v1'), '--bank', str(primary),
             '--phase', 'hidden', '--population-lock', str(lock_path),
-            '--output', str(run / 'codearc-primary-hidden-v4'), '--workers', '12'])
+            '--output', str(run / 'codearc-primary-hidden-v5'), '--workers', '12'])
         audit = [python, 'scripts/build_apbpf_hard_bank.py', 'audit', '--lock', str(lock_path),
-                 '--hidden-bank', str(run / 'codearc-primary-hidden-v4/bank_groups.json'),
+                 '--hidden-bank', str(run / 'codearc-primary-hidden-v5/bank_groups.json'),
                  '--output', str(run / 'codearc-primary500-audit.json')]
         if diagnostic['passes']:
             audit += ['--pilot-report', str(run / 'codearc-development-pilot-sealed.json')]

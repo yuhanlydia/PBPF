@@ -26,7 +26,7 @@ from pbpf.belief.features import BeliefBatch
 from pbpf.belief.model import NeuralBeliefModel
 from pbpf.conditioning.mixture import sample_components_once, whole_sequence_mixture_loss
 from pbpf.conditioning.soft_prompt import SoftPrefixProjector
-from pbpf.real_gate import FrozenTextEncoder, fit_histogram_latent, render_repair_prompt
+from pbpf.real_gate import FrozenTextEncoder, fit_histogram_latent, render_repair_prompt, public_test_text
 from pbpf.registry import OUTCOMES
 
 
@@ -312,10 +312,12 @@ def _clean(text):
     return (match.group(1) if match else text).strip()
 
 
-def _features(rows, encoder, device):
+def _features(rows, encoder, device, *, expected_is_public=None):
     task = np.stack([encoder(row["task_text"]) for row in rows])
     candidate = np.stack([encoder(row["candidate"]) for row in rows])
-    tests = np.stack([[encoder(case["input"]) for case in row["tests"]] for row in rows])
+    tests = np.stack([[encoder(case["input"] if expected_is_public is None else
+                              public_test_text(case, expected_is_public=expected_is_public))
+                       for case in row["tests"]] for row in rows])
     outcomes = np.asarray([[OUTCOMES.index(value) for value in row["outcomes"]] for row in rows])
     return BeliefBatch(torch.tensor(task, device=device), torch.tensor(candidate, device=device),
         torch.tensor(tests, device=device), torch.tensor(outcomes, dtype=torch.long, device=device))
@@ -324,6 +326,8 @@ def _features(rows, encoder, device):
 @torch.no_grad()
 def _posterior(rows, checkpoint, *, batch_size, device):
     saved = torch.load(checkpoint, map_location="cpu", weights_only=False)
+    if saved.get("encoder_type") == "frozen_code_model":
+        raise ValueError("this repair adapter needs an online code-model encoder for semantic checkpoints; hash fallback forbidden")
     difficulty_dim = saved.get("difficulty_dim")
     model = NeuralBeliefModel(saved["feature_dim"], saved["latent_dim"], saved["hidden_dim"],
                               difficulty_dim=difficulty_dim).to(device)
@@ -333,7 +337,8 @@ def _posterior(rows, checkpoint, *, batch_size, device):
     latents, weights = [], []
     generator = torch.Generator(device=device).manual_seed(saved["seed"] + 880_000)
     for start in range(0, len(rows), batch_size):
-        batch = _features(rows[start:start + batch_size], encoder, device)
+        batch = _features(rows[start:start + batch_size], encoder, device,
+                          expected_is_public=saved.get("expected_is_public"))
         trace = model.filter(batch, particles=8, visible_steps=4, generator=generator)
         posterior = trace.latents[:, 3]
         # A-PBPF actor conditioning is diagnosis-only. Difficulty remains useful

@@ -388,7 +388,7 @@ def train_and_evaluate(payload: dict, output: Path, *, feature_dim: int, latent_
                        difficulty_dim: int = 8, association_weight: float = 1.,
                        invariance_weight: float = .1, association_margin: float = .03,
                        expected_is_public: bool = False, strong_baselines: bool = True,
-                       bootstrap_replicates: int = 10000) -> dict:
+                       bootstrap_replicates: int = 10000, feature_cache: Path | None = None) -> dict:
     validate_rbr_cache(payload)
     dataset = payload.get("dataset", "runbugrun")
     if dataset == "codearc_replay" and expected_is_public:
@@ -407,11 +407,23 @@ def train_and_evaluate(payload: dict, output: Path, *, feature_dim: int, latent_
               "strong_baselines": strong_baselines, "bootstrap_replicates": bootstrap_replicates}
     evaluation_role = payload.get("evaluation_role", "standalone_held_out_diagnostic")
     config["evaluation_role"] = evaluation_role
+    encoder = FrozenTextEncoder(feature_dim)
+    if feature_cache is not None:
+        from pbpf.apbpf.semantic_cache import FrozenSemanticCache
+        encoder = FrozenSemanticCache(feature_cache)
+        if encoder.dimension != feature_dim:
+            raise ValueError("feature cache dimension differs from model configuration")
+        if (encoder.manifest["expected_is_public"] != expected_is_public
+                or encoder.manifest["evaluation_role"] != evaluation_role):
+            raise ValueError("feature cache visibility/evaluation role mismatch")
+        payload_digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
+        if encoder.manifest["source_payload_sha256"] != payload_digest:
+            raise ValueError("semantic features were extracted for another source population")
+        config.update(encoder_type="frozen_code_model", feature_cache_manifest_sha256=encoder.manifest_sha256)
     config_hash = hashlib.sha256(json.dumps(config, sort_keys=True).encode()).hexdigest()
     torch.manual_seed(seed)
     np.random.seed(seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    encoder = FrozenTextEncoder(feature_dim)
     rows = payload["records"]
     by_split = {name: [row for row in rows if row["split"] == name] for name in ("train", "development", "test")}
     if any(not values for values in by_split.values()):
@@ -577,6 +589,7 @@ def main():
     parser.add_argument("--workers", type=int, default=min(24, os.cpu_count() or 1))
     parser.add_argument("--timeout", type=float, default=2.0)
     parser.add_argument("--feature-dim", type=int, default=256)
+    parser.add_argument("--feature-cache", type=Path, help="verified frozen code-model public-text feature cache")
     parser.add_argument("--latent-dim", type=int, default=32)
     parser.add_argument("--hidden-dim", type=int, default=192)
     parser.add_argument("--particles", type=int, default=8)
@@ -613,7 +626,7 @@ def main():
         difficulty_dim=args.difficulty_dim, association_weight=args.association_weight,
         invariance_weight=args.invariance_weight, association_margin=args.association_margin,
         expected_is_public=args.expected_is_public, strong_baselines=not args.skip_strong_baselines,
-        bootstrap_replicates=args.bootstrap_replicates)
+        bootstrap_replicates=args.bootstrap_replicates, feature_cache=args.feature_cache)
 
 
 if __name__ == "__main__":

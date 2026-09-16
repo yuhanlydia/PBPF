@@ -81,6 +81,8 @@ def main():
         raise ValueError('this diagnostic requires an explicitly development-only cache')
     rows = [r for r in payload['records'] if r['split'] == 'test']
     weights = torch.load(args.checkpoint, map_location='cpu', weights_only=True)
+    if weights.get('encoder_type') == 'frozen_code_model':
+        raise ValueError('semantic checkpoints require their frozen feature cache; hash fallback forbidden')
     if weights.get('evaluation_role') != 'development_assessment_only' or not weights.get('apbpf'):
         raise ValueError('requires a factored development-only checkpoint')
     model = NeuralBeliefModel(weights['feature_dim'], weights['latent_dim'], weights['hidden_dim'],
