@@ -1,6 +1,7 @@
 {
-  "README.md": "26112b0ebea897e9bd3f57b4aa5568bdf84cec91e00e62146d74823c72e93b8f",
+  "README.md": "659227c9533943333abe90d7a671255de054648e859770f1774b03bfb404dfd6",
   "acquisition_replay_tests.log": "dc6d1b0c26161b6ba53bc38ea34255b2c7b95db096c25797382b56ce3d2e7cc7",
+  "bank_prefix_v2_launch.json": "2dfc7019965fc8c72bd6fa7c7422be4b7a35ffcab8f25fb1ead336c23d9ac931",
   "code_extraction_tests.log": "d2320f0baa78d1ab98a88a9eabdf8a004377bc8a3cc44a5d0b9805f2fd470aa4",
   "codearc-development-hardness-diagnosis.json": "f8c065ee03708c51179c4ab1e521f7aee227b3cff679503a8026ee0f2209168c",
   "codearc-development-prediction-seed1701.json": "fb153d0fd6920e7939624b514a273a719ba2c49d31ea3ecd8f167be1173a69a6",
@@ -31,6 +32,7 @@
   "development-sweep-v2/provenance_note.json": "ade38f7130f018131d564511e7e1404cbcca53dd17976069d136062db098e8e8",
   "development-sweep-v2/richer_semantics_3000.json": "978a149f36a8b46da0be96d94a3ad34e98af6423f86c56f8fec91295a0189637",
   "execution_v4_tests.log": "efd0460bc64d7d1e49565c4ea3ae25300534009d7b6d0547655681bddffe07f1",
+  "full_stage_cache_real_data_proof.json": "f0fe91646c439ccf19e243f9d584821d117481b0614348bbc751c444782f4561",
   "generated_cache_real_data_contract.json": "6811fd4bdb1adbda282d1bc65405d4ed82b9d6e2da319560e5f98771c6861015",
   "generated_prediction_launches.json": "bc97ba357a36e44840a114fb800edff4f0a7c6029aff278c883cf1b5c88e6873",
   "generated_replication_cache_tests.log": "c8062b24e4d18be784708bc5601be051d9f0bc88dd72659d360f91273c8c4c78",
@@ -91,5 +93,8 @@
   "smc_executed_source/real_gate.py": "33af0b5cd294a24328f10d8df108098cd270b4cca60f5c5ee2f733e6e475117f",
   "smc_executed_source/run_apbpf_smc_acquisition_replay.py": "5b886f3a529f8883c89837538bef1434a56a458e0ca9117e0c6b30282fb427ef",
   "smc_executed_source/smc_acquisition.py": "fcadc1528530684d40ab1ee97a0bdb4a33aa86c991a7d32fa8613be203852299",
+  "stage_cache_tests.log": "94004e5697e2bfdbacf8867efa7e67e7290569d5d18cc8bd3b52416e498db076",
+  "stage_training_progress.json": "25d237b14d83d16c71f8ddabdec2ae48a0982058bae0505cefad35f6b05e1033",
+  "stage_training_tests.log": "5858f7cdad789de5d7d8d39f4a2db0d38901197b609d3c40128dfd32e38a3111",
   "stopping_and_supervisor_tests.log": "8e6e4b888eff523e881a5823c5db88ef45a5ffd98a0e774aad2741c8a2b12318"
 }

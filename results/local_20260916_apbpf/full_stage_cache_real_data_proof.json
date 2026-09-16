@@ -1,0 +1,44 @@
+{
+  "schema": "apbpf-full-stage-cache-real-data-proof-v1",
+  "domain": "codearc",
+  "counts": {
+    "train": 1696,
+    "development": 3200,
+    "test": 4000
+  },
+  "problem_counts": {
+    "train": 212,
+    "development": 400,
+    "test": 500
+  },
+  "candidate_count": 8896,
+  "cache_sha256": "ceac963cacb3e8f6cb38992233ea8c99503ad339f190d22499e5117afb87533b",
+  "primary_joined_candidates": 4000,
+  "all_future_expected_redacted": true,
+  "development_derivation_matches_prior_public_features_and_outcomes": true,
+  "source_bindings": [
+    {
+      "bank": "codearc-generation-train212-extracted-v2",
+      "bank_sha256": "7a138c6aaa5ed6e947b8b1770ebeabbf319540bac739102ce9484acc15779e20",
+      "execution_sha256": "d4ca571098945ee2947acfe01fc7db9a1c24edbc76d76974a35d5958793b49d7"
+    },
+    {
+      "bank": "codearc-generation-pilot16-extracted-v2",
+      "bank_sha256": "0ea15b30655142f15f50345da68befb16b6e559621baf753fdb5e94dd3bc9ffb",
+      "execution_sha256": "7a7cebb12c099a485541c60dade7b42a014a69c7cd978d0169612568d7ee9e02"
+    },
+    {
+      "bank": "codearc-generation-development-bounded384-extracted-v2",
+      "bank_sha256": "8fb5619e0f46103b5b0222d09180ac7809e98ed9afc94d0dab94843bd7d2e04e",
+      "execution_sha256": "c6c0455a3b3967033464a9ae3688d31532d23bc3ee585d99c2de5d001ae24859"
+    },
+    {
+      "bank": "primary",
+      "bank_sha256": "fc707e9004b3b56b358d6d09699a4e8eab8e23a87cfd88b4180d6a3df986b5c3",
+      "visible_sha256": "fdeebc86cb6fa9f3d3c15d2e56ceccc77bc2b770b09802476d309446dea89f5f",
+      "hidden_sha256": "52a68b2f2e0f2593d9ec3365928c5a6ba6aeb4ba3b82d52cff94ea59809826e5",
+      "lock_sha256": "eab8677b8e9d83cdcca6f4ef429d93c508378026815cc4b5260824a10d406077"
+    }
+  ],
+  "scope": "assembly from existing scored banks; not fresh stage execution or efficacy evidence"
+}

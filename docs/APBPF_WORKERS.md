@@ -1,11 +1,12 @@
 # A-PBPF stage-worker contract
 
-The repository bundles adapters for the first five real stages: `materialize`,
-`hard_bank_lock`, `execution_cache`, `hard_bank`, and `hard_bank_gate`.
+The repository bundles adapters for the first seven real stages: `materialize`,
+`hard_bank_lock`, `execution_cache`, `hard_bank`, `hard_bank_gate`,
+`train_baselines`, and `train_belief`.
 Only materialization has completed as a real two-domain stage so far. Public
 candidate import has also been checked on all 1112 CodeARC source groups; worker
 contract fixtures are separate from scientific execution evidence. The other
-16 stages still need real adapters; a complete scientifically validated real-stage
+14 stages still need real adapters; a complete scientifically validated real-stage
 pipeline is not bundled.
 The site template intentionally leaves every command unprovisioned. Existing
 research scripts need explicit adapters to satisfy this contract; do not simply
@@ -122,6 +123,13 @@ inside the public-only evaluator sandbox. It creates separate domain locks and
 a combined 1000-source v2 lock. `run_apbpf_execution_cache_worker.py` verifies
 both complete primary locks before opening any evaluator task file, then freshly
 executes all training/development candidates and the primary hidden tests.
+It also merges the exact primary visible/hidden records and publishes
+`rbr-full-cache.json` and `codearc-full-cache.json`, with all candidates retained
+and primary sources mapped only to the fitter's test split. Six future expected
+answers are redacted before feature extraction. Separate `*-development-only-cache.json`
+artifacts exclude primary sources and split original training into fitting and
+validation; their test slot represents original development assessment.
+The execution index binds these caches, their source counts, and their hashes.
 `run_apbpf_hard_bank_worker.py` audits all 800 development groups and all 1000
 locked primary groups; domain-level development counts accompany the combined
 pilot. `run_apbpf_hard_bank_gate_worker.py` binds the resulting decision to the
@@ -135,6 +143,30 @@ overlay, then launches real execution through `hard_bank_gate`. It provisions
 only those five stages. A scientific gate failure is retained with exit 20;
 later stages and full-DAG verification remain incomplete. Candidate import and
 the new prefix are always exploratory, including if the hard-bank gate passes.
+
+To additionally provision actual checkpoint training, pass
+`--through-stage train_belief`. `--continue-exploratory` explicitly permits
+training after a failed hard-bank gate and preserves the failed-gate lineage;
+it does not change thresholds or permit confirmatory claims. A waiting prefix
+must be archived and redeclared if captured source files change before launch.
+
+`run_apbpf_train_worker.py --kind baselines` and `--kind belief` implement the two
+training stages. Each consumes the declared full execution caches for both
+domains and fits seeds 1701–1703. Defaults are 1000 steps, batch size 64, learning
+rate 0.0003, feature width 256 and hidden width 192. These exploratory workers use
+frozen hash-text features, not code-model semantic embeddings. The frozen source
+and site command record the budget; protocol particle count and loss weights
+come from the request. Only training outcomes enter optimization; original
+development outcomes select checkpoints and Dirichlet smoothing. Primary
+predictions are produced after fitting. Future expected-answer text is absent.
+
+The baseline stage saves all three neural predictor state dictionaries and the
+tuned Dirichlet parameter. The belief stage saves the factored model checkpoint.
+Both preserve prediction matrices, primary candidate/source order, complete
+training histories, and cache identities. These stages do not decide scientific
+gates or claim cross-fitted selection performance. Fairness, association,
+selection and the other downstream adapters remain to be implemented. Contract
+fixtures exercise both training workers but do not count as real stage runs.
 
 ## Worker inputs and outputs
 

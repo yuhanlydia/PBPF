@@ -426,3 +426,42 @@ identity and future-answer feature isolation; compilation checks passed.
 Only 1/21 real DAG stages has completed. Five stage adapters exist, and sixteen
 are still missing. New standalone generation/evaluation/training queues do not
 increase the completed-stage count or establish a scientific improvement.
+
+
+## Full stage caches and real training adapters (2026-09-17)
+
+The execution-cache adapter now publishes source-bound full caches and separate
+development-only derivatives for both domains. It checks both population locks
+before evaluator access and joins primary visible and hidden records by exact
+candidate identity and complementary test IDs. All eight candidates per source
+remain present, including empty/all-fail candidates. Primary sources map only to
+the full cache's test partition; six future expected answers are blanked.
+
+A real-data assembly check joined the existing complete Qwen CodeARC records:
+1696 train, 3200 development and 4000 primary candidates (8896 total), covering
+212/400/500 source components. The derived development cache matched the previous
+cache's public features and outcomes while excluding all primary sources. This
+uses existing execution evidence; it is not a newly completed execution stage.
+
+`run_apbpf_train_worker.py` adds actual `train_baselines` and `train_belief`
+adapters. Both consume the exact declared full cache and fit seeds 1701–1703
+in both domains. Training uses fixed hash-text features, 1000 steps, batch64,
+learning rate0.0003, feature256/hidden192; protocol particle count and loss
+weights remain unchanged. Only original train data enters optimization and only
+original development data selects checkpoints. Three neural baseline states and
+the tuned Dirichlet parameter are saved; belief checkpoints and all primary
+prediction matrices are also retained. Primary predictions follow completed
+fitting. Scientific gates and cross-fitted selection remain downstream work.
+
+Thirteen cache/worker checks passed. Four training checks passed, including
+counterfactual changes to primary hidden labels that leave fitted weights,
+checkpoint selection and predictions unchanged, plus complete two-domain,
+three-seed worker contract calls. These short fixture fits do not count as
+scientific training runs. Compilation and whitespace checks passed.
+
+The unstarted prefix-v1 supervisor was verified waiting, with no stage directory
+or child process, then archived before the execution-cache source changed.
+Prefix-v2 is now queued through `train_belief` with explicit exploratory
+continuation after failed gates. Its new source identity is frozen; GPU jobs and
+independent development prediction queues continue. Seven real adapters now
+exist, fourteen are still missing, and only one real stage has completed.

@@ -4,13 +4,16 @@ import json
 
 from pbpf.apbpf.codearc_bank import file_sha, load_bank, verify_hidden_lock
 from pbpf.apbpf.worker_io import WorkerIO, bank_inventory
+from pbpf.apbpf.stage_cache import build_stage_cache, join_primary_executions
+from pbpf.apbpf.development import development_cache
 
 
 def main():
     io = WorkerIO('execution_cache', [
         'scripts/run_apbpf_execution_cache_worker.py', 'scripts/evaluate_apbpf_codearc_bank.py',
         'scripts/evaluate_apbpf_rbr_bank.py', 'src/pbpf/apbpf/codearc_execution.py',
-        'src/pbpf/apbpf/rbr_execution.py'])
+        'src/pbpf/apbpf/rbr_execution.py', 'src/pbpf/apbpf/stage_cache.py',
+        'src/pbpf/apbpf/development.py', 'src/pbpf/apbpf/codearc_prompt.py', 'src/pbpf/real_gate.py'])
     imported = bank_inventory(io)
     locks = json.loads(io.artifact('hard_bank_lock', 'locks.json').read_text())
     if set(locks) != {'rbr', 'codearc'}:
@@ -28,10 +31,11 @@ def main():
         lock_paths[domain] = lock
     python = str(io.root/'.venv/bin/python')
     evaluations = []
+    cache_inputs = {d: {'banks': [], 'executions': [], 'bindings': []} for d in locks}
     for entry in imported:
         domain, name = entry['domain'], entry['directory']
         bank = io.directory('materialize', 'candidate-banks/'+name)
-        _, _, checksum = load_bank(bank)
+        run, rows, checksum = load_bank(bank)
         if checksum != entry['complete_sha256']:
             raise ValueError('imported candidate inventory changed')
         evaluator = io.directory('materialize', f'{domain}-evaluator')
@@ -46,14 +50,63 @@ def main():
             command += ['--population-lock', str(lock_paths[domain])]
         io.execute(name, command)
         result = json.loads((output/'results.json').read_text())
+        if (result['bank_complete_sha256'] != checksum or result['phase'] != ('hidden' if primary else 'all')
+                or result['split'] != run['split']
+                or result['task_manifest_sha256'] != file_sha(evaluator/'manifest.json')
+                or result['reference_control']
+                or (domain == 'rbr' and result.get('stdin_policy') != 'official-terminal-newline-if-missing')):
+            raise ValueError('execution result identity/protocol mismatch')
+        measured = result['records']
+        binding = {'bank_complete_sha256': checksum, 'result_sha256': file_sha(output/'results.json')}
+        if primary:
+            if result['population_lock_sha256'] != file_sha(lock_paths[domain]):
+                raise ValueError('primary hidden execution used another population lock')
+            visible_path = io.artifact('hard_bank_lock', f'{domain}-visible/evaluation/results.json')
+            visible = json.loads(visible_path.read_text())
+            public = io.directory('materialize', f'{domain}-public')
+            if (visible['phase'] != 'visible' or visible['reference_control']
+                    or visible['bank_complete_sha256'] != checksum
+                    or visible['task_manifest_sha256'] != file_sha(public/'manifest.json')):
+                raise ValueError('primary visible execution identity mismatch')
+            measured = join_primary_executions(visible['records'], measured)
+            binding.update(visible_result_sha256=file_sha(visible_path), lock_sha256=file_sha(lock_paths[domain]))
+        cache_inputs[domain]['banks'] += rows
+        cache_inputs[domain]['executions'] += measured
+        cache_inputs[domain]['bindings'].append(binding)
         evaluations.append({**entry, 'evaluation_directory': name,
             'results_sha256': file_sha(output/'results.json'),
             'phase': result['phase'], 'tests': result['tests'], 'test_passes': result['test_passes']})
+    caches = {}
+    for domain, inputs in cache_inputs.items():
+        task_sets = []
+        for kind in ('public', 'evaluator'):
+            directory = io.directory('materialize', f'{domain}-{kind}')
+            manifest = json.loads((directory/'manifest.json').read_text())
+            if file_sha(directory/'tasks.jsonl') != manifest[f'{kind}_tasks_sha256']:
+                raise ValueError('materialized task checksum mismatch')
+            with (directory/'tasks.jsonl').open() as stream:
+                task_sets.append({r['task_id']: r for r in map(json.loads, stream)})
+        full = build_stage_cache(inputs['banks'], inputs['executions'], *task_sets, domain=domain)
+        full.update(execution_bindings=inputs['bindings'],
+                    pre_hidden_lock_sha256=file_sha(lock_paths[domain]),
+                    lock_stage_completion_sha256=io.request['dependencies']['hard_bank_lock'])
+        development = development_cache(full)
+        development['derivation'] = 'primary excluded from source-bound full stage cache'
+        caches[domain] = {}
+        for role, payload in [('full', full), ('development-only', development)]:
+            path = io.outputs/f'{domain}-{role}-cache.json'
+            with path.open('x') as stream:
+                json.dump(payload, stream, sort_keys=True); stream.write('\n')
+            caches[domain][role] = {'path': path.name, 'sha256': file_sha(path),
+                                    'counts': payload['counts'], 'problem_counts': payload['problem_counts'],
+                                    'evaluation_role': payload['evaluation_role']}
     (io.outputs/'execution-index.json').write_text(json.dumps({
         'schema': 'apbpf-generated-execution-cache-v1', 'evaluations': evaluations,
+        'training_caches': caches,
         'lock_stage_completion_sha256': io.request['dependencies']['hard_bank_lock'],
         'pre_hidden_locks': {d: file_sha(p) for d, p in lock_paths.items()}}, indent=2)+'\n')
     io.finish({'actual_candidate_execution': True, 'evaluation_runs': len(evaluations),
+               'training_caches': caches,
                'tests': sum(e['tests'] for e in evaluations),
                'hidden_access_after_both_primary_locks': True,
                'scope': 'exploratory execution evidence; no hard-bank gate decision'})

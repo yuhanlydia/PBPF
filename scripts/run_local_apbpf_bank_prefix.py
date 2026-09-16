@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Wait for public Qwen banks, then run the first five real A-PBPF stages."""
+"""Wait for public Qwen banks, then run the bank prefix and optional training."""
 import argparse
 import json
 import os
@@ -30,6 +30,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-root', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--through-stage', choices=['hard_bank_gate', 'train_belief'], default='hard_bank_gate')
+    parser.add_argument('--continue-exploratory', action='store_true')
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     run, output = args.run_root.resolve(), args.output.resolve()
@@ -38,7 +40,8 @@ def main():
                *sorted((root/'scripts').glob('*.sh')), *sorted((root/'configs/apbpf').glob('*.yaml'))]
     hashes = {str(p.relative_to(root)): file_sha(p) for p in sources}
     state = {'status': 'waiting_for_full_public_banks', 'pid': os.getpid(), 'source_sha256': hashes,
-             'banks': BANKS, 'scope': 'real stages through hard_bank_gate; all later stages remain incomplete',
+             'banks': BANKS, 'scope': f'real stages through {args.through_stage}; later stages remain incomplete',
+             'through_stage': args.through_stage, 'continue_exploratory': args.continue_exploratory,
              'claim_status': 'exploratory-predeclared', 'fresh_generation': False,
              'fresh_public_and_hidden_execution': True}
 
@@ -71,12 +74,21 @@ def main():
                 'worker_revisions': {stage: file_sha(root/'scripts'/name) for stage, name in WORKERS.items()}}
         site['commands']['materialize'] += ['--candidate-cache-manifest', str(manifest),
                                             '--candidate-cache-sha256', file_sha(manifest)]
+        if args.through_stage == 'train_belief':
+            for kind in ('baselines', 'belief'):
+                stage = 'train_' + kind
+                worker = root/'scripts/run_apbpf_train_worker.py'
+                site['commands'][stage] = [python, str(worker), '--kind', kind]
+                site['worker_files'][stage] = str(worker)
+                site['worker_revisions'][stage] = file_sha(worker)
         site_path = output/'site.json'; site_path.write_text(json.dumps(site, indent=2)+'\n')
         experiment = root/'configs/experiments/apbpf_iclr2027.yaml'
         resolved = resolve_config(experiment, 'local_exploratory', site=site_path)
         command = [python, '-m', 'pbpf.apbpf.cli', 'run', '--config', str(experiment),
                    '--profile', 'local_exploratory', '--site', str(site_path),
-                   '--output-root', str(output/'runs'), '--through-stage', 'hard_bank_gate']
+                   '--output-root', str(output/'runs'), '--through-stage', args.through_stage]
+        if args.continue_exploratory:
+            command.append('--continue-exploratory')
         state.update(status='running', fingerprint=resolved.fingerprint, command=command,
                      run_directory=str(output/'runs'/resolved.fingerprint))
         save()
