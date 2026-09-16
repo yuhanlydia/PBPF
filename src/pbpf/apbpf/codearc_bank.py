@@ -37,14 +37,16 @@ def load_bank(root):
     return run, rows, file_sha(root / "complete.json")
 
 
-def verify_hidden_lock(path, bank, bank_digest):
+def verify_hidden_lock(path, bank, bank_digest, *, provenance_prefix='codearc-bank-sha256:'):
     """Check the entire bank binding before opening any evaluator task data."""
     payload = json.loads(Path(path).read_bytes())
     digest = payload.pop("content_sha256", None)
     actual = hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
     if digest != actual or payload.get("schema") != "apbpf-hard-bank-lock-v2":
         raise ValueError("invalid pre-hidden lock checksum or schema")
-    if payload["population_lock"]["provenance"] != "codearc-bank-sha256:" + bank_digest:
+    if provenance_prefix not in {'codearc-bank-sha256:', 'rbr-bank-sha256:'}:
+        raise ValueError('unsupported candidate bank protocol')
+    if payload["population_lock"]["provenance"] != provenance_prefix + bank_digest:
         raise ValueError("pre-hidden lock binds a different candidate bank")
     groups = payload["groups"]
     if len(groups) != len(bank):

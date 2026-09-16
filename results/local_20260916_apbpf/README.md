@@ -5,6 +5,8 @@ local workflow remains active. No positive A-PBPF claim or complete real-stage D
 is established by these files. Legacy H200 formal experiments are pending external
 resources; the user confirmed that only local execution is available.
 
+**RBR protocol correction (2026-09-17):** the RBR results below used literal stdin. The pinned official runner appends a missing terminal newline. A new development control confirms this local discrepancy; those historic results remain diagnostics and require corrected execution/retraining. See `rbr_stdin_protocol_audit.json`. CodeARC results are unaffected.
+
 ## Completed findings
 
 - The original directory was aligned to upstream `7dd64de`, preserving local fixes.
@@ -35,13 +37,14 @@ resources; the user confirmed that only local execution is available.
 
 ## Running and unresolved
 
-Qwen primary500 and training212 generation are complete; bounded development384
-is complete and executing its 3072 candidates. DeepSeek primary500 generation is running on GPU 1; a
-corrected repair pilot trains on GPU 0. The CodeARC prediction queue will use
-GPU 2, followed by the remaining DeepSeek train/development generation. GPU 3 belongs to another project. The
-complete primary population will be evaluated visibly, sealed using the public
-candidate inventory, and only then evaluated on hidden calls. A local supervisor
-implements this sequence. It does **not** represent the sealed 21-stage DAG.
+Qwen CodeARC generation, primary audit, three prediction seeds, and three utility
+selection seeds are complete; their scientific gates remain failed. DeepSeek
+primary generation runs on GPU 1 and train/development generation on GPU 2.
+The repair pilot occupies GPU 0; it will hand that GPU to the newly queued RBR
+Qwen banks. GPU 3 belongs to another project. CPU supervisors now rebuild the
+RBR cache, queue three corrected development prediction seeds, and automatically
+execute the forthcoming RBR/DeepSeek banks. These are standalone exploratory
+workflows; only the real materialize stage (1/21) has completed.
 
 One development public prompt (`CodeARC/508`) contains 1,128,840 characters and
 caused a 53.23 GiB allocation on the 24 GiB GPU. The failed 110-group partial run
@@ -260,3 +263,60 @@ The full regression completed: **757 passed**, with one existing NumPy/PyTorch
 read-only-array warning. Compileall, shell syntax and diff checks also passed.
 Full attempt-owned data remain local; the snapshot includes their checksums,
 stage completion record and read-only run report.
+
+## RBR stdin correction and generated-bank execution (2026-09-17)
+
+The [pinned official executor](https://github.com/giganticode/run_bug_run/blob/374251a9d65410f37e1136049cb7ff5dcca3d0ae/lib/run_bug_run/test_runner.rb#L344-L350)
+adds a terminal newline to raw inputs that lack one. Two development reference
+programs use `sys.stdin.readline()[:-1]`; literal input dropped the final digit.
+The first 400-source reference control passed 3995/4000 calls (398/400 complete
+programs). With only stdin normalization changed, the same control passed
+4000/4000 calls and all 400 programs. The five old failures remain in the audit.
+This does not establish that the other prior RBR failures have the same cause.
+The local output matcher still uses its declared global absolute tolerance of
+1e-4, rather than the official per-problem tolerance table.
+
+New generated-bank tools use four whitelisted public tests, fixed eight-candidate
+inventories, bounded prompts, pinned Qwen/DeepSeek weights and decoding budgets,
+raw-completion retention, and source-bound resume checks. RBR programs execute in
+per-call bubblewrap sandboxes with CPU/memory/output limits. Primary hidden
+execution requires a checksum-bound full population lock with the RBR provenance
+prefix; a CodeARC lock is rejected before private files are opened.
+
+The legacy predictor preparation also now normalizes stdin and records its
+execution protocol. Its existing 7934-candidate pre-screen inventory was recovered
+from pinned raw sources (6523 train, 1290 development, 121 held-out candidates).
+A fresh cache rebuild re-executed all formerly rejected fixed-program candidates. It completed with 6392 train, 1267 development, and 117 held-out candidates; 158 fixed programs were rejected (previously 193).
+The historic cache did not record its timeout; the new rebuild explicitly fixes
+2 seconds, so it is not presented as a fully matched one-variable comparison.
+Three fixed 1000-step seeds (1701–1703) are queued on CPU, with seed 1701 complete and seed 1702 running,
+using original train/development only. The first corrected prediction result is recorded below; the other seeds are still running. The live repair run keeps its original source identity and will
+be archived as a literal-input diagnostic before corrected follow-up work.
+
+`scripts/run_local_bank_evaluation.py` now queues full RBR Qwen and CodeARC
+DeepSeek execution. It retains all 400 development groups, records the unchanged
+300-mixed-group threshold, then evaluates all 500 primary groups visibly, creates
+the pre-hidden lock, executes hidden calls, and audits the fixed population.
+Cross-split sources and model/decoding identities must agree with the declaration.
+The workflows do not complete additional sealed stages by themselves.
+
+Focused validation passed 13 generated-bank/executor checks, 1 held-out-exclusion
+check for corrected replay supervision, and 2 complete-bank inventory checks.
+The full run passed 747 tests and failed 21: shell `umask=002` made test-owned factory dependencies group-writable, which existing trust checks reject. With `umask 077`, all 21 failures and the 3 subsequently added supervisor tests passed (24/24). In total, 771 distinct tests passed across the invocations; the initially failed full-run log is retained. Compile checks and `git diff --check` passed.
+
+The corrected development comparison recovered 32 training candidates and 3
+development candidates, while 2 training fixed programs were newly rejected.
+Among common candidates, 72 training test labels and 10 development test labels
+changed. These differences do not by themselves establish better model quality.
+`rbr_development_protocol_difference.json` excludes original held-out metrics.
+
+Corrected seed 1701 still fails association, invariance and baseline fairness:
+aligned NLL 0.44975 versus 0.36935 for the no-particle comparator; association gap
+0.0000462 nats, 95% CI [-0.011454, 0.011776], below the unchanged 0.03 threshold.
+The input correction has not established the claimed model improvement.
+
+A two-repeat, fixed-2-second check of the two newly rejected training fixed
+programs found timeouts under both literal and normalized stdin for p03298;
+p03458 passed both modes in both repeats. Execution stability is another source
+of fixed-screen variation. The new cache remains frozen; these replays do not
+reintroduce selected successes or tune the scoring deadline.

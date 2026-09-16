@@ -31,6 +31,7 @@ from pbpf.real_gate import (FrozenTextEncoder, classify_execution, compare_predi
                            public_test_text, clustered_nll_gap, association_strata)
 from pbpf.apbpf.counterfactual import outcome_derangement, joint_permutation
 from pbpf.apbpf.rbr_splits import select_sources
+from pbpf.apbpf.rbr_execution import canonical_stdin
 from pbpf.registry import OUTCOMES
 from pbpf.train_belief import train_belief_step
 
@@ -106,7 +107,7 @@ def _execute(payload):
             actual, stderr, returncode, timed_out = "", "", None, False
             try:
                 result = subprocess.run(
-                    ["/usr/bin/python3", "-I", str(source)], input=case["input"], text=True,
+                    ["/usr/bin/python3", "-I", str(source)], input=canonical_stdin(case["input"]), text=True,
                     capture_output=True, timeout=timeout, cwd=directory,
                     env={"PATH": "/usr/bin:/bin", "LANG": "C.UTF-8", "PYTHONHASHSEED": "0"},
                 )
@@ -207,6 +208,23 @@ def prepare(root: Path, descriptions_root: Path, descriptions_archive: Path, cac
         "population_policy": "all selected buggy candidates, including all-pass; fixed-program validity screen",
         "source_split_policy": source_split_policy,
         "execution_fields_visibility": "evaluator-only unless explicitly whitelisted by protocol",
+        "execution_protocol": {
+            "stdin_policy": "official-terminal-newline-if-missing",
+            "scoring_policy": "line/token match; absolute numeric tolerance 1e-4",
+            "timeout_seconds": timeout,
+            "runner": "legacy-isolated-python-subprocess",
+            "source_sha256": {
+                str(path.relative_to(Path(__file__).resolve().parents[1])): _sha256(path)
+                for path in (Path(__file__).resolve(),
+                    Path(__file__).resolve().parents[1] / "src/pbpf/apbpf/rbr_execution.py")
+            },
+        },
+        "preparation_parameters": {
+            "train_problems": train_problems, "dev_problems": dev_problems,
+            "test_problems": test_problems, "candidates_per_problem": candidates_per_problem,
+            "tests_per_candidate": tests_per_candidate, "workers": workers,
+            "selected_candidates_before_fixed_screen": len(jobs),
+        },
     }
     cache.write_text(json.dumps(payload, sort_keys=True) + "\n")
     return payload

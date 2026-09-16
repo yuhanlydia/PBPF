@@ -34,7 +34,7 @@ def development_cache(payload, *, seed=2701, inner_validation_fraction=.2):
     # Do not inherit old test inventory/count metadata or any test record bytes.
     result = {key: copy.deepcopy(payload[key]) for key in
               ("schema", "dataset", "seed", "tests_per_candidate", "official_md5", "problem_descriptions",
-               "execution_fields_visibility", "source_split_policy") if key in payload}
+               "execution_fields_visibility", "source_split_policy", "execution_protocol") if key in payload}
     result.update(records=rows, counts=dict(Counter(r["split"] for r in rows)),
                   problem_counts={s: len({source(r) for r in rows if r["split"] == s})
                                   for s in ("train", "development", "test")},

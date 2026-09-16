@@ -1,0 +1,171 @@
+{
+  "schema": "apbpf-rbr-stdin-protocol-audit-v1",
+  "updated_at": "2026-09-16T18:09:23.570509+00:00",
+  "official_source": "https://github.com/giganticode/run_bug_run/blob/374251a9d65410f37e1136049cb7ff5dcca3d0ae/lib/run_bug_run/test_runner.rb#L344-L350",
+  "finding": "The pinned official executor appends one terminal newline when absent. Legacy local prediction and repair execution passed literal input strings instead.",
+  "scope": "Development reference-control evidence; neither model efficacy nor complete official evaluator equivalence is established.",
+  "unchanged_scoring": "Line/token equality with absolute numeric tolerance 1e-4. Official per-problem tolerances have not been ported.",
+  "reference_runs": {
+    "rbr-generated-reference-development-v1": {
+      "schema": "apbpf-rbr-generated-execution-v1",
+      "phase": "all",
+      "reference_control": true,
+      "split": "development",
+      "bank_complete_sha256": null,
+      "population_lock_sha256": null,
+      "task_manifest_sha256": "e03f0bc4f21e91d97d57a6bb4baf81250d3af08769c7212c9858d612973d0336",
+      "timeout": 6.0,
+      "candidate_count": 400,
+      "source_sha256": {
+        "scripts/evaluate_apbpf_rbr_bank.py": "5db129b55845ec7b4435b6c45eb3dfa0cbbb58e3277fab01818939953b40875d",
+        "src/pbpf/apbpf/rbr_execution.py": "eddf1a892aac2f1c8d5cb5e0337a7eccde6a1fd6135d368137d7118c8b5e7a8f",
+        "src/pbpf/apbpf/codearc_execution.py": "e55bbd0fc69e2efb847524932dbf0e6ef0a22d8142dc869ca2c655c2b17d21e9",
+        "src/pbpf/apbpf/codearc_bank.py": "cc479620ee4a4922a060be466092a027881f35ab8203cc5b7f9154d7dc29cdfc"
+      },
+      "scope": "exploratory standalone execution; not sealed-stage evidence",
+      "tests": 4000,
+      "test_passes": 3995,
+      "all_pass": 398,
+      "scoring_policy": "line/token match with absolute numeric tolerance1e-4, matching prior RBR; timeout never PASS",
+      "results_file_sha256": "b8c5f8f5025f44640664292d79f43637b6dff0372790c82bbf8227b8667bacdf",
+      "failures": [
+        {
+          "task_id": "RBR/p03249",
+          "test_id": "6",
+          "outcome": "RUNTIME_EXCEPTION"
+        },
+        {
+          "task_id": "RBR/p03249",
+          "test_id": "7",
+          "outcome": "RUNTIME_EXCEPTION"
+        },
+        {
+          "task_id": "RBR/p03249",
+          "test_id": "8",
+          "outcome": "RUNTIME_EXCEPTION"
+        },
+        {
+          "task_id": "RBR/p03249",
+          "test_id": "9",
+          "outcome": "RUNTIME_EXCEPTION"
+        },
+        {
+          "task_id": "RBR/p03440",
+          "test_id": "1",
+          "outcome": "RUNTIME_EXCEPTION"
+        }
+      ]
+    },
+    "rbr-generated-reference-development-v2": {
+      "schema": "apbpf-rbr-generated-execution-v1",
+      "phase": "all",
+      "reference_control": true,
+      "split": "development",
+      "bank_complete_sha256": null,
+      "population_lock_sha256": null,
+      "task_manifest_sha256": "e03f0bc4f21e91d97d57a6bb4baf81250d3af08769c7212c9858d612973d0336",
+      "timeout": 6.0,
+      "stdin_policy": "official-terminal-newline-if-missing",
+      "candidate_count": 400,
+      "source_sha256": {
+        "scripts/evaluate_apbpf_rbr_bank.py": "34070f6ab18540e5c9b40c534ee844fff6f07b0d531b5a2c9a9086bb0e063dd1",
+        "src/pbpf/apbpf/rbr_execution.py": "b7f1dfc3044e9d35364a60b68be3a3355db784ab2cf7ad09b16c8bfda880a659",
+        "src/pbpf/apbpf/codearc_execution.py": "e55bbd0fc69e2efb847524932dbf0e6ef0a22d8142dc869ca2c655c2b17d21e9",
+        "src/pbpf/apbpf/codearc_bank.py": "cc479620ee4a4922a060be466092a027881f35ab8203cc5b7f9154d7dc29cdfc"
+      },
+      "scope": "exploratory standalone execution; not sealed-stage evidence",
+      "tests": 4000,
+      "test_passes": 4000,
+      "all_pass": 400,
+      "scoring_policy": "line/token match with absolute numeric tolerance1e-4, matching prior RBR; timeout never PASS",
+      "results_file_sha256": "3ce1b22da30787f4d78d516c2ca5bf5e0dd1d651f4e6901aa86e85c6d8110d77",
+      "failures": []
+    }
+  },
+  "legacy_results": {
+    "status": "retained_literal_stdin_diagnostics_require_corrected_replays",
+    "affected": [
+      "RBR default and expanded prediction",
+      "RBR semantic prediction",
+      "RBR acquisition and stopping replays",
+      "RBR running repair pilot and its training cache"
+    ],
+    "unaffected_domain": "CodeARC function-call executor",
+    "old_cache_rejected_fixed_candidates": 193,
+    "all_193_caused_by_newline": "not established",
+    "original_prepare_timeout": "not recorded; corrected legacy cache rebuild explicitly fixes 2 seconds"
+  },
+  "next_runs": {
+    "cache_rebuild_status": "local/longgoal/rbr_stdin_cache_rebuild_status.json",
+    "development_prediction_status": "local/longgoal/rbr-stdin-development-replay-v1/status.json",
+    "rbr_generated_bank_evaluation_status": "local/longgoal/rbr-qwen-full-evaluation-v1/status.json",
+    "deepseek_generated_bank_evaluation_status": "local/longgoal/codearc-deepseek-full-evaluation-v1/status.json"
+  },
+  "completion": "local longgoal active; 1 of 21 real sealed stages complete; no positive scientific gate claim",
+  "cache_rebuild": {
+    "status": "complete",
+    "timeout_note": "2 seconds explicitly fixed for this rebuild; old cache omitted timeout metadata so exact original timeout cannot be attested",
+    "original_population_reconstruction": {
+      "train_selected_candidates": 6523,
+      "development_selected_candidates": 1290,
+      "test_selected_candidates": 121,
+      "total": 7934,
+      "matches_original_prepare_log_jobs": true
+    },
+    "cache_sha256": "ce9acd40ae2ee178532c777e318595b08a8965662c3355f9afc9666fe6e1f2a7",
+    "counts": {
+      "development": 1267,
+      "test": 117,
+      "train": 6392
+    },
+    "problem_counts": {
+      "development": 200,
+      "test": 92,
+      "train": 995
+    },
+    "rejected_fixed_candidates": 158
+  },
+  "validation": {
+    "initial_full_run": {
+      "passed": 747,
+      "failed": 21,
+      "reason": "shell umask002 made test-owned factory dependencies group-writable; existing trust checks correctly rejected them"
+    },
+    "rerun_umask077": {
+      "passed": 24,
+      "failed": 0,
+      "scope": "all21initialfailures plus3new supervisor checks"
+    },
+    "distinct_tests_verified_passing_across_runs": 771,
+    "compileall": "passed",
+    "diff_check": "passed"
+  },
+  "corrected_seed1701": {
+    "gate": {
+      "association_passes": false,
+      "association_threshold": 0.03,
+      "baseline_fairness_passes": false,
+      "baseline_margin": 0.02,
+      "baseline_status": "evaluated",
+      "controls_worse_than_aligned": true,
+      "full_gate_passes": false,
+      "max_degradation_fraction": 0.25,
+      "pair_invariance_passes": false,
+      "particles_necessary_claim_allowed": false
+    },
+    "association": {
+      "ci95": [
+        -0.011453962204361057,
+        0.01177565508186975
+      ],
+      "clusters": 200,
+      "estimand": "future-example-weighted; whole-source-component resampling",
+      "mean_nll_gap": 4.62077914562542e-05,
+      "replicates": 10000,
+      "unit": "source_component"
+    },
+    "aligned_nll": 0.44974927987751057,
+    "no_particle_nll": 0.3693512113305886
+  },
+  "cache_comparison_limitation": "p03298 times out under both input modes; p03458 passes both modes on rerun. At least some selection variation is due to execution stability, so full-cache changes cannot be attributed solely to stdin."
+}
