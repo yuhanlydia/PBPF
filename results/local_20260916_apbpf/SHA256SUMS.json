@@ -17,5 +17,8 @@
   "codearc-pilot16-summary.json": "8c763462f2592bc2f96faaae5face0159e6aeada6c13e45927f6aa7b48855c15",
   "codearc-reference-control-summary.json": "231005d1174e3de1cff21f90503f1ae9e4125b1404cf2271916426e942792f61",
   "development-sweep-v2/default_3000.json": "0ebc6c821e3832a2ea0ab0fb527b858e925b59682054fec80d95a390cd44db95",
-  "deepseek_verified_manifest.json": "d8bb587d950061e60f68f114a82f28bfed2361761c498bab66c4f9b14ed29ac7"
+  "deepseek_verified_manifest.json": "d8bb587d950061e60f68f114a82f28bfed2361761c498bab66c4f9b14ed29ac7",
+  "rbr-acquisition-development-v1.json": "10908ccf9cb30acf092ae0d399b5a94c460c662252d1a9d5377f5bf1470178b4",
+  "acquisition_replay_tests.log": "dc6d1b0c26161b6ba53bc38ea34255b2c7b95db096c25797382b56ce3d2e7cc7",
+  "rbr-acquisition-next-plan.json": "e5e7744fbce51464b534fcf1198e0cfa7a1285614b3c31d84909f4c5d26da52a"
 }

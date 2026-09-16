@@ -73,3 +73,20 @@ outputs are create-once, bind source/data checksums, and preserve failed gates.
 `SHA256SUMS.json` covers this milestone's copied reports and logs. Full raw local
 artifacts and checkpoints remain under `local/longgoal/`; subsequent results require
 new snapshots. CodeARC replay is not the official interactive leaderboard protocol.
+
+## Active-testing development diagnostic (2026-09-17)
+
+A full 1264-candidate / 200-source development replay compared fixed, random,
+diagnostic-MI, and predictive-entropy acquisition using the shipped mean-field
+adapter. At budgets one and two, an evaluator-only oracle subset had NLL advantages
+0.06762 and 0.05425 over fixed. Diagnostic MI achieved 0.00656 and −0.00644, both
+with confidence intervals crossing zero. At budget four all four public tests are
+consumed; canonical oracle and fixed predictions coincide, as checked in the run.
+The four-test MI advantage was −0.00013, providing no active-testing gate success.
+These are cached observation budgets, not fresh sandbox execution counts, and
+remain exploratory because the upstream gates failed. Five additional regression
+checks verified exact public budgets and rejection of a hidden query.
+
+The next predeclared diagnostic compares the trained SMC posterior updates with
+the adapter's fixed-particle mean-field updates using the same development cache
+and checkpoint. The mismatch is a hypothesis, not a demonstrated cause.
