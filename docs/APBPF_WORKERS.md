@@ -391,6 +391,20 @@ sources remain included; the 10000-draw bootstrap keeps a source in the same
 cluster across seeds. Raw predictions and original per-seed gates are retained.
 This is a development summary, not a new fit or a sealed primary stage.
 
+`diagnose_apbpf_order_sensitivity.py --development-root /absolute/codearc-semantic-debug-v1
+--sensitivity-root /absolute/particle-sensitivity --output /absolute/new-order-diagnostic`
+uses the three frozen eight-particle-trained semantic models at 32 inference
+particles. Its fixed 2x2 design crosses the learned first-observation proposal
+versus the root-prior proposal with ESS-0.5 resampling versus no resampling.
+All 12 cells retain aligned, shuffled, reversed and permuted predictions. The
+unchanged cell must reproduce the existing sensitivity arrays; every alternative
+is compared at the same particle budget. This isolates two possible sources of
+finite-particle order sensitivity. A direct static-Bayes regression test checks
+the prior/no-resampling control, including sensitivity to changed outcomes.
+This is inference diagnosis only, using all 400 development sources. It does
+not refit, change gate thresholds, evaluate primary sources, or establish a
+successful replacement method.
+
 `audit_pbpf_finite_support.py --input /absolute/finite_contract --output
 /absolute/support-audit.json` verifies every existing finite-family archive and
 reports posterior mass at the numerical floor for every original particle arm.

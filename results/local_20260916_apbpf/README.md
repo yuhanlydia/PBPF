@@ -13,12 +13,12 @@ families. All nine configured prediction controls are now complete for both
 CodeARC families, including the previously missing fixed `history_rate`.
 See `full_pipeline_progress_v2.json`, `ablation_coverage_audit.json` and the final
 sections below. The latest checkpoint is
-`development_summary_progress.json`: all three Qwen RBR development
-prediction seeds are complete and fail association/fairness gates. A checkpoint
-replay reproduces all 12 seed/control NLLs and its pooled association interval
-also crosses zero. All 18
-inference-particle cells are complete; bounded 32-particle retraining continues,
-and CodeARC repair seed1701 has finished training. Earlier
+`particle_training_and_order_completion.json`: all three semantic 32-particle
+refits and their matched-inference comparison are complete, with no evidence of
+training benefit. A 12-cell proposal/resampling diagnosis is also complete.
+All three Qwen RBR development prediction seeds fail association/fairness gates;
+their checkpoint replay reproduces all 12 seed/control NLLs and the pooled
+association interval crosses zero. GPU generation and CodeARC repair continue. Earlier
 sections are historical checkpoints, not the current running-process inventory.
 
 **RBR protocol correction (2026-09-17):** the RBR results below used literal stdin. The pinned official runner appends a missing terminal newline. A new development control confirms this local discrepancy; those historic results remain diagnostics and require corrected execution/retraining. See `rbr_stdin_protocol_audit.json`. CodeARC results are unaffected.
@@ -943,3 +943,48 @@ Semantic 32-particle refit seed1702 has also completed, with association
 0.005944, CI [−0.003116, 0.015245] and aligned NLL 0.494202. Association,
 strong-baseline fairness and pair invariance fail. Seed1703 and the queued
 same-inference-budget comparison remain in progress at this checkpoint.
+
+## Completed particle retraining and order diagnosis
+
+All three semantic 32-particle development refits have now completed. The third
+seed has association gain 0.010543, CI [0.001907, 0.020179], below the unchanged
+0.03 criterion; fairness and pair invariance also fail. Across all three seeds,
+association is 0.006739, CI [−0.000534, 0.014309]. At the same 32-particle
+inference budget, the new models have NLL 0.485320 versus 0.479641 for the old
+eight-particle-trained models. The paired improvement is −0.005679, CI
+[−0.011639, 0.000053]. Increased training particle count therefore has not
+established a benefit. All checkpoints, raw replay predictions and original
+gate decisions remain bound to `codearc_semantic_p32_comparison_results.json`.
+
+Code inspection identified two possible numerical sources of order sensitivity:
+the proposal depends on the first observation, and intermediate resampling
+discards particle support. A fixed 2x2 inference diagnostic used all three
+original eight-particle-trained semantic models, all 400 development sources,
+and 32 inference particles. It crossed learned-first-observation versus
+root-prior proposals with ESS-0.5 resampling versus no resampling. All 12 cells
+and their four controls completed; the standard cell reproduced the existing
+prediction arrays before any alternative was interpreted.
+
+| Proposal | Resampling | Aligned NLL | Association gap | Association 95% CI |
+|---|---|---:|---:|---|
+| Learned first observation | ESS 0.5 | 0.479641 | 0.001043 | [−0.002506, 0.004843] |
+| Learned first observation | None | 0.476244 | 0.000935 | [−0.002108, 0.004004] |
+| Root prior | ESS 0.5 | 0.508474 | −0.000114 | [−0.000426, 0.000179] |
+| Root prior | None | 0.507851 | −0.000005 | [−0.000018, 0.000008] |
+
+Removing resampling with the learned proposal improves NLL by 0.003397,
+CI [0.002032, 0.004985], but does not establish association. The largest
+pair-order probability difference across all examples/seeds is 0.6700 for the
+standard implementation, 0.6298 without resampling, 0.1799 for the prior with
+resampling, and 4.77e-7 for the prior without resampling. Thus removing
+resampling alone does not remove observed order sensitivity. The prior/no-
+resampling control is invariant to numerical precision but worsens NLL by
+0.028210, with improvement CI [−0.039227, −0.018579]. Numerical invariance has
+not produced a successful replacement method. These are exploratory diagnostic
+intervals, with no primary evaluation, checkpoint refitting, or gate changes.
+
+`codearc_order_decomposition_results.json` retains every cell and raw prediction
+checksum. A focused regression test independently checks static-Bayes weighting,
+pair-order invariance and changed-outcome sensitivity of the prior/no-resampling
+control; it passes. The training and inference diagnostic scripts do not modify
+the source files frozen by the live packet actor and full pipeline.
