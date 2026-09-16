@@ -215,3 +215,19 @@ The Qwen primary bank completed public-only execution and pre-hidden sealing;
 its hidden execution is underway. DeepSeek primary and training banks continue
 generating; its remaining development bank is queued. Corrected repair training
 continues, including full inner-validation passes between training segments.
+
+
+The primary500 audit subsequently completed: 107 mixed, 350 all-fail and
+43 all-pass groups; visible-pass selection 28.0%, oracle ceiling 30.0%.
+The bank gate remains failed because the development mixed-group requirement
+failed. The raw audit's `pilot_primary_source_disjoint: false` denotes absence
+of the required passing pilot artifact; it does not establish actual source
+collision. The initial materialization assigned disjoint source components.
+No primary measurements are used to retune this recipe.
+
+The raw RBR eligibility inventory found 1221 official-training sources and only
+164 test-only sources under the current size/test-count constraints. Therefore
+a 500-source primary bank cannot be built from the official-exclusive test pool.
+A new generated-bank partition needs an explicitly exploratory source split and
+fresh belief/utility fitting; existing belief checkpoints must not be reused on
+sources they previously saw. The official-exclusive pool remains reserved.
