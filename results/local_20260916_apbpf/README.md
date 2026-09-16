@@ -171,3 +171,47 @@ stopping, unchanged default SMC acquisition, and supervisor recovery behavior.
 `run_local_codearc_prediction.py` waits for the completed development-only
 CodeARC executions and the GPU handoff, then builds the cache and runs all three
 prediction seeds. It remains a standalone workflow, not a complete real DAG worker.
+
+
+## CodeARC association and actual candidate selection (2026-09-17)
+
+All 400 development source groups (3200 candidates) completed ten-call execution.
+The bank has 70 mixed, 293 all-fail and 37 all-pass groups, below the unchanged
+300-mixed-group gate. Hidden outcomes were predominantly WRONG_OUTPUT
+(12383/19200), with 953 runtime exceptions, 84 compile errors and 34 timeouts.
+Visible-pass selection scored 25.50%; oracle Pass@8 is 26.75%, leaving only
+1.25 percentage points, insufficient for a 3-point gain over visible-pass.
+
+All three CodeARC association seeds completed with aligned NLLs
+0.53334, 0.54161 and 0.55381; association gaps were −0.00128, 0.00187 and 0.00014.
+Every association CI crosses zero, and all seeds failed baseline fairness.
+Original primary candidates are absent from fitting and development assessment.
+
+A separate learned-utility extension now evaluates actual selection. It trains
+one shared success head over posterior particles, plus pair-aware, Deep Sets,
+no-particle-bottleneck and tuned-rate controls. Only task text, candidate code,
+four public test inputs and their outcomes enter selection features; future
+inputs, expected outputs and execution outcomes are excluded. Utility targets
+are six-hidden-call success labels used only for training/validation or scoring.
+All learned heads use independent fitting/inner-validation source partitions;
+five source folds select the strongest deterministic comparator using the other
+folds. Fixed candidate order breaks ties. Every development group is retained.
+
+| Seed | Particle selector Pass@1 | Cross-fitted comparator | Difference | Paired source 95% CI |
+| --- | ---: | ---: | ---: | --- |
+| 1701 | 24.75% | 25.00% | −0.25 pp | [−1.75, 1.25] pp |
+| 1702 | 24.50% | 25.75% | −1.25 pp | [−3.00, 0.25] pp |
+| 1703 | 23.50% | 25.00% | −1.50 pp | [−3.25, 0.25] pp |
+
+No selection gate passed. These standalone utility-head experiments remain
+exploratory; they are not a claim that the full real-stage DAG is complete.
+Two regression tests cover exclusion of all future content and comparator
+choice invariance to its own assessment-fold labels. All three 1000-step
+selection runs completed with checksummed source/data/checkpoint identities.
+Use `scripts/run_apbpf_selection_replay.py` with the matching development cache
+and prediction checkpoint to reproduce them.
+
+The Qwen primary bank completed public-only execution and pre-hidden sealing;
+its hidden execution is underway. DeepSeek primary and training banks continue
+generating; its remaining development bank is queued. Corrected repair training
+continues, including full inner-validation passes between training segments.

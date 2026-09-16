@@ -1,0 +1,68 @@
+{
+  "schema": "apbpf-codearc-development-hardness-diagnosis-v1",
+  "groups": 400,
+  "mixed": 70,
+  "all_fail": 293,
+  "all_pass": 37,
+  "summary": {
+    "all": {
+      "candidates": 3200,
+      "visible_all_pass": 665,
+      "hidden_all_pass": 527,
+      "hidden_outcomes": {
+        "WRONG_OUTPUT": 12383,
+        "PASS": 5746,
+        "RUNTIME_EXCEPTION": 953,
+        "COMPILE_ERROR": 84,
+        "TIMEOUT": 34
+      },
+      "common_errors": [
+        [
+          "SyntaxError",
+          84
+        ]
+      ]
+    },
+    "all_fail_groups": {
+      "candidates": 2344,
+      "visible_all_pass": 164,
+      "hidden_all_pass": 0,
+      "hidden_outcomes": {
+        "WRONG_OUTPUT": 10935,
+        "PASS": 2189,
+        "RUNTIME_EXCEPTION": 834,
+        "TIMEOUT": 34,
+        "COMPILE_ERROR": 72
+      },
+      "common_errors": [
+        [
+          "SyntaxError",
+          72
+        ]
+      ]
+    }
+  },
+  "visible_selected_pass1": 0.255,
+  "oracle_pass8": 0.2675,
+  "scope": "complete development population; not primary; no correctness filtering",
+  "source_sha256": {
+    "codearc-pilot16-evaluation-v5": "7a7cebb12c099a485541c60dade7b42a014a69c7cd978d0169612568d7ee9e02",
+    "codearc-development384-evaluation-v5": "c6c0455a3b3967033464a9ae3688d31532d23bc3ee585d99c2de5d001ae24859"
+  },
+  "runtime_error_types": {
+    "TypeError": 258,
+    "ValueError": 252,
+    "Error": 18,
+    "IndexError": 165,
+    "ZeroDivisionError": 65,
+    "MemoryError": 6,
+    "AssertionError": 42,
+    "AttributeError": 12,
+    "NameError": 60,
+    "KeyError": 50,
+    "error": 6,
+    "AddressValueError": 4,
+    "unknown": 2,
+    "RecursionError": 13
+  }
+}
