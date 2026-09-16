@@ -183,13 +183,8 @@ def load_evaluator_tasks(
         "generator_manifest_hash"
     ):
         raise ValueError("generator manifest does not match completion record")
-    rows = [
-        json.loads(line)
-        for line in (manifest_path.parent / "tasks.jsonl")
-        .read_text(encoding="utf-8")
-        .splitlines()
-        if line.strip()
-    ]
+    with (manifest_path.parent / "tasks.jsonl").open(encoding="utf-8") as stream:
+        rows = [json.loads(line) for line in stream if line.strip()]
     tasks = tuple(
         EvaluatorTask(
             task_id=row["task_id"],

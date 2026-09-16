@@ -311,6 +311,22 @@ def test_benchmark_loader_rejects_evaluator_fields_and_keeps_test_order(tmp_path
         load_benchmark_jsonl(path, dataset="swebench_verified")
 
 
+@pytest.mark.parametrize("separator", ["\u0085", "\u2028", "\u2029"])
+@pytest.mark.parametrize("newline", ["\n", "\r\n"])
+def test_benchmark_loader_preserves_unicode_separators_inside_json_strings(tmp_path, separator, newline):
+    path = tmp_path / "unicode.jsonl"
+    rows = [
+        {"task_id": "a", "prompt": "before" + separator + "after", "tests": ["t2", "t1"]},
+        {"task_id": "b", "prompt": "second", "tests": ["t3"]},
+    ]
+    path.write_bytes((newline.join(json.dumps(row, ensure_ascii=False) for row in rows) + newline).encode("utf-8"))
+    records = load_benchmark_jsonl(path, dataset="codearc")
+    assert [record.task_id for record in records] == ["a", "b"]
+    assert records[0].prompt == "before" + separator + "after"
+    assert records[0].test_order == ("t2", "t1")
+    assert records[1].prompt == "second"
+
+
 def test_benchmark_loader_rejects_nested_and_alias_gold_fields(tmp_path):
     path = tmp_path / "leaky.jsonl"
     path.write_text(

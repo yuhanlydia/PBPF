@@ -1,4 +1,4 @@
-from dataclasses import FrozenInstanceError
+from dataclasses import FrozenInstanceError, replace
 import json
 import os
 import resource
@@ -120,6 +120,28 @@ def test_serialized_bank_separates_trainer_rows_from_evaluator_sidecars(tmp_path
     evaluator = TrajectoryBank.read_evaluator(trainer_path, evaluator_path)
     assert evaluator.bank.tasks == (record,)
     assert evaluator.future_outcomes_by_candidate == outcomes
+
+
+@pytest.mark.parametrize("field", ["public_prompt", "gold_solution", "test_order", "candidate_code"])
+@pytest.mark.parametrize("separator", ["\u0085", "\u2028", "\u2029"])
+def test_bank_roundtrip_preserves_unicode_separators(tmp_path, field, separator):
+    value = "left" + separator + "right"
+    record = task("a")
+    if field == "test_order":
+        record = replace(record, test_order=(value, "t2"))
+    elif field != "candidate_code":
+        record = replace(record, **{field: value})
+    candidate = CandidateVersion.create("c1", "a", value if field == "candidate_code" else "print(1)")
+    outcomes = {(candidate.content_hash, test_id): "PASS" for test_id in record.test_order}
+    trainer, evaluator = tmp_path / "trainer", tmp_path / "evaluator"
+    TrajectoryBank((record,), (candidate,), ()).write(trainer, evaluator, candidate_outcomes=outcomes)
+    public = TrajectoryBank.read_trainer(trainer)
+    assert public.tasks[0].public_prompt == record.public_prompt
+    assert public.tasks[0].gold_solution is None
+    assert public.candidates == (candidate,)
+    private = TrajectoryBank.read_evaluator(trainer, evaluator)
+    assert private.bank.tasks == (record,)
+    assert private.future_outcomes_by_candidate == outcomes
 
 
 def test_trainer_writer_rejects_raw_evaluator_feedback(tmp_path):

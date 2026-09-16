@@ -59,7 +59,8 @@ def load_benchmark_jsonl(path: str | Path, *, dataset: str) -> tuple[BenchmarkRe
     if dataset not in DATASETS:
         raise ValueError(f"unknown benchmark dataset: {dataset}")
     records: list[BenchmarkRecord] = []
-    for line_number, line in enumerate(Path(path).read_text(encoding="utf-8").splitlines(), 1):
+    # JSONL records end at LF, not Unicode separators embedded in JSON strings.
+    for line_number, line in enumerate(Path(path).read_text(encoding="utf-8").split("\n"), 1):
         if not line.strip():
             continue
         row = json.loads(line)
