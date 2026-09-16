@@ -12,7 +12,10 @@ selection are complete for both Qwen and DeepSeek, with negative effects in both
 families. All nine configured prediction controls are now complete for both
 CodeARC families, including the previously missing fixed `history_rate`.
 See `full_pipeline_progress_v2.json`, `ablation_coverage_audit.json` and the final
-sections below. Earlier
+sections below. The latest numerical-debug and live-process checkpoint is
+`particle_debug_progress.json`: all 18 inference-particle cells are complete,
+bounded 32-particle development retraining has started, Qwen RBR development
+generation is complete, and CodeARC repair seed1701 has finished training. Earlier
 sections are historical checkpoints, not the current running-process inventory.
 
 **RBR protocol correction (2026-09-17):** the RBR results below used literal stdin. The pinned official runner appends a missing terminal newline. A new development control confirms this local discrepancy; those historic results remain diagnostics and require corrected execution/retraining. See `rbr_stdin_protocol_audit.json`. CodeARC results are unaffected.
@@ -828,3 +831,58 @@ recomputed from the archived metrics. All gates remain failed; on test the
 and HPD coverage is 0.7994. This is a verified negative local diagnostic, not a
 sealed formal S1 result. Historical execution source hashes are absent, and this
 audit does not retroactively claim immutable source provenance.
+
+## Frozen-model particle sensitivity and repair training (2026-09-17)
+
+A predeclared development-only numerical diagnostic evaluated every combination
+of two feature encoders, three frozen model seeds and 8/32/128 inference particles
+(18 cells). It retained all 3200 candidates from the 400 original development
+sources; no original primary source entered the cache. Model, cache, feature and
+population receipts were verified. Each original eight-particle result was
+numerically reproduced before interpreting the larger budgets. Raw predictions,
+resampling ancestry and ESS are retained locally with complete checksums.
+
+| Frozen encoder | Particles | Aligned NLL | Association gap | Source-bootstrap 95% CI |
+|---|---:|---:|---:|---|
+| Lexical512 | 8 | 0.538300 | −0.001252 | [−0.004252, 0.001622] |
+| Lexical512 | 32 | 0.506779 | 0.000106 | [−0.001088, 0.001293] |
+| Lexical512 | 128 | 0.498018 | 0.000330 | [−0.000158, 0.000818] |
+| Semantic512 | 8 | 0.506826 | 0.005754 | [−0.001798, 0.013506] |
+| Semantic512 | 32 | 0.479641 | 0.001043 | [−0.002506, 0.004843] |
+| Semantic512 | 128 | 0.471963 | 0.000803 | [−0.001094, 0.002984] |
+
+The paired NLL improvements from8 to128 particles are 0.040282 for lexical
+features (CI [0.032732, 0.049663]) and 0.034863 for semantic features
+([0.028227, 0.042142]). These are inference-budget effects, not active-test
+acquisition gains. Every association interval still crosses zero and the
+0.03-nat criterion remains unmet. Average surviving initial particles rise from
+6.32 to91.23 (lexical) and from5.93 to83.65 (semantic). Uniform post-resampling
+weights are not counted as restored ancestry diversity; two focused regression
+checks verify that distinction. Full details and all budgets are in
+`codearc_particle_sensitivity_summary.json` and `codearc_particle_sensitivity_results.json`.
+
+A bounded follow-up is now fitting all three semantic model seeds with32
+particles, keeping the same 1000-step optimization budget, frozen features,
+170 fitting/42 inner-validation/400 development-assessment source partition,
+and four strong baselines. It tests whether training approximation contributes
+to weak association. Its plan is recorded before fitting; no primary evaluation
+or original protocol replacement occurs. Compute increases with particle count,
+so this is not a compute-matched improvement claim. All three results will be
+retained regardless of direction.
+
+CodeARC repair seed1701 completed1500 steps. The saved projector matches the
+best development checkpoint at step1250, with teacher-forced NLL0.745874 versus
+1.260503 without a prefix on394 validation items/34047 target tokens. The full
+validation history and checkpoint checksum are retained. Seed1702 is running;
+repair success still requires all remaining fits, six-arm code generation and
+fresh hidden execution. Qwen RBR development384 generation also completed and
+its execution queue started; GPU0 has moved to primary500 generation.
+
+A reproducible audit of the existing60000-case finite outputs found that the
+32-particle final approximation retains about6.4 states above the metric's
+numerical floor. On test, those floor states carry15.95% of exact posterior mass,
+and the true latent lies there in16.06% of cases. Their mean KL contribution is
+3.99042 versus mean total KL3.92179 (other states can contribute negatively).
+This describes support loss in the archived discrete problem. It cannot separate
+initial proposal omission from later resampling loss, and does not establish a
+cause for the neural continuous-latent model. No finite gate was changed.

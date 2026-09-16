@@ -1,0 +1,137 @@
+{
+  "plan_sha256": "fdb9d5c51ff6f4f37bc9852eecb56182c98df226ddfe6f2e35490418548d3e30",
+  "results_sha256": "14363cadb49c3e33880c3bfd077f0858b1b9c63d527e9830812e859af7220d1d",
+  "summary": [
+    {
+      "encoder": "lexical",
+      "particles": 8,
+      "aligned_nll": 0.5382998880841232,
+      "association_gap": -0.001252011745236814,
+      "association_ci95": [
+        -0.004251569933361478,
+        0.0016221096515655494
+      ],
+      "joint_reversal_gap": -0.0028841341845691204,
+      "presentation_permutation_gap": -0.0017711299005895853,
+      "mean_unique_initial_particles": 6.317395846048991
+    },
+    {
+      "encoder": "lexical",
+      "particles": 32,
+      "aligned_nll": 0.5067788691896892,
+      "association_gap": 0.0001059649366652593,
+      "association_ci95": [
+        -0.0010884932776292165,
+        0.0012930088076326576
+      ],
+      "joint_reversal_gap": -0.00011022248509107158,
+      "presentation_permutation_gap": -0.0003921759780496359,
+      "mean_unique_initial_particles": 23.656770706176758,
+      "nll_improvement_over_eight_particles": {
+        "unit": "source_component",
+        "clusters": 400,
+        "replicates": 10000,
+        "mean_nll_gap": 0.0315210223197937,
+        "ci95": [
+          0.025564575990041097,
+          0.0385530481338501
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    },
+    {
+      "encoder": "lexical",
+      "particles": 128,
+      "aligned_nll": 0.4980180155335162,
+      "association_gap": 0.00032989674946293235,
+      "association_ci95": [
+        -0.00015826460387971663,
+        0.0008177569392654624
+      ],
+      "joint_reversal_gap": -0.00015466749027837068,
+      "presentation_permutation_gap": -0.00011557975085452199,
+      "mean_unique_initial_particles": 91.23270924886067,
+      "nll_improvement_over_eight_particles": {
+        "unit": "source_component",
+        "clusters": 400,
+        "replicates": 10000,
+        "mean_nll_gap": 0.04028187319636345,
+        "ci95": [
+          0.0327323129442003,
+          0.04966316721174452
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    },
+    {
+      "encoder": "semantic",
+      "particles": 8,
+      "aligned_nll": 0.5068259795846397,
+      "association_gap": 0.005754225887358189,
+      "association_ci95": [
+        -0.0017977822919686634,
+        0.013506027910444468
+      ],
+      "joint_reversal_gap": 0.007047740742564201,
+      "presentation_permutation_gap": 0.0021074919495731592,
+      "mean_unique_initial_particles": 5.926249980926514
+    },
+    {
+      "encoder": "semantic",
+      "particles": 32,
+      "aligned_nll": 0.4796405202728512,
+      "association_gap": 0.0010425614891573787,
+      "association_ci95": [
+        -0.0025058292150497434,
+        0.004843403021494548
+      ],
+      "joint_reversal_gap": 0.0010203657438978553,
+      "presentation_permutation_gap": 0.000442513293819502,
+      "mean_unique_initial_particles": 21.608333587646484,
+      "nll_improvement_over_eight_particles": {
+        "unit": "source_component",
+        "clusters": 400,
+        "replicates": 10000,
+        "mean_nll_gap": 0.027185458689928055,
+        "ci95": [
+          0.02198935265011258,
+          0.03276034874386258
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    },
+    {
+      "encoder": "semantic",
+      "particles": 128,
+      "aligned_nll": 0.47196319800670544,
+      "association_gap": 0.0008031709585338831,
+      "association_ci95": [
+        -0.0010942768885029686,
+        0.002984102090199788
+      ],
+      "joint_reversal_gap": 0.0009114971617236733,
+      "presentation_permutation_gap": 0.0003914986446034163,
+      "mean_unique_initial_particles": 83.6527099609375,
+      "nll_improvement_over_eight_particles": {
+        "unit": "source_component",
+        "clusters": 400,
+        "replicates": 10000,
+        "mean_nll_gap": 0.034862782806158066,
+        "ci95": [
+          0.028226554181840686,
+          0.04214193683200412
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    }
+  ],
+  "sources": 400,
+  "candidates": 3200,
+  "seeds": [
+    1701,
+    1702,
+    1703
+  ],
+  "scope": "development-only frozen-model inference diagnostic; all budgets retained; pointwise exploratory CIs, no primary or trained-method claim",
+  "summary_source_sha256": "48e676586c20d6fd0f2a6edddce726844e8615a1cb1056e16bb7ef3cac3d2fb5"
+}

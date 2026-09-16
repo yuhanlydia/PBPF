@@ -1,0 +1,168 @@
+{
+  "summary_sha256": "c7dda2d6a5fe85c9b011cf6343b5eef36412c56790d855aeadcd2ccade3cfa81",
+  "results": {
+    "train": {
+      "particles_1": {
+        "cases": 50000,
+        "mean_states_above_numerical_floor": 1.0,
+        "mean_exact_posterior_mass_on_floor_states": 0.9393307840816904,
+        "median_exact_posterior_mass_on_floor_states": 0.9988157627176943,
+        "true_latent_on_floor_fraction": 0.9395,
+        "mean_kl_contribution_from_floor_states": 24.73924029844531,
+        "mean_total_kl": 24.67834802370827,
+        "median_total_kl": 26.088649505622847
+      },
+      "particles_4": {
+        "cases": 50000,
+        "mean_states_above_numerical_floor": 1.7667,
+        "mean_exact_posterior_mass_on_floor_states": 0.7744138612311502,
+        "median_exact_posterior_mass_on_floor_states": 0.929584724581463,
+        "true_latent_on_floor_fraction": 0.77726,
+        "mean_kl_contribution_from_floor_states": 20.32176438882926,
+        "mean_total_kl": 20.17106289415967,
+        "median_total_kl": 24.238770680460497
+      },
+      "particles_8": {
+        "cases": 50000,
+        "mean_states_above_numerical_floor": 2.83842,
+        "mean_exact_posterior_mass_on_floor_states": 0.5754448247689163,
+        "median_exact_posterior_mass_on_floor_states": 0.6212537636967281,
+        "true_latent_on_floor_fraction": 0.57554,
+        "mean_kl_contribution_from_floor_states": 14.991859469726082,
+        "mean_total_kl": 14.81379976314759,
+        "median_total_kl": 15.708747393022062
+      },
+      "particles_16": {
+        "cases": 50000,
+        "mean_states_above_numerical_floor": 4.32262,
+        "mean_exact_posterior_mass_on_floor_states": 0.33290203924121814,
+        "median_exact_posterior_mass_on_floor_states": 0.23599922269286994,
+        "true_latent_on_floor_fraction": 0.33196,
+        "mean_kl_contribution_from_floor_states": 8.536990051248305,
+        "mean_total_kl": 8.401929413690068,
+        "median_total_kl": 5.699247156147309
+      },
+      "particles_32": {
+        "cases": 50000,
+        "mean_states_above_numerical_floor": 6.41626,
+        "mean_exact_posterior_mass_on_floor_states": 0.15616836882678678,
+        "median_exact_posterior_mass_on_floor_states": 0.08825683768710951,
+        "true_latent_on_floor_fraction": 0.15824,
+        "mean_kl_contribution_from_floor_states": 3.9031305168790476,
+        "mean_total_kl": 3.837345147717211,
+        "median_total_kl": 2.063748181837064
+      }
+    },
+    "development": {
+      "particles_1": {
+        "cases": 5000,
+        "mean_states_above_numerical_floor": 1.0,
+        "mean_exact_posterior_mass_on_floor_states": 0.9397526139050708,
+        "median_exact_posterior_mass_on_floor_states": 0.9987970133290185,
+        "true_latent_on_floor_fraction": 0.9414,
+        "mean_kl_contribution_from_floor_states": 24.741067135191873,
+        "mean_total_kl": 24.680692625206262,
+        "median_total_kl": 26.07183547972764
+      },
+      "particles_4": {
+        "cases": 5000,
+        "mean_states_above_numerical_floor": 1.7646,
+        "mean_exact_posterior_mass_on_floor_states": 0.7680463937900656,
+        "median_exact_posterior_mass_on_floor_states": 0.927751218558289,
+        "true_latent_on_floor_fraction": 0.7754,
+        "mean_kl_contribution_from_floor_states": 20.138321320766433,
+        "mean_total_kl": 19.986629638812197,
+        "median_total_kl": 24.07992524599554
+      },
+      "particles_8": {
+        "cases": 5000,
+        "mean_states_above_numerical_floor": 2.8624,
+        "mean_exact_posterior_mass_on_floor_states": 0.5694264476113158,
+        "median_exact_posterior_mass_on_floor_states": 0.6128343764875525,
+        "true_latent_on_floor_fraction": 0.5666,
+        "mean_kl_contribution_from_floor_states": 14.821597134934057,
+        "mean_total_kl": 14.644326757117442,
+        "median_total_kl": 15.504845158380851
+      },
+      "particles_16": {
+        "cases": 5000,
+        "mean_states_above_numerical_floor": 4.334,
+        "mean_exact_posterior_mass_on_floor_states": 0.3287146615604728,
+        "median_exact_posterior_mass_on_floor_states": 0.23342096934746775,
+        "true_latent_on_floor_fraction": 0.3272,
+        "mean_kl_contribution_from_floor_states": 8.421421359414442,
+        "mean_total_kl": 8.285919795378627,
+        "median_total_kl": 5.642407512976699
+      },
+      "particles_32": {
+        "cases": 5000,
+        "mean_states_above_numerical_floor": 6.475,
+        "mean_exact_posterior_mass_on_floor_states": 0.15649217797278703,
+        "median_exact_posterior_mass_on_floor_states": 0.08992267680114197,
+        "true_latent_on_floor_fraction": 0.16,
+        "mean_kl_contribution_from_floor_states": 3.90978055533273,
+        "mean_total_kl": 3.8443058515615136,
+        "median_total_kl": 2.0938277729126185
+      }
+    },
+    "test": {
+      "particles_1": {
+        "cases": 5000,
+        "mean_states_above_numerical_floor": 1.0,
+        "mean_exact_posterior_mass_on_floor_states": 0.9402585097244741,
+        "median_exact_posterior_mass_on_floor_states": 0.9989935355079238,
+        "true_latent_on_floor_fraction": 0.9428,
+        "mean_kl_contribution_from_floor_states": 24.764662523800517,
+        "mean_total_kl": 24.70479215927825,
+        "median_total_kl": 26.09304723557869
+      },
+      "particles_4": {
+        "cases": 5000,
+        "mean_states_above_numerical_floor": 1.7772,
+        "mean_exact_posterior_mass_on_floor_states": 0.7780986996096432,
+        "median_exact_posterior_mass_on_floor_states": 0.9309045064575534,
+        "true_latent_on_floor_fraction": 0.7926,
+        "mean_kl_contribution_from_floor_states": 20.424782034040266,
+        "mean_total_kl": 20.272846594564506,
+        "median_total_kl": 24.2446923044171
+      },
+      "particles_8": {
+        "cases": 5000,
+        "mean_states_above_numerical_floor": 2.8582,
+        "mean_exact_posterior_mass_on_floor_states": 0.5807177315424185,
+        "median_exact_posterior_mass_on_floor_states": 0.6347244948195601,
+        "true_latent_on_floor_fraction": 0.583,
+        "mean_kl_contribution_from_floor_states": 15.139558887027484,
+        "mean_total_kl": 14.964468180162465,
+        "median_total_kl": 16.061752029834132
+      },
+      "particles_16": {
+        "cases": 5000,
+        "mean_states_above_numerical_floor": 4.3592,
+        "mean_exact_posterior_mass_on_floor_states": 0.3326577106919097,
+        "median_exact_posterior_mass_on_floor_states": 0.23510933021162142,
+        "true_latent_on_floor_fraction": 0.337,
+        "mean_kl_contribution_from_floor_states": 8.533229171326072,
+        "mean_total_kl": 8.400454975321459,
+        "median_total_kl": 5.697339737660286
+      },
+      "particles_32": {
+        "cases": 5000,
+        "mean_states_above_numerical_floor": 6.399,
+        "mean_exact_posterior_mass_on_floor_states": 0.15951221504383947,
+        "median_exact_posterior_mass_on_floor_states": 0.09048708006084125,
+        "true_latent_on_floor_fraction": 0.1606,
+        "mean_kl_contribution_from_floor_states": 3.990419938911429,
+        "mean_total_kl": 3.921793074837373,
+        "median_total_kl": 2.1084183269785273
+      }
+    }
+  },
+  "floor_definition": "np.isclose(saved posterior, 1e-12, rtol=1e-6, atol=0); stabilizer used by archived finite metric implementation",
+  "scope": "descriptive support audit of existing finite outputs only; no rerun, tuning, new gate or A-PBPF mechanism claim",
+  "limitations": [
+    "Final floor states do not distinguish initial proposal omission from later resampling loss.",
+    "Finite discrete support results do not directly identify causes in neural continuous-latent A-PBPF."
+  ],
+  "audit_source_sha256": "93f70922ef3a5fa676b639c2ea26631c2f94e54a2a67ad254c657d0fcc35ca4c"
+}

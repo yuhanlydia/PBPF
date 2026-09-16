@@ -355,6 +355,28 @@ Standalone instances can wait for the existing replication-cell supervisors,
 but do not count as sealed stages. Public-only probability construction and
 exact population/label bindings are checked independently.
 
+For development-only numerical diagnosis, `run_apbpf_particle_diagnostic.py
+--development-root /absolute/codearc-semantic-debug-v1 --output /absolute/new-run`
+holds all six completed lexical/semantic checkpoints fixed and evaluates 8, 32
+and 128 inference particles on all 400 original development sources. It rejects
+primary records, validates model/data receipts, and first reproduces each
+original eight-particle result. All budgets, seeds and pair-preserving controls
+are retained. ESS and surviving initial-particle ancestry are reported separately;
+resampling can produce uniform weights without restoring lost particle diversity.
+`summarize_apbpf_particle_diagnostic.py --run /absolute/new-run --cache
+/absolute/codearc-semantic-debug-v1/development-cache.json --output /absolute/summary.json`
+requires the complete 18-cell run and adds paired source-bootstrap comparisons
+against eight particles. This is an exploratory inference-budget diagnostic,
+not retraining, primary evaluation, or a replacement for the locked eight-particle
+protocol and its failed gates.
+
+`audit_pbpf_finite_support.py --input /absolute/finite_contract --output
+/absolute/support-audit.json` verifies every existing finite-family archive and
+reports posterior mass at the numerical floor for every original particle arm.
+It does not rerun the finite generator or distinguish initial support omission
+from later resampling loss. Its discrete-state findings cannot be presented as
+an established explanation for the neural continuous-latent experiments.
+
 ## Worker inputs and outputs
 
 The `hard_bank_lock` stage receives only public materialization and must finish
