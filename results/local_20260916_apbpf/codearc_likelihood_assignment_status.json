@@ -1,0 +1,30 @@
+{
+  "status": "complete",
+  "pid": 280009,
+  "runs": {
+    "1701": {
+      "diagnostics_sha256": "ed1b8768a4cce6bd6c53ceb81e0d7eb1df94969586b146da739acaaf26130855",
+      "reference_reproduction_errors": {
+        "aligned": 4.172325134277344e-07,
+        "outcome_shuffled": 4.172325134277344e-07
+      }
+    },
+    "1702": {
+      "diagnostics_sha256": "8067fe2fa274a5e163fd77632c000ddb5e3a738c3eaa58d6c6dbd37273b2c39c",
+      "reference_reproduction_errors": {
+        "aligned": 4.172325134277344e-07,
+        "outcome_shuffled": 4.172325134277344e-07
+      }
+    },
+    "1703": {
+      "diagnostics_sha256": "5372233f6fa14ad95e6a7fbc3fc9aa8fe55601e2d269167b4f7ae58e154d3a5d",
+      "reference_reproduction_errors": {
+        "aligned": 4.76837158203125e-07,
+        "outcome_shuffled": 4.172325134277344e-07
+      }
+    }
+  },
+  "plan_sha256": "29216fcf9d5b6310f6c591083bfd52d8d8a658a17a1aae3550514cffc4e89abd",
+  "current_seed": 1703,
+  "results_sha256": "ccba8d0645f0fa1802ee05d0fd5fa8dbba2ba0d8d2cf431ea97417ecf0215c8a"
+}

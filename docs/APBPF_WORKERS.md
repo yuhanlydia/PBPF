@@ -418,6 +418,31 @@ proposal evaluations increase computation. Tests verify importance weights,
 pair-order invariance, use of every visible outcome, and exclusion of future
 tests/outcomes. This diagnosis neither refits checkpoints nor replaces gates.
 
+`audit_apbpf_likelihood_association.py --development-root /absolute/codearc-semantic-debug-v1
+--order-root /absolute/completed-order-diagnostic --output /absolute/new-likelihood-audit`
+holds the 32 prior samples fixed while changing only visible outcome assignment.
+It directly computes likelihood ratios, posterior total variation and future
+probability changes, and must reproduce both completed prior/no-resampling
+prediction arrays. Full and mixed/constant-visible summaries are descriptive;
+finite sampled support does not establish a statement about the exact continuous
+posterior. A known separable/interactive likelihood test checks the audit.
+
+`run_apbpf_prior_training_debug.py --development-root /absolute/codearc-semantic-debug-v1
+--likelihood-audit /absolute/completed-likelihood-audit --output /absolute/new-refits`
+requires the completed audit before fitting. In a CPU-only environment, it
+refits all three seeds for 1000 steps with 32 particles, the same frozen semantic
+features, source partitions, losses, optimizer and strong-baseline assessment.
+The fixed intervention uses the root prior as proposal and disables resampling
+during fitting, validation and assessment. The source-bound plan and each
+completed seed's `.variant.json` are mandatory parts of its identity. Restore
+these checkpoints using `PriorTrainingBelief` from that script, not the default
+model: tensor shapes and base-helper configuration alone do not encode the
+overridden filter. In particular, the helper's requested ESS default is
+overridden to zero by this subclass. Proposal-head tensors remain present but
+unused. This bounded development iteration does not alter the original protocol
+or evaluate primary sources. A focused test checks prefix visibility and an
+actual likelihood-parameter update with no proposal-head gradients.
+
 `audit_pbpf_finite_support.py --input /absolute/finite_contract --output
 /absolute/support-audit.json` verifies every existing finite-family archive and
 reports posterior mass at the numerical floor for every original particle arm.

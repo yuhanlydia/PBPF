@@ -13,7 +13,10 @@ families. All nine configured prediction controls are now complete for both
 CodeARC families, including the previously missing fixed `history_rate`.
 See `full_pipeline_progress_v2.json`, `ablation_coverage_audit.json` and the final
 sections below. The latest checkpoint is
-`pooled_proposal_and_repair_progress.json`: all three semantic 32-particle
+`likelihood_audit_and_refit_progress.json`: a common-particle likelihood audit
+has reproduced all three models' prior/no-resampling predictions and measured
+weak assignment sensitivity on that support. A bounded three-seed prior-proposal,
+no-resampling development refit is now running. All three semantic 32-particle
 refits and their matched-inference comparison are complete, with no evidence of
 training benefit. The 12-cell proposal/resampling diagnosis and a fixed pooled-
 proposal follow-up are complete; the latter improves NLL and numerical order
@@ -1027,3 +1030,39 @@ The final-step development NLL was 0.746973. The full validation trajectory is i
 `packet_repair_seed1702_training_complete.json`. Seed1703 has started; six-arm
 generation and fresh hidden execution remain required before repair efficacy
 can be assessed.
+
+## Likelihood assignment audit and bounded training follow-up
+
+The next diagnostic fixes the same 32 prior particles for aligned and shuffled
+visible outcomes, so the proposal and sampling support cannot change between
+them. Direct likelihood weighting reproduces both archived predictions for all
+three frozen semantic models within 4.77e-7. All 3200 development candidates
+remain included: 1025 have mixed visible outcomes and 2175 have constant visible
+outcomes. Constant histories have exactly zero assignment contrast.
+
+| Frozen seed | Mean centered log-ratio RMS, mixed histories | Mean posterior total variation, mixed histories | Mean maximum future-probability difference, mixed histories |
+|---|---:|---:|---:|
+| 1701 | 0.004025 | 0.000975 | 0.000226 |
+| 1702 | 0.006353 | 0.001710 | 0.000418 |
+| 1703 | 0.004054 | 0.001270 | 0.000160 |
+
+The log ratio is centered across particles because a constant likelihood ratio
+does not change normalized posterior weights. These descriptive results show
+weak dependence on outcome assignment on the sampled support. They do not
+establish a property of the exact continuous posterior. Raw per-candidate arrays,
+all-population summaries and quantiles are retained by
+`codearc_likelihood_assignment_results.json`. A focused test distinguishes a
+known separable likelihood, whose assignment ratio is constant over particles,
+from an interacting likelihood with a large posterior change.
+
+One fixed follow-up now refits all three seeds with a prior proposal and no
+resampling, using the same 32-particle budget, 1000 steps, semantic features,
+170/42/400 source partition, original losses, optimizer and four strong
+baselines. It tests whether removing the first-observation proposal route during
+training helps the likelihood learn assignment dependence. No primary sources
+are used and every seed will be retained. Its immutable plan is
+`codearc_prior_training_plan.json`. A focused test verifies prefix visibility
+and an actual likelihood update while the original proposal-head parameters
+remain unused. Checkpoint loading must use the declared `PriorTrainingBelief`
+class and per-seed variant sidecar; the default model has matching tensor shapes
+but different filtering behavior. No efficacy conclusion is available yet.
