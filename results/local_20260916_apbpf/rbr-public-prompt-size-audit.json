@@ -1,0 +1,39 @@
+{
+  "schema": "apbpf-rbr-public-prompt-size-audit-v1",
+  "public_tasks_sha256": "3b1fcc94872c4ae7137e5b709476ba43dd2dbd757f8c2e1d83ad2bdb6c0309fd",
+  "tasks": 1221,
+  "character_counts": {
+    "description": {
+      "median": 1100,
+      "p95": 2090,
+      "maximum": 6000
+    },
+    "buggy_code": {
+      "median": 333,
+      "p95": 1831,
+      "maximum": 7280
+    },
+    "largest_public_input": {
+      "median": 19,
+      "p95": 143,
+      "maximum": 2579
+    },
+    "largest_public_expected": {
+      "median": 5,
+      "p95": 45,
+      "maximum": 2500
+    },
+    "combined_public_characters": {
+      "median": 1652,
+      "p95": 3947,
+      "maximum": 11813
+    }
+  },
+  "generation_requirements": [
+    "Retain all four public example slots under the fixed token cap; do not truncate whole chat blindly",
+    "Use deterministic field clipping with explicit omission markers; freeze same rule before all splits and families",
+    "Generate exactly8 full stdin/stdout programs per source with fixed source/candidate inventory",
+    "Generator runs in public-only sandbox; no fixed code/future inputs or outcomes mounted"
+  ],
+  "scope": "public-input feasibility audit, no generated candidates or outcome-based tuning"
+}

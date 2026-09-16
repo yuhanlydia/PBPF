@@ -1,0 +1,25 @@
+{
+  "scientific_measurements": false,
+  "actual_raw_data_materialized": true,
+  "domains": {
+    "runbugrun": {
+      "source_components": 1221,
+      "component_counts": {
+        "primary": 500,
+        "development": 400,
+        "train": 321
+      }
+    },
+    "codearc_replay": {
+      "source_components": 1112,
+      "component_counts": {
+        "primary": 500,
+        "development": 400,
+        "train": 212
+      }
+    }
+  },
+  "rbr_fresh_belief_training_required": true,
+  "claim_status": "exploratory-predeclared",
+  "firewall": "generator must mount only the domain public directory; evaluator directories never mounted"
+}

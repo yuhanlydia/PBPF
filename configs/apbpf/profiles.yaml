@@ -5,6 +5,10 @@ local_24gb:
   backend: real
   claim_status: prospective-gated
   device_budget: single_24gb_gpu
+local_exploratory:
+  backend: real
+  claim_status: exploratory-predeclared
+  device_budget: single_24gb_gpu
 slurm_h200x16:
   backend: real
   claim_status: prospective-gated

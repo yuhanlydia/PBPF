@@ -83,8 +83,8 @@ def resolve_config(path, profile="local_24gb", *, site=None):
         raise ValueError("profile backend must be real or fake")
     if execution["backend"] == "fake" and execution.get("claim_status") != "smoke-only-no-claim":
         raise ValueError("fake backend must be explicitly smoke-only-no-claim")
-    if execution["backend"] == "real" and execution.get("claim_status") != "prospective-gated":
-        raise ValueError("real backend must use prospective-gated claim status")
+    if execution["backend"] == "real" and execution.get("claim_status") not in {"prospective-gated", "exploratory-predeclared"}:
+        raise ValueError("real backend must use prospective-gated or exploratory-predeclared claim status")
     protocol = sections["protocol"]
     locked = {"seeds": [1701, 1702, 1703], "visible_tests": 4, "future_tests": 6,
               "particles": 8, "bootstrap_draws": 10000,

@@ -231,3 +231,32 @@ a 500-source primary bank cannot be built from the official-exclusive test pool.
 A new generated-bank partition needs an explicitly exploratory source split and
 fresh belief/utility fitting; existing belief checkpoints must not be reused on
 sources they previously saw. The official-exclusive pool remains reserved.
+
+
+## First real stage adapter: both-domain materialization (2026-09-17)
+
+The new `run_apbpf_materialize_worker.py` completed through the actual stage
+runner, with request fingerprints, evidence inventories and runner-authored
+lineage. It read pinned raw RBR/CodeNet and CodeARC files and created separate
+public/evaluator materializations: RBR 321/400/500 and CodeARC 212/400/500
+training/development/primary source components. RBR sources come from official
+training files; official test-only sources remain reserved. No correctness
+filter was used. Its new partition requires fresh belief/utility training and
+is explicitly exploratory because earlier experiments saw these source problems.
+
+The `local_exploratory` real profile marks stages nonconfirmatory from the
+outset and cannot become main-table eligible. `--through-stage` enables explicit
+partial provisioning/execution while full verification still requires all 21
+stages. The actual run completed **1/21** stages, with 20 pending; this is data
+preparation evidence, not generation or a passing scientific gate. The first
+materialization run is retained; the final run uses the recovery-command fix.
+
+Seven focused checks passed, covering public/private record separation, source
+splits independent of reference correctness, real partial-run resume/rerun,
+failed-gate stops and refusal to verify an incomplete DAG. An actual generator
+sandbox probe read all 1221 RBR public tasks, each with exactly four tests,
+while both raw-data and evaluator-artifact directories were unmounted.
+The full regression completed: **757 passed**, with one existing NumPy/PyTorch
+read-only-array warning. Compileall, shell syntax and diff checks also passed.
+Full attempt-owned data remain local; the snapshot includes their checksums,
+stage completion record and read-only run report.

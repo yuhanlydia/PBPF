@@ -1,12 +1,16 @@
 # A-PBPF stage-worker contract
 
-This is **prospective infrastructure**, not an experiment result. The repository
-does not bundle a complete set of scientifically validated real-stage adapters.
+The repository now bundles a real, two-domain `materialize` adapter, validated
+on pinned local raw data. The other 20 stages still need real adapters; a complete
+scientifically validated real-stage pipeline is not bundled.
 The site template intentionally leaves every command unprovisioned. Existing
 research scripts need explicit adapters to satisfy this contract; do not simply
 point a stage at an unrelated script and treat its exit status as evidence.
 
 The independent schema is `apbpf-iclr-v1`; legacy `pbpf-iclr` is unchanged.
+`local_exploratory` uses real workers and permanently labels every stage
+`exploratory-predeclared`, including before any gate fails. It cannot become
+main-table eligible, even if every descriptive gate later passes.
 `local_24gb`, `slurm_h200x16`, and `real` use only real commands. Profile names
 describe operator resources; the runner itself does not allocate GPUs or submit
 Slurm jobs. Slurm adapters must wait for completion and return the actual worker
@@ -44,6 +48,45 @@ All commands default to `configs/experiments/apbpf_iclr2027.yaml` and
 `--output-root runs/apbpf`. `doctor` is read-only: it lists every missing command,
 missing directory, and unavailable executable and exits 2 when unprovisioned.
 Readiness does not validate adapter scientific correctness or start experiments.
+
+## Implemented local materialization
+
+`scripts/run_apbpf_materialize_worker.py` reads the three provisioned site paths
+and the runner-owned request. The dataset directory must contain
+`runbugrun-v0.0.1/`, `project_codenet/problem_descriptions.tar.gz`, and `codearc/`.
+It validates the raw checksums and writes separate public/evaluator directories
+for both domains below the attempt's `outputs/`. Reference programs and future
+calls are evaluator-only. RBR descriptions are read directly from the pinned
+tar archive, so mutable extracted HTML cannot change the input silently.
+
+This worker requires `local_exploratory`: the generated RBR bank uses a new
+source partition of the 1221 eligible official-training problems, with
+321 training, 400 development, and 500 primary sources. Official test-only
+sources remain excluded. The earlier exploratory belief checkpoints saw some
+of these problems; downstream workers must train new belief/utility models
+on the new fitting sources and bind checkpoint identities to this manifest.
+No source is removed based on reference-program or generated-candidate success.
+The worker materializes CodeARC from its pinned raw data as well, preserving
+its 212/400/500 source partition.
+
+For incremental provisioning, `doctor`, `run`, and `rerun-stage` accept
+`--through-stage STAGE`. Readiness then covers that stage and its ordered
+predecessors. Execution stops at the requested stage, retaining the ordinary
+gate-stop rules; missing later stages remain pending. `verify` always requires
+all 21 stages. Omit this option for the full pipeline. A partial failure's
+recorded retry commands preserve the same terminal stage.
+
+Provision `commands.materialize` as the installed Python plus the materialize
+worker path, and set its SHA-256 in `worker_revisions.materialize` and its path
+in `worker_files.materialize`. Other stage commands may remain null for:
+
+```bash
+pbpf-apbpf doctor --profile local_exploratory --site /absolute/site.yaml --through-stage materialize
+pbpf-apbpf run --profile local_exploratory --site /absolute/site.yaml --through-stage materialize --output-root /absolute/runs
+```
+
+The completed root stage proves data preparation and provenance only. It does
+not prove generation, execution, hard-bank quality, inference, or efficacy.
 
 ## Worker inputs and outputs
 
