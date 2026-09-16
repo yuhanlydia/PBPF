@@ -524,3 +524,60 @@ perform very large integer enumeration or while-loop search. Raw outputs, all
 failures and the six-second scoring deadline remain unchanged. This evidence
 does not support fixing these failures by changing extraction or extending the
 output cap selectively.
+
+
+## Completed full-primary diagnosis and query stages (2026-09-17)
+
+The standalone CodeARC full-cache diagnostic completed all three fixed seeds,
+with 212 original training, 400 development and 500 primary source groups.
+The seed-mean full-primary association gap is -0.00261796 nats/test (95% source
+CI [-0.00530136, 0.00006508]); every seed has a negative gap. All four strong
+baselines outperform belief: paired NLL advantages for belief are -0.0756490
+(pair-aware), -0.0591516 (Deep Sets), -0.0498716 (Dirichlet), and -0.0629411
+(no-particle bottleneck). All four confidence intervals lie below zero.
+Association, invariance and baseline-fairness claims remain unsupported.
+
+Failure diagnosis retained the whole population. Of 4000 primary candidates,
+2715 have constant visible histories and exactly zero shuffle gap. The other
+1285 candidates have gap -0.00814929, with CI [-0.0165768, 0.00009206]. Thus
+constant-history dilution alone does not explain the missing positive effect.
+Best checkpoints were selected on development at steps400/450/350 for
+1701/1702/1703, with NLL0.5281/0.5299/0.5329. Step1000 development NLL worsened
+to0.6547/0.6484/0.6468. The evaluator already restored the better checkpoints;
+no primary-based reselection or favorable-source filtering was performed.
+The exact executed training/association source was archived before later
+adapter edits. Raw checkpoints and prediction arrays remain locally bound by
+checksums; repository summaries include the training curves and report digests.
+
+Assessment bundles now forward byte-identical evaluator caches and belief
+checkpoints through declared direct stage dependencies. Four real adapters add
+oracle headroom, its gate, active testing and its gate. Oracle subsets use
+canonical ordering for both fixed and uniform-random subset comparators, with
+the main local oracle check fixed in advance at budget2. Budgets1/2/4 are all
+reported. Active policies use only the four public slots; all six future labels
+remain evaluator-side. Diagnostic MI, fixed, random, predictive entropy and
+joint-particle MI all preserve exact fixed observation budgets. Threshold
+stopping is calibrated on original development sources before primary replay,
+with complete separate threshold--quality curves retained. Cached observation
+counts do not establish physical runtime savings.
+
+The actual CodeARC oracle replay completed three seeds over all 500 primary
+sources/4000 candidates. At budget2, oracle NLL advantage is0.0762357 over fixed
+(95% CI[0.0659394,0.0877039]) and0.0714757 over random canonical subsets
+(CI[0.0643118,0.0791274]), above the unchanged0.03 threshold in this one-domain
+standalone diagnostic. This is an evaluator upper bound using hidden labels,
+not a realizable policy or a passing staged two-domain gate. At budget4, oracle,
+fixed and random canonical subsets coincide exactly because the public pool
+contains only four tests. The standalone progress counter stopped at its last
+64-item update (3968); the preserved count audit verifies all4000 records for
+each seed and the complete report. No records were missing.
+
+The full CodeARC active-policy/stopping diagnostic is now running with the same
+checkpoints and complete primary population. Prior association/fairness failures
+remain binding. The waiting prefix-v3 was archived without interrupting a stage;
+prefix-v4 queues fifteen real stages through active_testing_gate. Six later
+adapters remain absent and only1/21 real stages has actually completed.
+
+Seventeen focused query/bundle/prediction checks passed. Full A-PBPF regression
+passed127 checks with the pre-existing read-only NumPy-to-Torch warning in the
+legacy diagnostic adapter. Compilation and whitespace checks passed.

@@ -1,0 +1,170 @@
+{
+  "seeds": [
+    1701,
+    1702,
+    1703
+  ],
+  "candidates_per_seed": 4000,
+  "source_components": 500,
+  "summary": {
+    "1": {
+      "fixed": {
+        "nll": 0.6688920975319214,
+        "against_fixed": {
+          "mean_nll_gap": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "clusters": 500,
+          "replicates": 10000,
+          "unit": "source_component_across_all_fixed_seeds"
+        }
+      },
+      "random_canonical": {
+        "nll": 0.661772169308116,
+        "against_fixed": {
+          "mean_nll_gap": 0.007119928223805295,
+          "ci95": [
+            -0.0009939627951114538,
+            0.015491132542532352
+          ],
+          "clusters": 500,
+          "replicates": 10000,
+          "unit": "source_component_across_all_fixed_seeds"
+        }
+      },
+      "oracle": {
+        "nll": 0.5878398330228196,
+        "against_fixed": {
+          "mean_nll_gap": 0.0810522645091017,
+          "ci95": [
+            0.06976915672876767,
+            0.09298784692840029
+          ],
+          "clusters": 500,
+          "replicates": 10000,
+          "unit": "source_component_across_all_fixed_seeds"
+        },
+        "against_random": {
+          "mean_nll_gap": 0.07393233628529641,
+          "ci95": [
+            0.06666435788095826,
+            0.08173691713352584
+          ],
+          "clusters": 500,
+          "replicates": 10000,
+          "unit": "source_component_across_all_fixed_seeds"
+        }
+      }
+    },
+    "2": {
+      "fixed": {
+        "nll": 0.6031237901345723,
+        "against_fixed": {
+          "mean_nll_gap": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "clusters": 500,
+          "replicates": 10000,
+          "unit": "source_component_across_all_fixed_seeds"
+        }
+      },
+      "random_canonical": {
+        "nll": 0.5983638002980086,
+        "against_fixed": {
+          "mean_nll_gap": 0.0047599898365636665,
+          "ci95": [
+            -0.002618917460336041,
+            0.012481551204694227
+          ],
+          "clusters": 500,
+          "replicates": 10000,
+          "unit": "source_component_across_all_fixed_seeds"
+        }
+      },
+      "oracle": {
+        "nll": 0.526888124105831,
+        "against_fixed": {
+          "mean_nll_gap": 0.07623566602874134,
+          "ci95": [
+            0.06593935243525646,
+            0.0877039213917425
+          ],
+          "clusters": 500,
+          "replicates": 10000,
+          "unit": "source_component_across_all_fixed_seeds"
+        },
+        "against_random": {
+          "mean_nll_gap": 0.07147567619217768,
+          "ci95": [
+            0.06431176079722742,
+            0.07912742327900811
+          ],
+          "clusters": 500,
+          "replicates": 10000,
+          "unit": "source_component_across_all_fixed_seeds"
+        }
+      }
+    },
+    "4": {
+      "fixed": {
+        "nll": 0.5451004954162572,
+        "against_fixed": {
+          "mean_nll_gap": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "clusters": 500,
+          "replicates": 10000,
+          "unit": "source_component_across_all_fixed_seeds"
+        }
+      },
+      "random_canonical": {
+        "nll": 0.5451004954162572,
+        "against_fixed": {
+          "mean_nll_gap": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "clusters": 500,
+          "replicates": 10000,
+          "unit": "source_component_across_all_fixed_seeds"
+        }
+      },
+      "oracle": {
+        "nll": 0.5451004954162572,
+        "against_fixed": {
+          "mean_nll_gap": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "clusters": 500,
+          "replicates": 10000,
+          "unit": "source_component_across_all_fixed_seeds"
+        },
+        "against_random": {
+          "mean_nll_gap": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "clusters": 500,
+          "replicates": 10000,
+          "unit": "source_component_across_all_fixed_seeds"
+        }
+      }
+    }
+  },
+  "all_policies_execute_exact_budget": true,
+  "seed_estimand": "mean paired loss over all three fixed seeds; shared source clusters",
+  "budget_semantics": "cached public-observation counts; no new execution or wall-clock savings",
+  "scope": "standalone exploratory full-primary oracle diagnostic after negative association/fairness; no stage completion",
+  "oracle_gate_budget": 2,
+  "cache_sha256": "ceac963cacb3e8f6cb38992233ea8c99503ad339f190d22499e5117afb87533b"
+}

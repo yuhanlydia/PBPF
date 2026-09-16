@@ -1,0 +1,20 @@
+{
+  "scope": "complete record inventory; status completed counter reports last64-item progress tick",
+  "seeds": {
+    "1701": {
+      "actual_records": 4000,
+      "last_progress_update": 3968,
+      "complete": true
+    },
+    "1702": {
+      "actual_records": 4000,
+      "last_progress_update": 3968,
+      "complete": true
+    },
+    "1703": {
+      "actual_records": 4000,
+      "last_progress_update": 3968,
+      "complete": true
+    }
+  }
+}

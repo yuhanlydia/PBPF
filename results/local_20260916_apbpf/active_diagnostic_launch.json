@@ -1,0 +1,15 @@
+{
+  "pid": 1789389,
+  "command": [
+    "/data/cwj/PBPF/.venv/bin/python",
+    "-u",
+    "scripts/run_local_active_diagnostic.py",
+    "--cache",
+    "/data/cwj/PBPF/local/longgoal/codearc-full-stage-cache-proof-v1.json",
+    "--training-root",
+    "/data/cwj/PBPF/local/longgoal/codearc-full-stage-training-diagnostic-v1",
+    "--output",
+    "/data/cwj/PBPF/local/longgoal/codearc-full-active-diagnostic-v1"
+  ],
+  "scope": "full fixed budgets and development-locked stopping; exploratory after negative upstream gates"
+}

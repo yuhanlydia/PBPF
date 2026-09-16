@@ -4,6 +4,7 @@ import argparse
 import json
 
 from pbpf.apbpf.stage_prediction import DOMAINS
+from pbpf.apbpf.assessment_bundle import forward_bundle
 from pbpf.apbpf.worker_io import WorkerIO
 
 
@@ -41,10 +42,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--stage', choices=['association_gate', 'pair_invariance_gate'], required=True)
     args = parser.parse_args()
-    io = WorkerIO(args.stage, ['scripts/run_apbpf_prediction_gate_worker.py', 'src/pbpf/apbpf/stage_prediction.py'])
+    io = WorkerIO(args.stage, ['scripts/run_apbpf_prediction_gate_worker.py', 'src/pbpf/apbpf/stage_prediction.py',
+                              'src/pbpf/apbpf/assessment_bundle.py'])
     evidence = json.loads(io.artifact('association', 'association.json').read_text())
     gate = decision(evidence, io.config, args.stage)
     (io.outputs/'gate-evidence.json').write_text(json.dumps(gate, indent=2)+'\n')
+    if args.stage == 'association_gate':
+        forward_bundle(io, 'association')
     io.finish({'actual_association_evidence': True, 'scope': 'exploratory fixed-threshold prediction gate'}, gate=gate)
 
 

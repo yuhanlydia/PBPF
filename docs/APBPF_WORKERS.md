@@ -1,13 +1,14 @@
 # A-PBPF stage-worker contract
 
-The repository bundles adapters for the first eleven real stages: `materialize`,
+The repository bundles adapters for the first fifteen real stages: `materialize`,
 `hard_bank_lock`, `execution_cache`, `hard_bank`, `hard_bank_gate`,
 `train_baselines`, `train_belief`, `baseline_fairness_gate`, `association`,
-`association_gate`, and `pair_invariance_gate`.
+`association_gate`, `pair_invariance_gate`, `oracle_headroom`,
+`oracle_headroom_gate`, `active_testing`, and `active_testing_gate`.
 Only materialization has completed as a real two-domain stage so far. Public
 candidate import has also been checked on all 1112 CodeARC source groups; worker
 contract fixtures are separate from scientific execution evidence. The other
-10 stages still need real adapters; a complete scientifically validated real-stage
+6 stages still need real adapters; a complete scientifically validated real-stage
 pipeline is not bundled.
 The site template intentionally leaves every command unprovisioned. Existing
 research scripts need explicit adapters to satisfy this contract; do not simply
@@ -190,9 +191,41 @@ thresholds remain unchanged and the runner recomputes each gate decision.
 The standalone `run_local_stage_training_diagnostic.py` can exercise these
 trainers and controls on an existing, checksummed full cache while complete
 two-domain generation is pending. Its output is explicitly a standalone
-exploratory diagnostic and never counts as a sealed DAG stage. Oracle headroom,
-active testing, selection, repair, replication and paper tables still require
-their remaining ten adapters.
+exploratory diagnostic and never counts as a sealed DAG stage. Selection,
+repair, replication and paper tables still require their remaining
+six adapters.
+
+`--through-stage active_testing_gate` provisions the oracle and active-query
+workers as well. Association produces an evaluator-only assessment bundle with
+the exact full cache and all three belief checkpoints. The association gate,
+oracle stage and oracle gate forward byte-identical bundles as declared output
+artifacts. Downstream workers consume only their direct dependencies; no implicit
+ancestor lookup or untracked external result import is used. These bundles must
+never be mounted in a generator sandbox.
+
+Oracle replay exhausts canonical subsets at budgets 1, 2 and 4, using the same
+proposal noise and resampling uniforms. Fixed and uniformly random subsets use
+the same canonical ordering. The local exploratory oracle gate is predeclared
+at budget 2; all budgets remain reported. With only four public tests, the
+four-test canonical oracle equals fixed testing. This is a limitation of the
+current materialization, not evidence that test selection has no value in a
+larger pool.
+
+Active replay uses the trained joint SMC posterior, a nuisance-marginalized
+diagnostic MI selector, and fixed/random/predictive-entropy/joint-particle-MI
+controls. Policies receive only four public feature/outcome slots; six future
+targets enter evaluator scoring separately. Every fixed-budget policy observes
+exactly its declared number of distinct public tests. At budget4, the pool
+allows order differences only. The gate uses advantage over both fixed and
+random testing, without changing the 0.03 threshold.
+
+Stopping thresholds are chosen on original development sources before primary
+replay. The chosen thresholds and complete threshold--quality curves remain
+separate from the fixed-budget table. A savings claim requires at least25%
+fewer observations and no worse primary NLL than fixed, random and same-policy
+four-test references, with nonnegative source-cluster lower bounds. All budgets
+count cached public observations; no wall-clock or physical execution savings
+are claimed. Failed upstream gates continue to block confirmatory claims.
 
 ## Worker inputs and outputs
 

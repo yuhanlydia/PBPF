@@ -9,6 +9,7 @@ import numpy as np
 import torch
 
 from pbpf.apbpf.codearc_bank import file_sha
+from pbpf.apbpf.assessment_bundle import create_bundle
 from pbpf.apbpf.stage_prediction import DOMAINS, aggregate_predictions, load_training
 from pbpf.apbpf.worker_io import WorkerIO
 from pbpf.belief.model import NeuralBeliefModel
@@ -105,6 +106,7 @@ def main():
                 'domains': results, 'bootstrap_draws': io.config['protocol']['bootstrap_draws'],
                 'scope': 'exploratory full-population controls; no favorable stratum selection'}
     (io.outputs/'association.json').write_text(json.dumps(evidence, indent=2)+'\n')
+    create_bundle(io, training)
     io.finish({'actual_counterfactual_replay': True, 'domains': list(results),
                'controls': list(CONTROLS), 'full_primary_population': True,
                'scope': 'fixed-checkpoint association and pair-preserving controls; gates downstream'})

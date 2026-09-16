@@ -1,0 +1,92 @@
+{
+  "schema": "apbpf-codearc-full-primary-failure-diagnosis-v1",
+  "scope": "post-evaluation diagnostics only; no population filtering, checkpoint reselection or tuning on primary",
+  "cache_sha256": "ceac963cacb3e8f6cb38992233ea8c99503ad339f190d22499e5117afb87533b",
+  "strata": {
+    "full": {
+      "candidates": 4000,
+      "association": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.0026179607957601547,
+        "ci95": [
+          -0.005301363542344836,
+          6.507917907502909e-05
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    },
+    "eligible": {
+      "candidates": 1285,
+      "association": {
+        "unit": "source_component",
+        "clusters": 287,
+        "replicates": 10000,
+        "mean_nll_gap": -0.008149294182658195,
+        "ci95": [
+          -0.016576797554423837,
+          9.205756209941771e-05
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    },
+    "constant_visible": {
+      "candidates": 2715,
+      "association": {
+        "unit": "source_component",
+        "clusters": 454,
+        "replicates": 10000,
+        "mean_nll_gap": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    },
+    "future_variable": {
+      "candidates": 1505,
+      "association": {
+        "unit": "source_component",
+        "clusters": 305,
+        "replicates": 10000,
+        "mean_nll_gap": -0.0023708646185696125,
+        "ci95": [
+          -0.007866766271746662,
+          0.0030359796520416657
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    }
+  },
+  "development_checkpoint_diagnosis": {
+    "1701": {
+      "best_step": 400,
+      "best_development_nll": 0.528069794178009,
+      "last_step": 1000,
+      "last_development_nll": 0.6547482013702393,
+      "selected_checkpoint_sha256": "1def3c7d352b40f047d695c3620ba34e52b51c3ebcf4b02d73612b60a3ba9a98"
+    },
+    "1702": {
+      "best_step": 450,
+      "best_development_nll": 0.5298790335655212,
+      "last_step": 1000,
+      "last_development_nll": 0.6483737230300903,
+      "selected_checkpoint_sha256": "255c942d7cfe325069a83ac08eb680020b9223adef7cad880c363e375591f560"
+    },
+    "1703": {
+      "best_step": 350,
+      "best_development_nll": 0.5328583121299744,
+      "last_step": 1000,
+      "last_development_nll": 0.6467737555503845,
+      "selected_checkpoint_sha256": "421572d55268b079b0d86aff1c42df1aecabf8a55b01e0617b3934776a9996bd"
+    }
+  },
+  "findings": [
+    "Constant histories have exactly zero shuffle gap as required.",
+    "Eligible histories also do not establish the association target; negative full-population gap is not explained solely by constant-history dilution.",
+    "Development checkpoint selection retains steps350\u2013450; extending fitting to1000 worsens development NLL in every seed. Best checkpoints were already restored before primary scoring.",
+    "No justification was found for changing labels, dropping difficult sources or selecting another primary-favorable checkpoint."
+  ]
+}
