@@ -1,0 +1,67 @@
+{
+  "schema": "apbpf-rbr-two-gpu-handoff-v1",
+  "original_parent": {
+    "pid": 1117848,
+    "state": "S",
+    "ppid": 1117828,
+    "start_ticks": "63664004",
+    "command": ".venv/bin/python -u scripts/run_local_rbr_replication_generation.py --run-root local/longgoal --previous-pid 3469598 ",
+    "children": [
+      1477375
+    ]
+  },
+  "source_sha256": {
+    "scripts/run_local_rbr_replication_generation.py": "5298c05c648504d2a14879d90f5a8294c8d8a768a33154a8a16150b1bc292de3",
+    "scripts/generate_apbpf_rbr_replication_bank.py": "b273a104df566fa0d903c5f6c565444b8fbbc6cfb503b9ef640121f64d0a2592",
+    "scripts/apbpf_generator_sandbox.sh": "4891ed0edfd435e4ea3af2c805007d78f2bd8e85060e6b3e9e1f6e691315b9de",
+    "src/pbpf/apbpf/rbr_prompt.py": "db5a53422a7bfe44ef091373eddfee789ad6ad6a6116ecb227c9d8021d75fe5c",
+    "src/pbpf/apbpf/codearc_bank.py": "cc479620ee4a4922a060be466092a027881f35ab8203cc5b7f9154d7dc29cdfc",
+    "scripts/coordinate_rbr_replication_gpus.py": "0f4f57f02919dfb8eb2189b0cca822e35fa5812f78ffd6d5572b7adfeb6e3c1e"
+  },
+  "original_status_sha256": "4a44751ca764ea1faa2c5fb0379de81f073cf97d4d404f212c6ce5a2dcadc8c4",
+  "public_tasks_sha256": "3b1fcc94872c4ae7137e5b709476ba43dd2dbd757f8c2e1d83ad2bdb6c0309fd",
+  "model_proof_sha256": "d8bb587d950061e60f68f114a82f28bfed2361761c498bab66c4f9b14ed29ac7",
+  "gpus": [
+    0,
+    1
+  ],
+  "bank_specs": {
+    "rbr-deepseek-development-pilot16": [
+      "development",
+      16,
+      0
+    ],
+    "rbr-deepseek-train321": [
+      "train",
+      321,
+      0
+    ],
+    "rbr-deepseek-development384": [
+      "development",
+      384,
+      16
+    ],
+    "rbr-deepseek-primary500": [
+      "primary",
+      500,
+      0
+    ]
+  },
+  "expected_bank_identity": {
+    "model": "deepseek-ai/deepseek-coder-6.7b-instruct",
+    "revision": "e5d64addd26a6a1db0f9b863abf6ee3141936807",
+    "candidates": 8,
+    "source_sha256": "b273a104df566fa0d903c5f6c565444b8fbbc6cfb503b9ef640121f64d0a2592",
+    "prompt_source_sha256": "db5a53422a7bfe44ef091373eddfee789ad6ad6a6116ecb227c9d8021d75fe5c",
+    "inventory_source_sha256": "cc479620ee4a4922a060be466092a027881f35ab8203cc5b7f9154d7dc29cdfc",
+    "model_proof_sha256": "d8bb587d950061e60f68f114a82f28bfed2361761c498bab66c4f9b14ed29ac7",
+    "public_tasks_sha256": "3b1fcc94872c4ae7137e5b709476ba43dd2dbd757f8c2e1d83ad2bdb6c0309fd",
+    "public_manifest_sha256": "27dda6a6eca39d3f39283196944a4ffe52a5905d6535156991922ba3813912f7",
+    "candidate_seed_policy": "sha256(seed:task_id:candidate_index) first32bits",
+    "temperature": 0.8,
+    "top_p": 0.95
+  },
+  "scheduling_policy": "largest remaining declared source inventory first; no outcome-based scheduling",
+  "handoff": "wait for Qwen completion and idleGPU0; park only original parent, keep its current child running; own remaining bank scheduling; retire old parent only after adopted bank validates and child is terminal",
+  "scope": "scheduling only; unchanged generator source, model, public tasks, per-candidate seeds, serial decode and token limits; disjoint output directories; GPU2/3 untouched"
+}

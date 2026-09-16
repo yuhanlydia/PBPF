@@ -13,7 +13,10 @@ families. All nine configured prediction controls are now complete for both
 CodeARC families, including the previously missing fixed `history_rate`.
 See `full_pipeline_progress_v2.json`, `ablation_coverage_audit.json` and the final
 sections below. The latest checkpoint is
-`prior_refit_seed1701_progress.json`: the first prior/no-resampling refit has
+`parallel_replication_queue_progress.json`: a tested coordinator is queued to
+use GPU0 and GPU1 for distinct DeepSeek banks after Qwen completes and GPU0 is
+idle. Handoff has not started; the original generator remains untouched.
+The first prior/no-resampling refit has
 completed and failed the original association/fairness gates; seed1702 is
 running and the all-seed comparison remains queued. A common-particle likelihood audit
 has reproduced all three models' prior/no-resampling predictions and measured
@@ -1092,3 +1095,29 @@ The second seed started automatically. Its report is
 `codearc_prior_training_seed1701_variant.json`. Observed generation throughput
 and verified live process identities are retained in the progress record;
 throughput measurements do not guarantee future completion times.
+
+## Queued parallel replication scheduling
+
+Observed RBR generation throughput is substantially lower for the required
+serial DeepSeek decoding than for Qwen. A coordinator now waits for the complete
+Qwen primary bank and an idle GPU0 before changing the DeepSeek schedule. It
+will park only the original scheduler, keep the existing GPU1 generator alive,
+and assign remaining whole banks to distinct output directories on GPU0/GPU1.
+The largest declared source inventory is assigned first, without inspecting
+outcomes. The old scheduler can be retired only after the adopted bank passes
+complete checksum/identity validation and its child is terminal.
+
+All generation settings remain fixed: pinned model and weights proof, generator
+source, public tasks, per-candidate seed rule, eight serial candidates, sampling
+parameters and 4096/1024 input/output token limits. The completed pilot and
+active training bank match the coordinator's expected identity. Five focused
+tests pass, including a real parked-parent/live-child test and rejection of
+retirement while a child is still running. GPU2 and GPU3 are not reassigned.
+
+`rbr_deepseek_parallel_handoff_plan.json` is the active declaration. A childless
+initial waiting coordinator was superseded before any handoff to improve the
+fixed bank ordering; its audit remains available and no generator was stopped.
+At this checkpoint the replacement coordinator is still waiting, the original
+scheduler is unparked and remains the generation owner, and no parallel
+generation result or speedup is claimed. This changes scheduling only; it does
+not complete an additional sealed scientific stage or change failed gates.

@@ -320,6 +320,29 @@ only for intentionally partial runs.
 
 ## Complete local replication and remaining ablations
 
+`coordinate_rbr_replication_gpus.py --run-root /absolute/local/longgoal
+--output /absolute/new-handoff` can move the original serial RBR DeepSeek queue
+to two GPUs after Qwen finishes its complete primary bank and GPU0 is idle.
+It verifies the original scheduler's PID, process start time and command. The
+handoff parks only that scheduler with SIGSTOP; its current GPU1 generator
+continues. The new coordinator adopts that live bank and schedules remaining
+whole banks into distinct directories, largest declared source inventory first.
+Generator source, model proof/revision, per-candidate seeds, serial decode,
+sampling settings and token limits remain fixed. No source is selected by
+generated outcomes. GPU2 and GPU3 are untouched.
+
+The old scheduler is retired only after its adopted generator is terminal, its
+bank has passed the complete checksum/identity audit, and no live child remains.
+The original scheduler state, handoff and retirement records are retained.
+After ownership transfer, the shared generation status names the new coordinator
+and per-GPU bank assignments, so existing evaluator watchers follow the same
+canonical bank paths. Do not resume the superseded scheduler: it would attempt
+to create the already assigned future directories. Before handoff, the new
+coordinator only waits and does not alter the existing generator or its status.
+Process tests verify that a parked parent does not stop its child and cannot be
+retired while work is live; further checks cover PID identity, GPU occupancy,
+bank identity and the fixed inventory-based scheduling order.
+
 `run_local_apbpf_full_pipeline.py --run-root /absolute/local/longgoal
 --materialized-root /absolute/materialize/outputs --output /absolute/new-attempt
 --gpu 0` waits for all Qwen public banks and both completed DeepSeek replays.
