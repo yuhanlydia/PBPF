@@ -1,0 +1,650 @@
+[
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-110",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 2,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/110"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-111",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/111"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-112",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 2,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/112"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-113",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/113"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-114",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/114"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-115",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/115"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-116",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/116"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-117",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/117"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-118",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/118"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-119",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/119"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-120",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/120"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-121",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/121"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-122",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "task_id": "HumanEval/122"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-123",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/123"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-124",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "task_id": "HumanEval/124"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-125",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/125"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-126",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/126"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-127",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/127"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-128",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/128"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-129",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/129"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-130",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/130"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-131",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/131"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-132",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/132"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-133",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/133"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-134",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/134"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-135",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "task_id": "HumanEval/135"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-136",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/136"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-137",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/137"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-138",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/138"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-139",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/139"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-140",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/140"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-141",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/141"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-142",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/142"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-143",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/143"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-144",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/144"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-145",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/145"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-146",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "task_id": "HumanEval/146"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-147",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/147"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-148",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/148"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-149",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/149"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-150",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/150"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-151",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/151"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-152",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/152"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-153",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/153"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-154",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/154"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-155",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/155"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-156",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/156"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-157",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 1,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/157"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-158",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "task_id": "HumanEval/158"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-159",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/159"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-160",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/160"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-161",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/161"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-162",
+    "final_pass_at_1": 1.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      1.0,
+      1.0,
+      0.0
+    ],
+    "task_id": "HumanEval/162"
+  },
+  {
+    "artifact": "/dev/shm/pbpf-additional/evalplus_repair_164_shard2/HumanEval-163",
+    "final_pass_at_1": 0.0,
+    "initial_passes": 0,
+    "round_pass_at_1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "task_id": "HumanEval/163"
+  }
+]

@@ -27,6 +27,14 @@ existing 164-task GOAV EvalPlus bank found that four-test pass rate already
 matches Oracle Pass@8, so that bank cannot identify an additional PBPF selector
 gain; a harder grouped candidate bank is required.
 
+## 2026-09-16 local execution results
+
+The [local execution report and artifacts](results/local_20260916/README.md) record
+completed runnable diagnostics (EvalPlus frozen 86/164; repair 72/164), training
+logs, reproduction patches, and 674 passing tests on the recorded run version.
+Formal S0–S4 remains unexecuted. These are not APBPF results or evidence of
+learned PBPF repair gains.
+
 ## Install and run offline
 
 After the reviewed feature branch is published:

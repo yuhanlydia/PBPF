@@ -1,0 +1,66 @@
+{
+  "status": "local_repair_complete",
+  "model_download_completed": true,
+  "model_sha256_verified": true,
+  "cache": "/home/root123/.cache/pbpf/huggingface",
+  "repair_smoke_completed": true,
+  "full_1500_step_pilot_completed": true,
+  "gpu": 0,
+  "full_repair_gpu": 1,
+  "updated_at": "2026-09-16 18:43:08 +0800",
+  "smoke_gpu": 2,
+  "projector_steps": 1500,
+  "selected_step": 750,
+  "training_items": 120,
+  "summary": {
+    "heuristic": {
+      "future_pass_fraction": 0.375,
+      "generated_tokens": 1614,
+      "generation_seconds": 53.092674016952515,
+      "solved": 2,
+      "success_rate": 0.25,
+      "tasks": 8
+    },
+    "no_latent": {
+      "future_pass_fraction": 0.25,
+      "generated_tokens": 1619,
+      "generation_seconds": 53.16205292113591,
+      "solved": 1,
+      "success_rate": 0.125,
+      "tasks": 8
+    },
+    "pbpf": {
+      "future_pass_fraction": 0.1875,
+      "generated_tokens": 1614,
+      "generation_seconds": 53.33928880013991,
+      "solved": 1,
+      "success_rate": 0.125,
+      "tasks": 8
+    },
+    "posterior_map": {
+      "future_pass_fraction": 0.1875,
+      "generated_tokens": 1614,
+      "generation_seconds": 52.972439687117,
+      "solved": 1,
+      "success_rate": 0.125,
+      "tasks": 8
+    },
+    "posterior_mean": {
+      "future_pass_fraction": 0.25,
+      "generated_tokens": 1630,
+      "generation_seconds": 53.50718209601473,
+      "solved": 1,
+      "success_rate": 0.125,
+      "tasks": 8
+    },
+    "random_latent": {
+      "future_pass_fraction": 0.25,
+      "generated_tokens": 1619,
+      "generation_seconds": 53.195163849159144,
+      "solved": 1,
+      "success_rate": 0.125,
+      "tasks": 8
+    }
+  },
+  "scope": "Current-code local pilot; upstream dataset/cache differs and formal S0-S4 remains unprovisioned."
+}

@@ -1,0 +1,33 @@
+{
+  "weights": [
+    [
+      0.5,
+      0.5,
+      0.0,
+      0.0
+    ],
+    [
+      0.333251953125,
+      0.0,
+      0.333740234375,
+      0.333251953125
+    ]
+  ],
+  "indices": [
+    [
+      0,
+      0,
+      1,
+      1
+    ],
+    [
+      0,
+      0,
+      2,
+      3
+    ]
+  ],
+  "has_underflowed_zero_weight": true,
+  "selected_weights_all_positive": true,
+  "upstream_first_weight_zero_precondition": false
+}

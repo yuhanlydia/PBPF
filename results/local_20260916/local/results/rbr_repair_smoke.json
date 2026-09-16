@@ -1,0 +1,224 @@
+{
+  "arms": [
+    "no_latent",
+    "random_latent",
+    "heuristic",
+    "posterior_mean",
+    "posterior_map",
+    "pbpf"
+  ],
+  "claim_status": "pilot-no-confirmatory-claim",
+  "matched": {
+    "max_new_tokens": 512,
+    "same_actor": "Qwen/Qwen2.5-Coder-7B-Instruct",
+    "same_decode_policy": "greedy",
+    "same_prefix_tokens": 8,
+    "same_prompt": true,
+    "same_revision": "c03e6d358207e414f1eca0bb1891e29f1db0e242",
+    "same_tasks": true
+  },
+  "schema": "pbpf-rbr-repair-gate-v1",
+  "seed": 2701,
+  "summary": {
+    "heuristic": {
+      "future_pass_fraction": 0.0,
+      "generated_tokens": 230,
+      "generation_seconds": 7.431262876023538,
+      "solved": 0,
+      "success_rate": 0.0,
+      "tasks": 1
+    },
+    "no_latent": {
+      "future_pass_fraction": 0.0,
+      "generated_tokens": 230,
+      "generation_seconds": 8.546768817002885,
+      "solved": 0,
+      "success_rate": 0.0,
+      "tasks": 1
+    },
+    "pbpf": {
+      "future_pass_fraction": 0.0,
+      "generated_tokens": 230,
+      "generation_seconds": 7.364527545985766,
+      "solved": 0,
+      "success_rate": 0.0,
+      "tasks": 1
+    },
+    "posterior_map": {
+      "future_pass_fraction": 0.0,
+      "generated_tokens": 230,
+      "generation_seconds": 7.531150639988482,
+      "solved": 0,
+      "success_rate": 0.0,
+      "tasks": 1
+    },
+    "posterior_mean": {
+      "future_pass_fraction": 0.0,
+      "generated_tokens": 230,
+      "generation_seconds": 7.411315730074421,
+      "solved": 0,
+      "success_rate": 0.0,
+      "tasks": 1
+    },
+    "random_latent": {
+      "future_pass_fraction": 0.0,
+      "generated_tokens": 230,
+      "generation_seconds": 7.428434603032656,
+      "solved": 0,
+      "success_rate": 0.0,
+      "tasks": 1
+    }
+  },
+  "tasks": [
+    {
+      "arm": "no_latent",
+      "code": "def f(n, ans):\n    for k, c in list(dic.items()):\n        a, b = k\n        if a == n:\n            if not b in cost or c < cost[b]:\n                cost[b] = c\n        elif b == n:\n            if not a in cost or c < cost[a]:\n                cost[a] = c\n    for k, c in sorted(list(cost.items()), key=lambda x: x[1]):\n        if not k in res:\n            res.append(k)\n            ans += c\n            del dic[k]\n            return f(k, ans)\n    return ans\n\nwhile True:\n    n, m = map(int, input().split())\n    if n == m == 0: break\n    dic = {}\n    s, b, c = map(int, input().split())\n    dic[(s, b)] = c\n    for i in range(m-1):\n        a, b, c = map(int, input().split())\n        dic[(a, b)] = c\n    cost = {}\n    res = [s]\n    print(f(s, 0))",
+      "code_sha256": "a4c1e92ec383f117035a467e8bb488260b1a3328fb94d96b6a394135d7a9b116",
+      "future_pass_fraction": 0.0,
+      "generated_tokens": 230,
+      "generation_seconds": 8.546768817002885,
+      "outcomes": [
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION"
+      ],
+      "particle_index": null,
+      "problem_id": "p00180",
+      "solved": false,
+      "task_id": "30445",
+      "visible_pass_fraction": 0.0
+    },
+    {
+      "arm": "random_latent",
+      "code": "def f(n, ans):\n    for k, c in list(dic.items()):\n        a, b = k\n        if a == n:\n            if not b in cost or c < cost[b]:\n                cost[b] = c\n        elif b == n:\n            if not a in cost or c < cost[a]:\n                cost[a] = c\n    for k, c in sorted(list(cost.items()), key=lambda x: x[1]):\n        if not k in res:\n            res.append(k)\n            ans += c\n            del dic[k]\n            return f(k, ans)\n    return ans\n\nwhile True:\n    n, m = map(int, input().split())\n    if n == m == 0: break\n    dic = {}\n    s, b, c = map(int, input().split())\n    dic[(s, b)] = c\n    for i in range(m-1):\n        a, b, c = map(int, input().split())\n        dic[(a, b)] = c\n    cost = {}\n    res = [s]\n    print(f(s, 0))",
+      "code_sha256": "a4c1e92ec383f117035a467e8bb488260b1a3328fb94d96b6a394135d7a9b116",
+      "future_pass_fraction": 0.0,
+      "generated_tokens": 230,
+      "generation_seconds": 7.428434603032656,
+      "outcomes": [
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION"
+      ],
+      "particle_index": null,
+      "problem_id": "p00180",
+      "solved": false,
+      "task_id": "30445",
+      "visible_pass_fraction": 0.0
+    },
+    {
+      "arm": "heuristic",
+      "code": "def f(n, ans):\n    for k, c in list(dic.items()):\n        a, b = k\n        if a == n:\n            if not b in cost or c < cost[b]:\n                cost[b] = c\n        elif b == n:\n            if not a in cost or c < cost[a]:\n                cost[a] = c\n    for k, c in sorted(list(cost.items()), key=lambda x: x[1]):\n        if not k in res:\n            res.append(k)\n            ans += c\n            del dic[k]\n            return f(k, ans)\n    return ans\n\nwhile True:\n    n, m = map(int, input().split())\n    if n == m == 0: break\n    dic = {}\n    s, b, c = map(int, input().split())\n    dic[(s, b)] = c\n    for i in range(m-1):\n        a, b, c = map(int, input().split())\n        dic[(a, b)] = c\n    cost = {}\n    res = [s]\n    print(f(s, 0))",
+      "code_sha256": "a4c1e92ec383f117035a467e8bb488260b1a3328fb94d96b6a394135d7a9b116",
+      "future_pass_fraction": 0.0,
+      "generated_tokens": 230,
+      "generation_seconds": 7.431262876023538,
+      "outcomes": [
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION"
+      ],
+      "particle_index": null,
+      "problem_id": "p00180",
+      "solved": false,
+      "task_id": "30445",
+      "visible_pass_fraction": 0.0
+    },
+    {
+      "arm": "posterior_mean",
+      "code": "def f(n, ans):\n    for k, c in list(dic.items()):\n        a, b = k\n        if a == n:\n            if not b in cost or c < cost[b]:\n                cost[b] = c\n        elif b == n:\n            if not a in cost or c < cost[a]:\n                cost[a] = c\n    for k, c in sorted(list(cost.items()), key=lambda x: x[1]):\n        if not k in res:\n            res.append(k)\n            ans += c\n            del dic[k]\n            return f(k, ans)\n    return ans\n\nwhile True:\n    n, m = map(int, input().split())\n    if n == m == 0: break\n    dic = {}\n    s, b, c = map(int, input().split())\n    dic[(s, b)] = c\n    for i in range(m-1):\n        a, b, c = map(int, input().split())\n        dic[(a, b)] = c\n    cost = {}\n    res = [s]\n    print(f(s, 0))",
+      "code_sha256": "a4c1e92ec383f117035a467e8bb488260b1a3328fb94d96b6a394135d7a9b116",
+      "future_pass_fraction": 0.0,
+      "generated_tokens": 230,
+      "generation_seconds": 7.411315730074421,
+      "outcomes": [
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION"
+      ],
+      "particle_index": null,
+      "problem_id": "p00180",
+      "solved": false,
+      "task_id": "30445",
+      "visible_pass_fraction": 0.0
+    },
+    {
+      "arm": "posterior_map",
+      "code": "def f(n, ans):\n    for k, c in list(dic.items()):\n        a, b = k\n        if a == n:\n            if not b in cost or c < cost[b]:\n                cost[b] = c\n        elif b == n:\n            if not a in cost or c < cost[a]:\n                cost[a] = c\n    for k, c in sorted(list(cost.items()), key=lambda x: x[1]):\n        if not k in res:\n            res.append(k)\n            ans += c\n            del dic[k]\n            return f(k, ans)\n    return ans\n\nwhile True:\n    n, m = map(int, input().split())\n    if n == m == 0: break\n    dic = {}\n    s, b, c = map(int, input().split())\n    dic[(s, b)] = c\n    for i in range(m-1):\n        a, b, c = map(int, input().split())\n        dic[(a, b)] = c\n    cost = {}\n    res = [s]\n    print(f(s, 0))",
+      "code_sha256": "a4c1e92ec383f117035a467e8bb488260b1a3328fb94d96b6a394135d7a9b116",
+      "future_pass_fraction": 0.0,
+      "generated_tokens": 230,
+      "generation_seconds": 7.531150639988482,
+      "outcomes": [
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION"
+      ],
+      "particle_index": null,
+      "problem_id": "p00180",
+      "solved": false,
+      "task_id": "30445",
+      "visible_pass_fraction": 0.0
+    },
+    {
+      "arm": "pbpf",
+      "code": "def f(n, ans):\n    for k, c in list(dic.items()):\n        a, b = k\n        if a == n:\n            if not b in cost or c < cost[b]:\n                cost[b] = c\n        elif b == n:\n            if not a in cost or c < cost[a]:\n                cost[a] = c\n    for k, c in sorted(list(cost.items()), key=lambda x: x[1]):\n        if not k in res:\n            res.append(k)\n            ans += c\n            del dic[k]\n            return f(k, ans)\n    return ans\n\nwhile True:\n    n, m = map(int, input().split())\n    if n == m == 0: break\n    dic = {}\n    s, b, c = map(int, input().split())\n    dic[(s, b)] = c\n    for i in range(m-1):\n        a, b, c = map(int, input().split())\n        dic[(a, b)] = c\n    cost = {}\n    res = [s]\n    print(f(s, 0))",
+      "code_sha256": "a4c1e92ec383f117035a467e8bb488260b1a3328fb94d96b6a394135d7a9b116",
+      "future_pass_fraction": 0.0,
+      "generated_tokens": 230,
+      "generation_seconds": 7.364527545985766,
+      "outcomes": [
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION",
+        "RUNTIME_EXCEPTION"
+      ],
+      "particle_index": 6,
+      "problem_id": "p00180",
+      "solved": false,
+      "task_id": "30445",
+      "visible_pass_fraction": 0.0
+    }
+  ]
+}

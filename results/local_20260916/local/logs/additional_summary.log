@@ -1,0 +1,52 @@
+{
+  "scope": "Execute documented experiments; matching published values is not required.",
+  "completed": {
+    "legacy_exact_smoke": {
+      "bundle_verified": true,
+      "rounds": 4,
+      "final_pass_at_1": 0.0,
+      "manifest_sha256": "92b02b0c2a402efc9ebc6961bb737c415e1b4ef4e7b89257f8fc378e8ceeeb94"
+    },
+    "legacy_rbr_6581": {
+      "bundle_verified": true,
+      "rounds": 4,
+      "final_pass_at_1": 0.0,
+      "manifest_sha256": "2cfdc511c2c7c1cb0dfafd4017c3bc62b890e39c6b1cc31396d3ab5795cc02c0"
+    },
+    "finite_contract": {
+      "cases": 60000,
+      "splits": {
+        "train": 50000,
+        "development": 5000,
+        "test": 5000
+      },
+      "test_gate": {
+        "median_kl": 2.1084183269785273,
+        "relative_future_nll_gap": 0.03362606442101663,
+        "hpd_coverage": 0.7994,
+        "passes": false
+      },
+      "scope": "Standalone local generator using repository finite audit; not a sealed formal run."
+    },
+    "selector_bank_audit": {
+      "matches_committed_audit": true,
+      "decision": {
+        "bank_identifies_pbpf_beyond_visible_pass_rate": false,
+        "status": "saturated-baseline-no-pbpf-selector-test"
+      },
+      "source_files": {
+        "bank.jsonl": "a41b71d4e60a6758baeb0f5eb5e31760052d263c78544e616cf5fad51265e758",
+        "bank.npz": "97af7eefcca496c0dbe732b18c9cc31ad75054a445b729803ac9533a5760616a",
+        "sidecar.json": "f1619b7a38b5de0fb8483c951d03c93b0f144443c1e85ea62e47b2f8be31f706"
+      }
+    },
+    "evalplus_evaluator_positive_control": {
+      "passed": 164,
+      "total": 164
+    }
+  },
+  "pending": [
+    "evalplus_frozen_164",
+    "evalplus_repair_164"
+  ]
+}

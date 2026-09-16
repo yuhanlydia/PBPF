@@ -1,0 +1,14 @@
+{
+  "paired_tasks": 164,
+  "repair_minus_frozen_pass_at_1": -0.08536585365853659,
+  "paired_bootstrap_95ci": [
+    -0.17682926829268292,
+    0.006097560975609756
+  ],
+  "bootstrap_replicates": 10000,
+  "bootstrap_seed": 1701,
+  "repair_only_pass": 24,
+  "frozen_only_pass": 38,
+  "mcnemar_exact_pvalue": 0.09795444051950736,
+  "scope": "Historical heuristic diagnostic; no learned PBPF efficacy claim."
+}

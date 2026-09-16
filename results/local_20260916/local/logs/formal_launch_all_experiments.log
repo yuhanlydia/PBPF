@@ -1,0 +1,1 @@
+pbpf-iclr: formal preflight: set PBPF_ICLR_SITE to an operator-provisioned YAML; missing account, approved_projection, authority_receipt, cells, container_digest, cpu_price_per_hour, factory, factory_sha256, gpu_price_per_hour, identity, partition, private_root, public_root, sandbox_spec, trust_anchor, usable_h200_bytes. See docs/EXPERIMENTS.md; no jobs or models started

@@ -1,0 +1,50 @@
+[
+  {
+    "index": 0,
+    "start_index": 0,
+    "tasks": 55,
+    "torch_seed": 0,
+    "gpu": 0,
+    "command": [
+      "bash",
+      "local/sandbox.sh",
+      "bash",
+      "scripts/run_repair.sh",
+      "configs/diagnostics/evalplus_repair_7b_24gb.yaml",
+      "/dev/shm/pbpf-additional/evalplus_repair_164_shard0"
+    ],
+    "log": "/data/cwj/PBPF/local/logs/evalplus_repair_164_shard0.log"
+  },
+  {
+    "index": 1,
+    "start_index": 55,
+    "tasks": 55,
+    "torch_seed": 0,
+    "gpu": 1,
+    "command": [
+      "bash",
+      "local/sandbox.sh",
+      "bash",
+      "scripts/run_repair.sh",
+      "configs/diagnostics/evalplus_repair_7b_24gb.yaml",
+      "/dev/shm/pbpf-additional/evalplus_repair_164_shard1"
+    ],
+    "log": "/data/cwj/PBPF/local/logs/evalplus_repair_164_shard1.log"
+  },
+  {
+    "index": 2,
+    "start_index": 110,
+    "tasks": 54,
+    "torch_seed": 0,
+    "gpu": 2,
+    "command": [
+      "bash",
+      "local/sandbox.sh",
+      "bash",
+      "scripts/run_repair.sh",
+      "configs/diagnostics/evalplus_repair_7b_24gb.yaml",
+      "/dev/shm/pbpf-additional/evalplus_repair_164_shard2"
+    ],
+    "log": "/data/cwj/PBPF/local/logs/evalplus_repair_164_shard2.log"
+  }
+]
