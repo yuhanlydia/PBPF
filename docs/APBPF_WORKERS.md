@@ -381,6 +381,16 @@ training-budget effects from simply increasing inference computation. It also
 aggregates the new association contrast, retaining original per-seed gates;
 neither comparison evaluates primary sources or changes the original protocol.
 
+For a completed lexical generated-development study, run
+`summarize_generated_development.py --development-root /absolute/completed-study
+--output /absolute/new-summary`. It requires all three fixed seeds, verifies
+source and checkpoint receipts, and replays aligned, outcome-shuffled,
+joint-reversed and presentation-permuted predictions. Each arm must reproduce
+its original reported NLL within 1e-6 before aggregation. All 400 development
+sources remain included; the 10000-draw bootstrap keeps a source in the same
+cluster across seeds. Raw predictions and original per-seed gates are retained.
+This is a development summary, not a new fit or a sealed primary stage.
+
 `audit_pbpf_finite_support.py --input /absolute/finite_contract --output
 /absolute/support-audit.json` verifies every existing finite-family archive and
 reports posterior mass at the numerical floor for every original particle arm.

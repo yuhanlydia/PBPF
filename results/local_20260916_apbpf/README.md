@@ -13,8 +13,10 @@ families. All nine configured prediction controls are now complete for both
 CodeARC families, including the previously missing fixed `history_rate`.
 See `full_pipeline_progress_v2.json`, `ablation_coverage_audit.json` and the final
 sections below. The latest checkpoint is
-`generated_rbr_development_progress.json`: all three Qwen RBR development
-prediction seeds are complete and fail association/fairness gates. All 18
+`development_summary_progress.json`: all three Qwen RBR development
+prediction seeds are complete and fail association/fairness gates. A checkpoint
+replay reproduces all 12 seed/control NLLs and its pooled association interval
+also crosses zero. All 18
 inference-particle cells are complete; bounded 32-particle retraining continues,
 and CodeARC repair seed1701 has finished training. Earlier
 sections are historical checkpoints, not the current running-process inventory.
@@ -921,3 +923,23 @@ comparison of all three old/new models at 32 inference particles, with source
 bootstrap intervals and prediction receipts. It waits for all three refits and
 uses only development assessment sources; it is not additional training or a
 primary evaluation. Training compute is not matched across these models.
+
+The completed RBR development checkpoint replay restores all three models and
+reproduces every aligned, outcome-shuffled, joint-reversed and
+presentation-permuted NLL, with a maximum absolute error of 2.25e-8. Pooling
+paired losses across seeds while keeping each of the 400 sources as one
+bootstrap cluster yields aligned NLL 0.419859 and association gain 0.007664,
+95% CI [−0.001760, 0.017550]. Pair-preserving reversal and permutation gaps are
+0.004180 and 0.002970 respectively; their intervals also cross zero. This is
+still negative association evidence under the unchanged criterion. The shared
+aggregation helper's historical `primary_candidates` field denotes 3200
+development candidates in this report; no primary examples were evaluated.
+See `rbr_qwen_generated_development_pooled.json` for aggregate and per-seed
+contrasts, raw prediction checksums, and the original gate decisions. Bootstrap
+draws use fixed seed 201701 for the summary, so individual intervals can differ
+slightly from the original seed-specific reports.
+
+Semantic 32-particle refit seed1702 has also completed, with association
+0.005944, CI [−0.003116, 0.015245] and aligned NLL 0.494202. Association,
+strong-baseline fairness and pair invariance fail. Seed1703 and the queued
+same-inference-budget comparison remain in progress at this checkpoint.
