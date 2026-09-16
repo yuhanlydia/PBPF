@@ -50,6 +50,12 @@ def test_baseline_catalog_has_provenance_and_distinguishes_particle_neighbor():
 
 def test_experiment_configs_are_no_claim_plans_with_fixed_equal_budget_protocol():
     for path in sorted((ROOT / "configs/experiments").glob("*.yaml")):
+        raw = load_yaml(path)
+        if raw.get("schema") == "apbpf-iclr-v1":
+            from pbpf.apbpf.config import resolve_config as resolve_apbpf_config
+            resolved = resolve_apbpf_config(path, "local_smoke")
+            assert resolved.config["execution"]["claim_status"] == "smoke-only-no-claim"
+            continue
         if path.name == "iclr_pbpf.yaml":
             from pbpf.iclr_config import resolve_config
             resolved = resolve_config(path, "local_cpu")

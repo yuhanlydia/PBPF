@@ -527,6 +527,7 @@ def test_all_experiment_configs_validate_and_cover_profiles_and_primary_arms():
     root = Path(__file__).parents[1]
     paths = sorted((root / "configs" / "experiments").glob("*.yaml"))
     assert {path.stem for path in paths} == {
+        "apbpf_iclr2027",
         "exact_smoke",
         "frozen_7b_16gb",
         "repair_7b_24gb",
@@ -536,7 +537,17 @@ def test_all_experiment_configs_validate_and_cover_profiles_and_primary_arms():
     from pbpf.iclr_config import resolve_config
     matrix = resolve_config(root / "configs/experiments/iclr_pbpf.yaml", "local_cpu")
     assert matrix.science["protocol"]["initial_origin"] == "actor_sample"
-    configs = [validate_experiment(load_experiment(path)) for path in paths if path.stem != "iclr_pbpf"]
+    from pbpf.apbpf.config import resolve_config as resolve_apbpf_config
+    apbpf = resolve_apbpf_config(
+        root / "configs/experiments/apbpf_iclr2027.yaml", "local_smoke"
+    )
+    assert apbpf.config["schema"] == "apbpf-iclr-v1"
+    assert apbpf.config["execution"]["claim_status"] == "smoke-only-no-claim"
+    configs = [
+        validate_experiment(load_experiment(path))
+        for path in paths
+        if path.stem not in {"apbpf_iclr2027", "iclr_pbpf"}
+    ]
     assert {config["profile"] for config in configs} == {"cpu", "16gb", "24gb", "h200_formal"}
     required = {
         "raw_transcript",
