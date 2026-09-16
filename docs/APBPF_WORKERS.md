@@ -405,6 +405,19 @@ This is inference diagnosis only, using all 400 development sources. It does
 not refit, change gate thresholds, evaluate primary sources, or establish a
 successful replacement method.
 
+`diagnose_apbpf_pooled_proposal.py --development-root /absolute/codearc-semantic-debug-v1
+--order-root /absolute/completed-order-diagnostic --output /absolute/new-pooled-diagnostic`
+tests one fixed follow-up after the complete 2x2 diagnosis. It matches the mean
+and marginal variance of the four visible per-observation proposal Gaussians
+with a single diagonal Gaussian, retaining the exact prior/proposal importance
+correction and disabling resampling. This is a moment approximation, not an
+evaluation of a Gaussian-mixture density. All three frozen models use 32
+particles and the full development population, with comparisons to the existing
+standard, learned/no-resampling and prior/no-resampling predictions. Four
+proposal evaluations increase computation. Tests verify importance weights,
+pair-order invariance, use of every visible outcome, and exclusion of future
+tests/outcomes. This diagnosis neither refits checkpoints nor replaces gates.
+
 `audit_pbpf_finite_support.py --input /absolute/finite_contract --output
 /absolute/support-audit.json` verifies every existing finite-family archive and
 reports posterior mass at the numerical floor for every original particle arm.

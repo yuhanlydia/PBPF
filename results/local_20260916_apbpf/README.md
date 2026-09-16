@@ -13,9 +13,12 @@ families. All nine configured prediction controls are now complete for both
 CodeARC families, including the previously missing fixed `history_rate`.
 See `full_pipeline_progress_v2.json`, `ablation_coverage_audit.json` and the final
 sections below. The latest checkpoint is
-`particle_training_and_order_completion.json`: all three semantic 32-particle
+`pooled_proposal_and_repair_progress.json`: all three semantic 32-particle
 refits and their matched-inference comparison are complete, with no evidence of
-training benefit. A 12-cell proposal/resampling diagnosis is also complete.
+training benefit. The 12-cell proposal/resampling diagnosis and a fixed pooled-
+proposal follow-up are complete; the latter improves NLL and numerical order
+invariance but has essentially zero association. CodeARC repair seed1702 has
+completed training and seed1703 is running.
 All three Qwen RBR development prediction seeds fail association/fairness gates;
 their checkpoint replay reproduces all 12 seed/control NLLs and the pooled
 association interval crosses zero. GPU generation and CodeARC repair continue. Earlier
@@ -988,3 +991,39 @@ checksum. A focused regression test independently checks static-Bayes weighting,
 pair-order invariance and changed-outcome sensitivity of the prior/no-resampling
 control; it passes. The training and inference diagnostic scripts do not modify
 the source files frozen by the live packet actor and full pipeline.
+
+## Exchangeable proposal diagnostic and second repair fit
+
+A fixed follow-up pools the four visible per-observation proposal Gaussians by
+matching their mean and marginal variance with one diagonal Gaussian. This is
+a single Gaussian proposal with its exact prior/proposal density correction,
+not an evaluation of a mixture density. It retains all three frozen semantic
+models, 32 particles and all 400 development sources, and disables resampling.
+Every original model/feature receipt and reference prediction checksum was
+verified. No checkpoint was refit and no primary source was evaluated.
+
+The pooled aligned NLL is 0.475059. The paired improvements are:
+
+| Reference inference | NLL improvement | Source-bootstrap 95% CI |
+|---|---:|---|
+| Learned first-observation proposal, ESS 0.5 | 0.004581 | [0.001477, 0.007741] |
+| Learned first-observation proposal, no resampling | 0.001185 | [−0.001609, 0.003818] |
+| Root-prior proposal, no resampling | 0.032792 | [0.022278, 0.045004] |
+
+All pair-preserving order differences are at most 4.77e-7 in probability.
+However, association is −0.00000466, CI [−0.00002968, 0.00002092], far below
+the unchanged gate. Resolving numerical order sensitivity therefore has not
+recovered the required association signal. These exploratory comparisons use
+four proposal evaluations rather than one and are not compute-matched claims.
+All outputs and references are in `codearc_pooled_proposal_results.json`.
+Two focused tests pass: they verify exact importance weighting, order invariance,
+dependence on every visible outcome, and exclusion of future tests/outcomes.
+
+Repair seed1702 completed all 1500 steps and restored its best development
+projector from step1250, with teacher-forced NLL 0.745385 versus 1.260503 without
+a prefix on the same 394 items/34047 tokens. The saved projector tensors were
+verified against the best-state tensors and the supervisor's checkpoint hash.
+The final-step development NLL was 0.746973. The full validation trajectory is in
+`packet_repair_seed1702_training_complete.json`. Seed1703 has started; six-arm
+generation and fresh hidden execution remain required before repair efficacy
+can be assessed.
