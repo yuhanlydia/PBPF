@@ -342,6 +342,9 @@ coordinator only waits and does not alter the existing generator or its status.
 Process tests verify that a parked parent does not stop its child and cannot be
 retired while work is live; further checks cover PID identity, GPU occupancy,
 bank identity and the fixed inventory-based scheduling order.
+An additional simulated full-flow check exercises adoption, two distinct bank
+assignments, retirement after validation, and final generation-status publication.
+It is a scheduler test, not empirical candidate-generation evidence.
 
 `run_local_apbpf_full_pipeline.py --run-root /absolute/local/longgoal
 --materialized-root /absolute/materialize/outputs --output /absolute/new-attempt

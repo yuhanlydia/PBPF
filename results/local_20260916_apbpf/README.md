@@ -13,12 +13,13 @@ families. All nine configured prediction controls are now complete for both
 CodeARC families, including the previously missing fixed `history_rate`.
 See `full_pipeline_progress_v2.json`, `ablation_coverage_audit.json` and the final
 sections below. The latest checkpoint is
-`parallel_replication_queue_progress.json`: a tested coordinator is queued to
+`prior_refit_seed1702_progress.json`: two prior/no-resampling refits have
+completed with failed original gates, and the third is running. The queued
+coordinator now also passes a simulated full-flow test (six targeted checks
+total). It remains queued to
 use GPU0 and GPU1 for distinct DeepSeek banks after Qwen completes and GPU0 is
 idle. Handoff has not started; the original generator remains untouched.
-The first prior/no-resampling refit has
-completed and failed the original association/fairness gates; seed1702 is
-running and the all-seed comparison remains queued. A common-particle likelihood audit
+The all-seed comparison remains queued. A common-particle likelihood audit
 has reproduced all three models' prior/no-resampling predictions and measured
 weak assignment sensitivity on that support. A bounded three-seed prior-proposal,
 no-resampling development refit is now running. All three semantic 32-particle
@@ -1121,3 +1122,17 @@ At this checkpoint the replacement coordinator is still waiting, the original
 scheduler is unparked and remains the generation owner, and no parallel
 generation result or speedup is claimed. This changes scheduling only; it does
 not complete an additional sealed scientific stage or change failed gates.
+
+The second prior/no-resampling refit is complete and its model/report/population
+receipt and variant sidecar have been verified. Seed1702 has aligned NLL
+0.450032 and association −0.00007146, CI [−0.00017435, −0.00000241]. Original
+association, strong-baseline fairness and pair-invariance gates remain failed.
+The third seed is still running; no pooled training-intervention result is
+available yet. See `codearc_prior_training_seed1702.json` and its variant sidecar.
+
+The coordinator's additional full-flow fixture exercises current-bank adoption,
+largest-bank-first GPU0/GPU1 assignment into distinct directories, old-parent
+retirement only after validation, and final complete-status publication. All six
+targeted tests pass; `replication_gpu_handoff_flow_tests.log` records this check.
+It supplements the real process-parking test but is not a real GPU handoff or
+an empirical generation result. The actual coordinator remains queued.
