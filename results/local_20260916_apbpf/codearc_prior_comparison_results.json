@@ -1,0 +1,513 @@
+{
+  "plan_sha256": "9d21d5bc817a147372b5e7647d9d8130e71e26a9eb48a1e97605ba5f7011c7a8",
+  "bindings": {
+    "1701": {
+      "receipts": {
+        "new": {
+          "prior-no-resample-seed1701.json": "1b3f3892789cc7c1bf2869d5fa19c375e2e0a5c7cee639ffd8844130f3846337",
+          "prior-no-resample-seed1701.population.json": "f70e1a337e09821cd731bafc1c153e9f7b423c2ac27e8120c47fe001787dc06d",
+          "prior-no-resample-seed1701.pt": "96e5e18c254a78e16005e52e132da95de0e0757960a92803f0554aedecbb2841"
+        },
+        "old": {
+          "semantic-p32-seed1701.json": "b08efffdbec346e09f722825798226251fedd61116671ec9c0810c508c13f588",
+          "semantic-p32-seed1701.population.json": "f70e1a337e09821cd731bafc1c153e9f7b423c2ac27e8120c47fe001787dc06d",
+          "semantic-p32-seed1701.pt": "0049ec241f193eb2967483e0f608f2e5dbe78baddc7fc2bfb29adcd37768987c"
+        }
+      },
+      "variant_sha256": "ba743e4b41c402b6fc9ec06581cb2f3d75fd81b9b954a4d65ae21abf0b4bf5bf",
+      "predictions_sha256": "8e94a1029c105892d2f0627ac7fd711398ae24a54a26bb40585f070d2392e1ac",
+      "new_report_nll_reproduction_errors": {
+        "aligned": 1.7623343839812122e-08,
+        "outcome_shuffled": 2.5951056470407963e-08,
+        "joint_reversed": 1.6134311164872628e-08,
+        "presentation_permuted": 1.9333420697709158e-08
+      },
+      "original_new_gate": {
+        "association_passes": false,
+        "association_threshold": 0.03,
+        "baseline_fairness_passes": false,
+        "baseline_margin": 0.02,
+        "baseline_status": "evaluated",
+        "controls_worse_than_aligned": true,
+        "full_gate_passes": false,
+        "max_degradation_fraction": 0.25,
+        "pair_invariance_passes": false,
+        "particles_necessary_claim_allowed": false
+      }
+    },
+    "1702": {
+      "receipts": {
+        "new": {
+          "prior-no-resample-seed1702.json": "416240c479b6bc5fe4a566f3fe142fc8e7821d6d03b0d2f84c864a31c178279e",
+          "prior-no-resample-seed1702.population.json": "4975e52f9d097e8395e0eab51c820096fece1104044e86794c07923154365172",
+          "prior-no-resample-seed1702.pt": "3a8c701c43e70ef15530d0b5a3d35a8aac307f513d7441528ff1eb587a47143f"
+        },
+        "old": {
+          "semantic-p32-seed1702.json": "283e8462216ac85ef3225629b9e3aa644fc5183f5f90bc67d56062b338b8190d",
+          "semantic-p32-seed1702.population.json": "4975e52f9d097e8395e0eab51c820096fece1104044e86794c07923154365172",
+          "semantic-p32-seed1702.pt": "7c4f8c96575c79e734000a6c5a906eba4d8e3efe0af8b8cb33e558583ec0fdc6"
+        }
+      },
+      "variant_sha256": "e2f18ae8e0598911acb67146f7c4e79bc70f439719cd94dbed4b1567950b7647",
+      "predictions_sha256": "061f2fef9e268beee5ed9cda77365bbd0dab651c578132036e5ab4b901cc06d2",
+      "new_report_nll_reproduction_errors": {
+        "aligned": 3.6143671944266487e-09,
+        "outcome_shuffled": 1.1627398821545398e-08,
+        "joint_reversed": 2.2380915454256467e-09,
+        "presentation_permuted": 2.733476278660163e-09
+      },
+      "original_new_gate": {
+        "association_passes": false,
+        "association_threshold": 0.03,
+        "baseline_fairness_passes": false,
+        "baseline_margin": 0.02,
+        "baseline_status": "evaluated",
+        "controls_worse_than_aligned": true,
+        "full_gate_passes": false,
+        "max_degradation_fraction": 0.25,
+        "pair_invariance_passes": false,
+        "particles_necessary_claim_allowed": false
+      }
+    },
+    "1703": {
+      "receipts": {
+        "new": {
+          "prior-no-resample-seed1703.json": "415394d1acd4e3a929663b92dfd3f883048698e6d7b8dae57f80bdf149a2799f",
+          "prior-no-resample-seed1703.population.json": "e7c1407610bb2fa3a465b697af98eb52a5293f3e4027f9100c0ebb1d5c378b27",
+          "prior-no-resample-seed1703.pt": "dd84de5950e882a427f182ffadfcf988c2781288d3dc2247b0c58ce5cf14cd9a"
+        },
+        "old": {
+          "semantic-p32-seed1703.json": "7fd650b1367c8c2e1186f11bd3d32b5bad56050b19daf9a269b2104c7d79dff4",
+          "semantic-p32-seed1703.population.json": "e7c1407610bb2fa3a465b697af98eb52a5293f3e4027f9100c0ebb1d5c378b27",
+          "semantic-p32-seed1703.pt": "bcecbe85eccd6aa325b98d88661b9a5202f8dddae55dfea9b6e9507b94c03200"
+        }
+      },
+      "variant_sha256": "c8b58157f30be4450e309dba2f7d131f66bbe25fa53b5569c5c2be5efe26d09e",
+      "predictions_sha256": "9c1fd015c82e4f8ac5beea769a6cee045a783bc763bc77817a4cd3b65cb5bcc9",
+      "new_report_nll_reproduction_errors": {
+        "aligned": 7.4281715223278866e-09,
+        "outcome_shuffled": 3.665335329694486e-08,
+        "joint_reversed": 7.80633041541634e-09,
+        "presentation_permuted": 7.492010178911102e-09
+      },
+      "original_new_gate": {
+        "association_passes": false,
+        "association_threshold": 0.03,
+        "baseline_fairness_passes": false,
+        "baseline_margin": 0.02,
+        "baseline_status": "evaluated",
+        "controls_worse_than_aligned": true,
+        "full_gate_passes": false,
+        "max_degradation_fraction": 0.25,
+        "pair_invariance_passes": true,
+        "particles_necessary_claim_allowed": false
+      }
+    }
+  },
+  "new_association": {
+    "seed_estimand": "mean paired per-example loss across all three fixed seeds; whole-source resampling across seeds",
+    "seeds": [
+      1701,
+      1702,
+      1703
+    ],
+    "primary_candidates": 3200,
+    "source_components": 400,
+    "future_examples_per_seed": 19200,
+    "metrics": {
+      "baseline": {
+        "nll": 0.452308856255697,
+        "brier": 0.24668779794020543,
+        "accuracy": 0.8350347222222222,
+        "nll_gain_vs_baseline": 0.0
+      },
+      "presentation_permuted": {
+        "nll": 0.45230885537076143,
+        "brier": 0.24668779833390436,
+        "accuracy": 0.8350347222222222,
+        "nll_gain_vs_baseline": 8.849355167911789e-10
+      },
+      "aligned": {
+        "nll": 0.452308856255697,
+        "brier": 0.24668779794020543,
+        "accuracy": 0.8350347222222222,
+        "nll_gain_vs_baseline": 0.0
+      },
+      "joint_reversed": {
+        "nll": 0.4523088561672297,
+        "brier": 0.24668779834815846,
+        "accuracy": 0.8350347222222222,
+        "nll_gain_vs_baseline": 8.846727736071411e-11
+      },
+      "outcome_shuffled": {
+        "nll": 0.4522749929706869,
+        "brier": 0.24666864925046297,
+        "accuracy": 0.8349826388888889,
+        "nll_gain_vs_baseline": 3.386328501008204e-05
+      }
+    },
+    "comparisons": {
+      "joint_reversed": {
+        "unit": "source_component",
+        "clusters": 400,
+        "replicates": 10000,
+        "mean_nll_gap": -1.3819873023734885e-10,
+        "ci95": [
+          -1.7212234726887094e-09,
+          1.4567404933687708e-09
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "outcome_shuffled": {
+        "unit": "source_component",
+        "clusters": 400,
+        "replicates": 10000,
+        "mean_nll_gap": -3.38632489729207e-05,
+        "ci95": [
+          -7.305607530805801e-05,
+          4.653000104654988e-06
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "presentation_permuted": {
+        "unit": "source_component",
+        "clusters": 400,
+        "replicates": 10000,
+        "mean_nll_gap": -8.884025182176458e-10,
+        "ci95": [
+          -2.5855616614636447e-09,
+          8.233079521839182e-10
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    },
+    "per_seed_comparisons": {
+      "1701": {
+        "joint_reversed": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": 1.4411852822249216e-09,
+          "ci95": [
+            -1.4277469138808858e-09,
+            4.266146788722835e-09
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        },
+        "outcome_shuffled": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": -3.226211265427992e-05,
+          "ci95": [
+            -8.407919916013876e-05,
+            2.0934450517718983e-05
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        },
+        "presentation_permuted": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": -1.6349319675867946e-09,
+          "ci95": [
+            -4.300342576849895e-09,
+            9.685403104716286e-10
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        }
+      },
+      "1702": {
+        "joint_reversed": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": -1.3975901547169656e-09,
+          "ci95": [
+            -4.263119384025533e-09,
+            1.5042878658277905e-09
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        },
+        "outcome_shuffled": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": -7.14579873601906e-05,
+          "ci95": [
+            -0.00017480560640494028,
+            -2.399794155887049e-06
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        },
+        "presentation_permuted": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": -9.126961408867373e-10,
+          "ci95": [
+            -3.759515796749232e-09,
+            1.9328957326555e-09
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        }
+      },
+      "1703": {
+        "joint_reversed": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": -4.5819129046442697e-10,
+          "ci95": [
+            -3.3834985515568405e-09,
+            2.4461296561639754e-09
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        },
+        "outcome_shuffled": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": 2.1303476387402043e-06,
+          "ci95": [
+            -4.733516019769013e-05,
+            5.7363567097733417e-05
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        },
+        "presentation_permuted": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": -1.1757947393498114e-10,
+          "ci95": [
+            -3.152984087743486e-09,
+            2.9414416834091142e-09
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        }
+      }
+    }
+  },
+  "old_prior_association": {
+    "seed_estimand": "mean paired per-example loss across all three fixed seeds; whole-source resampling across seeds",
+    "seeds": [
+      1701,
+      1702,
+      1703
+    ],
+    "primary_candidates": 3200,
+    "source_components": 400,
+    "future_examples_per_seed": 19200,
+    "metrics": {
+      "baseline": {
+        "nll": 0.493701412254179,
+        "brier": 0.26942559405799993,
+        "accuracy": 0.8172743055555556,
+        "nll_gain_vs_baseline": 0.0
+      },
+      "aligned": {
+        "nll": 0.493701412254179,
+        "brier": 0.26942559405799993,
+        "accuracy": 0.8172743055555556,
+        "nll_gain_vs_baseline": 0.0
+      },
+      "outcome_shuffled": {
+        "nll": 0.4936960862774409,
+        "brier": 0.2694207998884046,
+        "accuracy": 0.81734375,
+        "nll_gain_vs_baseline": 5.325976738160803e-06
+      }
+    },
+    "comparisons": {
+      "outcome_shuffled": {
+        "unit": "source_component",
+        "clusters": 400,
+        "replicates": 10000,
+        "mean_nll_gap": -5.325983693182934e-06,
+        "ci95": [
+          -1.8352208452092277e-05,
+          8.122034784820328e-06
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    },
+    "per_seed_comparisons": {
+      "1701": {
+        "outcome_shuffled": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": -1.8120315871783532e-05,
+          "ci95": [
+            -3.9520300769557556e-05,
+            3.5885397422437816e-06
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        }
+      },
+      "1702": {
+        "outcome_shuffled": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": -1.390812712998013e-06,
+          "ci95": [
+            -9.278063875778268e-06,
+            6.689212090956665e-06
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        }
+      },
+      "1703": {
+        "outcome_shuffled": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": 3.5331765957380412e-06,
+          "ci95": [
+            -1.0386732950185735e-05,
+            1.800025937457879e-05
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        }
+      }
+    }
+  },
+  "paired_comparisons": {
+    "seed_estimand": "mean paired per-example loss across all three fixed seeds; whole-source resampling across seeds",
+    "seeds": [
+      1701,
+      1702,
+      1703
+    ],
+    "primary_candidates": 3200,
+    "source_components": 400,
+    "future_examples_per_seed": 19200,
+    "metrics": {
+      "baseline": {
+        "nll": 0.452308856255697,
+        "brier": 0.24668779794020543,
+        "accuracy": 0.8350347222222222,
+        "nll_gain_vs_baseline": 0.0
+      },
+      "aligned": {
+        "nll": 0.452308856255697,
+        "brier": 0.24668779794020543,
+        "accuracy": 0.8350347222222222,
+        "nll_gain_vs_baseline": 0.0
+      },
+      "old_standard_inference": {
+        "nll": 0.4853195140206382,
+        "brier": 0.2611520155517447,
+        "accuracy": 0.8288368055555555,
+        "nll_gain_vs_baseline": -0.033010657764941206
+      },
+      "old_prior_inference": {
+        "nll": 0.493701412254179,
+        "brier": 0.26942559405799993,
+        "accuracy": 0.8172743055555556,
+        "nll_gain_vs_baseline": -0.04139255599848208
+      }
+    },
+    "comparisons": {
+      "old_prior_inference": {
+        "unit": "source_component",
+        "clusters": 400,
+        "replicates": 10000,
+        "mean_nll_gap": 0.04139256104826927,
+        "ci95": [
+          0.029057368278503415,
+          0.054459497345818404
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "old_standard_inference": {
+        "unit": "source_component",
+        "clusters": 400,
+        "replicates": 10000,
+        "mean_nll_gap": 0.033010657876729965,
+        "ci95": [
+          0.02190666034486559,
+          0.04439050165812174
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    },
+    "per_seed_comparisons": {
+      "1701": {
+        "old_prior_inference": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": 0.025124769657850266,
+          "ci95": [
+            0.011720826228459677,
+            0.0386357897122701
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        },
+        "old_standard_inference": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": 0.02686120942234993,
+          "ci95": [
+            0.012293046871821086,
+            0.04214905500411987
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        }
+      },
+      "1702": {
+        "old_prior_inference": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": 0.05093874782323837,
+          "ci95": [
+            0.03438878838221232,
+            0.06776105117797851
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        },
+        "old_standard_inference": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": 0.0441700778901577,
+          "ci95": [
+            0.029625508308410643,
+            0.058472860972086586
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        }
+      },
+      "1703": {
+        "old_prior_inference": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": 0.04811415448784828,
+          "ci95": [
+            0.03317024437586467,
+            0.06498546187082925
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        },
+        "old_standard_inference": {
+          "unit": "source_component",
+          "clusters": 400,
+          "replicates": 10000,
+          "mean_nll_gap": 0.028000684455037117,
+          "ci95": [
+            0.01568365768591563,
+            0.041052445491154985
+          ],
+          "estimand": "future-example-weighted; whole-source-component resampling"
+        }
+      }
+    }
+  },
+  "scope": "all three development-only seeds; first contrast holds inference fixed; second changes both training and inference; 32 particles throughout but compute not matched; no gate or primary substitution"
+}

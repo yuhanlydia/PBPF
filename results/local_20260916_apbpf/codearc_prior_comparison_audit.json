@@ -1,0 +1,28 @@
+{
+  "captured_at": "2026-09-16T23:44:25.025809+00:00",
+  "all_three_prediction_archives_and_old_new_model_receipts_verified": true,
+  "variant_bindings_verified": true,
+  "report_replay_max_nll_error": 3.665335329694486e-08,
+  "independent_float64_mean_nll": {
+    "aligned": 0.45230885625569694,
+    "outcome_shuffled": 0.45227499297068685,
+    "old_prior_inference": 0.49370141225417896,
+    "old_standard_inference": 0.4853195140206383
+  },
+  "max_pair_probability_differences": {
+    "1701": {
+      "joint_reversed": 4.76837158203125e-07,
+      "presentation_permuted": 4.76837158203125e-07
+    },
+    "1702": {
+      "joint_reversed": 4.76837158203125e-07,
+      "presentation_permuted": 4.76837158203125e-07
+    },
+    "1703": {
+      "joint_reversed": 4.76837158203125e-07,
+      "presentation_permuted": 4.76837158203125e-07
+    }
+  },
+  "comparison_result_sha256": "e9f600f0504a011bc1f98f0faa29d71942e6c1448de222bacd3843fc5df95ff9",
+  "scope": "400 development source components, 3200 candidates, 19200 future labels per seed; aggregate helper historical field primary_candidates means development candidates here; no primary evaluation or gate substitution; fixed particle count does not imply matched compute"
+}

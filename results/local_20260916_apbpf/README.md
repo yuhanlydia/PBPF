@@ -13,21 +13,16 @@ families. All nine configured prediction controls are now complete for both
 CodeARC families, including the previously missing fixed `history_rate`.
 See `full_pipeline_progress_v2.json`, `ablation_coverage_audit.json` and the final
 sections below. The latest checkpoint is
-`prior_refit_seed1702_progress.json`: two prior/no-resampling refits have
-completed with failed original gates, and the third is running. The queued
-coordinator now also passes a simulated full-flow test (six targeted checks
-total). It remains queued to
-use GPU0 and GPU1 for distinct DeepSeek banks after Qwen completes and GPU0 is
-idle. Handoff has not started; the original generator remains untouched.
-The all-seed comparison remains queued. A common-particle likelihood audit
-has reproduced all three models' prior/no-resampling predictions and measured
-weak assignment sensitivity on that support. A bounded three-seed prior-proposal,
-no-resampling development refit is now running. All three semantic 32-particle
-refits and their matched-inference comparison are complete, with no evidence of
-training benefit. The 12-cell proposal/resampling diagnosis and a fixed pooled-
-proposal follow-up are complete; the latter improves NLL and numerical order
-invariance but has essentially zero association. CodeARC repair seed1702 has
-completed training and seed1703 is running.
+`prior_refit_and_repair_training_complete.json`: all three prior/no-resampling
+refits and their paired comparison are complete. Mean development NLL is
+0.452309; improvement over the old model under the same prior inference is
+0.041393 (95% CI 0.029057–0.054459). Association is −0.00003386
+(95% CI −0.00007306–0.00000465); every seed still fails association and
+strong-baseline fairness. All three CodeARC repair projector fits are complete;
+six-arm code generation has started, with fresh execution still required.
+The six-check-tested GPU coordinator remains queued until Qwen completes and
+GPU0 is idle. It will run disjoint DeepSeek banks on GPU0/1 without changing
+candidate seeds or decode settings. Handoff has not started.
 All three Qwen RBR development prediction seeds fail association/fairness gates;
 their checkpoint replay reproduces all 12 seed/control NLLs and the pooled
 association interval crosses zero. GPU generation and CodeARC repair continue. Earlier
@@ -1136,3 +1131,30 @@ retirement only after validation, and final complete-status publication. All six
 targeted tests pass; `replication_gpu_handoff_flow_tests.log` records this check.
 It supplements the real process-parking test but is not a real GPU handoff or
 an empirical generation result. The actual coordinator remains queued.
+
+## Prior refits and repair training complete (2026-09-17)
+
+All three development-only prior-proposal/no-resampling fits and the matched
+32-particle replay completed. `codearc_prior_comparison_results.json` contains
+all comparisons; `codearc_prior_comparison_audit.json` verifies every prediction
+archive, old/new model receipt, variant binding and independent mean loss.
+Maximum report-replay NLL error is 3.67e-8. Joint reversal and presentation
+permutation change probabilities by at most 4.77e-7, while the original relative
+invariance gate remains recorded exactly as evaluated (two failures when the
+association denominator is near zero).
+
+The mean NLL is 0.452309. Holding prior/no-resampling inference fixed, retraining
+improves NLL by 0.041393 (95% source-bootstrap CI 0.029057–0.054459). Against
+old standard inference the improvement is 0.033011 (0.021907–0.044391), a contrast
+that changes both training and inference. Both use 32 particles; compute is not
+matched. Association is −0.00003386 (−0.00007306–0.00000465), and all seeds fail
+original association and strong-baseline fairness gates. These are development
+results on 400 sources / 3200 candidates; the shared aggregator's historical
+`primary_candidates` field does not denote primary evaluation here.
+
+`packet_repair_seed1703_training_complete.json` verifies the final 1500-step
+checkpoint restores the best development projector, selected at step 1000
+(NLL 0.749572; no-latent validation NLL 1.260503). All three fits now have verified
+best-checkpoint restoration and exclude primary data from training/selection.
+Generation proceeds across 500 sources × six arms × three seeds, followed by
+fresh hidden-test execution. Teacher-forced NLL is not a repair-success result.
