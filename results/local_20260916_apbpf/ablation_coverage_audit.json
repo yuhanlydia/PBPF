@@ -1,0 +1,229 @@
+{
+  "captured_at": "2026-09-16T21:34:39.854099+00:00",
+  "config_sha256": "e4d82e8d391e59c049146d398133a2b587a825e2b4370e8bff388259a95325a7",
+  "required": {
+    "prediction": [
+      "aligned",
+      "outcome_shuffled",
+      "joint_reversed",
+      "presentation_permuted",
+      "orderless",
+      "semantics_masked",
+      "wrong_candidate",
+      "random_latent",
+      "history_rate"
+    ],
+    "selection": [
+      "pair_aware_deterministic",
+      "exchangeable_deep_sets",
+      "tuned_dirichlet_rate",
+      "no_particle_bottleneck",
+      "apbpf"
+    ],
+    "acquisition": [
+      "fixed",
+      "random",
+      "joint_particle_mutual_information",
+      "diagnostic_mutual_information",
+      "oracle"
+    ],
+    "repair": [
+      "no_latent",
+      "mean",
+      "map",
+      "random",
+      "sample_once",
+      "token_remix_fault"
+    ],
+    "token_remix_fault_role": "intentionally_incorrect_control"
+  },
+  "codearc_prediction": {
+    "qwen": {
+      "control_arrays": "local/longgoal/codearc-full-stage-training-diagnostic-v1/controls-seed{1701,1702,1703}.npz",
+      "recorded_arms_by_seed": {
+        "1701": [
+          "baseline",
+          "aligned",
+          "outcome_shuffled",
+          "joint_reversed",
+          "presentation_permuted",
+          "orderless",
+          "semantics_masked",
+          "wrong_candidate",
+          "random_latent",
+          "labels",
+          "pair_aware",
+          "deep_sets",
+          "no_particle_bottleneck",
+          "tuned_dirichlet"
+        ],
+        "1702": [
+          "baseline",
+          "aligned",
+          "outcome_shuffled",
+          "joint_reversed",
+          "presentation_permuted",
+          "orderless",
+          "semantics_masked",
+          "wrong_candidate",
+          "random_latent",
+          "labels",
+          "pair_aware",
+          "deep_sets",
+          "no_particle_bottleneck",
+          "tuned_dirichlet"
+        ],
+        "1703": [
+          "baseline",
+          "aligned",
+          "outcome_shuffled",
+          "joint_reversed",
+          "presentation_permuted",
+          "orderless",
+          "semantics_masked",
+          "wrong_candidate",
+          "random_latent",
+          "labels",
+          "pair_aware",
+          "deep_sets",
+          "no_particle_bottleneck",
+          "tuned_dirichlet"
+        ]
+      },
+      "history_rate_report": "local/longgoal/codearc-qwen-history-rate-v1/assessment/results.json",
+      "history_rate_sha256": "5e2f31c6d4a1a8794828edabb550e5d3f2b03508c3a49f518767f4064ce7a3ce",
+      "history_rate_gap": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.2782250043445629,
+        "ci95": [
+          0.24595271313965414,
+          0.30724729178115107
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "all_prediction_ablations_executed": true
+    },
+    "deepseek": {
+      "control_arrays": "local/longgoal/codearc-deepseek-full-replication-cell-v1/training/controls-seed{1701,1702,1703}.npz",
+      "recorded_arms_by_seed": {
+        "1701": [
+          "baseline",
+          "aligned",
+          "outcome_shuffled",
+          "joint_reversed",
+          "presentation_permuted",
+          "orderless",
+          "semantics_masked",
+          "wrong_candidate",
+          "random_latent",
+          "labels",
+          "pair_aware",
+          "deep_sets",
+          "no_particle_bottleneck",
+          "tuned_dirichlet"
+        ],
+        "1702": [
+          "baseline",
+          "aligned",
+          "outcome_shuffled",
+          "joint_reversed",
+          "presentation_permuted",
+          "orderless",
+          "semantics_masked",
+          "wrong_candidate",
+          "random_latent",
+          "labels",
+          "pair_aware",
+          "deep_sets",
+          "no_particle_bottleneck",
+          "tuned_dirichlet"
+        ],
+        "1703": [
+          "baseline",
+          "aligned",
+          "outcome_shuffled",
+          "joint_reversed",
+          "presentation_permuted",
+          "orderless",
+          "semantics_masked",
+          "wrong_candidate",
+          "random_latent",
+          "labels",
+          "pair_aware",
+          "deep_sets",
+          "no_particle_bottleneck",
+          "tuned_dirichlet"
+        ]
+      },
+      "history_rate_report": "local/longgoal/codearc-deepseek-history-rate-v1/assessment/results.json",
+      "history_rate_sha256": "70028f0868fc56bb435289e25d63554103e5d5fd32bae586fb30ee72dac2a570",
+      "history_rate_gap": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.297694308110925,
+        "ci95": [
+          0.2682436273869259,
+          0.3240612079231095
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "all_prediction_ablations_executed": true
+    }
+  },
+  "rbr_prediction": "full banks incomplete; main controls and supplementary history-rate are queued for both families",
+  "selection": "all five required method families completed on full CodeARC Qwen/DeepSeek cells; RBR pending",
+  "acquisition": "all five configured policy types implemented; Qwen CodeARC full three-seed oracle/active reports completed; RBR queued in complete DAG",
+  "repair": "all six arms implemented; actual CodeARC three-seed projector training running, full generation/scoring pending; RBR queued in complete DAG",
+  "replication": "CodeARC two-family cells complete and negative; both RBR cells pending",
+  "formal_legacy": "unavailable formal deployment; finite60k standalone archives and numerical summaries verified separately, all finite gates fail",
+  "full_pipeline": {
+    "status": "waiting_for_full_banks_and_replication_replay",
+    "pid": 3137406,
+    "planned_stages": [
+      "materialize",
+      "hard_bank_lock",
+      "execution_cache",
+      "hard_bank",
+      "hard_bank_gate",
+      "train_baselines",
+      "train_belief",
+      "baseline_fairness_gate",
+      "association",
+      "association_gate",
+      "pair_invariance_gate",
+      "oracle_headroom",
+      "oracle_headroom_gate",
+      "active_testing",
+      "active_testing_gate",
+      "selection",
+      "selection_gate",
+      "repair",
+      "replication",
+      "replication_gate",
+      "paper_tables"
+    ],
+    "runs": {},
+    "claim_status": "exploratory-predeclared",
+    "fresh_candidate_generation": false,
+    "fresh_primary_family_execution": true,
+    "fresh_replication_family_execution": false,
+    "fresh_replication_fitting": true,
+    "gpu": "0",
+    "scope": "all 21 local adapters provisioned; neither execution completion nor gate success implied",
+    "waiting_on": [
+      "qwen_public_banks",
+      "rbr_deepseek_full_replay"
+    ]
+  },
+  "full_pipeline_live_start_ticks": "64605641",
+  "sealed_real_stages_completed": 1,
+  "implemented_real_stage_adapters": 21,
+  "verification": {
+    "apbpf_tests": "170 passed, one pre-existing NumPy warning",
+    "real_bridge": "all 500 CodeARC sources match standalone history-rate metrics; original association bytes unchanged"
+  },
+  "claim": "incomplete and exploratory; stronger baseline, association, active and selection failures are retained"
+}

@@ -1,16 +1,16 @@
 # A-PBPF stage-worker contract
 
-The repository bundles adapters for twenty of the twenty-one real stages: `materialize`,
+The repository bundles adapters for all twenty-one real stages: `materialize`,
 `hard_bank_lock`, `execution_cache`, `hard_bank`, `hard_bank_gate`,
 `train_baselines`, `train_belief`, `baseline_fairness_gate`, `association`,
 `association_gate`, `pair_invariance_gate`, `oracle_headroom`,
 `oracle_headroom_gate`, `active_testing`, `active_testing_gate`, `selection`,
-`selection_gate`, `repair`, `replication_gate`, and `paper_tables`.
+`selection_gate`, `repair`, `replication`, `replication_gate`, and `paper_tables`.
 Only materialization has completed as a real two-domain stage so far. Public
 candidate import has also been checked on all 1112 CodeARC source groups; worker
-contract fixtures are separate from scientific execution evidence. The other
-`replication` still needs its real adapter; a complete scientifically validated real-stage
-pipeline is not bundled.
+contract fixtures are separate from scientific execution evidence. The full local
+pipeline is queued behind unfinished RBR generation and execution; complete
+adapter coverage does not mean a completed or scientifically validated run.
 The site template intentionally leaves every command unprovisioned. Existing
 research scripts need explicit adapters to satisfy this contract; do not simply
 point a stage at an unrelated script and treat its exit status as evidence.
@@ -193,7 +193,7 @@ The standalone `run_local_stage_training_diagnostic.py` can exercise these
 trainers and controls on an existing, checksummed full cache while complete
 two-domain generation is pending. Its output is explicitly a standalone
 exploratory diagnostic and never counts as a sealed DAG stage. The replication
-stage still needs its adapter and declared cross-family input provenance.
+bridge described below supplies the declared cross-family input provenance.
 
 `--through-stage active_testing_gate` provisions the oracle and active-query
 workers as well. Association produces an evaluator-only assessment bundle with
@@ -314,9 +314,46 @@ eight direct dependencies and exports gate decisions, unchanged gate metrics,
 per-seed selection/repair results and replication effects. It preserves failed
 gates and permanently marks tables ineligible for confirmatory main-table use.
 Missing confidence bounds are never inferred from lower bounds or averaged
-across seed reports. These two downstream adapters remain unqueued until the
-replication stage can supply a complete, correctly bound matrix. The current
-waiting prefix still provisions eighteen stages through repair.
+across seed reports. The full supervisor provisions all 21 stages, including
+replication and both downstream adapters; the older prefix remains available
+only for intentionally partial runs.
+
+## Complete local replication and remaining ablations
+
+`run_local_apbpf_full_pipeline.py --run-root /absolute/local/longgoal
+--materialized-root /absolute/materialize/outputs --output /absolute/new-attempt
+--gpu 0` waits for all Qwen public banks and both completed DeepSeek replays.
+It freezes sources when queued, writes immutable candidate and replication
+manifests, provisions every adapter, and runs the permanently exploratory DAG.
+Use a new output directory for a new declaration. Current GPU work is never
+preempted; GPU0 repair begins only after its Qwen bank generation is finished.
+
+`run_apbpf_replication_bridge.py` wraps the unchanged materialize,
+execution-cache, association and association-gate workers. At materialization,
+both replication cache paths and proofs are bound by the root manifest checksum
+in the frozen command. Each cache is reconstructed from raw bound candidate
+execution and compared byte-for-byte, with matching generator revision, decoding
+budget and materialized task inventories. The bridge forwards these evaluator
+inputs through exact direct dependencies; no generator receives them. Existing
+DeepSeek candidate execution is explicitly reused. Qwen candidates are freshly
+executed by the ordinary bank/cache stages.
+
+`run_apbpf_replication_worker.py` reads same-run Qwen association and selection
+evidence, freshly fits all three DeepSeek model seeds and utility heads on each
+declared cache, and emits the complete two-domain/two-family matrix. Standalone
+trained results are not imported. Positive direction is checked by the original
+replication gate; stricter failed upstream gates remain binding.
+
+The prediction ablation `history_rate` uses exactly four visible categorical
+outcomes and fixed Laplace smoothing alpha=1. It differs from the tuned Dirichlet
+baseline. `run_apbpf_history_rate_ablation.py` adds this supplementary score using
+the exact existing aligned predictions, all three seeds and all 500 primary
+sources. It fits no parameters and does not change any gate or checkpoint. The
+association bridge records it for Qwen; the replication worker records it for
+DeepSeek. Paper tables export the complete four-cell control comparison.
+Standalone instances can wait for the existing replication-cell supervisors,
+but do not count as sealed stages. Public-only probability construction and
+exact population/label bindings are checked independently.
 
 ## Worker inputs and outputs
 

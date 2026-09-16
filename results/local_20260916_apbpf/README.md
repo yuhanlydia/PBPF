@@ -9,7 +9,10 @@ resources; the user confirmed that only local execution is available.
 only materialization (1/21) has completed as a sealed real stage. The full pipeline
 is queued behind the remaining RBR banks. CodeARC full-primary association and
 selection are complete for both Qwen and DeepSeek, with negative effects in both
-families. See `full_pipeline_progress.json` and the final section below. Earlier
+families. All nine configured prediction controls are now complete for both
+CodeARC families, including the previously missing fixed `history_rate`.
+See `full_pipeline_progress_v2.json`, `ablation_coverage_audit.json` and the final
+sections below. Earlier
 sections are historical checkpoints, not the current running-process inventory.
 
 **RBR protocol correction (2026-09-17):** the RBR results below used literal stdin. The pinned official runner appends a missing terminal newline. A new development control confirms this local discrepancy; those historic results remain diagnostics and require corrected execution/retraining. See `rbr_stdin_protocol_audit.json`. CodeARC results are unaffected.
@@ -788,3 +791,40 @@ status files. Root-import validation on the real 8896-candidate DeepSeek CodeARC
 cache reproduced its digest exactly. This engineering check is not a completed
 DAG stage. Repair seed1701 has reached step1000/1500 and is validating; neither its
 teacher-forced loss nor an unfinished generation run is evidence of repair efficacy.
+
+## Required prediction-control audit and finite-contract verification (2026-09-17)
+
+Auditing `configs/apbpf/ablations.yaml` found that full-stage reports contained
+tuned Dirichlet but omitted the distinct fixed-alpha `history_rate` control.
+The missing ablation is now implemented without fitting or changing the existing
+models, association results, primary population or numerical gates. It predicts
+six future categorical outcomes from the four observed categories using fixed
+Laplace alpha=1. Tests verify independence from hidden labels and semantic fields,
+visible-order invariance and rejection of incomplete public histories.
+
+Actual supplementary evaluation on all 500 CodeARC primary sources and all three
+seeds completed for both families. Aligned prediction beats this fixed weak
+control by 0.278225 NLL for Qwen (95% CI [0.245953, 0.307247]) and 0.297694 for
+DeepSeek ([0.268244, 0.324061]). These positive weak-control comparisons do not
+alter the negative association results or failures against stronger matched
+baselines. All nine configured prediction controls now have complete CodeARC
+results; RBR remains queued behind bank generation and fitting.
+
+The stage bridge writes supplementary history-rate evidence while preserving the
+original association report byte-for-byte. Replication evaluates the same control
+on freshly fitted DeepSeek models, and paper tables export all four cells. A real
+full-CodeARC engineering check reproduced standalone metrics exactly. Full queue
+v1 was confirmed childless with no stage execution, archived, then replaced by
+v2 (all 21 stages with the additional ablation). Existing generation and repair
+jobs were not interrupted. The A-PBPF suite passed 170 tests, with one pre-existing
+read-only NumPy warning. This does not establish completed real-stage execution.
+
+The existing standalone legacy finite-contract run contains all 60000 cases:
+50000 train, 5000 development, 5000 test, across 120 disjoint families. Every
+archive SHA-256 and the specification SHA-256 were verified. Every reported
+per-arm aggregate metric and all finite gate decisions were independently
+recomputed from the archived metrics. All gates remain failed; on test the
+32-particle median posterior KL is 2.10842, relative future-NLL gap is 0.0336261,
+and HPD coverage is 0.7994. This is a verified negative local diagnostic, not a
+sealed formal S1 result. Historical execution source hashes are absent, and this
+audit does not retroactively claim immutable source provenance.

@@ -85,6 +85,20 @@ def main():
     replication_rows = [{k: json.dumps(row[k]) if isinstance(row[k], list) else row[k] for k in columns}
                         for row in replication['cells']]
     write_csv(io.outputs/'replication.csv', replication_rows, columns)
+    history_rows = []
+    for cell in replication['cells']:
+        control = cell['prediction_ablations']['history_rate']
+        if (control['cache_sha256'] != cell['cache_sha256'] or control['alpha'] != 1.
+                or control['seeds'] != cell['seeds'] or control['source_components'] != 500
+                or control['primary_candidates'] != 4000):
+            raise ValueError('history-rate table requires the exact full replication population')
+        gap = control['comparisons']['history_rate']
+        history_rows.append({'domain': cell['domain'], 'family': cell['family'], 'alpha': 1.,
+            'aligned_nll': control['metrics']['aligned']['nll'],
+            'history_rate_nll': control['metrics']['history_rate']['nll'],
+            'nll_gap': gap['mean_nll_gap'], 'ci95': json.dumps(gap['ci95']), 'sources': 500})
+    write_csv(io.outputs/'history-rate-ablation.csv', history_rows,
+              ['domain', 'family', 'alpha', 'aligned_nll', 'history_rate_nll', 'nll_gap', 'ci95', 'sources'])
     failed = [row['stage'] for row in gates if not row['passed']]
     summary = {'schema': 'apbpf-exploratory-tables-v1', 'failed_gates': failed,
                'main_table_eligible': False, 'claim_status': 'exploratory-predeclared',

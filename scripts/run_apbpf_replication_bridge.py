@@ -13,6 +13,7 @@ import shutil
 import subprocess
 
 from build_apbpf_full_replay_cache import assemble
+from run_apbpf_history_rate_ablation import assess
 from pbpf.apbpf.codearc_bank import file_sha
 from pbpf.apbpf.worker_io import WorkerIO
 
@@ -93,6 +94,38 @@ def forward(io, dependency):
             raise ValueError('replication forwarding changed an artifact')
 
 
+def add_history_rate(io):
+    import numpy as np
+    association = json.loads((io.outputs/'association.json').read_text())
+    bundle = io.outputs/'assessment-bundle'
+    manifest = json.loads((bundle/'manifest.json').read_text())
+    reports = {}
+    for domain, entry in manifest['domains'].items():
+        cache = bundle/entry['cache']
+        if file_sha(cache) != entry['cache_sha256']:
+            raise ValueError('history-rate input differs from current association cache')
+        payload = json.loads(cache.read_text())
+        existing = association['domains'][payload['dataset']]
+        arrays, populations, bindings = {}, {}, {}
+        for binding in existing['prediction_bindings']:
+            path = io.outputs/binding['controls']
+            if file_sha(path) != binding['controls_sha256']:
+                raise ValueError('association prediction bytes changed before supplementary scoring')
+            seed = binding['seed']
+            with np.load(path, allow_pickle=False) as archive:
+                arrays[seed] = {k: archive[k].copy() for k in ('aligned', 'labels')}
+            populations[seed] = existing['primary_population']
+            bindings[str(seed)] = binding
+        report, rate = assess(payload, arrays, populations, checksum=entry['cache_sha256'])
+        path = io.outputs/f'{domain}-history-rate-probabilities.npy'
+        np.save(path, rate, allow_pickle=False)
+        report.update(bindings=bindings, probabilities_sha256=file_sha(path))
+        reports[payload['dataset']] = report
+    evidence = {'schema': 'apbpf-stage-history-rate-v1', 'domains': reports,
+                'scope': 'supplementary fixed-alpha control; original association report and gates unchanged'}
+    (io.outputs/'history-rate.json').write_text(json.dumps(evidence, indent=2)+'\n')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--stage', choices=WORKERS, required=True)
@@ -105,7 +138,7 @@ def main():
     worker, dependency = WORKERS[args.stage]
     sources = [str(p.relative_to(root)) for p in (root/'src/pbpf').rglob('*.py')]
     io = WorkerIO(args.stage, sources + ['scripts/run_apbpf_replication_bridge.py',
-        'scripts/build_apbpf_full_replay_cache.py', 'scripts/'+worker])
+        'scripts/build_apbpf_full_replay_cache.py', 'scripts/run_apbpf_history_rate_ablation.py', 'scripts/'+worker])
     if args.stage == 'materialize':
         command = io.config['site']['commands']['materialize']
         for flag, value in (('--replication-cache-manifest', str(args.replication_cache_manifest)),
@@ -130,8 +163,11 @@ def main():
         import_manifest(io, args.replication_cache_manifest, args.replication_cache_sha256)
     else:
         forward(io, dependency)
+    if args.stage == 'association':
+        add_history_rate(io)
     if args.stage == 'association_gate':
         shutil.copyfile(io.artifact('association', 'association.json'), io.outputs/'primary-association.json')
+        shutil.copyfile(io.artifact('association', 'history-rate.json'), io.outputs/'history-rate.json')
     summary = dict(base['summary'], replication_inputs_forwarded=True, replication_candidate_execution_reused=True)
     io.finish(summary, gate=base.get('gate'))
 

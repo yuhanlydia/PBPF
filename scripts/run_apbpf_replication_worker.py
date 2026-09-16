@@ -28,11 +28,13 @@ def make_cell(association, selection, *, dataset, family, checksum, bindings, sc
 
 
 def main():
+    from run_apbpf_history_rate_ablation import evaluate_training
     root = Path(__file__).resolve().parents[1]
     sources = [str(p.relative_to(root)) for p in (root/'src/pbpf').rglob('*.py')]
     sources += ['scripts/'+name for name in ('run_apbpf_replication_worker.py',
         'run_local_stage_training_diagnostic.py', 'run_apbpf_train_worker.py',
-        'run_apbpf_association_worker.py', 'run_rbr_prediction_gate.py', 'run_local_selection_diagnostic.py')]
+        'run_apbpf_association_worker.py', 'run_rbr_prediction_gate.py', 'run_local_selection_diagnostic.py',
+        'run_apbpf_history_rate_ablation.py')]
     io = WorkerIO('replication', sources)
     local = resolve_config(root/'configs/experiments/apbpf_iclr2027.yaml', 'local_exploratory').config
     if any(local[key] != io.config[key] for key in ('protocol', 'models', 'datasets')):
@@ -40,6 +42,9 @@ def main():
     models = {m['role']: m for m in io.config['models'].values()}
     primary_path = io.artifact('association_gate', 'primary-association.json')
     primary = json.loads(primary_path.read_text())
+    history = json.loads(io.artifact('association_gate', 'history-rate.json').read_text())
+    if history['schema'] != 'apbpf-stage-history-rate-v1' or set(history['domains']) != set(DOMAINS.values()):
+        raise ValueError('both primary-family history-rate controls are required')
     if (primary['schema'] != 'apbpf-stage-association-v1' or set(primary['domains']) != set(DOMAINS.values())
             or primary['bootstrap_draws'] != 10000 or primary['population'] != 'full_locked_population'):
         raise ValueError('complete stage-bound primary association required')
@@ -66,6 +71,9 @@ def main():
             family=models['primary']['family'], checksum=association['cache_sha256'],
             bindings={'association': file_sha(primary_path), 'selection_by_seed': report_bindings},
             scope='same-run primary-family stages; no refitting or independent-repeat claim'))
+        if history['domains'][dataset]['cache_sha256'] != association['cache_sha256']:
+            raise ValueError('history-rate ablation uses another primary cache')
+        cells[-1]['prediction_ablations'] = {'history_rate': history['domains'][dataset]}
         entry = manifest['domains'][domain]
         paths = {}
         for kind in ('cache', 'proof'):
@@ -91,6 +99,8 @@ def main():
             bindings={'cache_proof': entry['proof_sha256'], 'association': file_sha(training/'comparison.json'),
                       'selection': file_sha(selecting/'results.json')},
             scope='fresh three-seed fitting and assessment in this stage; root-declared candidate execution reuse'))
+        cells[-1]['prediction_ablations'] = {'history_rate': evaluate_training(
+            paths['cache'], training, io.outputs/f'{domain}-history-rate')}
     result = {'schema': 'apbpf-stage-replication-v1', 'cells': cells,
               'root_manifest_sha256': manifest['root_manifest_sha256'],
               'fresh_replication_fitting': True, 'fresh_replication_candidate_execution': False,
