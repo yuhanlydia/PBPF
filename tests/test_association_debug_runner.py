@@ -58,6 +58,9 @@ def test_driver_writes_auditable_failed_or_passed_development_result(tmp_path, a
         assert repeat['counterfactual_seed']==report['development']['counterfactual_seed']
     assert report['training_views'] == 'uniform_pair_permutation'
     assert report['selection']['development_gate_passed'] in (True, False)
+    assert report['selection']['policy'] == 'predictive_nll'
+    assert report['selection']['gate_enforced'] is False
+    assert report['selection']['index'] == report['selection']['best_nll_index']
     assert report['training_history'][-1]['step'] == 2
     assert (output / 'model.pt').is_file()
     assert (output / 'checksums.json').is_file()

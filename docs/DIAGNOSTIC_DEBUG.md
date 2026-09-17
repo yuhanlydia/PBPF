@@ -20,9 +20,13 @@ the held-out test split, and does not replace the `apbpf-iclr-v1` worker DAG.
 - `DeterministicInteractionPredictor`: a non-particle control using
   outcome-conditioned test summaries and a bilinear decoder. It shares input
   visibility, but is not parameter/compute matched to the particle model.
-- `select_diagnostic_checkpoint`: screen on development association and pair
-  invariance within 0.02 NLL of the best absolute predictor. If no checkpoint
-  qualifies, select minimum NLL and explicitly report screen failure.
+- The debug runner defaults to `--checkpoint-policy predictive_nll`: select
+  minimum development NLL and report association continuously. A positive gap
+  supports further debugging without requiring .03. The historical screen is
+  advisory (`gate_enforced=false`), not a success claim or stopping rule.
+  `--checkpoint-policy historical_screen` reproduces the earlier association
+  and pair-invariance screen within .02 NLL of the best predictor. The low-level
+  selection helper retains that historical default for existing callers.
 
 Legacy constructors and training remain available. The one shared numerical
 fix makes SMC CDF probabilities agree with native-precision ESS probabilities,
@@ -180,8 +184,9 @@ The three subsequent Monte Carlo repetitions each use a disjoint four-draw
 ensemble, with history corruption still fixed. This reduces sensitivity to one
 favorable particle draw; it does not correct adaptive reuse of development data.
 
-Use `--selection-replicates 1` with the reproduction commands above to reproduce
-the earlier selection protocol. Historical reports and checkpoints remain
+Use `--selection-replicates 1 --checkpoint-policy historical_screen` with the
+reproduction commands above to reproduce the earlier selection protocol.
+Historical reports and checkpoints remain
 unchanged. Four independent K=64 self-normalized estimates averaged together
 are not equivalent to one K=256 importance estimate. Neither the 0.03 diagnostic
 screen nor the 0.02 NLL guard has changed.
@@ -190,3 +195,16 @@ Six subsequent real-data runs and the two-seed K8/K32 comparison are reported
 in `results/DIAGNOSTIC_SELECTION_FIX_2026-09-17.md`. The evaluator correction
 does not itself establish a causal prediction improvement; all new model
 comparisons share the corrected estimator.
+
+Following the user's instruction to continue on positive signals, the runner
+now records `association_positive` separately from the old
+`development_gate_passed`. Neither a positive point estimate nor an old screen
+pass establishes bug identity. Negative results remain recorded. Training's
+association-loss margin is unchanged; this update changes checkpoint selection
+and interpretation, not the objective. Reproduce the six-run follow-up with
+`--selection-replicates 4 --checkpoint-policy historical_screen`.
+
+`results/DIAGNOSTIC_ACTIVE_REPLAY_2026-09-17.md` records the subsequent influence
+audit and 18 one-step acquisition replays. Association improvements did not
+consistently translate to acquisition benefits; this motivates debugging
+likelihood calibration and query ranking rather than imposing another gate.

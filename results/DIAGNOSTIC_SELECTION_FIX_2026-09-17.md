@@ -84,7 +84,9 @@ establish interpretable bug identity, active testing or repair control.
 
 Use `scripts/run_association_debug.py` with `--source runbugrun`, the immutable
 semantic cache, `--seed 1703 --steps 1000 --eval-particles 64
---selection-replicates 4`, and the model/particle choices in the table.
+--selection-replicates 4 --checkpoint-policy historical_screen`, and the
+model/particle choices in the table. The current runner defaults to advisory
+association reporting; this flag reproduces the historical selection policy.
 Exact commands, source snapshots, data hashes, checkpoints and negative
 controls are recorded under `/root/pbpf-runs/selection-fix-20260917/`.
 The pre-run plan is `plan.json`; the independent panel is `independent-audit/`.

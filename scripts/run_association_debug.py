@@ -262,7 +262,8 @@ def run(args):
                 torch.save(dict(model=snapshot, config=config, step=step,
                                 model_class=cls.__name__, data=metadata), checkpoint_dir / f'{step:06d}.pt')
                 print(json.dumps(row, sort_keys=True), flush=True)
-        selection = select_diagnostic_checkpoint(validation)
+        selection = select_diagnostic_checkpoint(validation,
+            policy='predictive_nll' if args.arm == 'legacy' else args.checkpoint_policy)
         if args.arm == 'legacy':
             # Reproduce legacy minimum-NLL selection; report revised screen separately.
             selection['index'] = selection['best_nll_index']
@@ -270,8 +271,6 @@ def run(args):
             selection['development_gate_passed'] = bool(selected['association_gap'] >= .03
                 and selected['pair_order_effect'] <= .25 * selected['association_gap'])
             selection['policy'] = 'legacy_minimum_nll'
-        else:
-            selection['policy'] = 'diagnostic_constraints_with_absolute_nll_guard'
         selected_step = history[selection['index']]['step']
         checkpoint = checkpoint_dir / f'{selected_step:06d}.pt'
         saved = torch.load(checkpoint, map_location=device, weights_only=False)
@@ -325,7 +324,9 @@ def main():
     parser.add_argument('--feature-cache', type=Path)
     parser.add_argument('--eval-particles', type=int)
     parser.add_argument('--selection-replicates', type=int, default=4,
-                        help='Average predictive probabilities across fixed draws for selection; use 1 to reproduce older runs')
+                        help='Draws averaged for selection; old single-draw screened runs require 1 plus --checkpoint-policy historical_screen')
+    parser.add_argument('--checkpoint-policy', choices=['predictive_nll', 'historical_screen'],
+                        default='predictive_nll', help='Default selects minimum NLL; association is advisory')
     parser.add_argument('--shuffle-train-tests', action='store_true')
     parser.add_argument('--steps', type=int, default=1000)
     parser.add_argument('--seed', type=int, default=1701)

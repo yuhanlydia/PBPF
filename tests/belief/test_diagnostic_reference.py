@@ -195,6 +195,17 @@ def test_selection_rejects_pair_order_effect_even_if_nll_improves(api):
     assert not api.select_diagnostic_checkpoint(rows)['development_gate_passed']
 
 
+@pytest.mark.parametrize('gap', [.001, -.001])
+def test_predictive_selection_reports_signal_without_enforcing_old_gate(api, gap):
+    rows = [dict(aligned_nll=.4, association_gap=gap, pair_order_effect=0.),
+            dict(aligned_nll=.41, association_gap=.04, pair_order_effect=0.)]
+    selected = api.select_diagnostic_checkpoint(rows, policy='predictive_nll')
+    assert selected['index'] == 0
+    assert selected['association_positive'] == (gap > 0)
+    assert selected['gate_enforced'] is False
+    assert selected['development_gate_passed'] is False
+
+
 def test_training_updates_model_and_records_estimator(api):
     torch.manual_seed(31)
     model = api.HistoryISBeliefModel(3, 4, 12, difficulty_dim=2)

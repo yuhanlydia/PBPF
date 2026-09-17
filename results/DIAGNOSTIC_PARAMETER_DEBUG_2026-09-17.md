@@ -145,7 +145,8 @@ history, 1000 steps, training K8 and evaluation K64. Parameter-only runs use
 `--particles 32` with the original interaction arm.
 
 For this historical round, also pass `--selection-replicates 1` when using the
-updated runner; the later correction defaults to four draws for selection.
+updated runner, plus `--checkpoint-policy historical_screen`; the later
+correction defaults to four draws and advisory association reporting.
 
 `inspect_diagnostic_state.py` instruments frozen checkpoints.
 `audit_diagnostic_sampling.py` snapshots source and separates sampling, corruption

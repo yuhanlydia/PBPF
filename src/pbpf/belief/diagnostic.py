@@ -303,8 +303,11 @@ def train_diagnostic_step(model, batch, optimizer, *, particles=8, visible_steps
             'gradient_norms': gradient_norms}
 
 
-def select_diagnostic_checkpoint(rows, *, margin=.03, nll_tolerance=.02, pair_fraction=.25):
-    """Fail-closed development screening; never rescue poor NLL with a gap."""
+def select_diagnostic_checkpoint(rows, *, margin=.03, nll_tolerance=.02, pair_fraction=.25,
+                                 policy='historical_screen'):
+    """Select predictive NLL or reproduce the historical diagnostic screen."""
+    if policy not in ('predictive_nll', 'historical_screen'):
+        raise ValueError('unknown checkpoint policy')
     if not rows or any(not math.isfinite(v) or v < 0 for v in (margin, nll_tolerance, pair_fraction)):
         raise ValueError("nonempty validation history and nonnegative finite thresholds required")
     if any(not all(math.isfinite(r[k]) for k in ('aligned_nll', 'association_gap', 'pair_order_effect'))
@@ -315,6 +318,8 @@ def select_diagnostic_checkpoint(rows, *, margin=.03, nll_tolerance=.02, pair_fr
                 if row['aligned_nll'] <= rows[best]['aligned_nll'] + nll_tolerance
                 and row['association_gap'] >= margin and row['association_gap'] > 0
                 and row['pair_order_effect'] <= pair_fraction * row['association_gap']]
-    chosen = min(eligible, key=lambda i: rows[i]['aligned_nll']) if eligible else best
-    return dict(index=chosen, development_gate_passed=bool(eligible), best_nll_index=best,
+    chosen = min(eligible, key=lambda i: rows[i]['aligned_nll']) if eligible and policy == 'historical_screen' else best
+    return dict(index=chosen, development_gate_passed=chosen in eligible, best_nll_index=best,
+                policy=policy, gate_enforced=policy == 'historical_screen',
+                association_positive=rows[chosen]['association_gap'] > 0,
                 margin=margin, nll_tolerance=nll_tolerance, pair_fraction=pair_fraction)
