@@ -168,3 +168,25 @@ budget. Larger K does not imply nested random particles across every candidate.
 
 See `results/DIAGNOSTIC_PARAMETER_DEBUG_2026-09-17.md` for all positive and negative
 trials. The stronger association remains an exploratory development result.
+
+## Checkpoint sampling correction (2026-09-17 follow-up)
+
+The runner now defaults to `--selection-replicates 4`. Each scheduled checkpoint
+is scored by averaging predictive probabilities from four independent particle
+draws, then computing NLL. History corruption stays fixed across these draws;
+each aligned/shuffled comparison uses matched sampling seeds. Selected-model
+scoring and the descriptive bootstrap use the same averaged probabilities.
+The three subsequent Monte Carlo repetitions each use a disjoint four-draw
+ensemble, with history corruption still fixed. This reduces sensitivity to one
+favorable particle draw; it does not correct adaptive reuse of development data.
+
+Use `--selection-replicates 1` with the reproduction commands above to reproduce
+the earlier selection protocol. Historical reports and checkpoints remain
+unchanged. Four independent K=64 self-normalized estimates averaged together
+are not equivalent to one K=256 importance estimate. Neither the 0.03 diagnostic
+screen nor the 0.02 NLL guard has changed.
+
+Six subsequent real-data runs and the two-seed K8/K32 comparison are reported
+in `results/DIAGNOSTIC_SELECTION_FIX_2026-09-17.md`. The evaluator correction
+does not itself establish a causal prediction improvement; all new model
+comparisons share the corrected estimator.

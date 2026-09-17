@@ -144,6 +144,9 @@ history, 1000 steps, training K8 and evaluation K64. Parameter-only runs use
 `--evidence-weight .1`, `--invariance-weight 0`, `--association-weight 10`, or
 `--particles 32` with the original interaction arm.
 
+For this historical round, also pass `--selection-replicates 1` when using the
+updated runner; the later correction defaults to four draws for selection.
+
 `inspect_diagnostic_state.py` instruments frozen checkpoints.
 `audit_diagnostic_sampling.py` snapshots source and separates sampling, corruption
 and evaluation-budget changes. Full configurations and pre-run stage plans are

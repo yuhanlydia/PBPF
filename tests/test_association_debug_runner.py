@@ -49,6 +49,13 @@ def test_driver_writes_auditable_failed_or_passed_development_result(tmp_path, a
     assert report['test_evaluated'] is False
     assert report['device'] == 'cpu'
     assert report['evaluation_particles'] == 8
+    assert report['checkpoint_evaluation']['sampling_replicates'] == 4
+    selection_seeds=set(report['development']['sampling_seeds'])
+    assert len(selection_seeds)==4
+    for repeat in report['monte_carlo_repeats']:
+        assert len(repeat['sampling_seeds'])==4
+        assert selection_seeds.isdisjoint(repeat['sampling_seeds'])
+        assert repeat['counterfactual_seed']==report['development']['counterfactual_seed']
     assert report['training_views'] == 'uniform_pair_permutation'
     assert report['selection']['development_gate_passed'] in (True, False)
     assert report['training_history'][-1]['step'] == 2
@@ -112,3 +119,22 @@ def test_prediction_separates_particle_noise_from_history_corruption(mode):
     assert any(not torch.equal(observed[0][i], observed[2][i]) for i in (0,1))
     for default, explicit in zip(observed[3], observed[4]):
         torch.testing.assert_close(default, explicit)
+
+
+def test_evaluation_averages_probabilities_and_holds_corruption_fixed(monkeypatch):
+    import numpy as np
+    module=driver()
+    batches,_=module.controlled_batches(2,2,8,17,torch.device('cpu'))
+    batch=batches['development'];batch.outcomes[:,4:]=0
+    seen=[]
+    def predictions(model,batch,*,particles,seed,mode,counterfactual_seed):
+        seen.append((seed,counterfactual_seed,mode))
+        p=.2 if seed==100 else .8
+        return np.tile([p]+[(1-p)/4]*4,(8,1))
+    monkeypatch.setattr(module.legacy,'_predict',predictions)
+    row,p=module.evaluate(torch.nn.Identity(),batch,particles=4,seed=100,sampling_replicates=2)
+    assert row['aligned_nll']==pytest.approx(-np.log(.5))
+    assert row['sampling_seeds']==[100,201]
+    assert {x[1] for x in seen}=={100}
+    assert {x[0] for x in seen}=={100,201}
+    np.testing.assert_allclose(p['aligned'][:,0],.5)

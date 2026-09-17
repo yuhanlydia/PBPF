@@ -94,14 +94,20 @@ def mean_nll(labels, probabilities):
 
 
 @torch.no_grad()
-def evaluate(model, batch, *, particles, seed, counterfactual_seed=None):
+def evaluate(model, batch, *, particles, seed, counterfactual_seed=None, sampling_replicates=1):
     model.eval()
     labels = batch.outcomes[:, 4:].reshape(-1).cpu().numpy()
-    predictions = {arm: legacy._predict(model, batch, particles=particles, seed=seed, mode=arm,
-                        counterfactual_seed=counterfactual_seed)
+    if type(sampling_replicates) is not int or sampling_replicates < 1:
+        raise ValueError('positive integer sampling replicate count required')
+    sampling_seeds = [seed + 101 * i for i in range(sampling_replicates)]
+    corruption_seed = seed if counterfactual_seed is None else counterfactual_seed
+    predictions = {arm: np.mean([legacy._predict(model, batch, particles=particles,
+                        seed=draw_seed, mode=arm, counterfactual_seed=corruption_seed)
+                        for draw_seed in sampling_seeds], axis=0)
                    for arm in ('aligned', 'outcome_shuffled', 'joint_reversed', 'presentation_permuted')}
     nlls = {arm: mean_nll(labels, value) for arm, value in predictions.items()}
-    row = dict(sampling_seed=seed, counterfactual_seed=seed if counterfactual_seed is None else counterfactual_seed,
+    row = dict(sampling_seed=seed, sampling_seeds=sampling_seeds, sampling_replicates=sampling_replicates,
+               counterfactual_seed=seed if counterfactual_seed is None else counterfactual_seed,
                aligned_nll=nlls['aligned'], association_gap=nlls['outcome_shuffled'] - nlls['aligned'],
                pair_order_effect=max(abs(nlls[arm] - nlls['aligned'])
                                      for arm in ('joint_reversed', 'presentation_permuted')),
@@ -195,7 +201,7 @@ def run(args):
         raise ValueError('positive evaluation particle count required')
     if args.feature_cache and args.source != 'runbugrun':
         raise ValueError('feature cache requires real data')
-    if min(args.steps, args.particles, args.batch_size, args.bootstrap_replicates) < 1:
+    if min(args.steps, args.particles, args.batch_size, args.bootstrap_replicates, args.selection_replicates) < 1:
         raise ValueError('steps, particles, batch size and bootstrap replicates must be positive')
     output = args.output
     output.mkdir(parents=True, exist_ok=False)
@@ -246,7 +252,8 @@ def run(args):
                     evidence_weight=args.evidence_weight, invariance_weight=args.invariance_weight,
                     measure_gradients=(step == 1))
             if step == 1 or step % max(1, args.steps // 20) == 0 or step == args.steps:
-                dev_row, _ = evaluate(model, dev, particles=evaluation_particles, seed=args.seed + 50000)
+                dev_row, _ = evaluate(model, dev, particles=evaluation_particles, seed=args.seed + 50000,
+                    sampling_replicates=args.selection_replicates)
                 row = dict(step=step, training=metrics, development=dev_row)
                 history.append(row)
                 validation.append(dev_row)
@@ -270,25 +277,31 @@ def run(args):
         saved = torch.load(checkpoint, map_location=device, weights_only=False)
         model.load_state_dict(saved['model'])
         shutil.copyfile(checkpoint, output / 'model.pt')
-        selected_metrics, predictions = evaluate(model, dev, particles=evaluation_particles, seed=args.seed + 50000)
+        selected_metrics, predictions = evaluate(model, dev, particles=evaluation_particles, seed=args.seed + 50000,
+                    sampling_replicates=args.selection_replicates)
         labels = dev.outcomes[:, 4:].reshape(-1).cpu().numpy()
         clusters = np.repeat(metadata['source_ids']['development'], dev.tests.shape[1] - 4)
         bootstrap = clustered_nll_gap(labels, predictions['aligned'], predictions['outcome_shuffled'], clusters,
                                       seed=args.seed + 200000, replicates=args.bootstrap_replicates)
         mc_repeats = [evaluate(model, dev, particles=evaluation_particles, seed=args.seed + offset,
-                               counterfactual_seed=args.seed + 50000)[0]
+                               counterfactual_seed=args.seed + 50000,
+                               sampling_replicates=args.selection_replicates)[0]
                       for offset in (70000, 80000, 90000)]
         baselines = fit_development_baselines(batches, args, output, metadata['source_ids']['development'])
         result = dict(schema='apbpf-diagnostic-debug-v1', scope='development_only_exploratory',
             test_evaluated=False, config=config, data=metadata, eligible=eligibility,
             evaluation_particles=evaluation_particles,
+            checkpoint_evaluation=dict(sampling_replicates=args.selection_replicates,
+                aggregation="mean_probability_then_nll", corruption="fixed_across_sampling_replicates",
+                sampling_seeds=[args.seed + 50000 + 101*i for i in range(args.selection_replicates)]),
             training_views='uniform_pair_permutation' if args.shuffle_train_tests else 'fixed_prefix',
             parameters=sum(p.numel() for p in model.parameters()), device=str(device),
             inference='prefix_is' if isinstance(model, HistoryISBeliefModel) else 'legacy_smc',
             selection={**selection, 'step': selected_step}, development=selected_metrics,
             development_bootstrap=bootstrap, bootstrap_caveat='descriptive only; checkpoint selected on these same development data',
             monte_carlo_repeats=mc_repeats, monte_carlo_protocol=
-                dict(vary="sampling_noise_only", fixed_counterfactual_seed=args.seed + 50000),
+                dict(vary="sampling_noise_only", fixed_counterfactual_seed=args.seed + 50000,
+                     sampling_replicates_per_repeat=args.selection_replicates),
             baselines=baselines, training_history=history,
             elapsed_seconds=time.monotonic() - start)
         (output / 'result.json').write_text(json.dumps(result, sort_keys=True, indent=2) + '\n')
@@ -311,6 +324,8 @@ def main():
     parser.add_argument('--cache', type=Path, default=Path('/root/pbpf-runs/association-20260916-seed1701/dataset.json'))
     parser.add_argument('--feature-cache', type=Path)
     parser.add_argument('--eval-particles', type=int)
+    parser.add_argument('--selection-replicates', type=int, default=4,
+                        help='Average predictive probabilities across fixed draws for selection; use 1 to reproduce older runs')
     parser.add_argument('--shuffle-train-tests', action='store_true')
     parser.add_argument('--steps', type=int, default=1000)
     parser.add_argument('--seed', type=int, default=1701)
