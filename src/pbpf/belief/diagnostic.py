@@ -27,6 +27,9 @@ class HistoryISBeliefModel(NeuralBeliefModel):
         self.diagnosis_proposal = _mlp(2 * feature_dim + 6 + hidden_dim,
                                        hidden_dim, 2 * self.diagnosis_dim)
 
+    def encode_pairs(self, tests, one_hot_outcomes):
+        return self.pair_encoder(torch.cat([tests, one_hot_outcomes], -1)).mean(1)
+
     def history_proposal(self, batch, prefix):
         if type(prefix) is not int or not 1 <= prefix <= batch.tests.shape[1]:
             raise ValueError("prefix must select a nonempty visible history")
@@ -34,7 +37,7 @@ class HistoryISBeliefModel(NeuralBeliefModel):
         histogram = outcomes.mean(1)
         count = batch.task.new_full((len(batch.task), 1), math.log1p(prefix))
         context = torch.cat([batch.task, batch.candidate, histogram, count], -1)
-        pairs = self.pair_encoder(torch.cat([batch.tests[:, :prefix], outcomes], -1)).mean(1)
+        pairs = self.encode_pairs(batch.tests[:, :prefix], outcomes)
         difficulty = self._gaussian(self.difficulty_proposal, context)
         diagnosis = self._gaussian(self.diagnosis_proposal, torch.cat([context, pairs], -1))
         return GaussianParams(torch.cat([difficulty.mean, diagnosis.mean], -1),
@@ -108,6 +111,56 @@ class InteractionHistoryISBeliefModel(HistoryISBeliefModel):
         _, diagnosis = self.split_latent(z)
         projected_test = self._expand(self.test_projection(test), z)
         return difficulty_logits, diagnosis_logits + self.interaction_head(diagnosis * projected_test)
+
+
+class InteractionOnlyHistoryISBeliefModel(InteractionHistoryISBeliefModel):
+    """Remove the additive diagnosis MLP shortcut; retain only test x g.
+
+    Difficulty carries global class logits. Diagnosis vanishes if test features
+    or g are zero. This does not establish identifiability: test features can
+    still contain candidate-global components. The encoder is unchanged.
+    """
+
+    def __init__(self, feature_dim, latent_dim=32, hidden_dim=128, *, difficulty_dim=8):
+        super().__init__(feature_dim, latent_dim, hidden_dim, difficulty_dim=difficulty_dim)
+        del self.diagnosis_head
+
+    def likelihood_components(self, z, task, candidate, test):
+        _, diagnosis = self.split_latent(z)
+        projected = self._expand(self.test_projection(test), z)
+        return self.difficulty_logits(z, task, candidate), self.interaction_head(diagnosis * projected)
+
+
+class HighGainHistoryISBeliefModel(InteractionOnlyHistoryISBeliefModel):
+    """Initialization-only ablation: tenfold test x g logit scale.
+
+    All other initialized tensors and the training objective match the
+    interaction-only arm under the same seed. Weights remain freely trainable;
+    this is not a likelihood temperature or a post-hoc probability adjustment.
+    """
+
+    def __init__(self, feature_dim, latent_dim=32, hidden_dim=128, *, difficulty_dim=8):
+        super().__init__(feature_dim, latent_dim, hidden_dim, difficulty_dim=difficulty_dim)
+        with torch.no_grad():
+            self.interaction_head.weight.mul_(10.)
+
+
+class BoundHistoryISBeliefModel(InteractionHistoryISBeliefModel):
+    """Bind test features to outcome classes before any learned aggregation.
+
+    A near-linear encoder of concatenated test/outcome vectors loses association
+    under averaging. Outcome-conditioned feature blocks preserve correspondence
+    even with a linear pair encoder. This changes encoder capacity; it is an
+    architectural ablation, not a parameter-matched identifiability proof.
+    """
+
+    def __init__(self, feature_dim, latent_dim=32, hidden_dim=128, *, difficulty_dim=8):
+        super().__init__(feature_dim, latent_dim, hidden_dim, difficulty_dim=difficulty_dim)
+        self.pair_encoder = _mlp(5 * feature_dim, hidden_dim, hidden_dim)
+
+    def encode_pairs(self, tests, one_hot_outcomes):
+        bound = (one_hot_outcomes[..., :, None] * tests[..., None, :]).flatten(-2)
+        return self.pair_encoder(bound).mean(1)
 
 
 class DeterministicInteractionPredictor(nn.Module):

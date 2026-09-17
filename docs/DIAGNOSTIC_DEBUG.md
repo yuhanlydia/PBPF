@@ -125,3 +125,46 @@ cannot directly justify diagnosis mutual information or latent-conditioned
 repair. Report both shuffle gaps and paired source-bootstrap comparisons to the
 histogram control. Four corruption seeds are sensitivity checks, not four
 independent data replications. See the follow-up results for the actual outcomes.
+
+## Parameter and mechanism debugging (2026-09-17)
+
+Three additional ablations preserve prefix-IS inference and visibility rules:
+
+- `--arm binding`: bind each test feature vector to its one-hot outcome before
+  learned averaging. This increases encoder capacity and is explicitly an
+  architectural ablation.
+- `--arm interaction_only`: keep the original encoder, remove the additive
+  diagnosis MLP, and use only bilinear test × g diagnosis logits plus the
+  difficulty head. This reduces parameter count.
+- `--arm high_gain`: the interaction-only model with tenfold initialized
+  interaction-head weights. All other initialized parameter tensors match at a
+  shared seed. The weights remain trainable.
+
+```bash
+PYTHONPATH=src python scripts/run_association_debug.py \
+  --source runbugrun --cache /absolute/path/to/rich-cache-v3.json \
+  --feature-cache runs/debug/codebert-features.npz \
+  --arm high_gain --seed 1701 --steps 1000 --particles 8 --eval-particles 64 \
+  --output runs/debug/high-gain-1701
+
+PYTHONPATH=src python scripts/inspect_diagnostic_state.py \
+  --runs runs/debug/high-gain-1701 --particles 256 \
+  --seed 71701 --counterfactual-seed 51701 \
+  --output runs/debug/high-gain-state.json
+
+PYTHONPATH=src python scripts/audit_diagnostic_sampling.py \
+  --runs runs/debug/high-gain-1701 runs/debug/high-gain-1702 \
+  --output runs/debug/high-gain-sensitivity
+```
+
+A seed-routing bug in the earlier evaluation mixed sampling noise and history
+corruption inside what was called `monte_carlo_repeats`. Historical repetitions
+are retained as mixed sensitivity checks; original primary metrics/checkpoint
+choices are unchanged. New repetitions fix the counterfactual seed and vary
+sampling only. The optional low-level `counterfactual_seed` defaults to the old
+behavior for compatibility. Audits freeze selected checkpoints, validate both
+input fingerprints, and separately vary sampling, corruption and particle
+budget. Larger K does not imply nested random particles across every candidate.
+
+See `results/DIAGNOSTIC_PARAMETER_DEBUG_2026-09-17.md` for all positive and negative
+trials. The stronger association remains an exploratory development result.

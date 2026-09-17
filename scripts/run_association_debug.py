@@ -18,7 +18,7 @@ import torch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import run_rbr_prediction_gate as legacy
-from pbpf.belief.diagnostic import (HistoryISBeliefModel, InteractionHistoryISBeliefModel,
+from pbpf.belief.diagnostic import (HistoryISBeliefModel, InteractionHistoryISBeliefModel, BoundHistoryISBeliefModel, InteractionOnlyHistoryISBeliefModel, HighGainHistoryISBeliefModel,
                                     DeterministicInteractionPredictor, select_diagnostic_checkpoint,
                                     train_diagnostic_step)
 from pbpf.belief.features import BeliefBatch
@@ -94,13 +94,15 @@ def mean_nll(labels, probabilities):
 
 
 @torch.no_grad()
-def evaluate(model, batch, *, particles, seed):
+def evaluate(model, batch, *, particles, seed, counterfactual_seed=None):
     model.eval()
     labels = batch.outcomes[:, 4:].reshape(-1).cpu().numpy()
-    predictions = {arm: legacy._predict(model, batch, particles=particles, seed=seed, mode=arm)
+    predictions = {arm: legacy._predict(model, batch, particles=particles, seed=seed, mode=arm,
+                        counterfactual_seed=counterfactual_seed)
                    for arm in ('aligned', 'outcome_shuffled', 'joint_reversed', 'presentation_permuted')}
     nlls = {arm: mean_nll(labels, value) for arm, value in predictions.items()}
-    row = dict(aligned_nll=nlls['aligned'], association_gap=nlls['outcome_shuffled'] - nlls['aligned'],
+    row = dict(sampling_seed=seed, counterfactual_seed=seed if counterfactual_seed is None else counterfactual_seed,
+               aligned_nll=nlls['aligned'], association_gap=nlls['outcome_shuffled'] - nlls['aligned'],
                pair_order_effect=max(abs(nlls[arm] - nlls['aligned'])
                                      for arm in ('joint_reversed', 'presentation_permuted')),
                nll=nlls)
@@ -220,7 +222,7 @@ def run(args):
                              if args.source == 'controlled' else real_batches(args.cache, args.feature_dim, device, args.feature_cache))
         torch.manual_seed(args.seed)
         np.random.seed(args.seed)
-        cls = {'history_is': HistoryISBeliefModel, 'interaction': InteractionHistoryISBeliefModel}.get(args.arm, NeuralBeliefModel)
+        cls = {'history_is': HistoryISBeliefModel, 'interaction': InteractionHistoryISBeliefModel, 'binding': BoundHistoryISBeliefModel, 'interaction_only': InteractionOnlyHistoryISBeliefModel, 'high_gain': HighGainHistoryISBeliefModel}.get(args.arm, NeuralBeliefModel)
         model = cls(args.feature_dim, args.latent_dim, args.hidden_dim, difficulty_dim=args.difficulty_dim).to(device)
         optimizer = torch.optim.AdamW(model.parameters(), lr=args.learning_rate, weight_decay=.01)
         rng = np.random.default_rng(args.seed)
@@ -273,7 +275,8 @@ def run(args):
         clusters = np.repeat(metadata['source_ids']['development'], dev.tests.shape[1] - 4)
         bootstrap = clustered_nll_gap(labels, predictions['aligned'], predictions['outcome_shuffled'], clusters,
                                       seed=args.seed + 200000, replicates=args.bootstrap_replicates)
-        mc_repeats = [evaluate(model, dev, particles=evaluation_particles, seed=args.seed + offset)[0]
+        mc_repeats = [evaluate(model, dev, particles=evaluation_particles, seed=args.seed + offset,
+                               counterfactual_seed=args.seed + 50000)[0]
                       for offset in (70000, 80000, 90000)]
         baselines = fit_development_baselines(batches, args, output, metadata['source_ids']['development'])
         result = dict(schema='apbpf-diagnostic-debug-v1', scope='development_only_exploratory',
@@ -284,7 +287,9 @@ def run(args):
             inference='prefix_is' if isinstance(model, HistoryISBeliefModel) else 'legacy_smc',
             selection={**selection, 'step': selected_step}, development=selected_metrics,
             development_bootstrap=bootstrap, bootstrap_caveat='descriptive only; checkpoint selected on these same development data',
-            monte_carlo_repeats=mc_repeats, baselines=baselines, training_history=history,
+            monte_carlo_repeats=mc_repeats, monte_carlo_protocol=
+                dict(vary="sampling_noise_only", fixed_counterfactual_seed=args.seed + 50000),
+            baselines=baselines, training_history=history,
             elapsed_seconds=time.monotonic() - start)
         (output / 'result.json').write_text(json.dumps(result, sort_keys=True, indent=2) + '\n')
         checksums = {str(p.relative_to(output)): hashlib.sha256(p.read_bytes()).hexdigest()
@@ -301,7 +306,7 @@ def run(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source', choices=['controlled', 'runbugrun'], required=True)
-    parser.add_argument('--arm', choices=['legacy', 'objective', 'history_is', 'interaction'], required=True)
+    parser.add_argument('--arm', choices=['legacy', 'objective', 'history_is', 'interaction', 'binding', 'interaction_only', 'high_gain'], required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--cache', type=Path, default=Path('/root/pbpf-runs/association-20260916-seed1701/dataset.json'))
     parser.add_argument('--feature-cache', type=Path)

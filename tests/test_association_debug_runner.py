@@ -32,10 +32,11 @@ def test_controlled_histograms_cannot_reveal_diagnosis_but_pairs_can():
     assert metadata['scientific_claim'] == 'controlled_learnability_only'
 
 
-def test_driver_writes_auditable_failed_or_passed_development_result(tmp_path):
+@pytest.mark.parametrize('arm', ['history_is', 'binding', 'interaction_only', 'high_gain'])
+def test_driver_writes_auditable_failed_or_passed_development_result(tmp_path, arm):
     output = tmp_path / 'run'
     command = [sys.executable, str(ROOT / 'scripts/run_association_debug.py'),
-               '--source', 'controlled', '--arm', 'history_is', '--output', str(output),
+               '--source', 'controlled', '--arm', arm, '--output', str(output),
                '--steps', '2', '--train-size', '16', '--dev-size', '8',
                '--feature-dim', '16', '--hidden-dim', '12', '--latent-dim', '4',
                '--difficulty-dim', '2', '--particles', '4', '--device', 'cpu',
@@ -87,3 +88,27 @@ def test_deterministic_controls_detect_pair_signal_without_order_signal():
     assert metrics['aligned_nll'] < .001
     assert metrics['association_gap'] > 1.
     assert metrics['pair_order_effect'] < 1e-6
+
+
+@pytest.mark.parametrize('mode', ['outcome_shuffled', 'presentation_permuted'])
+def test_prediction_separates_particle_noise_from_history_corruption(mode):
+    module = driver()
+    batches, _ = module.controlled_batches(32,32,8,17,torch.device('cpu'))
+    model = module.InteractionHistoryISBeliefModel(8,4,12,difficulty_dim=1)
+    original_filter = model.filter
+    observed = []
+    def record(batch, **options):
+        observed.append((batch.tests.clone(), batch.outcomes.clone(), options['proposal_noise'].clone()))
+        return original_filter(batch, **options)
+    model.filter = record
+    with torch.no_grad():
+        for noise_seed, history_seed in [(11,13),(12,13),(11,14),(11,None),(11,11)]:
+            module.legacy._predict(model,batches['development'],particles=4,seed=noise_seed,
+                                   counterfactual_seed=history_seed,mode=mode)
+    torch.testing.assert_close(observed[0][0], observed[1][0])
+    torch.testing.assert_close(observed[0][1], observed[1][1])
+    assert not torch.equal(observed[0][2], observed[1][2])
+    torch.testing.assert_close(observed[0][2], observed[2][2])
+    assert any(not torch.equal(observed[0][i], observed[2][i]) for i in (0,1))
+    for default, explicit in zip(observed[3], observed[4]):
+        torch.testing.assert_close(default, explicit)
