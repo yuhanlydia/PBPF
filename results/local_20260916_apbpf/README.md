@@ -13,7 +13,8 @@ families. All nine configured prediction controls are now complete for both
 CodeARC families, including the previously missing fixed `history_rate`.
 See `full_pipeline_progress_v2.json`, `ablation_coverage_audit.json` and the final
 sections below. The latest checkpoint is
-`gradient_debug_and_qwen_completion_progress.json`. Qwen RBR generation and
+`association_weight_comparison_queue_progress.json`: the all-three-seed
+weight100 comparison is queued and identity-validated. Qwen RBR generation and
 execution are complete for all 500 primary sources / 4000 candidates. Its full
 three-seed cell and fixed history-rate control are complete: association is
 0.000493 and selection advantage 0.004667, both with CIs crossing zero.
@@ -1234,3 +1235,19 @@ The original GPU1 generator child was preserved; its original parent is parked,
 while the coordinator owns future scheduling and a distinct primary bank onGPU0.
 The old parent must not be manually resumed into directories now owned by the
 coordinator. GPU2 continues repair generation, and unrelatedGPU3 is untouched.
+
+## Weight100 comparison queued (2026-09-17)
+
+`scripts/summarize_apbpf_association_weight.py` waits for every fixed seed and
+binds both coefficient declarations, mandatory model-variant sidecars, model
+receipts and original weight1 prediction archives. Both sides use the same
+prior/no-resampling class and32-particle inference. It will reproduce all four
+control NLLs for every old/new model and report paired loss changes separately
+for aligned and shuffled histories, plus both order controls. Positive changes
+mean weight1 NLL minus weight100 NLL. A larger association gap caused solely by
+worse shuffled predictions must not be described as improved aligned prediction.
+
+The comparison is running as a waiter, with source/plan identities checked;
+no weight100 outcome is available yet. See the comparison plan and
+`association_weight_comparison_queue_progress.json`. Actual checkpoint replay
+and numerical verification remain pending until all three fits finish.
