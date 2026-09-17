@@ -13,8 +13,9 @@ families. All nine configured prediction controls are now complete for both
 CodeARC families, including the previously missing fixed `history_rate`.
 See `full_pipeline_progress_v2.json`, `ablation_coverage_audit.json` and the final
 sections below. The latest checkpoint is
-`association_weight_comparison_queue_progress.json`: the all-three-seed
-weight100 comparison is queued and identity-validated. Qwen RBR generation and
+`association_weight_seed1701_progress.json`: weight100 seed1701 is complete
+and fails original gates; seed1702 is running and the all-three-seed comparison
+remains queued. Qwen RBR generation and
 execution are complete for all 500 primary sources / 4000 candidates. Its full
 three-seed cell and fixed history-rate control are complete: association is
 0.000493 and selection advantage 0.004667, both with CIs crossing zero.
@@ -1251,3 +1252,19 @@ The comparison is running as a waiter, with source/plan identities checked;
 no weight100 outcome is available yet. See the comparison plan and
 `association_weight_comparison_queue_progress.json`. Actual checkpoint replay
 and numerical verification remain pending until all three fits finish.
+
+## Weight100 first seed completed (2026-09-17)
+
+Seed1701 completed all1000 fitting steps, strong baselines and development
+assessment. The inner-validation checkpoint is from step500. Its aligned NLL
+is0.455991, compared with0.456188 for weight1; association is−0.000014425
+(95% CI −0.000064005–0.000035651). Original association, relative pair-invariance
+and strong-baseline fairness gates fail. This is one seed, not the all-seed result.
+
+All model/report/population receipts and the weight100 variant binding were
+verified. All four strong baselines reproduce the original absolute NLL, accuracy
+and Brier exactly; their relative gain fields differ because the learned prior
+baseline changed. See `codearc_association_weight100_seed1701_verified.json`.
+Second-seed training is running; third-seed training and the independently queued
+all-seed numerical replay/paired comparison remain pending. No further coefficient
+or method variant has been selected from this partial result.

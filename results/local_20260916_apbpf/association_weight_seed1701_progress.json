@@ -1,0 +1,63 @@
+{
+  "captured_at": "2026-09-17T01:33:11.126387+00:00",
+  "previous_turn_classification": "progress: implemented and queued all-seed matched comparison",
+  "this_turn_classification": "progress: verified completed weight100 seed1701 report/checkpoint/variant/population receipts and unchanged strong baseline absolute metrics",
+  "completed_weight100_seeds": [
+    1701
+  ],
+  "live": {
+    "codearc-association-weight100-v1/status.json": {
+      "status": "running",
+      "pid": 2730307,
+      "current": "association-weight100-seed1702",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_apbpf_association_weight_debug.py --development-root /data/cwj/PBPF/local/longgoal/codearc-semantic-debug-v1 --gradient-audit /data/cwj/PBPF/local/longgoal/codearc-training-gradients-v1 --output /data/cwj/PBPF/local/longgoal/codearc-association-weight100-v1 ",
+      "process_start_ticks": "65931579"
+    },
+    "codearc-association-weight100-comparison-v1/status.json": {
+      "status": "waiting_for_all_refits",
+      "pid": 2908763,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u /data/cwj/PBPF/scripts/summarize_apbpf_association_weight.py --training-root /data/cwj/PBPF/local/longgoal/codearc-association-weight100-v1 --reference-training-root /data/cwj/PBPF/local/longgoal/codearc-prior-training-v1 --reference-replay-root /data/cwj/PBPF/local/longgoal/codearc-prior-comparison-v1 --development-root /data/cwj/PBPF/local/longgoal/codearc-semantic-debug-v1 --output /data/cwj/PBPF/local/longgoal/codearc-association-weight100-comparison-v1 --wait ",
+      "process_start_ticks": "65989515"
+    },
+    "rbr-deepseek-parallel-handoff-v2/status.json": {
+      "status": "running",
+      "pid": 796796,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/coordinate_rbr_replication_gpus.py --run-root /data/cwj/PBPF/local/longgoal --output /data/cwj/PBPF/local/longgoal/rbr-deepseek-parallel-handoff-v2 ",
+      "process_start_ticks": "65280428"
+    },
+    "codearc-packet-repair-v1/status.json": {
+      "status": "running",
+      "pid": 2533538,
+      "current": "generate-seed1701",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_packet_repair.py --packet-root /data/cwj/PBPF/local/longgoal/codearc-repair-packets-v1 --output /data/cwj/PBPF/local/longgoal/codearc-packet-repair-v1 --domain codearc --gpu 2 ",
+      "process_start_ticks": "64331942"
+    },
+    "codearc-packet-repair-evaluation-v1/status.json": {
+      "status": "waiting_for_generation",
+      "pid": 2546736,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_packet_repair_evaluation.py --generation-root /data/cwj/PBPF/local/longgoal/codearc-packet-repair-v1 --packet-root /data/cwj/PBPF/local/longgoal/codearc-repair-packets-v1 --evaluator-root /data/cwj/PBPF/local/longgoal/codearc-evaluator-v1 --output /data/cwj/PBPF/local/longgoal/codearc-packet-repair-evaluation-v1 ",
+      "process_start_ticks": "64337760"
+    },
+    "apbpf-real-full-pipeline-v2/status.json": {
+      "status": "waiting_for_full_banks_and_replication_replay",
+      "pid": 3137406,
+      "waiting_on": [
+        "rbr_deepseek_full_replay"
+      ],
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_apbpf_full_pipeline.py --run-root /data/cwj/PBPF/local/longgoal --materialized-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs --output /data/cwj/PBPF/local/longgoal/apbpf-real-full-pipeline-v2 --gpu 0 ",
+      "process_start_ticks": "64605641"
+    }
+  },
+  "generation_counts": {
+    "rbr-deepseek-train321": 214,
+    "rbr-deepseek-primary500": 51
+  },
+  "repair_latest_progress": "{\"generated\": 1904, \"task_id\": \"CodeARC/541/qwen/4\", \"arm\": \"mean\", \"tokens\": 54, \"seconds\": 1.8542545370291919}",
+  "scope": "first seed fails all original core gates; two further seeds and full paired replay pending; local longgoal remains active"
+}
