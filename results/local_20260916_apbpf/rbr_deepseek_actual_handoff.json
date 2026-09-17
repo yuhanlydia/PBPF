@@ -1,0 +1,33 @@
+{
+  "parent": {
+    "pid": 1117848,
+    "state": "T",
+    "ppid": 1117828,
+    "start_ticks": "63664004",
+    "command": ".venv/bin/python -u scripts/run_local_rbr_replication_generation.py --run-root local/longgoal --previous-pid 3469598 ",
+    "children": [
+      1477375
+    ]
+  },
+  "adopted": {
+    "name": "rbr-deepseek-train321",
+    "process": {
+      "pid": 1477375,
+      "state": "S",
+      "ppid": 1117848,
+      "start_ticks": "63885139",
+      "command": "bwrap --ro-bind /usr /usr --symlink usr/bin /bin --symlink usr/sbin /sbin --ro-bind /lib /lib --ro-bind /lib64 /lib64 --ro-bind /etc/ld.so.cache /etc/ld.so.cache --ro-bind /sys /sys --dev-bind /dev /dev --proc /proc --tmpfs /tmp --ro-bind /data/cwj/PBPF /data/cwj/PBPF --tmpfs /data/cwj/PBPF/local --ro-bind /data/cwj/.cache/pbpf-huggingface-root123 /data/cwj/.cache/pbpf-huggingface-root123 --ro-bind /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public /input --bind /data/cwj/PBPF/local/longgoal/rbr-deepseek-train321 /output --unshare-net --die-with-parent --setenv HOME /tmp --setenv HF_HOME /data/cwj/.cache/pbpf-huggingface-root123 --setenv HF_HUB_OFFLINE 1 --setenv TRANSFORMERS_OFFLINE 1 --setenv TOKENIZERS_PARALLELISM false --chdir /data/cwj/PBPF /data/cwj/PBPF/.venv/bin/python -u scripts/generate_apbpf_rbr_replication_bank.py --public-root /input --output /output --model-proof /output/model-proof.json --family deepseek --split train --components 321 --offset 0 --max-input-tokens 4096 --max-new-tokens 1024 ",
+      "children": [
+        1477391
+      ]
+    },
+    "gpu": 1
+  },
+  "pending_banks": [
+    "rbr-deepseek-primary500",
+    "rbr-deepseek-development384"
+  ],
+  "completed_banks": [
+    "rbr-deepseek-development-pilot16"
+  ]
+}

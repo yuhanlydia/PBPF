@@ -1,0 +1,29 @@
+{
+  "domain": "runbugrun",
+  "family": "qwen",
+  "seeds": [
+    1701,
+    1702,
+    1703
+  ],
+  "primary_sources": 500,
+  "primary_candidates": 4000,
+  "bootstrap_draws": 10000,
+  "association_gap": 0.0004925117827951908,
+  "association_ci95": [
+    -0.005562184874216715,
+    0.006574660004509818
+  ],
+  "selection_advantage": 0.004666666666666668,
+  "selection_ci95": [
+    -0.009333333333333332,
+    0.02
+  ],
+  "cache_sha256": "4af78c8a7856ae4996c3643bc803b849d9c976f06b518b14cf8998045ae3dc39",
+  "bindings": {
+    "cache_proof": "e134be86a35d136cd80c00098f803c7b0fe960a6f2fb91e72a3cf602864e13e8",
+    "association": "b3de9ad8f455e8ad8de5a7dc3576318b42e8a3f1f7450fdcb52b4eba307c6a22",
+    "selection": "7a6d7c93e2a03e94609b6d75cc24bdd2de6a65ce8be2e4ec7bd2f6ad4331815b"
+  },
+  "scope": "standalone full-population replication cell; no sealed-stage or scientific-gate pass implied"
+}

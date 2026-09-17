@@ -1,0 +1,40 @@
+{
+  "status": "complete",
+  "pid": 1303320,
+  "runs": {
+    "old-seed1701": {
+      "records_sha256": "0b834f76e636cca639be401ebaeb85bc299b930620996058cafb3e85a7289e37",
+      "parameters_unchanged": true,
+      "max_backward_sum_error": 2.384185791015625e-07
+    },
+    "new-seed1701": {
+      "records_sha256": "29af8351da3adefa13e59e9fb9289255bb0ae4fd44d210698f54e44b2031b6a2",
+      "parameters_unchanged": true,
+      "max_backward_sum_error": 4.172325134277344e-07
+    },
+    "old-seed1702": {
+      "records_sha256": "6ee76883a7e0965a01c7c9f506331aaf59cec53a4fa3c31fb9f228d7a01eb3c6",
+      "parameters_unchanged": true,
+      "max_backward_sum_error": 2.980232238769531e-07
+    },
+    "new-seed1702": {
+      "records_sha256": "14cb53876ca9512c42b88741608320de95109307f7d10bf24cd2ef96b9c4d0e2",
+      "parameters_unchanged": true,
+      "max_backward_sum_error": 4.172325134277344e-07
+    },
+    "old-seed1703": {
+      "records_sha256": "5bf20e40be18cc5e4bf7042b5f83a7f0ff08ba773c60ff2eba54569683fd7310",
+      "parameters_unchanged": true,
+      "max_backward_sum_error": 3.5762786865234375e-07
+    },
+    "new-seed1703": {
+      "records_sha256": "2f31f9657dd662ea783877b5c991af2efab622b3bc40b9c7d874e5823d9d6100",
+      "parameters_unchanged": true,
+      "max_backward_sum_error": 3.8743019104003906e-07
+    }
+  },
+  "plan_sha256": "102503f00bf1736046f81c0f790e848edec182941b79c4a70c9a5436ab899760",
+  "current": "new-seed1703",
+  "batch_index": 21,
+  "results_sha256": "9f9575d77c9bba8290bee0b67a0e5ad513d32a263747e2796e172f54d5dfc76d"
+}

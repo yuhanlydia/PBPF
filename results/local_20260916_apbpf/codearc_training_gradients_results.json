@@ -1,0 +1,680 @@
+{
+  "plan_sha256": "102503f00bf1736046f81c0f790e848edec182941b79c4a70c9a5436ab899760",
+  "cells": {
+    "old-seed1701": {
+      "batches": 22,
+      "candidates": 1360,
+      "eligible_candidates": 465,
+      "groups": {
+        "all": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.1378204094837575,
+            "quantiles_0_50_100": [
+              0.017217008570972275,
+              0.07848715727766571,
+              0.6895045817436517
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": 0.3147820657136523,
+            "quantiles_0_50_100": [
+              -0.23587093099782708,
+              0.22888817571369757,
+              0.886482740553664
+            ],
+            "negative_batches": 4
+          }
+        },
+        "root_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.023397777030867813,
+            "quantiles_0_50_100": [
+              0.0,
+              0.008793790748404758,
+              0.13274448558958202
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": -0.06922959170621347,
+            "quantiles_0_50_100": [
+              -0.4871065064715084,
+              -0.1299946032840227,
+              0.5866076704532482
+            ],
+            "negative_batches": 8
+          }
+        },
+        "difficulty_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.12690621450331274,
+            "quantiles_0_50_100": [
+              0.012976334784803424,
+              0.07262100770038504,
+              0.4619507071568996
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": 0.43911871046838713,
+            "quantiles_0_50_100": [
+              -0.3916969441569987,
+              0.5078265552153837,
+              0.9819575009567506
+            ],
+            "negative_batches": 3
+          }
+        },
+        "diagnosis_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.14924383417800866,
+            "quantiles_0_50_100": [
+              0.028990443405215116,
+              0.09377625178308549,
+              0.7881747703296352
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": 0.40120833225432406,
+            "quantiles_0_50_100": [
+              -0.15500823631155103,
+              0.3453472506213382,
+              0.9018285904545646
+            ],
+            "negative_batches": 2
+          }
+        },
+        "root_proposal_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.15729559411111774,
+            "quantiles_0_50_100": [
+              0.015263926821812634,
+              0.08399058468100745,
+              0.7131471723272629
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": 0.30550626534430914,
+            "quantiles_0_50_100": [
+              -0.2747890972368113,
+              0.23670860137719937,
+              0.8763994721128378
+            ],
+            "negative_batches": 5
+          }
+        },
+        "child_proposal_head": {
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null
+        },
+        "transition_head": {
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null
+        }
+      }
+    },
+    "new-seed1701": {
+      "batches": 22,
+      "candidates": 1360,
+      "eligible_candidates": 465,
+      "groups": {
+        "all": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.001661151538424966,
+            "quantiles_0_50_100": [
+              0.00017313972609341854,
+              0.0011188939740449377,
+              0.005225100748078459
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": -0.05137357130802862,
+            "quantiles_0_50_100": [
+              -0.6883775180879389,
+              -0.07904342733428611,
+              0.7005056193309985
+            ],
+            "negative_batches": 14
+          }
+        },
+        "root_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.001718771845133454,
+            "quantiles_0_50_100": [
+              8.541620236001962e-05,
+              0.0009815019631909398,
+              0.01003282378002862
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": -0.08535176141385556,
+            "quantiles_0_50_100": [
+              -0.9079876037178363,
+              -0.147607376328671,
+              0.7436387746914398
+            ],
+            "negative_batches": 13
+          }
+        },
+        "difficulty_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.0013935817190033745,
+            "quantiles_0_50_100": [
+              0.00011551987666545003,
+              0.0009983907455709301,
+              0.003633871810666826
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": -0.024775929490318094,
+            "quantiles_0_50_100": [
+              -0.9718127013859764,
+              0.003169083092261521,
+              0.9249325728956709
+            ],
+            "negative_batches": 11
+          }
+        },
+        "diagnosis_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.0023186893894136685,
+            "quantiles_0_50_100": [
+              0.00027871692178667795,
+              0.0012949124511825408,
+              0.008088655157154987
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": -0.0386048514820379,
+            "quantiles_0_50_100": [
+              -0.6419808174157386,
+              -0.05170793715709404,
+              0.6103788753309041
+            ],
+            "negative_batches": 12
+          }
+        },
+        "root_proposal_head": {
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null
+        },
+        "child_proposal_head": {
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null
+        },
+        "transition_head": {
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null
+        }
+      }
+    },
+    "old-seed1702": {
+      "batches": 22,
+      "candidates": 1360,
+      "eligible_candidates": 465,
+      "groups": {
+        "all": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.10278844018680137,
+            "quantiles_0_50_100": [
+              0.024544498461343104,
+              0.08645304911081889,
+              0.2577394276606301
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": 0.25184461805539643,
+            "quantiles_0_50_100": [
+              -0.583892893658247,
+              0.29662542838248995,
+              0.8571523038718745
+            ],
+            "negative_batches": 6
+          }
+        },
+        "root_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.012220973918401911,
+            "quantiles_0_50_100": [
+              0.0,
+              0.0023693474581794956,
+              0.062007712138869645
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": -0.028435422919771056,
+            "quantiles_0_50_100": [
+              -0.45621491720185386,
+              0.06613391952551345,
+              0.31526112101802856
+            ],
+            "negative_batches": 5
+          }
+        },
+        "difficulty_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.09672523789739684,
+            "quantiles_0_50_100": [
+              0.020597629681730227,
+              0.07874759496167547,
+              0.34166795214796175
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": 0.32696087800238316,
+            "quantiles_0_50_100": [
+              -0.7301640353820771,
+              0.5537941287133565,
+              0.9735900903529714
+            ],
+            "negative_batches": 7
+          }
+        },
+        "diagnosis_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.11102873016251204,
+            "quantiles_0_50_100": [
+              0.028637776282841084,
+              0.09452281128654795,
+              0.30172989692646335
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": 0.2726600607290938,
+            "quantiles_0_50_100": [
+              -0.4527608483569569,
+              0.2939029058241105,
+              0.9343109649221467
+            ],
+            "negative_batches": 8
+          }
+        },
+        "root_proposal_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.11013163445626444,
+            "quantiles_0_50_100": [
+              0.02497657228474906,
+              0.09631892588268764,
+              0.30119090271934607
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": 0.2529413169858794,
+            "quantiles_0_50_100": [
+              -0.7573225292682656,
+              0.3901880564503372,
+              0.8331811685926593
+            ],
+            "negative_batches": 6
+          }
+        },
+        "child_proposal_head": {
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null
+        },
+        "transition_head": {
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null
+        }
+      }
+    },
+    "new-seed1702": {
+      "batches": 22,
+      "candidates": 1360,
+      "eligible_candidates": 465,
+      "groups": {
+        "all": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.0020445010629651108,
+            "quantiles_0_50_100": [
+              0.00031777383442618183,
+              0.0011356881383462235,
+              0.012666952984552164
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": -0.014667998625107181,
+            "quantiles_0_50_100": [
+              -0.8025750663615783,
+              0.14397149112072724,
+              0.574959744999994
+            ],
+            "negative_batches": 8
+          }
+        },
+        "root_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.001873423004737199,
+            "quantiles_0_50_100": [
+              0.0003318896498611208,
+              0.0008795185280662075,
+              0.014430517310119137
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": -0.010056174790060596,
+            "quantiles_0_50_100": [
+              -0.8960146220965045,
+              0.12333172229258824,
+              0.810991687887463
+            ],
+            "negative_batches": 10
+          }
+        },
+        "difficulty_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.001984111896385773,
+            "quantiles_0_50_100": [
+              9.819129215532388e-05,
+              0.0010733931011124905,
+              0.014591836797786977
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": -0.0074592939135535085,
+            "quantiles_0_50_100": [
+              -0.9186916141657172,
+              0.1846827073630819,
+              0.6712828945280621
+            ],
+            "negative_batches": 10
+          }
+        },
+        "diagnosis_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.0025367010854773467,
+            "quantiles_0_50_100": [
+              0.0003788719113466514,
+              0.0013740316444139234,
+              0.01536270909870427
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": -0.04075547067210769,
+            "quantiles_0_50_100": [
+              -0.7154681391818393,
+              0.0181184865426814,
+              0.528080630262246
+            ],
+            "negative_batches": 10
+          }
+        },
+        "root_proposal_head": {
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null
+        },
+        "child_proposal_head": {
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null
+        },
+        "transition_head": {
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null
+        }
+      }
+    },
+    "old-seed1703": {
+      "batches": 22,
+      "candidates": 1360,
+      "eligible_candidates": 465,
+      "groups": {
+        "all": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.09551986559379885,
+            "quantiles_0_50_100": [
+              0.021865750982350423,
+              0.08070199134061921,
+              0.24534270761547491
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": 0.20574988803852656,
+            "quantiles_0_50_100": [
+              -0.5520638842640446,
+              0.27048108541586785,
+              0.8836859709230954
+            ],
+            "negative_batches": 8
+          }
+        },
+        "root_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.001220014397867285,
+            "quantiles_0_50_100": [
+              0.0,
+              0.0,
+              0.013071033038683757
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": 0.060627305585369336,
+            "quantiles_0_50_100": [
+              -0.2053231485447411,
+              0.10830115198658219,
+              0.23123006691305406
+            ],
+            "negative_batches": 1
+          }
+        },
+        "difficulty_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.12173734117196786,
+            "quantiles_0_50_100": [
+              0.023474567766621508,
+              0.0996432936207384,
+              0.38272923532006115
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": 0.26549172964468676,
+            "quantiles_0_50_100": [
+              -0.6389370161601469,
+              0.280081146716282,
+              0.9234997406956388
+            ],
+            "negative_batches": 6
+          }
+        },
+        "diagnosis_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.13284185992635017,
+            "quantiles_0_50_100": [
+              0.018909222925579755,
+              0.10453458403874141,
+              0.3246785574561064
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": 0.20387137943936465,
+            "quantiles_0_50_100": [
+              -0.49924025211784107,
+              0.1591879711151623,
+              0.902591545717253
+            ],
+            "negative_batches": 8
+          }
+        },
+        "root_proposal_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.09353383699831018,
+            "quantiles_0_50_100": [
+              0.019182393554816213,
+              0.08393841508078619,
+              0.2590228412212155
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": 0.18211605632100455,
+            "quantiles_0_50_100": [
+              -0.6312165421960906,
+              0.31090538872395346,
+              0.8911276096121712
+            ],
+            "negative_batches": 7
+          }
+        },
+        "child_proposal_head": {
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null
+        },
+        "transition_head": {
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null
+        }
+      }
+    },
+    "new-seed1703": {
+      "batches": 22,
+      "candidates": 1360,
+      "eligible_candidates": 465,
+      "groups": {
+        "all": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.003119057800806803,
+            "quantiles_0_50_100": [
+              0.0003504944124103769,
+              0.0018270559705468449,
+              0.02136737107989219
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": -0.050857286874424854,
+            "quantiles_0_50_100": [
+              -0.5771208015565402,
+              -0.053571541064666994,
+              0.4287405997240286
+            ],
+            "negative_batches": 12
+          }
+        },
+        "root_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.0025535776229420647,
+            "quantiles_0_50_100": [
+              0.00017931462817614803,
+              0.0012231134756899341,
+              0.01703067892268914
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": -0.09214046684145717,
+            "quantiles_0_50_100": [
+              -0.7464671153841622,
+              -0.11803595461069254,
+              0.5830830391293735
+            ],
+            "negative_batches": 14
+          }
+        },
+        "difficulty_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.003542028937079478,
+            "quantiles_0_50_100": [
+              0.00036900402970146983,
+              0.001444620113450071,
+              0.02747319964494421
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": -0.11485134885204547,
+            "quantiles_0_50_100": [
+              -0.958601542916478,
+              -0.2806904889881203,
+              0.7981251178371881
+            ],
+            "negative_batches": 14
+          }
+        },
+        "diagnosis_head": {
+          "association_to_base_norm_ratio": {
+            "unweighted_batch_mean": 0.0034608602127787474,
+            "quantiles_0_50_100": [
+              0.0003974159457780104,
+              0.0021394753023384456,
+              0.024831991879822924
+            ],
+            "negative_batches": 0
+          },
+          "base_association_cosine": {
+            "unweighted_batch_mean": -0.042070726149758146,
+            "quantiles_0_50_100": [
+              -0.5866304200211225,
+              -0.07288099977011984,
+              0.42207324893811027
+            ],
+            "negative_batches": 15
+          }
+        },
+        "root_proposal_head": {
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null
+        },
+        "child_proposal_head": {
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null
+        },
+        "transition_head": {
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null
+        }
+      }
+    }
+  },
+  "bindings": {
+    "old-seed1701": {
+      "records_sha256": "0b834f76e636cca639be401ebaeb85bc299b930620996058cafb3e85a7289e37",
+      "parameters_unchanged": true,
+      "max_backward_sum_error": 2.384185791015625e-07
+    },
+    "new-seed1701": {
+      "records_sha256": "29af8351da3adefa13e59e9fb9289255bb0ae4fd44d210698f54e44b2031b6a2",
+      "parameters_unchanged": true,
+      "max_backward_sum_error": 4.172325134277344e-07
+    },
+    "old-seed1702": {
+      "records_sha256": "6ee76883a7e0965a01c7c9f506331aaf59cec53a4fa3c31fb9f228d7a01eb3c6",
+      "parameters_unchanged": true,
+      "max_backward_sum_error": 2.980232238769531e-07
+    },
+    "new-seed1702": {
+      "records_sha256": "14cb53876ca9512c42b88741608320de95109307f7d10bf24cd2ef96b9c4d0e2",
+      "parameters_unchanged": true,
+      "max_backward_sum_error": 4.172325134277344e-07
+    },
+    "old-seed1703": {
+      "records_sha256": "5bf20e40be18cc5e4bf7042b5f83a7f0ff08ba773c60ff2eba54569683fd7310",
+      "parameters_unchanged": true,
+      "max_backward_sum_error": 3.5762786865234375e-07
+    },
+    "new-seed1703": {
+      "records_sha256": "2f31f9657dd662ea783877b5c991af2efab622b3bc40b9c7d874e5823d9d6100",
+      "parameters_unchanged": true,
+      "max_backward_sum_error": 3.8743019104003906e-07
+    }
+  },
+  "scope": "descriptive checkpoint-local gradients on every fitting candidate in fixed sorted batches; original train_apbpf_step backward checked; no parameter updates, Adam-state reconstruction, assessment gradients, primary use, gate or causal attribution"
+}

@@ -1,0 +1,632 @@
+{
+  "seed_estimand": "mean paired per-example loss across all three fixed seeds; whole-source resampling across seeds",
+  "seeds": [
+    1701,
+    1702,
+    1703
+  ],
+  "primary_candidates": 4000,
+  "source_components": 500,
+  "future_examples_per_seed": 24000,
+  "metrics": {
+    "baseline": {
+      "nll": 1.0691141505733817,
+      "brier": 0.5778241886035568,
+      "accuracy": 0.5698333333333333,
+      "nll_gain_vs_baseline": 0.0
+    },
+    "tuned_dirichlet": {
+      "nll": 0.2854716983239552,
+      "brier": 0.13019966468526137,
+      "accuracy": 0.9129583333333333,
+      "nll_gain_vs_baseline": 0.7836424522494265
+    },
+    "orderless": {
+      "nll": 0.4021495185276992,
+      "brier": 0.1945695510943433,
+      "accuracy": 0.8761111111111111,
+      "nll_gain_vs_baseline": 0.6669646320456823
+    },
+    "no_particle_bottleneck": {
+      "nll": 0.3225541322076877,
+      "brier": 0.1612460288842977,
+      "accuracy": 0.8966111111111111,
+      "nll_gain_vs_baseline": 0.746560018365694
+    },
+    "joint_reversed": {
+      "nll": 0.3998047197163203,
+      "brier": 0.19247164035662293,
+      "accuracy": 0.8775694444444444,
+      "nll_gain_vs_baseline": 0.6693094308570613
+    },
+    "random_latent": {
+      "nll": 1.063582765799818,
+      "brier": 0.5966253146747207,
+      "accuracy": 0.5254444444444445,
+      "nll_gain_vs_baseline": 0.005531384773563467
+    },
+    "pair_aware": {
+      "nll": 0.29993199882287114,
+      "brier": 0.15129812191254924,
+      "accuracy": 0.9050277777777778,
+      "nll_gain_vs_baseline": 0.7691821517505104
+    },
+    "deep_sets": {
+      "nll": 0.31327008501501546,
+      "brier": 0.1579255720853335,
+      "accuracy": 0.9010972222222222,
+      "nll_gain_vs_baseline": 0.7558440655583663
+    },
+    "presentation_permuted": {
+      "nll": 0.40114043997706367,
+      "brier": 0.1931158743859878,
+      "accuracy": 0.8765972222222222,
+      "nll_gain_vs_baseline": 0.6679737105963179
+    },
+    "wrong_candidate": {
+      "nll": 1.1170922144902609,
+      "brier": 0.5611498576261893,
+      "accuracy": 0.6370138888888889,
+      "nll_gain_vs_baseline": -0.04797806391687934
+    },
+    "semantics_masked": {
+      "nll": 0.4149270242396712,
+      "brier": 0.20237600243224785,
+      "accuracy": 0.8720972222222222,
+      "nll_gain_vs_baseline": 0.6541871263337105
+    },
+    "aligned": {
+      "nll": 0.40198042664902833,
+      "brier": 0.19434282879134376,
+      "accuracy": 0.8760833333333333,
+      "nll_gain_vs_baseline": 0.6671337239243533
+    },
+    "outcome_shuffled": {
+      "nll": 0.40247293845503734,
+      "brier": 0.19349926684758925,
+      "accuracy": 0.8772361111111111,
+      "nll_gain_vs_baseline": 0.6666412121183443
+    }
+  },
+  "comparisons": {
+    "baseline": {
+      "unit": "source_component",
+      "clusters": 500,
+      "replicates": 10000,
+      "mean_nll_gap": 0.6671336889266968,
+      "ci95": [
+        0.620645374891493,
+        0.7162296413845486
+      ],
+      "estimand": "future-example-weighted; whole-source-component resampling"
+    },
+    "deep_sets": {
+      "unit": "source_component",
+      "clusters": 500,
+      "replicates": 10000,
+      "mean_nll_gap": -0.08871033787727356,
+      "ci95": [
+        -0.11049203050401477,
+        -0.06758425598144531
+      ],
+      "estimand": "future-example-weighted; whole-source-component resampling"
+    },
+    "joint_reversed": {
+      "unit": "source_component",
+      "clusters": 500,
+      "replicates": 10000,
+      "mean_nll_gap": -0.0021757069043815136,
+      "ci95": [
+        -0.00919022577073839,
+        0.005120054308573403
+      ],
+      "estimand": "future-example-weighted; whole-source-component resampling"
+    },
+    "no_particle_bottleneck": {
+      "unit": "source_component",
+      "clusters": 500,
+      "replicates": 10000,
+      "mean_nll_gap": -0.07942629605531693,
+      "ci95": [
+        -0.10406475999620225,
+        -0.05425347841050891
+      ],
+      "estimand": "future-example-weighted; whole-source-component resampling"
+    },
+    "orderless": {
+      "unit": "source_component",
+      "clusters": 500,
+      "replicates": 10000,
+      "mean_nll_gap": 0.00016909182886593044,
+      "ci95": [
+        -0.004883279440138074,
+        0.005540413294898137
+      ],
+      "estimand": "future-example-weighted; whole-source-component resampling"
+    },
+    "outcome_shuffled": {
+      "unit": "source_component",
+      "clusters": 500,
+      "replicates": 10000,
+      "mean_nll_gap": 0.0004925117827951908,
+      "ci95": [
+        -0.005562184874216715,
+        0.006574660004509818
+      ],
+      "estimand": "future-example-weighted; whole-source-component resampling"
+    },
+    "pair_aware": {
+      "unit": "source_component",
+      "clusters": 500,
+      "replicates": 10000,
+      "mean_nll_gap": -0.10204842686653137,
+      "ci95": [
+        -0.12742025485568578,
+        -0.07710736948649088
+      ],
+      "estimand": "future-example-weighted; whole-source-component resampling"
+    },
+    "presentation_permuted": {
+      "unit": "source_component",
+      "clusters": 500,
+      "replicates": 10000,
+      "mean_nll_gap": -0.0008399871294386685,
+      "ci95": [
+        -0.006116860644022623,
+        0.004274185201856824
+      ],
+      "estimand": "future-example-weighted; whole-source-component resampling"
+    },
+    "random_latent": {
+      "unit": "source_component",
+      "clusters": 500,
+      "replicates": 10000,
+      "mean_nll_gap": 0.6616023182868958,
+      "ci95": [
+        0.6292254258897569,
+        0.6951738199869791
+      ],
+      "estimand": "future-example-weighted; whole-source-component resampling"
+    },
+    "semantics_masked": {
+      "unit": "source_component",
+      "clusters": 500,
+      "replicates": 10000,
+      "mean_nll_gap": 0.012946597300469875,
+      "ci95": [
+        0.008112515216403538,
+        0.017757491090562606
+      ],
+      "estimand": "future-example-weighted; whole-source-component resampling"
+    },
+    "tuned_dirichlet": {
+      "unit": "source_component",
+      "clusters": 500,
+      "replicates": 10000,
+      "mean_nll_gap": -0.11650872882011264,
+      "ci95": [
+        -0.14660757298806665,
+        -0.08754348232075891
+      ],
+      "estimand": "future-example-weighted; whole-source-component resampling"
+    },
+    "wrong_candidate": {
+      "unit": "source_component",
+      "clusters": 500,
+      "replicates": 10000,
+      "mean_nll_gap": 0.7151117324829102,
+      "ci95": [
+        0.6601598619249132,
+        0.772313944498698
+      ],
+      "estimand": "future-example-weighted; whole-source-component resampling"
+    }
+  },
+  "per_seed_comparisons": {
+    "1701": {
+      "baseline": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.6763027906417847,
+        "ci95": [
+          0.6279820027669271,
+          0.7268491760253906
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "deep_sets": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.07957649230957031,
+        "ci95": [
+          -0.10478731206258139,
+          -0.054424752807617195
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "joint_reversed": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.003254956565797329,
+        "ci95": [
+          -0.012338815848032635,
+          0.00559776121775309
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "no_particle_bottleneck": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.07656081020832062,
+        "ci95": [
+          -0.10316514994303386,
+          -0.04917764307657879
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "orderless": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.0013685900485143065,
+        "ci95": [
+          -0.007970621871948243,
+          0.005211528968811031
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "outcome_shuffled": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.0007393992855213583,
+        "ci95": [
+          -0.007666384283701579,
+          0.009131118742624915
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "pair_aware": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.09526145458221436,
+        "ci95": [
+          -0.12207743428548178,
+          -0.06799573135375976
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "presentation_permuted": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.0041052354499697685,
+        "ci95": [
+          -0.011885099983215332,
+          0.0034482376734415684
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "random_latent": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.6737667918205261,
+        "ci95": [
+          0.6401050069173178,
+          0.7085893412272135
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "semantics_masked": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.016764214262366295,
+        "ci95": [
+          0.009854222965240479,
+          0.023702159182230623
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "tuned_dirichlet": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.11183484183105202,
+        "ci95": [
+          -0.14186989622576096,
+          -0.08309240528120941
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "wrong_candidate": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.7175742983818054,
+        "ci95": [
+          0.6607313262939453,
+          0.776434796142578
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    },
+    "1702": {
+      "baseline": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.66756272315979,
+        "ci95": [
+          0.616548871866862,
+          0.721673270670573
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "deep_sets": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.10193998366594315,
+        "ci95": [
+          -0.12344576797485352,
+          -0.08146159439086915
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "joint_reversed": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.00011319033364998177,
+        "ci95": [
+          -0.009426819801330566,
+          0.009665045531590774
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "no_particle_bottleneck": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.08272452652454376,
+        "ci95": [
+          -0.10664944279988607,
+          -0.05840193901062013
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "orderless": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.00033150165108963847,
+        "ci95": [
+          -0.00762253770828247,
+          0.007531080357233683
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "outcome_shuffled": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.0014597434783354402,
+        "ci95": [
+          -0.006665572532018026,
+          0.00964988533655802
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "pair_aware": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.10676593333482742,
+        "ci95": [
+          -0.13346382751464844,
+          -0.08062326100667318
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "presentation_permuted": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.004691316746175289,
+        "ci95": [
+          -0.003113041520118713,
+          0.012713931242624913
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "random_latent": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.6525124311447144,
+        "ci95": [
+          0.6164048543294272,
+          0.6905246317545572
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "semantics_masked": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.011466840282082558,
+        "ci95": [
+          0.00436391278107961,
+          0.018605803998311358
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "tuned_dirichlet": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.12454446958726066,
+        "ci95": [
+          -0.15570880213454658,
+          -0.09414232521148252
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "wrong_candidate": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.728074312210083,
+        "ci95": [
+          0.6696299255371094,
+          0.7877972819010417
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    },
+    "1703": {
+      "baseline": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.6575356721878052,
+        "ci95": [
+          0.6119948944091796,
+          0.7048713623046875
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "deep_sets": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.08461456000804901,
+        "ci95": [
+          -0.10763370768229166,
+          -0.06107368634541829
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "joint_reversed": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.003158972365781665,
+        "ci95": [
+          -0.0112219012260437,
+          0.00471039272944132
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "no_particle_bottleneck": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.0789935514330864,
+        "ci95": [
+          -0.10676339670817057,
+          -0.050814100011189786
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "orderless": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.0022073679137974977,
+        "ci95": [
+          -0.004016444444656373,
+          0.008566671196619668
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "outcome_shuffled": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.0007216069498099387,
+        "ci95": [
+          -0.0077860057989756265,
+          0.006387011432647702
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "pair_aware": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.10411790013313293,
+        "ci95": [
+          -0.1297138214111328,
+          -0.08011744194030762
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "presentation_permuted": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.0031060415785759687,
+        "ci95": [
+          -0.009532873471577963,
+          0.0030070445299148502
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "random_latent": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.6585278511047363,
+        "ci95": [
+          0.625748306274414,
+          0.6924123677571614
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "semantics_masked": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.010608738288283348,
+        "ci95": [
+          0.005529426336288452,
+          0.015956132094065347
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "tuned_dirichlet": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": -0.11314687504202524,
+        "ci95": [
+          -0.1440244557010871,
+          -0.08312031343283235
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "wrong_candidate": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.6996867656707764,
+        "ci95": [
+          0.645558745320638,
+          0.7554288960774739
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    }
+  },
+  "scope": "standalone exploratory full-primary diagnostic; no sealed-stage completion",
+  "dataset": "runbugrun",
+  "cache_sha256": "4af78c8a7856ae4996c3643bc803b849d9c976f06b518b14cf8998045ae3dc39"
+}

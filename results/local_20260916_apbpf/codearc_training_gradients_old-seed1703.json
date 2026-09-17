@@ -1,0 +1,3265 @@
+{
+  "records": [
+    {
+      "batch_index": 0,
+      "candidate_offset": 0,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 5.150457382202148,
+        "fivo": 1.8620250225067139,
+        "future": 3.2404985427856445,
+        "prefix4_nll": 2.6733827590942383,
+        "association": 0.042808275669813156,
+        "invariance": 0.05125632509589195,
+        "association_gap": 0.025825176388025284,
+        "eligible_gap": 0.11805791407823563,
+        "aligned_nll": 0.44556379318237305,
+        "shuffled_nll": 0.47138896584510803,
+        "eligible_count": 14,
+        "population_count": 64,
+        "eligible_fraction": 0.21875
+      },
+      "weighted_losses": {
+        "fivo": 1.8620250225067139,
+        "future": 3.2404985427856445,
+        "association": 0.042808275669813156,
+        "invariance": 0.005125632509589195
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 3.2802655795215556,
+            "future": 2.634520987375699,
+            "association": 0.24262567831875043,
+            "invariance": 0.028451670802069208
+          },
+          "base_l2": 3.83546294483911,
+          "association_to_base_norm_ratio": 0.06325851189495146,
+          "base_association_cosine": -0.021692741922942172,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.645409774805412,
+            "future": 0.06358611157334554,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 1.6215902062485659,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 1.2673650224404547,
+            "future": 1.011168854837783,
+            "association": 0.10291521662875826,
+            "invariance": 0.014174038267544162
+          },
+          "base_l2": 0.6568695336357527,
+          "association_to_base_norm_ratio": 0.15667527775131493,
+          "base_association_cosine": -0.45839435545838425,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 1.5046527983615563,
+            "future": 1.1538134096407235,
+            "association": 0.1550738428440698,
+            "invariance": 0.011857081833182612
+          },
+          "base_l2": 0.8864839164424703,
+          "association_to_base_norm_ratio": 0.17493136645546076,
+          "base_association_cosine": -0.21674038480832006,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 2.045134421363528,
+            "future": 2.1407731785682724,
+            "association": 0.15565275850900384,
+            "invariance": 0.021633395965976354
+          },
+          "base_l2": 3.2960415479636485,
+          "association_to_base_norm_ratio": 0.047224149405874084,
+          "base_association_cosine": 0.07913029885129388,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 9.755603969097137e-08
+    },
+    {
+      "batch_index": 1,
+      "candidate_offset": 64,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 4.506889820098877,
+        "fivo": 1.9866554737091064,
+        "future": 2.4564075469970703,
+        "prefix4_nll": 1.5922191143035889,
+        "association": 0.058709245175123215,
+        "invariance": 0.051180414855480194,
+        "association_gap": 0.0037326207384467125,
+        "eligible_gap": 0.017063409090042114,
+        "aligned_nll": 0.26536983251571655,
+        "shuffled_nll": 0.2691024839878082,
+        "eligible_count": 14,
+        "population_count": 64,
+        "eligible_fraction": 0.21875
+      },
+      "weighted_losses": {
+        "fivo": 1.9866554737091064,
+        "future": 2.4564075469970703,
+        "association": 0.058709245175123215,
+        "invariance": 0.005118041764944792
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 2.9026296615758693,
+            "future": 2.4006508005759803,
+            "association": 0.5095033750780611,
+            "invariance": 0.024934518671795008
+          },
+          "base_l2": 4.303945379020325,
+          "association_to_base_norm_ratio": 0.11838053929811618,
+          "base_association_cosine": 0.34695232325011727,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.3399678487339728,
+            "future": 0.05496933596690762,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 1.3170573079824432,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.576782238755655,
+            "future": 0.7691032362813671,
+            "association": 0.21070806556664856,
+            "invariance": 0.018928415213695607
+          },
+          "base_l2": 0.7200434982889536,
+          "association_to_base_norm_ratio": 0.29263241188533223,
+          "base_association_cosine": 0.19030499381629007,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 0.57494692377382,
+            "future": 1.139418840481973,
+            "association": 0.2661744080368179,
+            "invariance": 0.010632010923568625
+          },
+          "base_l2": 1.0832035680229024,
+          "association_to_base_norm_ratio": 0.2457288878051315,
+          "base_association_cosine": 0.4493753171521516,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 2.4426427083219378,
+            "future": 1.9673097255657779,
+            "association": 0.3799302367900532,
+            "invariance": 0.0122639986388269
+          },
+          "base_l2": 3.8855518609168898,
+          "association_to_base_norm_ratio": 0.09778025114311548,
+          "base_association_cosine": 0.40805443316874135,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 9.313225746154785e-08
+    },
+    {
+      "batch_index": 2,
+      "candidate_offset": 128,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 5.1418070793151855,
+        "fivo": 1.600625991821289,
+        "future": 3.511915445327759,
+        "prefix4_nll": 2.883862018585205,
+        "association": 0.026970304548740387,
+        "invariance": 0.02295640856027603,
+        "association_gap": 0.024382615461945534,
+        "eligible_gap": 0.14186249673366547,
+        "aligned_nll": 0.48064368963241577,
+        "shuffled_nll": 0.5050262808799744,
+        "eligible_count": 11,
+        "population_count": 64,
+        "eligible_fraction": 0.171875
+      },
+      "weighted_losses": {
+        "fivo": 1.600625991821289,
+        "future": 3.511915445327759,
+        "association": 0.026970304548740387,
+        "invariance": 0.0022956409957259893
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 2.716691659999997,
+            "future": 5.1175416779249945,
+            "association": 0.17222747714532777,
+            "invariance": 0.01367816047755066
+          },
+          "base_l2": 5.226630675257015,
+          "association_to_base_norm_ratio": 0.03295191258886082,
+          "base_association_cosine": -0.40481043687112295,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.367688493326889,
+            "future": 0.2521784765964503,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 1.5295175553577673,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.40257883577695286,
+            "future": 1.4623484233780994,
+            "association": 0.06361628309115577,
+            "invariance": 0.008819333616890782
+          },
+          "base_l2": 1.6120876831549624,
+          "association_to_base_norm_ratio": 0.039462048966625994,
+          "base_association_cosine": -0.41436628338727094,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 0.5126603358200089,
+            "future": 1.6775693659101838,
+            "association": 0.08288270134403027,
+            "invariance": 0.004913330128474196
+          },
+          "base_l2": 1.82594808062892,
+          "association_to_base_norm_ratio": 0.045391598054355733,
+          "base_association_cosine": -0.3774495036811984,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 2.2549836854833676,
+            "future": 4.601405975617034,
+            "association": 0.1369150474835641,
+            "invariance": 0.009228792751613658
+          },
+          "base_l2": 4.364095687775147,
+          "association_to_base_norm_ratio": 0.03137306266384011,
+          "base_association_cosine": -0.4431380949850509,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 1.1920928955078125e-07
+    },
+    {
+      "batch_index": 3,
+      "candidate_offset": 192,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 7.1325836181640625,
+        "fivo": 2.4183461666107178,
+        "future": 4.586470127105713,
+        "prefix4_nll": 3.3638176918029785,
+        "association": 0.12562331557273865,
+        "invariance": 0.021444030106067657,
+        "association_gap": -0.046489790081977844,
+        "eligible_gap": -0.08500991016626358,
+        "aligned_nll": 0.5606362819671631,
+        "shuffled_nll": 0.5141464471817017,
+        "eligible_count": 35,
+        "population_count": 64,
+        "eligible_fraction": 0.546875
+      },
+      "weighted_losses": {
+        "fivo": 2.4183461666107178,
+        "future": 4.586470127105713,
+        "association": 0.12562331557273865,
+        "invariance": 0.0021444030571728945
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 2.7051223395045505,
+            "future": 3.4046650432599628,
+            "association": 0.341974950003547,
+            "invariance": 0.00921587636863503
+          },
+          "base_l2": 5.757060639523183,
+          "association_to_base_norm_ratio": 0.05940096368897556,
+          "base_association_cosine": 0.5807997579209475,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.0597359134764777,
+            "future": 0.10456368495384959,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 1.0774060550035207,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.9785878834308379,
+            "future": 1.346843977727204,
+            "association": 0.20557370598223812,
+            "invariance": 0.005139128773424601
+          },
+          "base_l2": 2.3110114067532472,
+          "association_to_base_norm_ratio": 0.08895399883423757,
+          "base_association_cosine": 0.694157916682591,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 1.26480857785529,
+            "future": 1.7364105227926556,
+            "association": 0.17553236374320802,
+            "invariance": 0.00336490907315933
+          },
+          "base_l2": 2.9730197206521325,
+          "association_to_base_norm_ratio": 0.05904177578233654,
+          "base_association_cosine": 0.5589891121136881,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 1.907163254983899,
+            "future": 2.598403411439443,
+            "association": 0.20946290153002964,
+            "invariance": 0.006870161542605454
+          },
+          "base_l2": 4.219398466400006,
+          "association_to_base_norm_ratio": 0.04964283492019742,
+          "base_association_cosine": 0.5905856297255003,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 1.6391277313232422e-07
+    },
+    {
+      "batch_index": 4,
+      "candidate_offset": 256,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 5.708643913269043,
+        "fivo": 2.0097274780273438,
+        "future": 3.635352373123169,
+        "prefix4_nll": 2.641728639602661,
+        "association": 0.055676352232694626,
+        "invariance": 0.07887745648622513,
+        "association_gap": 0.004892558325082064,
+        "eligible_gap": 0.014232894405722618,
+        "aligned_nll": 0.44028809666633606,
+        "shuffled_nll": 0.44518062472343445,
+        "eligible_count": 22,
+        "population_count": 64,
+        "eligible_fraction": 0.34375
+      },
+      "weighted_losses": {
+        "fivo": 2.0097274780273438,
+        "future": 3.635352373123169,
+        "association": 0.055676352232694626,
+        "invariance": 0.007887746207416058
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 2.6768575192515014,
+            "future": 1.8259073890058306,
+            "association": 0.16937698939106782,
+            "invariance": 0.022567699099645216
+          },
+          "base_l2": 3.596697545735883,
+          "association_to_base_norm_ratio": 0.047092363824663315,
+          "base_association_cosine": -0.20699640550657142,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.1684519414366268,
+            "future": 0.43628559787381505,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 1.265648730791627,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.3875373452268781,
+            "future": 0.9131009496323316,
+            "association": 0.08813534074365387,
+            "invariance": 0.015381253652421658
+          },
+          "base_l2": 1.0867702715280319,
+          "association_to_base_norm_ratio": 0.08109840971241596,
+          "base_association_cosine": 0.0854620797382804,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 0.48130818592040003,
+            "future": 0.828404327460667,
+            "association": 0.0813356833997458,
+            "invariance": 0.002822604442294581
+          },
+          "base_l2": 0.975814460300913,
+          "association_to_base_norm_ratio": 0.08335158650412315,
+          "base_association_cosine": -0.1966116368772117,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 2.327755029024059,
+            "future": 1.27419998286727,
+            "association": 0.11960448508763474,
+            "invariance": 0.016271170298854713
+          },
+          "base_l2": 3.033328706510159,
+          "association_to_base_norm_ratio": 0.03943011017267547,
+          "base_association_cosine": -0.32713030000580484,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 9.499490261077881e-08
+    },
+    {
+      "batch_index": 5,
+      "candidate_offset": 320,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 5.858891010284424,
+        "fivo": 2.2620625495910645,
+        "future": 3.4965829849243164,
+        "prefix4_nll": 2.7719109058380127,
+        "association": 0.09135618805885315,
+        "invariance": 0.08889394998550415,
+        "association_gap": 0.00881396234035492,
+        "eligible_gap": 0.019451506435871124,
+        "aligned_nll": 0.46198517084121704,
+        "shuffled_nll": 0.47079914808273315,
+        "eligible_count": 29,
+        "population_count": 64,
+        "eligible_fraction": 0.453125
+      },
+      "weighted_losses": {
+        "fivo": 2.2620625495910645,
+        "future": 3.4965829849243164,
+        "association": 0.09135618805885315,
+        "invariance": 0.0088893948122859
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 3.495161183098551,
+            "future": 2.345575954218545,
+            "association": 0.35121363199069777,
+            "invariance": 0.029964158179272976
+          },
+          "base_l2": 3.513135255405162,
+          "association_to_base_norm_ratio": 0.09997156569771552,
+          "base_association_cosine": 0.39107194434468506,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.2630100232746506,
+            "future": 0.23565195310221268,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 1.2468205491694644,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.754428120603626,
+            "future": 0.7524136156337219,
+            "association": 0.14691968180287532,
+            "invariance": 0.02054946802990028
+          },
+          "base_l2": 1.2142831634629305,
+          "association_to_base_norm_ratio": 0.12099293329892279,
+          "base_association_cosine": 0.53629893465246,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 0.8788347842837445,
+            "future": 1.0350133070521024,
+            "association": 0.15395449786497054,
+            "invariance": 0.005046625125711491
+          },
+          "base_l2": 1.5679747857532953,
+          "association_to_base_norm_ratio": 0.09818684539050597,
+          "base_association_cosine": 0.6605273168331554,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 3.046218148741494,
+            "future": 1.9516187945501575,
+            "association": 0.27939870254205534,
+            "invariance": 0.021215600720251485
+          },
+          "base_l2": 2.6181156030839836,
+          "association_to_base_norm_ratio": 0.10671748115818123,
+          "base_association_cosine": 0.3108721694995068,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 9.685754776000977e-08
+    },
+    {
+      "batch_index": 6,
+      "candidate_offset": 384,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 4.268252849578857,
+        "fivo": 1.6795499324798584,
+        "future": 2.4828360080718994,
+        "prefix4_nll": 1.4467089176177979,
+        "association": 0.10263128578662872,
+        "invariance": 0.03235943242907524,
+        "association_gap": -0.019653702154755592,
+        "eligible_gap": -0.04337369278073311,
+        "aligned_nll": 0.24111813306808472,
+        "shuffled_nll": 0.22146442532539368,
+        "eligible_count": 29,
+        "population_count": 64,
+        "eligible_fraction": 0.453125
+      },
+      "weighted_losses": {
+        "fivo": 1.6795499324798584,
+        "future": 2.4828360080718994,
+        "association": 0.10263128578662872,
+        "invariance": 0.0032359433826059103
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 1.7287513752213581,
+            "future": 1.795244105762034,
+            "association": 0.6888621794961782,
+            "invariance": 0.016026772449493767
+          },
+          "base_l2": 2.807754859279659,
+          "association_to_base_norm_ratio": 0.24534270761547491,
+          "base_association_cosine": 0.20925180272949245,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 0.7348532631915196,
+            "future": 0.5442602844231755,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.9390128796119396,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.4630736850770805,
+            "future": 0.7057261062497726,
+            "association": 0.153407117694626,
+            "invariance": 0.012966812812109867
+          },
+          "base_l2": 0.7445595094000098,
+          "association_to_base_norm_ratio": 0.2060374164292743,
+          "base_association_cosine": 0.24591828675343805,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 0.580140618160065,
+            "future": 0.6015120395388673,
+            "association": 0.24287069839748482,
+            "invariance": 0.004074165933238609
+          },
+          "base_l2": 0.7775317877029847,
+          "association_to_base_norm_ratio": 0.312361117884303,
+          "base_association_cosine": -0.3313145190799731,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 1.3775237291083238,
+            "future": 1.4376425394792185,
+            "association": 0.6261079638854389,
+            "invariance": 0.008492371435117158
+          },
+          "base_l2": 2.417192093691531,
+          "association_to_base_norm_ratio": 0.2590228412212155,
+          "base_association_cosine": 0.2902043633393335,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 1.1362135410308838e-07
+    },
+    {
+      "batch_index": 7,
+      "candidate_offset": 448,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 3.363722324371338,
+        "fivo": 1.7382971048355103,
+        "future": 1.6000837087631226,
+        "prefix4_nll": 1.14352548122406,
+        "association": 0.02427353523671627,
+        "invariance": 0.010678336024284363,
+        "association_gap": 0.013169477693736553,
+        "eligible_gap": 0.10535582154989243,
+        "aligned_nll": 0.19058758020401,
+        "shuffled_nll": 0.20375706255435944,
+        "eligible_count": 8,
+        "population_count": 64,
+        "eligible_fraction": 0.125
+      },
+      "weighted_losses": {
+        "fivo": 1.7382971048355103,
+        "future": 1.6000837087631226,
+        "association": 0.02427353523671627,
+        "invariance": 0.0010678336257115006
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 3.6669040533464687,
+            "future": 3.1290102773046033,
+            "association": 0.11933108848969948,
+            "invariance": 0.007111853748503143
+          },
+          "base_l2": 5.45744294746707,
+          "association_to_base_norm_ratio": 0.021865750982350423,
+          "base_association_cosine": 0.6374856096081369,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.5501793166164326,
+            "future": 0.35566754130385064,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 1.533062237219527,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.9929699885889363,
+            "future": 1.3923271435145868,
+            "association": 0.05595338201821204,
+            "invariance": 0.004797973170523217
+          },
+          "base_l2": 2.3835745379632574,
+          "association_to_base_norm_ratio": 0.023474567766621508,
+          "base_association_cosine": 0.9111426338773099,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 1.1782231108002301,
+            "future": 1.561747251097934,
+            "association": 0.05171202091169974,
+            "invariance": 0.0024829523343189623
+          },
+          "base_l2": 2.7347512436243733,
+          "association_to_base_norm_ratio": 0.018909222925579755,
+          "base_association_cosine": 0.7147010444522628,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 2.944304727048695,
+            "future": 2.2992556544806546,
+            "association": 0.09184222674831245,
+            "invariance": 0.004625242145070636
+          },
+          "base_l2": 3.7779772046874114,
+          "association_to_base_norm_ratio": 0.02430989436208402,
+          "base_association_cosine": 0.5549832330101653,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 8.940696716308594e-08
+    },
+    {
+      "batch_index": 8,
+      "candidate_offset": 512,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 5.652943134307861,
+        "fivo": 2.2976150512695312,
+        "future": 3.236692428588867,
+        "prefix4_nll": 2.317042827606201,
+        "association": 0.11273819208145142,
+        "invariance": 0.058972906321287155,
+        "association_gap": -0.026677975431084633,
+        "eligible_gap": -0.07114126533269882,
+        "aligned_nll": 0.3861737847328186,
+        "shuffled_nll": 0.3594958186149597,
+        "eligible_count": 24,
+        "population_count": 64,
+        "eligible_fraction": 0.375
+      },
+      "weighted_losses": {
+        "fivo": 2.2976150512695312,
+        "future": 3.236692428588867,
+        "association": 0.11273819208145142,
+        "invariance": 0.005897290538996458
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 2.8699546051096854,
+            "future": 2.8858472888483897,
+            "association": 0.4886792744297281,
+            "invariance": 0.019543930219941386
+          },
+          "base_l2": 4.810939794057972,
+          "association_to_base_norm_ratio": 0.10157667635610397,
+          "base_association_cosine": 0.08854923502186886,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.5113254110751164,
+            "future": 0.3071346182156545,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 1.5264895075038194,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.3058741559529735,
+            "future": 1.0916141647075428,
+            "association": 0.14147207520042057,
+            "invariance": 0.010009493193210282
+          },
+          "base_l2": 1.070167751815536,
+          "association_to_base_norm_ratio": 0.13219616733957243,
+          "base_association_cosine": -0.4758520532080354,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 0.34783557330202614,
+            "future": 1.4725463135711296,
+            "association": 0.21908327233673933,
+            "invariance": 0.007316343367829553
+          },
+          "base_l2": 1.4807502246028896,
+          "association_to_base_norm_ratio": 0.1479542388018165,
+          "base_association_cosine": -0.3255334073534883,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 2.395409433039502,
+            "future": 2.207661380430671,
+            "association": 0.41327424911053695,
+            "invariance": 0.015107824932167821
+          },
+          "base_l2": 4.180561115549428,
+          "association_to_base_norm_ratio": 0.09885616731528696,
+          "base_association_cosine": 0.22331696712159216,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 1.043081283569336e-07
+    },
+    {
+      "batch_index": 9,
+      "candidate_offset": 576,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 5.8221516609191895,
+        "fivo": 2.452812671661377,
+        "future": 3.2027294635772705,
+        "prefix4_nll": 2.1702027320861816,
+        "association": 0.16216300427913666,
+        "invariance": 0.044463928788900375,
+        "association_gap": -0.040576331317424774,
+        "eligible_gap": -0.11804025620222092,
+        "aligned_nll": 0.3617004156112671,
+        "shuffled_nll": 0.3211241364479065,
+        "eligible_count": 22,
+        "population_count": 64,
+        "eligible_fraction": 0.34375
+      },
+      "weighted_losses": {
+        "fivo": 2.452812671661377,
+        "future": 3.2027294635772705,
+        "association": 0.16216300427913666,
+        "invariance": 0.0044463928788900375
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 3.1449789466936666,
+            "future": 2.639221323726563,
+            "association": 0.3807785443204426,
+            "invariance": 0.02211607179556521
+          },
+          "base_l2": 4.716911985303031,
+          "association_to_base_norm_ratio": 0.080726234771154,
+          "base_association_cosine": -0.4138736264343742,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.5539929161836108,
+            "future": 0.2043462515911171,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 1.5439824695599706,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.5215828520374741,
+            "future": 1.1254643444036003,
+            "association": 0.11988906729130734,
+            "invariance": 0.01148686632573693
+          },
+          "base_l2": 1.6283125447541602,
+          "association_to_base_norm_ratio": 0.07362779810150513,
+          "base_association_cosine": -0.23226212586652473,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 0.6180380224735024,
+            "future": 1.3579158410325598,
+            "association": 0.2014689373365279,
+            "invariance": 0.0108785177716438
+          },
+          "base_l2": 1.9524129195782356,
+          "association_to_base_norm_ratio": 0.10318971735756065,
+          "base_association_cosine": -0.15955455188687107,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 2.611891828318137,
+            "future": 1.9527228126958163,
+            "association": 0.3000486271378455,
+            "invariance": 0.01545413811162809
+          },
+          "base_l2": 3.6608822514316275,
+          "association_to_base_norm_ratio": 0.08196074239222206,
+          "base_association_cosine": -0.5783238423524187,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 1.1920928955078125e-07
+    },
+    {
+      "batch_index": 10,
+      "candidate_offset": 640,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 7.8074212074279785,
+        "fivo": 1.9812672138214111,
+        "future": 5.7252020835876465,
+        "prefix4_nll": 5.3290324211120605,
+        "association": 0.09692125767469406,
+        "invariance": 0.040303248912096024,
+        "association_gap": -0.018821604549884796,
+        "eligible_gap": -0.06692126393318176,
+        "aligned_nll": 0.8881721496582031,
+        "shuffled_nll": 0.8693505525588989,
+        "eligible_count": 18,
+        "population_count": 64,
+        "eligible_fraction": 0.28125
+      },
+      "weighted_losses": {
+        "fivo": 1.9812672138214111,
+        "future": 5.7252020835876465,
+        "association": 0.09692125767469406,
+        "invariance": 0.00403032498434186
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 2.5994678542166763,
+            "future": 3.095800505951726,
+            "association": 0.8793971449368586,
+            "invariance": 0.028534332490126373
+          },
+          "base_l2": 3.59310675197917,
+          "association_to_base_norm_ratio": 0.24474562144652826,
+          "base_association_cosine": 0.18487396754413968,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.054148293046713,
+            "future": 0.2909572826265836,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 1.0594595520725842,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.34755031830543304,
+            "future": 1.4436180636312634,
+            "association": 0.23813708204021747,
+            "invariance": 0.01479406549492234
+          },
+          "base_l2": 1.3053459599883006,
+          "association_to_base_norm_ratio": 0.18243215924332565,
+          "base_association_cosine": 0.1339465989089723,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 0.5807275937541496,
+            "future": 1.7327144037398783,
+            "association": 0.48595214913463025,
+            "invariance": 0.0055643479406719135
+          },
+          "base_l2": 1.4967177165690302,
+          "association_to_base_norm_ratio": 0.3246785574561064,
+          "base_association_cosine": -0.08403067237754461,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 2.2777112941439395,
+            "future": 2.1007123348443963,
+            "association": 0.6931670631470477,
+            "invariance": 0.02375672091817745
+          },
+          "base_l2": 2.800690913023262,
+          "association_to_base_norm_ratio": 0.24749859398043844,
+          "base_association_cosine": 0.3109386079484001,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 1.6391277313232422e-07
+    },
+    {
+      "batch_index": 11,
+      "candidate_offset": 704,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 8.68162727355957,
+        "fivo": 2.9308388233184814,
+        "future": 5.633395671844482,
+        "prefix4_nll": 4.716588973999023,
+        "association": 0.11120718717575073,
+        "invariance": 0.06185765564441681,
+        "association_gap": 0.007345973048359156,
+        "eligible_gap": 0.010933535173535347,
+        "aligned_nll": 0.7860981225967407,
+        "shuffled_nll": 0.7934441566467285,
+        "eligible_count": 43,
+        "population_count": 64,
+        "eligible_fraction": 0.671875
+      },
+      "weighted_losses": {
+        "fivo": 2.9308388233184814,
+        "future": 5.633395671844482,
+        "association": 0.11120718717575073,
+        "invariance": 0.006185765843838453
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 4.4440009116677555,
+            "future": 8.970446852901096,
+            "association": 0.30369937698625826,
+            "invariance": 0.019496722046910525
+          },
+          "base_l2": 6.195354701567904,
+          "association_to_base_norm_ratio": 0.049020498682569184,
+          "base_association_cosine": 0.5008499366430442,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.3430683162036887,
+            "future": 0.12157458790199012,
+            "association": 0.006229425854354695,
+            "invariance": 9.039468436839865e-05
+          },
+          "base_l2": 1.306480740835356,
+          "association_to_base_norm_ratio": 0.004768096198931824,
+          "base_association_cosine": 0.08254544199422391,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 1.7342844614483828,
+            "future": 3.8042350799143314,
+            "association": 0.12339887608146315,
+            "invariance": 0.010237496157717242
+          },
+          "base_l2": 2.148283226585088,
+          "association_to_base_norm_ratio": 0.057440692434962616,
+          "base_association_cosine": 0.6756762638331142,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 2.120136417528582,
+            "future": 4.476901592305727,
+            "association": 0.14584642825500435,
+            "invariance": 0.006298698827261795
+          },
+          "base_l2": 2.6100767969718808,
+          "association_to_base_norm_ratio": 0.05587821340131074,
+          "base_association_cosine": 0.6034572567265236,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 3.231499741414409,
+            "future": 6.777852458549042,
+            "association": 0.2360000902170507,
+            "invariance": 0.015350376701556884
+          },
+          "base_l2": 5.024729469767303,
+          "association_to_base_norm_ratio": 0.04696772067770247,
+          "base_association_cosine": 0.449347617013987,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 2.3096799850463867e-07
+    },
+    {
+      "batch_index": 12,
+      "candidate_offset": 768,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 4.768552780151367,
+        "fivo": 1.9006967544555664,
+        "future": 2.7160823345184326,
+        "prefix4_nll": 1.9791629314422607,
+        "association": 0.1402450054883957,
+        "invariance": 0.11528515070676804,
+        "association_gap": -0.023698680102825165,
+        "eligible_gap": -0.10833682119846344,
+        "aligned_nll": 0.32986050844192505,
+        "shuffled_nll": 0.3061617910861969,
+        "eligible_count": 14,
+        "population_count": 64,
+        "eligible_fraction": 0.21875
+      },
+      "weighted_losses": {
+        "fivo": 1.9006967544555664,
+        "future": 2.7160823345184326,
+        "association": 0.1402450054883957,
+        "invariance": 0.011528515256941319
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 3.3946287518539817,
+            "future": 4.855019331123308,
+            "association": 0.8559754856213286,
+            "invariance": 0.05577531511773551
+          },
+          "base_l2": 6.80171856911269,
+          "association_to_base_norm_ratio": 0.12584694249309317,
+          "base_association_cosine": 0.6199219202654926,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.479526999529774,
+            "future": 0.26845519845995375,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 1.630862432544424,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.42513820713789363,
+            "future": 1.8184493183382977,
+            "association": 0.2944664334578551,
+            "invariance": 0.02423494842750412
+          },
+          "base_l2": 2.203827149308936,
+          "association_to_base_norm_ratio": 0.1336159387773185,
+          "base_association_cosine": 0.7213752139458812,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 0.590346159886867,
+            "future": 2.1978076549652323,
+            "association": 0.49539190890508944,
+            "invariance": 0.012687427207620864
+          },
+          "base_l2": 2.726407648206986,
+          "association_to_base_norm_ratio": 0.18170133480621745,
+          "base_association_cosine": 0.4583599178486448,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 2.9673646787873165,
+            "future": 3.9194423200771866,
+            "association": 0.6329063186148891,
+            "invariance": 0.04860640124562024
+          },
+          "base_l2": 5.595847607940638,
+          "association_to_base_norm_ratio": 0.11310285107063678,
+          "base_association_cosine": 0.7121070574040758,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 1.1920928955078125e-07
+    },
+    {
+      "batch_index": 13,
+      "candidate_offset": 832,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 4.812433242797852,
+        "fivo": 1.7905821800231934,
+        "future": 2.978428840637207,
+        "prefix4_nll": 2.363187313079834,
+        "association": 0.043316468596458435,
+        "invariance": 0.0010593460174277425,
+        "association_gap": -0.0008322792127728462,
+        "eligible_gap": -0.01331646740436554,
+        "aligned_nll": 0.39386457204818726,
+        "shuffled_nll": 0.3930322825908661,
+        "eligible_count": 4,
+        "population_count": 64,
+        "eligible_fraction": 0.0625
+      },
+      "weighted_losses": {
+        "fivo": 1.7905821800231934,
+        "future": 2.978428840637207,
+        "association": 0.043316468596458435,
+        "invariance": 0.00010593460319796577
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 3.6511823734622384,
+            "future": 4.786887699800832,
+            "association": 0.7061056842490226,
+            "invariance": 0.002257015714278086
+          },
+          "base_l2": 5.760455266540475,
+          "association_to_base_norm_ratio": 0.12257810391314515,
+          "base_association_cosine": -0.5520638842640446,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.834626582634495,
+            "future": 0.3361757105498061,
+            "association": 0.0025037950296889953,
+            "invariance": 6.95319663965824e-08
+          },
+          "base_l2": 1.8077440438045247,
+          "association_to_base_norm_ratio": 0.0013850384617612027,
+          "base_association_cosine": 0.13405686197894046,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.5025258033811969,
+            "future": 1.7925277097902281,
+            "association": 0.20876240931918513,
+            "invariance": 0.0009081767216319379
+          },
+          "base_l2": 1.8130983955413278,
+          "association_to_base_norm_ratio": 0.11514124651621899,
+          "base_association_cosine": -0.6389370161601469,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 0.6671748578679096,
+            "future": 2.3145353101740236,
+            "association": 0.43506674569520165,
+            "invariance": 0.001681870220690018
+          },
+          "base_l2": 2.3318861009925476,
+          "association_to_base_norm_ratio": 0.18657289715394723,
+          "base_association_cosine": -0.49924025211784107,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 3.04427718063537,
+            "future": 3.7724064534104307,
+            "association": 0.5154746856875375,
+            "invariance": 0.0012002697749695698
+          },
+          "base_l2": 4.603247524301338,
+          "association_to_base_norm_ratio": 0.11198065777828754,
+          "base_association_cosine": -0.6312165421960906,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 1.30385160446167e-07
+    },
+    {
+      "batch_index": 14,
+      "candidate_offset": 896,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 7.153151512145996,
+        "fivo": 2.5222935676574707,
+        "future": 4.551690578460693,
+        "prefix4_nll": 3.394859790802002,
+        "association": 0.07523155957460403,
+        "invariance": 0.0393562950193882,
+        "association_gap": -0.005554782226681709,
+        "eligible_gap": -0.012696645222604275,
+        "aligned_nll": 0.565809965133667,
+        "shuffled_nll": 0.560255229473114,
+        "eligible_count": 28,
+        "population_count": 64,
+        "eligible_fraction": 0.4375
+      },
+      "weighted_losses": {
+        "fivo": 2.5222935676574707,
+        "future": 4.551690578460693,
+        "association": 0.07523155957460403,
+        "invariance": 0.00393562950193882
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 2.217950152491368,
+            "future": 1.6974939993628493,
+            "association": 0.2707470030788212,
+            "invariance": 0.01832615992287297
+          },
+          "base_l2": 2.2738844650659398,
+          "association_to_base_norm_ratio": 0.11906805611206367,
+          "base_association_cosine": -0.10356208672881731,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.066698545727652,
+            "future": 0.17001413109032915,
+            "association": 0.00798084643279274,
+            "invariance": 0.0006482755213539839
+          },
+          "base_l2": 1.0478847481210878,
+          "association_to_base_norm_ratio": 0.007616149053703488,
+          "base_association_cosine": -0.2053231485447411,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.30198098540632723,
+            "future": 0.6120845281408548,
+            "association": 0.07486476246009452,
+            "invariance": 0.008707780615453548
+          },
+          "base_l2": 0.7380584004355868,
+          "association_to_base_norm_ratio": 0.10143474068706607,
+          "base_association_cosine": 0.34355922285267726,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 0.3807446132664223,
+            "future": 0.805697779542787,
+            "association": 0.11978458986762905,
+            "invariance": 0.006101509876255678
+          },
+          "base_l2": 0.9637764810623101,
+          "association_to_base_norm_ratio": 0.12428669117926394,
+          "base_association_cosine": 0.059823447679198054,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 1.8828962040963968,
+            "future": 1.3523256603173999,
+            "association": 0.23084012896031947,
+            "invariance": 0.014912210109511418
+          },
+          "base_l2": 1.6121081871949645,
+          "association_to_base_norm_ratio": 0.1431914624551201,
+          "base_association_cosine": -0.23628299402760813,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 8.620554581284523e-08
+    },
+    {
+      "batch_index": 15,
+      "candidate_offset": 960,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 6.158929347991943,
+        "fivo": 2.433706045150757,
+        "future": 3.6799867153167725,
+        "prefix4_nll": 2.5190868377685547,
+        "association": 0.04126189649105072,
+        "invariance": 0.03974803909659386,
+        "association_gap": 0.02566680684685707,
+        "eligible_gap": 0.044396642595529556,
+        "aligned_nll": 0.4198477864265442,
+        "shuffled_nll": 0.4455145597457886,
+        "eligible_count": 37,
+        "population_count": 64,
+        "eligible_fraction": 0.578125
+      },
+      "weighted_losses": {
+        "fivo": 2.433706045150757,
+        "future": 3.6799867153167725,
+        "association": 0.04126189649105072,
+        "invariance": 0.003974804189056158
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 2.920436162253547,
+            "future": 1.6964818633370569,
+            "association": 0.14036303647475562,
+            "invariance": 0.011702539367364517
+          },
+          "base_l2": 4.085253697273999,
+          "association_to_base_norm_ratio": 0.03435846262581362,
+          "base_association_cosine": -0.18344179309773775,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.5635147561784757,
+            "future": 0.11092116697504266,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 1.5680075961938993,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.29553932872591665,
+            "future": 0.508512331167688,
+            "association": 0.06427469358955265,
+            "invariance": 0.008224130678410348
+          },
+          "base_l2": 0.7910717326572074,
+          "association_to_base_norm_ratio": 0.08125014576573754,
+          "base_association_cosine": 0.2042562608405633,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 0.49744643940227073,
+            "future": 0.7418724272524118,
+            "association": 0.09027698847499327,
+            "invariance": 0.004136696341342409
+          },
+          "base_l2": 1.1938112159414707,
+          "association_to_base_norm_ratio": 0.07562082452358139,
+          "base_association_cosine": 0.056333288289400506,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 2.397826626366599,
+            "future": 1.4341505214172903,
+            "association": 0.08614296909364472,
+            "invariance": 0.0072250152670198815
+          },
+          "base_l2": 3.4899384298082086,
+          "association_to_base_norm_ratio": 0.024683234626113087,
+          "base_association_cosine": -0.40463126210624967,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 1.9371509552001953e-07
+    },
+    {
+      "batch_index": 16,
+      "candidate_offset": 1024,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 5.890944004058838,
+        "fivo": 2.773310899734497,
+        "future": 3.0663719177246094,
+        "prefix4_nll": 2.0524284839630127,
+        "association": 0.04729051515460014,
+        "invariance": 0.03971124440431595,
+        "association_gap": 0.009852024726569653,
+        "eligible_gap": 0.033185772597789764,
+        "aligned_nll": 0.34207144379615784,
+        "shuffled_nll": 0.3519234359264374,
+        "eligible_count": 19,
+        "population_count": 64,
+        "eligible_fraction": 0.296875
+      },
+      "weighted_losses": {
+        "fivo": 2.773310899734497,
+        "future": 3.0663719177246094,
+        "association": 0.04729051515460014,
+        "invariance": 0.003971124533563852
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 4.0726494034814404,
+            "future": 7.7372656386258525,
+            "association": 0.3466716449622988,
+            "invariance": 0.019424711365011452
+          },
+          "base_l2": 9.48008342777833,
+          "association_to_base_norm_ratio": 0.03656841710342857,
+          "base_association_cosine": 0.7574355433195514,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 2.4771894675233495,
+            "future": 0.22195562169380467,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 2.4733150843334752,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.6221561167939943,
+            "future": 2.9663815297474696,
+            "association": 0.1267693291758653,
+            "invariance": 0.010336185321579648
+          },
+          "base_l2": 3.557858380776263,
+          "association_to_base_norm_ratio": 0.03563079684700841,
+          "base_association_cosine": 0.8823848957655153,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 0.7503092108482431,
+            "future": 3.488167233425638,
+            "association": 0.15833824932332427,
+            "invariance": 0.00368184405178247
+          },
+          "base_l2": 4.197197812611643,
+          "association_to_base_norm_ratio": 0.03772475265462904,
+          "base_association_cosine": 0.8764929919083693,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 3.0822010577055514,
+            "future": 6.232919479368206,
+            "association": 0.28114011702777686,
+            "invariance": 0.016028933495099436
+          },
+          "base_l2": 7.312993132459102,
+          "association_to_base_norm_ratio": 0.03844391919088803,
+          "base_association_cosine": 0.7338691075956969,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 2.384185791015625e-07
+    },
+    {
+      "batch_index": 17,
+      "candidate_offset": 1088,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 5.093013763427734,
+        "fivo": 2.1781435012817383,
+        "future": 2.884094476699829,
+        "prefix4_nll": 1.9637470245361328,
+        "association": 0.030406054109334946,
+        "invariance": 0.003700754139572382,
+        "association_gap": 0.0029429523274302483,
+        "eligible_gap": 0.007244189735502005,
+        "aligned_nll": 0.3272911608219147,
+        "shuffled_nll": 0.3302341103553772,
+        "eligible_count": 26,
+        "population_count": 64,
+        "eligible_fraction": 0.40625
+      },
+      "weighted_losses": {
+        "fivo": 2.1781435012817383,
+        "future": 2.884094476699829,
+        "association": 0.030406054109334946,
+        "invariance": 0.00037007543141953647
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 2.500517485128029,
+            "future": 4.437194118342837,
+            "association": 0.09553875046345728,
+            "invariance": 0.00282158176345161
+          },
+          "base_l2": 4.1896431527238835,
+          "association_to_base_norm_ratio": 0.02280355318598985,
+          "base_association_cosine": 0.33171036810224325,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.0692043597160628,
+            "future": 0.5241196232203903,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 1.2015224470811494,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.638560312822778,
+            "future": 1.7232814184598606,
+            "association": 0.05010184090472961,
+            "invariance": 0.0011145064386649522
+          },
+          "base_l2": 1.3063824035834637,
+          "association_to_base_norm_ratio": 0.03835158891247929,
+          "base_association_cosine": 0.5029099623832266,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 0.7314930666679355,
+            "future": 2.2688445838361835,
+            "association": 0.051595535791047274,
+            "invariance": 0.0009985798949416905
+          },
+          "base_l2": 1.9114170610235879,
+          "association_to_base_norm_ratio": 0.0269933427105737,
+          "base_association_cosine": 0.19547287124849932,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 2.0412124707877872,
+            "future": 3.3610468118727184,
+            "association": 0.06289164542696175,
+            "invariance": 0.002392078017004317
+          },
+          "base_l2": 3.2786130285170416,
+          "association_to_base_norm_ratio": 0.019182393554816213,
+          "base_association_cosine": 0.39079354242275127,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 1.1175870895385742e-07
+    },
+    {
+      "batch_index": 18,
+      "candidate_offset": 1152,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 6.788633346557617,
+        "fivo": 2.8763957023620605,
+        "future": 3.805225372314453,
+        "prefix4_nll": 2.5846707820892334,
+        "association": 0.09811293333768845,
+        "invariance": 0.08899237960577011,
+        "association_gap": -0.009482776746153831,
+        "eligible_gap": -0.028899891301989555,
+        "aligned_nll": 0.430778443813324,
+        "shuffled_nll": 0.421295702457428,
+        "eligible_count": 21,
+        "population_count": 64,
+        "eligible_fraction": 0.328125
+      },
+      "weighted_losses": {
+        "fivo": 2.8763957023620605,
+        "future": 3.805225372314453,
+        "association": 0.09811293333768845,
+        "invariance": 0.008899237960577011
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 6.428696249041372,
+            "future": 5.312696834444311,
+            "association": 0.6078639398184893,
+            "invariance": 0.02215287386280517
+          },
+          "base_l2": 4.336555818910375,
+          "association_to_base_norm_ratio": 0.14017205478314917,
+          "base_association_cosine": 0.4365929258917516,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.650485181805268,
+            "future": 0.22901428094799153,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 1.6229024650345538,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 1.1976360435635205,
+            "future": 1.8397387714219773,
+            "association": 0.2038200161739188,
+            "invariance": 0.01190180406444221
+          },
+          "base_l2": 1.1783177257077786,
+          "association_to_base_norm_ratio": 0.1729754307578548,
+          "base_association_cosine": -0.03873635937176724,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 1.4999658965037248,
+            "future": 2.2551293964801844,
+            "association": 0.26046313205637495,
+            "invariance": 0.005741146156141089
+          },
+          "base_l2": 1.7000900145562368,
+          "association_to_base_norm_ratio": 0.1532054949010226,
+          "base_association_cosine": 0.12290307098182528,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 5.909298126136735,
+            "future": 4.438699445997008,
+            "association": 0.5100146342781772,
+            "invariance": 0.017780217130474243
+          },
+          "base_l2": 3.4486468707594904,
+          "association_to_base_norm_ratio": 0.1478883322622874,
+          "base_association_cosine": 0.6286769262787008,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 1.7508864402770996e-07
+    },
+    {
+      "batch_index": 19,
+      "candidate_offset": 1216,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 5.590123653411865,
+        "fivo": 2.027987480163574,
+        "future": 3.5139167308807373,
+        "prefix4_nll": 2.7474231719970703,
+        "association": 0.04516376927495003,
+        "invariance": 0.03055788390338421,
+        "association_gap": -0.003849918255582452,
+        "eligible_gap": -0.009476722218096256,
+        "aligned_nll": 0.4579038619995117,
+        "shuffled_nll": 0.45405396819114685,
+        "eligible_count": 26,
+        "population_count": 64,
+        "eligible_fraction": 0.40625
+      },
+      "weighted_losses": {
+        "fivo": 2.027987480163574,
+        "future": 3.5139167308807373,
+        "association": 0.04516376927495003,
+        "invariance": 0.003055788343772292
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 2.3253293796755385,
+            "future": 2.8768138175416196,
+            "association": 0.33018814360190135,
+            "invariance": 0.01635417480652249
+          },
+          "base_l2": 4.092679235046285,
+          "association_to_base_norm_ratio": 0.08067774791008443,
+          "base_association_cosine": 0.6543146587216547,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.1556421873922893,
+            "future": 0.29985343726887925,
+            "association": 0.013062226069953648,
+            "invariance": 0.00022949443756758217
+          },
+          "base_l2": 0.9993262224413293,
+          "association_to_base_norm_ratio": 0.013071033038683757,
+          "base_association_cosine": 0.23123006691305406,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.262808856562881,
+            "future": 1.2081132341397984,
+            "association": 0.13672761938854833,
+            "invariance": 0.011094836387741919
+          },
+          "base_l2": 1.3972921738632764,
+          "association_to_base_norm_ratio": 0.09785184655441072,
+          "base_association_cosine": 0.7342292342101538,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 0.3154418402323107,
+            "future": 1.4869422052991752,
+            "association": 0.18132326683007974,
+            "invariance": 0.005943745156728691
+          },
+          "base_l2": 1.7125444606784506,
+          "association_to_base_norm_ratio": 0.10587945071992218,
+          "base_association_cosine": 0.7471754006314842,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 1.9756203605562368,
+            "future": 2.1249966937745404,
+            "association": 0.23933453454897652,
+            "invariance": 0.010439485856426192
+          },
+          "base_l2": 3.2963823311594456,
+          "association_to_base_norm_ratio": 0.072605210957066,
+          "base_association_cosine": 0.6450482185208443,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 1.043081283569336e-07
+    },
+    {
+      "batch_index": 20,
+      "candidate_offset": 1280,
+      "candidate_count": 64,
+      "metrics": {
+        "total": 3.255887508392334,
+        "fivo": 1.1294453144073486,
+        "future": 1.9809112548828125,
+        "prefix4_nll": 1.3057384490966797,
+        "association": 0.14006930589675903,
+        "invariance": 0.054617539048194885,
+        "association_gap": -0.022048311308026314,
+        "eligible_gap": -0.09407280385494232,
+        "aligned_nll": 0.21762306988239288,
+        "shuffled_nll": 0.19557474553585052,
+        "eligible_count": 15,
+        "population_count": 64,
+        "eligible_fraction": 0.234375
+      },
+      "weighted_losses": {
+        "fivo": 1.1294453144073486,
+        "future": 1.9809112548828125,
+        "association": 0.14006930589675903,
+        "invariance": 0.005461753811687231
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 2.010581650591135,
+            "future": 1.87435546458706,
+            "association": 0.4921195852961518,
+            "invariance": 0.022286443228215273
+          },
+          "base_l2": 2.7864603853227674,
+          "association_to_base_norm_ratio": 0.17661101083234942,
+          "base_association_cosine": -0.21055745261302583,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.2958055363238103,
+            "future": 0.37682138208737737,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 1.5646063189769273,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 0.6872470520415394,
+            "future": 0.5849221730714493,
+            "association": 0.2104765278212478,
+            "invariance": 0.010628666798355115
+          },
+          "base_l2": 0.5499358512428105,
+          "association_to_base_norm_ratio": 0.38272923532006115,
+          "base_association_cosine": 0.31424400667912594,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 0.8544680230639159,
+            "future": 0.8025606941458678,
+            "association": 0.28672176036255853,
+            "invariance": 0.004116875626419637
+          },
+          "base_l2": 1.0049216740756604,
+          "association_to_base_norm_ratio": 0.28531752051849096,
+          "base_association_cosine": 0.2694426942660144,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 1.0774518424262833,
+            "future": 1.5443368924203706,
+            "association": 0.3401057917809744,
+            "invariance": 0.01915119654044096
+          },
+          "base_l2": 2.001017624630376,
+          "association_to_base_norm_ratio": 0.16996641488542516,
+          "base_association_cosine": -0.5917795067774376,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 1.1175870895385742e-07
+    },
+    {
+      "batch_index": 21,
+      "candidate_offset": 1344,
+      "candidate_count": 16,
+      "metrics": {
+        "total": 5.462255477905273,
+        "fivo": 1.9980316162109375,
+        "future": 3.381964683532715,
+        "prefix4_nll": 1.8488891124725342,
+        "association": 0.07568079978227615,
+        "invariance": 0.06578370183706284,
+        "association_gap": -0.010543106123805046,
+        "eligible_gap": -0.02811495028436184,
+        "aligned_nll": 0.30814817547798157,
+        "shuffled_nll": 0.29760506749153137,
+        "eligible_count": 6,
+        "population_count": 16,
+        "eligible_fraction": 0.375
+      },
+      "weighted_losses": {
+        "fivo": 1.9980316162109375,
+        "future": 3.381964683532715,
+        "association": 0.07568079978227615,
+        "invariance": 0.006578370463103056
+      },
+      "groups": {
+        "all": {
+          "component_l2": {
+            "fivo": 6.180424411830315,
+            "future": 12.2583575951647,
+            "association": 1.3891455410996583,
+            "invariance": 0.03027629357717801
+          },
+          "base_l2": 17.714321652629703,
+          "association_to_base_norm_ratio": 0.07841934725699409,
+          "base_association_cosine": 0.8836859709230954,
+          "unused_parameter_tensors": {
+            "fivo": 8,
+            "future": 8,
+            "association": 8,
+            "invariance": 8
+          }
+        },
+        "root_head": {
+          "component_l2": {
+            "fivo": 1.9969347255649963,
+            "future": 1.744537077568378,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 2.71425856461678,
+          "association_to_base_norm_ratio": 0.0,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "difficulty_head": {
+          "component_l2": {
+            "fivo": 2.0812556244323854,
+            "future": 5.456312362587703,
+            "association": 0.4836979839856501,
+            "invariance": 0.014297051561034469
+          },
+          "base_l2": 7.532282589525659,
+          "association_to_base_norm_ratio": 0.06421665388102636,
+          "base_association_cosine": 0.9234997406956388,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "diagnosis_head": {
+          "component_l2": {
+            "fivo": 2.633731398677232,
+            "future": 6.791008044180286,
+            "association": 0.7116518418211764,
+            "invariance": 0.009928035151019138
+          },
+          "base_l2": 9.411456869765868,
+          "association_to_base_norm_ratio": 0.07561548139346469,
+          "base_association_cosine": 0.902591545717253,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "root_proposal_head": {
+          "component_l2": {
+            "fivo": 4.789752765808584,
+            "future": 8.445992331376612,
+            "association": 1.0905563950011055,
+            "invariance": 0.024772613658488294
+          },
+          "base_l2": 12.6932734405785,
+          "association_to_base_norm_ratio": 0.08591608776935031,
+          "base_association_cosine": 0.8911276096121712,
+          "unused_parameter_tensors": {
+            "fivo": 0,
+            "future": 0,
+            "association": 0,
+            "invariance": 0
+          }
+        },
+        "child_proposal_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        },
+        "transition_head": {
+          "component_l2": {
+            "fivo": 0.0,
+            "future": 0.0,
+            "association": 0.0,
+            "invariance": 0.0
+          },
+          "base_l2": 0.0,
+          "association_to_base_norm_ratio": null,
+          "base_association_cosine": null,
+          "unused_parameter_tensors": {
+            "fivo": 4,
+            "future": 4,
+            "association": 4,
+            "invariance": 4
+          }
+        }
+      },
+      "backward_sum_max_absolute_error": 3.5762786865234375e-07
+    }
+  ],
+  "model_receipt": {
+    "semantic-p32-seed1703.json": "7fd650b1367c8c2e1186f11bd3d32b5bad56050b19daf9a269b2104c7d79dff4",
+    "semantic-p32-seed1703.population.json": "e7c1407610bb2fa3a465b697af98eb52a5293f3e4027f9100c0ebb1d5c378b27",
+    "semantic-p32-seed1703.pt": "bcecbe85eccd6aa325b98d88661b9a5202f8dddae55dfea9b6e9507b94c03200"
+  }
+}

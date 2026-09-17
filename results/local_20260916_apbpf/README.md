@@ -13,17 +13,16 @@ families. All nine configured prediction controls are now complete for both
 CodeARC families, including the previously missing fixed `history_rate`.
 See `full_pipeline_progress_v2.json`, `ablation_coverage_audit.json` and the final
 sections below. The latest checkpoint is
-`refit_assignment_progress.json`: the six-cell before/after likelihood audit
-is complete (see the final section). All three prior/no-resampling
-refits and their paired comparison are complete. Mean development NLL is
-0.452309; improvement over the old model under the same prior inference is
-0.041393 (95% CI 0.029057–0.054459). Association is −0.00003386
-(95% CI −0.00007306–0.00000465); every seed still fails association and
-strong-baseline fairness. All three CodeARC repair projector fits are complete;
-six-arm code generation has started, with fresh execution still required.
-The six-check-tested GPU coordinator remains queued until Qwen completes and
-GPU0 is idle. It will run disjoint DeepSeek banks on GPU0/1 without changing
-candidate seeds or decode settings. Handoff has not started.
+`gradient_debug_and_qwen_completion_progress.json`. Qwen RBR generation and
+execution are complete for all 500 primary sources / 4000 candidates. Its full
+three-seed cell and fixed history-rate control are complete: association is
+0.000493 and selection advantage 0.004667, both with CIs crossing zero.
+The two-GPU handoff is now real: coordinator796796 runs distinct DeepSeek
+primary/train banks on GPU0/1; the original child continues and its old parent
+remains parked. All three repair fits are complete and six-arm generation runs
+on GPU2. The 132-batch gradient audit found weak association gradients in all
+three prior refits; one fixed association-weight100 intervention is running,
+with three seeds and1000steps, no primary tuning or altered evaluation gates.
 All three Qwen RBR development prediction seeds fail association/fairness gates;
 their checkpoint replay reproduces all 12 seed/control NLLs and the pooled
 association interval crosses zero. GPU generation and CodeARC repair continue. Earlier
@@ -1189,3 +1188,49 @@ have zero assignment effect. Evidence is in `codearc_refit_assignment_results.js
 and `codearc_refit_assignment_verified.json`. Next debugging should inspect
 interactions between test features and diagnosis latents, or gradient allocation,
 before increasing training duration. GPU generation continues independently.
+
+## Training-gradient audit and fixed-weight follow-up (2026-09-17)
+
+The audit ran the unchanged training backward over all 1360 fitting candidates
+(170 sources) in 22 fixed batches for each of six old/new seed cells. It measured
+weighted loss gradients without updating any parameter. The component sum
+reproduces actual backward within 4.18e-7; all132 batch records and summary means
+are verified. One targeted observer test passed. This measures checkpoint-local
+raw gradients, not Adam-preconditioned updates or a causal explanation of fitting.
+
+| Seed | Old association/base gradient norm ratio | Prior-refit ratio |
+| --- | ---: | ---: |
+| 1701 | 0.137820 | 0.001661 |
+| 1702 | 0.102788 | 0.002045 |
+| 1703 | 0.095520 | 0.003119 |
+
+Ratios are unweighted means over fixed batches. Old and new models use their
+respective training inference paths. Prior-refit base/association mean gradient
+cosines are −0.0514, −0.0147 and −0.0509. `codearc_training_gradients_verified.json`
+and the per-cell records preserve the evidence.
+
+A single fixed follow-up raises association weight from1 to100, leaving prior
+inference, other loss weights, optimizer,1000steps,32particles,three seeds and
+all evaluation gates unchanged. The coefficient was chosen from fitting-gradient
+scale before any follow-up fit. All results are retained; a larger coefficient
+may harm NLL or merely worsen shuffled predictions. The plan is
+`codearc_association_weight100_plan.json`; it is development-only and running.
+
+## Qwen RBR full cell and actual GPU handoff (2026-09-17)
+
+All500 primary source receipts, the full cache, three-seed training reports,
+model receipts and selection input bindings were verified. Association was
+independently recomputed from all three raw prediction archives. The full-cell
+association gap is0.0004925 (95% CI −0.0055622–0.0065747); selection advantage
+is0.0046667 (−0.0093333–0.0200000). Both fail the original0.03-plus-positive-CI
+criterion. Fixed history-rate improvement is0.308833 (0.283904–0.332216), a weak
+control comparison that does not repair failed core gates. The primary bank has
+274 mixed,123 all-fail and103 all-pass sources; development has231 mixed sources,
+below the required300. These are standalone exploratory results, not sealed
+DAG stages. See `rbr_qwen_full_cell_verified.json` and the associated reports.
+
+`rbr_deepseek_actual_handoff.json` records the successful scheduler handoff.
+The original GPU1 generator child was preserved; its original parent is parked,
+while the coordinator owns future scheduling and a distinct primary bank onGPU0.
+The old parent must not be manually resumed into directories now owned by the
+coordinator. GPU2 continues repair generation, and unrelatedGPU3 is untouched.
