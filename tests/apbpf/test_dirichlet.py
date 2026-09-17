@@ -2,6 +2,17 @@ import numpy as np
 import pytest
 
 
+def test_effective_evidence_preserves_uniform_and_discounts_concentration():
+    from pbpf.apbpf.dirichlet import effective_evidence_weights
+    np.testing.assert_allclose(effective_evidence_weights([1, 1, 1, 1]), [1, 1, 1, 1])
+    np.testing.assert_allclose(effective_evidence_weights([4, 0, 0, 0]), [1, 0, 0, 0])
+    np.testing.assert_allclose(effective_evidence_weights([3, 1]), [1.2, .4])
+    np.testing.assert_allclose(effective_evidence_weights([30, 10]), [1.2, .4])
+    for invalid in ([], [0, 0], [-1, 2], [float('nan')], [[1, 2]]):
+        with pytest.raises(ValueError):
+            effective_evidence_weights(invalid)
+
+
 def test_rate_and_weighted_counts_have_exact_expected_probabilities():
     from pbpf.apbpf.dirichlet import predict_rate
     np.testing.assert_allclose(predict_rate([0, 0], 1, classes=2), [.75, .25])

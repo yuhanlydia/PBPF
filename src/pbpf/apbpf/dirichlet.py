@@ -41,6 +41,21 @@ def similarity_weights(query, history, strength):
     return len(history) * weights / weights.sum()
 
 
+def effective_evidence_weights(weights):
+    """Heuristic ESS mass: normalized weights times 1/sum(p**2).
+
+    This discounts weight concentration, not execution correlation, and is not
+    an exact posterior or a calibrated count of independent observations.
+    """
+    values = np.asarray(weights, dtype=float)
+    if (values.ndim != 1 or not values.size or not np.isfinite(values).all()
+            or (values < 0).any() or values.max() <= 0):
+        raise ValueError('weights must be a nonempty nonnegative vector with positive mass')
+    scaled = values / values.max()
+    probabilities = scaled / scaled.sum()
+    return probabilities / np.square(probabilities).sum()
+
+
 def inherit_counts(parent_counts, child_outcomes, retention):
     """Discount parent evidence once at a code change; never inherit alpha."""
     parent = np.asarray(parent_counts, dtype=float)

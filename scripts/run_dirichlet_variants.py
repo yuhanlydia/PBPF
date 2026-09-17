@@ -7,7 +7,7 @@ from pathlib import Path
 import runpy
 
 import numpy as np
-from pbpf.apbpf.dirichlet import predict_rate, similarity_weights
+from pbpf.apbpf.dirichlet import predict_rate, similarity_weights, effective_evidence_weights
 from pbpf.real_gate import FrozenTextEncoder, compare_predictions, clustered_nll_gap, validate_rbr_cache
 from pbpf.registry import OUTCOMES
 
@@ -16,13 +16,15 @@ STRENGTHS = (0., 1., 4., 16.)
 _encode = lru_cache(maxsize=20000)(FrozenTextEncoder(256))
 
 
-def predict_rows(rows, alpha, strength):
+def predict_rows(rows, alpha, strength, *, effective_evidence=False):
     predictions = []
     for row in rows:
         visible = [OUTCOMES.index(x) for x in row['outcomes'][:4]]
         history = np.stack([_encode(t['input']) for t in row['tests'][:4]])
         for test in row['tests'][4:]:
             weights = similarity_weights(_encode(test['input']), history, strength)
+            if effective_evidence:
+                weights = effective_evidence_weights(weights)
             predictions.append(predict_rate(visible, alpha, weights=weights))
     return np.asarray(predictions)
 
@@ -31,6 +33,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--cache', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--effective-evidence', action='store_true',
+                        help='Also compare concentration-discounted evidence on the same validation grid')
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     payload = json.loads(args.cache.read_text())
@@ -48,7 +52,9 @@ def main():
                     root / 'src/pbpf/real_gate.py', root / 'scripts/run_apbpf_parameter_diagnostic.py']
     plan = {'claim_status': 'exploratory-legacy-literal-stdin-not-corrected-protocol',
         'alpha_grid': ALPHAS, 'strength_grid': STRENGTHS, 'feature': 'public test input lexical cosine,256dimensions',
-        'weight_normalization': 'sum equals number of visible observations; no evidence-mass inflation',
+        'weight_normalization': 'fixed-mass arms sum to visible observation count; effective arm uses ESS mass',
+        'effective_evidence_arm': args.effective_evidence,
+        'effective_evidence_rule': 'sum(weights)^2/sum(weights^2); heuristic, not independence correction',
         'expected_outputs_used': False, 'original_test_used': False,
         'candidates': {k: len(v) for k, v in parts.items()},
         'cache_sha256': sha(args.cache),
@@ -72,8 +78,20 @@ def main():
     selected = {
         'dirichlet': min((s for s in scores if s['strength'] == 0), key=lambda s: s['validation_nll']),
         'weighted': min(scores, key=lambda s: (s['validation_nll'], s['strength'], s['alpha']))}
+    if args.effective_evidence:
+        effective_scores = []
+        for strength in STRENGTHS:
+            for alpha in ALPHAS:
+                p = predict_rows(parts['validation'], alpha, strength, effective_evidence=True)
+                nll = compare_predictions(labels['validation'], {'baseline': p})['baseline']['nll']
+                effective_scores.append({'alpha': alpha, 'strength': strength,
+                                         'validation_nll': nll, 'effective_evidence': True})
+        selected['weighted_effective'] = min(effective_scores,
+            key=lambda s: (s['validation_nll'], s['strength'], s['alpha']))
+        scores.extend(effective_scores)
     write('selection.json', {'selected': selected, 'all_validation_scores': scores})
-    predictions = {arm: predict_rows(parts['assessment'], s['alpha'], s['strength'])
+    predictions = {arm: predict_rows(parts['assessment'], s['alpha'], s['strength'],
+                                    effective_evidence=s.get('effective_evidence', False))
                    for arm, s in selected.items()}
     # Negative control: erase correspondence between public features and visible outcomes.
     from pbpf.apbpf.counterfactual import outcome_derangement
@@ -92,6 +110,9 @@ def main():
         'association_gap': clustered_nll_gap(labels['assessment'], predictions['weighted'],
             predictions['weighted_shuffled'], clusters, seed=2701),
         'real_rollout_or_inheritance_results': None}
+    if args.effective_evidence:
+        report['effective_gain_over_weighted'] = clustered_nll_gap(labels['assessment'],
+            predictions['weighted_effective'], predictions['weighted'], clusters, seed=2701)
     np.savez_compressed(args.output / 'predictions.npz', **predictions,
                         labels=labels['assessment'], clusters=clusters)
     write('report.json', report)
