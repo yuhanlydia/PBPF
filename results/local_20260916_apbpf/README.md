@@ -13,9 +13,9 @@ families. All nine configured prediction controls are now complete for both
 CodeARC families, including the previously missing fixed `history_rate`.
 See `full_pipeline_progress_v2.json`, `ablation_coverage_audit.json` and the final
 sections below. The latest checkpoint is
-`association_weight_seed1701_progress.json`: weight100 seed1701 is complete
-and fails original gates; seed1702 is running and the all-three-seed comparison
-remains queued. Qwen RBR generation and
+`codearc_association_weight100_seed1702_verified.json`: weight100 seeds1701
+and1702 are complete; both fail association/fairness. Seed1703 is running and
+the all-three-seed comparison remains queued. Qwen RBR generation and
 execution are complete for all 500 primary sources / 4000 candidates. Its full
 three-seed cell and fixed history-rate control are complete: association is
 0.000493 and selection advantage 0.004667, both with CIs crossing zero.
@@ -1268,3 +1268,12 @@ baseline changed. See `codearc_association_weight100_seed1701_verified.json`.
 Second-seed training is running; third-seed training and the independently queued
 all-seed numerical replay/paired comparison remain pending. No further coefficient
 or method variant has been selected from this partial result.
+
+## Weight100 second seed completed (2026-09-17)
+
+Seed1702 completed all1000steps and assessment. Aligned development NLL is 0.450848,
+association is0.00002643 (95% CI −0.00004448–0.00009318). Association and
+strong-baseline fairness fail; numerical pair invariance passes. Model, report,
+variant and population receipts were verified, with unchanged assessment rows
+and identical strong-baseline absolute metrics versus weight1. The third seed
+is running; the queued all-seed replay must finish before an aggregate conclusion.
