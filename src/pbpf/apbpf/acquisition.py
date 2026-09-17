@@ -62,6 +62,35 @@ def expected_information_gain(component_probs: Any, component_outcomes: Any) -> 
     return float(max(0.0, information))
 
 
+def predictive_information_gain(component_probs: Any, query_outcomes: Any,
+                                target_outcomes: Any) -> float:
+    """Mean I(query outcome; target outcome), in nats, under the model.
+
+    Targets have shape [components, targets, outcomes]. Query and target
+    outcomes are conditionally independent given a component. Inputs are
+    predictions only: no observed query or target labels enter this score.
+    This is expected target log-loss reduction for exact Bayesian updating
+    under this finite mixture, not information about a diagnostic identity.
+    """
+    weights = _probability_vector(component_probs, name='component_probs')
+    query = _component_outcome_matrix(query_outcomes, components=len(weights))
+    targets = np.asarray(target_outcomes, dtype=np.float64)
+    if targets.ndim != 3 or targets.shape[0] != len(weights) or targets.shape[1] == 0:
+        raise ValueError('target_outcomes must have shape [components, nonempty targets, outcomes]')
+    for index in range(targets.shape[1]):
+        _component_outcome_matrix(targets[:, index], components=len(weights))
+    joint = np.einsum('k,ka,ktb->tab', weights, query, targets)
+    query_marginal = weights @ query
+    target_marginal = np.einsum('k,ktb->tb', weights, targets)
+    positive = joint > 0
+    t, q, y = np.nonzero(positive)
+    log_ratio = np.log(joint[positive]) - np.log(query_marginal[q]) - np.log(target_marginal[t, y])
+    information = float(np.sum(joint[positive] * log_ratio) / targets.shape[1])
+    if information < -_MI_ROUNDOFF_ATOL:
+        raise ValueError('predictive mutual information is materially negative')
+    return max(0., information)
+
+
 def _state_value(state: Any, name: str, default: Any = ()) -> Any:
     if isinstance(state, Mapping):
         return state.get(name, default)

@@ -208,3 +208,12 @@ and interpretation, not the objective. Reproduce the six-run follow-up with
 audit and 18 one-step acquisition replays. Association improvements did not
 consistently translate to acquisition benefits; this motivates debugging
 likelihood calibration and query ranking rather than imposing another gate.
+
+The next completed round, `results/ACQUISITION_OBJECTIVE_DEBUG_2026-09-17.md`,
+compares target-outcome MI, train-only update-strength fitting, target-feature
+cosine and two-step acquisition. The optional
+`pbpf.apbpf.acquisition.predictive_information_gain(weights, query, targets)`
+accepts arrays shaped `[K]`, `[K, query outcomes]`, `[K, targets, target outcomes]`.
+It needs target predictions, never observed target labels, and reports mean
+marginal target information in nats. The new objective improves several
+comparisons but does not establish stable superiority over random acquisition.
