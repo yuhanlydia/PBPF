@@ -217,3 +217,19 @@ accepts arrays shaped `[K]`, `[K, query outcomes]`, `[K, targets, target outcome
 It needs target predictions, never observed target labels, and reports mean
 marginal target information in nats. The new objective improves several
 comparisons but does not establish stable superiority over random acquisition.
+
+Two optional predictive-information extensions are now available:
+
+- `predictive_information_scores(weights, queries, targets, budget=1|2)` scores
+  each remaining query, with exact two-step expected continuation for budget 2.
+  Pass only unexecuted queries; after observing one, update weights and reduce
+  the remaining budget. Query predictions have shape `[K,Q,C]`.
+- `pool_predictive_particles(draw_weights, draw_queries, draw_targets)` flattens
+  an equal mixture of independently normalized posterior draws before scoring.
+  Shapes are `[R,K]`, `[R,K,Q,C]`, `[R,K,T,C]`. Update returned weights globally
+  after an observation; do not renormalize each draw back to equal mass.
+
+`results/PREDICTIVE_INFORMATION_IMPROVEMENT_2026-09-17.md` records matched reruns
+against greedy target MI and predictive entropy. Lookahead did not improve
+realized loss. Four-draw pooling gave small positive point changes, with
+uncertainty and continuing sampling sensitivity; it remains experimental.

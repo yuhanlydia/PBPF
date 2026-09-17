@@ -91,6 +91,69 @@ def predictive_information_gain(component_probs: Any, query_outcomes: Any,
     return max(0., information)
 
 
+def predictive_information_scores(component_probs: Any, query_outcomes: Any,
+                                  target_outcomes: Any, *, budget: int = 1) -> np.ndarray:
+    """Score each remaining query with a one- or two-step predictive horizon.
+
+    Queries have shape [components, queries, outcomes]; targets have shape
+    [components, targets, outcomes]. For budget two, add expected best remaining
+    target information after each possible first outcome. This plans under the
+    finite mixture without reading actual outcomes. Callers must pass only
+    unexecuted queries, observe the chosen query, update weights, then call with
+    budget one. All query and target outcomes must be conditionally independent
+    given the component. Optimality is model-relative, not a data guarantee.
+    """
+    if type(budget) is not int or budget not in (1, 2):
+        raise ValueError('predictive planning supports budget one or two')
+    weights = _probability_vector(component_probs, name='component_probs')
+    queries = np.asarray(query_outcomes, dtype=np.float64)
+    if queries.ndim != 3 or queries.shape[0] != len(weights) or queries.shape[1] < budget:
+        raise ValueError('not enough remaining query predictions for the budget')
+    count = queries.shape[1]
+    scores = np.array([predictive_information_gain(weights, queries[:, i], target_outcomes)
+                       for i in range(count)])
+    if budget == 1:
+        return scores
+    for first in range(count):
+        for outcome in range(queries.shape[2]):
+            unnormalized = weights * queries[:, first, outcome]
+            probability = float(unnormalized.sum())
+            if probability == 0:
+                continue
+            posterior = unnormalized / probability
+            continuation = max(predictive_information_gain(posterior, queries[:, second], target_outcomes)
+                               for second in range(count) if second != first)
+            scores[first] += probability * continuation
+    return scores
+
+
+def pool_predictive_particles(component_probs: Any, query_outcomes: Any,
+                              target_outcomes: Any) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Pool equally weighted posterior draws before computing predictive MI.
+
+    Weights are [draws, particles]; predictions are [draws, particles, tests,
+    outcomes]. Each draw is an independently normalized posterior estimate.
+    Returns a flat mixture, not averaged MI scores or one pooled IS estimate.
+    After observing a query, update the returned joint weights globally; do not
+    reset each draw's mass to uniform. Pooling is not a calibration guarantee.
+    """
+    weights = np.asarray(component_probs, dtype=np.float64)
+    if weights.ndim != 2 or min(weights.shape) == 0:
+        raise ValueError('posterior draws require nonempty [draws, particles] weights')
+    for draw in weights:
+        _probability_vector(draw, name='draw weights')
+    predictions = []
+    for value in (query_outcomes, target_outcomes):
+        value = np.asarray(value, dtype=np.float64)
+        if value.ndim != 4 or value.shape[:2] != weights.shape or value.shape[2] == 0:
+            raise ValueError('predictions must match draws and particles with nonempty tests')
+        flattened = value.reshape((-1, *value.shape[2:]))
+        for test in range(flattened.shape[1]):
+            _component_outcome_matrix(flattened[:, test], components=weights.size)
+        predictions.append(flattened)
+    return weights.reshape(-1) / len(weights), predictions[0], predictions[1]
+
+
 def _state_value(state: Any, name: str, default: Any = ()) -> Any:
     if isinstance(state, Mapping):
         return state.get(name, default)
