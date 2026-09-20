@@ -98,7 +98,7 @@ def mechanism_table(root: Path, coverage: dict):
             fixed = eed = same = global_gain = None
         lines.append(
             f"{dataset_label} & {model_label} & {f4(fixed)} & {f4(eed)} & "
-            f"{f4(same)} & {f4(global_gain)} \\"
+            f"{f4(same)} & {f4(global_gain)} \\\\"
         )
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table*}", ""]
     return lines
@@ -149,7 +149,7 @@ def ablation_table(root: Path, coverage: dict):
         r"\midrule",
     ]
     for name, control, eed, gain in rows:
-        lines.append(f"{name} & {f4(control)} & {f4(eed)} & {f4(gain)} \\")
+        lines.append(f"{name} & {f4(control)} & {f4(eed)} & {f4(gain)} \\\\")
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}", ""]
     return lines
 
@@ -240,7 +240,7 @@ def recursive_table(root: Path, seeds, coverage: dict):
                 reports[seed] = report
         coverage["recursive"][dataset] = sorted(reports)
         base = [r["round0_pass_at_1"] for r in reports.values()]
-        lines.append(f"{label} & 0 & {latex_mean_std(base, percent=True)} & {latex_mean_std(base, percent=True)} \\")
+        lines.append(f"{label} & 0 & {latex_mean_std(base, percent=True)} & {latex_mean_std(base, percent=True)} \\\\")
         for round_index in (1, 2, 3):
             equal, eesd = [], []
             for report in reports.values():
@@ -250,7 +250,7 @@ def recursive_table(root: Path, seeds, coverage: dict):
                     eesd.append(match["eesd_pass_at_1"])
             lines.append(
                 f"{label} & {round_index} & {latex_mean_std(equal, percent=True)} & "
-                f"{latex_mean_std(eesd, percent=True)} \\"
+                f"{latex_mean_std(eesd, percent=True)} \\\\"
             )
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}", ""]
     return lines
