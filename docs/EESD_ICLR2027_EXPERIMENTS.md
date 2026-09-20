@@ -42,9 +42,11 @@ hardware with 4-bit loading.
 | qwen25_7b | Qwen2.5-Coder-7B-Instruct | primary |
 | qwen3_8b | Qwen3-8B, thinking disabled | same-family architecture/post-training replication |
 | deepseek_6p7b | DeepSeek-Coder-6.7B-Instruct | cross-family replication |
+| seed_coder_8b | Seed-Coder-8B-Instruct | second cross-family coder replication |
+| qwen3_coder_30b | Qwen3-Coder-30B-A3B-Instruct | stronger MoE coder replication (mechanism only) |
 
 Minimum paper breadth:
-- all four models on RunBugRun and CodeARC mechanism experiments;
+- all six model settings on RunBugRun and CodeARC mechanism experiments;
 - qwen25_7b and deepseek_6p7b on HumanEval+ and MBPP+;
 - qwen25_7b on LiveCodeBench temporal transfer;
 - qwen25_7b plus one cross-family model for full one-round EESD;
