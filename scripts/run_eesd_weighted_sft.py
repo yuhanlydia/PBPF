@@ -37,6 +37,8 @@ def load_rows(path: Path, rule: str):
             if not line.strip():
                 continue
             row = json.loads(line)
+            if row.get("split") not in {"train", "development"}:
+                raise ValueError("scored correction split must be train or development")
             weights = row.get("training_weights", {})
             if rule not in weights:
                 raise ValueError(f"training rule {rule} absent from scored correction")
@@ -185,9 +187,12 @@ def main() -> None:
             torch.tensor([labels], dtype=torch.long, device=student.device),
         )
 
-    positive = [row for row in rows if row["_weight"] > 0]
+    positive = [row for row in rows if row["split"] == "train" and row["_weight"] > 0]
+    development = [row for row in rows if row["split"] == "development"]
     if not positive:
-        raise ValueError("no positive-weight rows")
+        raise ValueError("no positive-weight training rows")
+    if not development:
+        raise ValueError("development correction rows are required but never used for gradients")
     rng = random.Random(args.seed)
     order = list(range(len(positive)))
     rng.shuffle(order)
@@ -276,7 +281,8 @@ def main() -> None:
         "model_config_sha256": sha(args.model_config),
         "previous_adapter": str(args.previous_adapter) if args.previous_adapter else None,
         "seed": args.seed,
-        "positive_trajectories": len(positive),
+        "positive_training_trajectories": len(positive),
+        "development_trajectories": len(development),
         "all_trajectories": len(rows),
         "sources": len({row["source_component_id"] for row in positive}),
         "max_steps": args.max_steps,
