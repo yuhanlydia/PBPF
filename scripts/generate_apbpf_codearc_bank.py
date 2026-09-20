@@ -67,6 +67,7 @@ def main():
     parser.add_argument("--candidates", type=int, default=8)
     parser.add_argument("--max-new-tokens", type=int, default=512)
     parser.add_argument("--temperature", type=float, default=.8)
+    parser.add_argument("--greedy", action="store_true")
     parser.add_argument("--seed", type=int, default=1701)
     args = parser.parse_args()
     if min(args.candidates, args.max_new_tokens) < 1 or args.temperature <= 0 or min(args.offset, args.components) < 0:
@@ -98,7 +99,10 @@ def main():
               "source_sha256": sha(__file__), "public_manifest_sha256": sha(args.public_root / "manifest.json"),
               "public_tasks_sha256": manifest["public_tasks_sha256"], "split": args.split,
               "components": len(tasks), "offset": args.offset, "candidates": args.candidates,
-              "max_new_tokens": args.max_new_tokens, "temperature": args.temperature, "top_p": .95,
+              "max_new_tokens": args.max_new_tokens,
+              "temperature": None if args.greedy else args.temperature,
+              "top_p": None if args.greedy else .95,
+              "decode_policy": "greedy" if args.greedy else f"temperature{args.temperature}-top_p0.95",
               "seed": args.seed, "task_ids": [row["task_id"] for row in tasks],
               "source_component_ids": [row["source_component_id"] for row in tasks],
               "population_selection": "pre-hidden fixed source order; no execution/quality filtering",
@@ -139,10 +143,16 @@ def main():
             {"role": "user", "content": row["task_text"]}], tokenize=False, add_generation_prompt=True, **template_kwargs)
         inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
         begin = time.monotonic()
+        generation_kwargs = dict(
+            do_sample=not args.greedy,
+            num_return_sequences=args.candidates,
+            max_new_tokens=args.max_new_tokens,
+            pad_token_id=tokenizer.pad_token_id,
+        )
+        if not args.greedy:
+            generation_kwargs.update(temperature=args.temperature, top_p=.95)
         with torch.inference_mode():
-            generated = model.generate(**inputs, do_sample=True, temperature=args.temperature, top_p=.95,
-                num_return_sequences=args.candidates, max_new_tokens=args.max_new_tokens,
-                pad_token_id=tokenizer.pad_token_id)
+            generated = model.generate(**inputs, **generation_kwargs)
         continuations = generated[:, inputs.input_ids.shape[1]:]
         candidates = []
         for candidate_index, tokens in enumerate(continuations):
