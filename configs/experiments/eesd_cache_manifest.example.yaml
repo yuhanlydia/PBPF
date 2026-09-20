@@ -1,0 +1,38 @@
+schema: eesd-cache-manifest-v1
+
+# Copy this file outside version control, replace paths with immutable cache artifacts,
+# and keep every declared cell. Do not remove cells after inspecting results.
+mechanism_cells:
+  - {dataset: runbugrun, model: qwen25_1p5b, cache: /ABS/PATH/rbr-qwen25-1p5b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: runbugrun, model: qwen25_7b, cache: /ABS/PATH/rbr-qwen25-7b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: runbugrun, model: qwen3_8b, cache: /ABS/PATH/rbr-qwen3-8b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: runbugrun, model: deepseek_6p7b, cache: /ABS/PATH/rbr-deepseek-6p7b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: codearc, model: qwen25_1p5b, cache: /ABS/PATH/codearc-qwen25-1p5b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: codearc, model: qwen25_7b, cache: /ABS/PATH/codearc-qwen25-7b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: codearc, model: qwen3_8b, cache: /ABS/PATH/codearc-qwen3-8b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: codearc, model: deepseek_6p7b, cache: /ABS/PATH/codearc-deepseek-6p7b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: humanevalplus, model: qwen25_7b, cache: /ABS/PATH/humanevalplus-qwen25-7b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: humanevalplus, model: deepseek_6p7b, cache: /ABS/PATH/humanevalplus-deepseek-6p7b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: mbppplus, model: qwen25_7b, cache: /ABS/PATH/mbppplus-qwen25-7b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: mbppplus, model: deepseek_6p7b, cache: /ABS/PATH/mbppplus-deepseek-6p7b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: livecodebench_v6, model: qwen25_7b, cache: /ABS/PATH/lcb-v6-qwen25-7b.json, validation_split: development, assessment_split: primary, visible: 4}
+
+correction_cells:
+  - dataset: runbugrun
+    model: qwen25_7b
+    round: 1
+    corrections: /ABS/PATH/rbr-round1-corrections.jsonl
+    model_config: configs/models/qwen2.5-coder-7b.yaml
+    previous_adapter: null
+    alpha: 0.1
+    uncertainty_penalty: 0.5
+    anchor_beta: 0.03
+  - dataset: codearc
+    model: qwen25_7b
+    round: 1
+    corrections: /ABS/PATH/codearc-round1-corrections.jsonl
+    model_config: configs/models/qwen2.5-coder-7b.yaml
+    previous_adapter: null
+    alpha: 0.1
+    uncertainty_penalty: 0.5
+    anchor_beta: 0.03
