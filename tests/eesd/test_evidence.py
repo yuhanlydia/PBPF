@@ -56,3 +56,22 @@ def test_prediction_metrics_are_finite():
     result = score_predictions([0, 1], p, ece_bins=5)
     assert result["accuracy"] == 1.0
     assert all(np.isfinite(v) for v in result.values())
+
+
+def test_distillation_rules_are_same_bank_weighting_only():
+    from pbpf.eesd.distillation import TRAIN_RULES, score_trajectory
+
+    result = score_trajectory(
+        [1, 0, 1, 2],
+        [0, 0, 1, 2],
+        [0.7, 0.1, 0.1, 0.1],
+        alpha=0.1,
+        utility=[1.0, -1.0, 0.0, -0.25],
+        uncertainty_penalty=0.5,
+    )
+    assert set(result["weights"]) == set(TRAIN_RULES)
+    assert result["weights"]["no_update"] == 0.0
+    assert result["weights"]["equal_weight"] == 1.0
+    assert 0.0 <= result["weights"]["eesd_full"] <= 1.0
+    assert result["weights"]["eed_no_anchor"] == result["weights"]["eesd_full"]
+    # no-anchor changes only the training objective, not evidence trust.
