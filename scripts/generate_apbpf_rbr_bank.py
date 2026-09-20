@@ -61,6 +61,7 @@ def main():
     p.add_argument('--max-input-tokens', type=int, default=4096)
     p.add_argument('--max-new-tokens', type=int, default=1024)
     p.add_argument('--candidates', type=int, default=8)
+    p.add_argument('--greedy', action='store_true')
     args = p.parse_args()
     if min(args.components, args.offset) < 0 or min(args.max_input_tokens, args.max_new_tokens, args.candidates) < 1:
         raise ValueError('invalid generation limits')
@@ -86,7 +87,9 @@ def main():
               'components': len(rows), 'task_ids': [r['task_id'] for r in rows],
               'source_component_ids': [r['source_component_id'] for r in rows],
               'max_input_tokens': args.max_input_tokens, 'max_new_tokens': args.max_new_tokens,
-              'temperature': .8, 'top_p': .95, 'prompt_policy': 'adaptively cap public fields while retaining all four example slots',
+              'temperature': None if args.greedy else .8, 'top_p': None if args.greedy else .95,
+              'decode_policy': 'greedy' if args.greedy else 'temperature0.8-top_p0.95',
+              'prompt_policy': 'adaptively cap public fields while retaining all four example slots',
               'population_selection': 'fixed pre-hidden source order; no outcome filtering',
               'claim_status': 'exploratory-predeclared-candidate-generation-only'}
     args.output.mkdir(parents=True, exist_ok=True)
@@ -125,9 +128,16 @@ def main():
         inputs = tokenizer(prompt, add_special_tokens=False, return_tensors='pt').to(model.device)
         if inputs.input_ids.shape[1] != metadata['input_tokens']:
             raise ValueError('token count changed after prompt construction')
+        generation_kwargs = dict(
+            do_sample=not args.greedy,
+            num_return_sequences=args.candidates,
+            max_new_tokens=args.max_new_tokens,
+            pad_token_id=tokenizer.pad_token_id,
+        )
+        if not args.greedy:
+            generation_kwargs.update(temperature=.8, top_p=.95)
         with torch.inference_mode():
-            generated = model.generate(**inputs, do_sample=True, temperature=.8, top_p=.95,
-                num_return_sequences=args.candidates, max_new_tokens=args.max_new_tokens, pad_token_id=tokenizer.pad_token_id)
+            generated = model.generate(**inputs, **generation_kwargs)
         candidates = []
         for j, tokens in enumerate(generated[:, inputs.input_ids.shape[1]:]):
             text = tokenizer.decode(tokens, skip_special_tokens=True); ids = tokens.cpu().tolist()
