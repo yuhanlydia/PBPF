@@ -1,0 +1,4 @@
+role: flagship_coder_replication
+model_id: Qwen/Qwen3-Coder-30B-A3B-Instruct
+revision: b2cff646eb4bb1d68355c01b18ae02e7cf42d120
+license: Apache-2.0
