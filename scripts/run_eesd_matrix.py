@@ -24,7 +24,7 @@ def main() -> None:
     p.add_argument("--config", type=Path, default=Path("configs/experiments/eesd_iclr2027.yaml"))
     p.add_argument("--manifest", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
-    p.add_argument("--stage", choices=["mechanism", "prepare-corrections", "generate-corrections", "score", "train", "fresh", "transfer", "recursive"], required=True)
+    p.add_argument("--stage", choices=["mechanism", "prepare-corrections", "generate-corrections", "score", "train", "fresh", "transfer", "recursive", "render"], required=True)
     p.add_argument("--rules", nargs="*", default=None)
     p.add_argument("--seed", type=int, default=None, help="one seed; omit to run all locked seeds")
     p.add_argument("--max-steps", type=int, default=200)
@@ -40,6 +40,20 @@ def main() -> None:
     seeds = [args.seed] if args.seed is not None else [int(x) for x in locked["seeds"]]
     args.output.mkdir(parents=True, exist_ok=True)
     python = sys.executable
+
+    if args.stage == "render":
+        run(
+            [
+                python,
+                "scripts/render_eesd_tables.py",
+                "--results", str(args.output.resolve()),
+                "--config", str(args.config.resolve()),
+                "--output", str((root / "paper/generated_eesd_results.tex").resolve()),
+                "--coverage", str((root / "paper/generated_eesd_results.coverage.json").resolve()),
+            ],
+            cwd=root,
+        )
+        return
 
     if args.stage == "mechanism":
         seen = set()
