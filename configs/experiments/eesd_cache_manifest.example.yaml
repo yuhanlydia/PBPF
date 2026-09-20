@@ -15,11 +15,6 @@ mechanism_cells:
   - {dataset: codearc, model: deepseek_6p7b, cache: /ABS/PATH/codearc-deepseek-6p7b.json, validation_split: development, assessment_split: primary, visible: 4}
   - {dataset: codearc, model: seed_coder_8b, cache: /ABS/PATH/codearc-seed-coder-8b.json, validation_split: development, assessment_split: primary, visible: 4}
   - {dataset: codearc, model: qwen3_coder_30b, cache: /ABS/PATH/codearc-qwen3-coder-30b.json, validation_split: development, assessment_split: primary, visible: 4}
-  - {dataset: humanevalplus, model: qwen25_7b, cache: /ABS/PATH/humanevalplus-qwen25-7b.json, validation_split: development, assessment_split: primary, visible: 4}
-  - {dataset: humanevalplus, model: deepseek_6p7b, cache: /ABS/PATH/humanevalplus-deepseek-6p7b.json, validation_split: development, assessment_split: primary, visible: 4}
-  - {dataset: mbppplus, model: qwen25_7b, cache: /ABS/PATH/mbppplus-qwen25-7b.json, validation_split: development, assessment_split: primary, visible: 4}
-  - {dataset: mbppplus, model: deepseek_6p7b, cache: /ABS/PATH/mbppplus-deepseek-6p7b.json, validation_split: development, assessment_split: primary, visible: 4}
-  - {dataset: livecodebench_v6, model: qwen25_7b, cache: /ABS/PATH/lcb-v6-qwen25-7b.json, validation_split: development, assessment_split: primary, visible: 4}
 
 correction_cells:
   - dataset: runbugrun
@@ -28,6 +23,18 @@ correction_cells:
     round: 1
     cache: /ABS/PATH/rbr-qwen25-7b-train-development.json
     model_config: configs/models/qwen2.5-coder-7b.yaml
+    previous_adapter: null
+    visible: 4
+    relevance_strength: 16.0
+    alpha: 0.1
+    uncertainty_penalty: 0.5
+    anchor_beta: 0.03
+  - dataset: runbugrun
+    domain: rbr
+    model: deepseek_6p7b
+    round: 1
+    cache: /ABS/PATH/rbr-deepseek-6p7b-train-development.json
+    model_config: configs/models/deepseek-coder-6.7b.yaml
     previous_adapter: null
     visible: 4
     relevance_strength: 16.0
@@ -46,3 +53,9 @@ correction_cells:
     alpha: 0.1
     uncertainty_penalty: 0.5
     anchor_beta: 0.03
+
+transfer_cells:
+  - {dataset: humaneval, model: qwen25_7b, model_config: configs/models/qwen2.5-coder-7b.yaml, source_dataset: runbugrun, source_round: 1}
+  - {dataset: mbpp, model: qwen25_7b, model_config: configs/models/qwen2.5-coder-7b.yaml, source_dataset: runbugrun, source_round: 1}
+  - {dataset: humaneval, model: deepseek_6p7b, model_config: configs/models/deepseek-coder-6.7b.yaml, source_dataset: runbugrun, source_round: 1}
+  - {dataset: mbpp, model: deepseek_6p7b, model_config: configs/models/deepseek-coder-6.7b.yaml, source_dataset: runbugrun, source_round: 1}
