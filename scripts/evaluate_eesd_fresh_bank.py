@@ -58,7 +58,7 @@ def main() -> None:
     manifest = json.loads((root / "manifest.json").read_text())
     expected_materialization = (
         "apbpf-rbr-generated-materialization-v1" if args.domain == "rbr"
-        else "apbpf-codearc-materialization-v1"
+        else "apbpf-codearc-replay-materialization-v1"
     )
     if manifest.get("schema") != expected_materialization:
         raise ValueError("wrong evaluator materialization")
@@ -69,8 +69,14 @@ def main() -> None:
 
     with (root / "tasks.jsonl").open() as stream:
         tasks = {row["task_id"]: row for row in map(json.loads, stream) if row["split"] == "primary"}
-    if {row["task_id"] for row in bank} != set(tasks):
-        raise ValueError("fresh bank must cover the complete primary task population")
+    expected_sources = {row["source_component_id"] for row in tasks.values()}
+    bank_sources = [row["source_component_id"] for row in bank]
+    if (
+        len(bank_sources) != len(set(bank_sources))
+        or set(bank_sources) != expected_sources
+        or any(row["task_id"] not in tasks for row in bank)
+    ):
+        raise ValueError("fresh bank must contain exactly one representative for every primary source component")
 
     jobs = []
     for row in bank:
