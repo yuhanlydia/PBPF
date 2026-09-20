@@ -176,7 +176,7 @@ def transfer_table(root: Path, seeds, coverage: dict):
                     scores.append(report["evalplus_summary"]["plus_pass_at_1"])
             coverage["transfer"][f"{dataset}/{model}/{rule}"] = len(scores)
             values.append(latex_mean_std(scores, percent=True))
-        lines.append(f"{dataset_label} & {model_label} & " + " & ".join(values) + r" \")
+        lines.append(f"{dataset_label} & {model_label} & " + " & ".join(values) + " \\\\")
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table*}", ""]
     return lines
 
@@ -215,7 +215,7 @@ def fresh_table(root: Path, seeds, coverage: dict):
                     scores.append(report["fresh_all_tests_pass_at_1"])
             coverage["fresh"][f"{dataset}/{model}/{rule}"] = len(scores)
             vals.append(latex_mean_std(scores, percent=True))
-        lines.append(f"{dlabel} & {mlabel} & " + " & ".join(vals) + r" \")
+        lines.append(f"{dlabel} & {mlabel} & " + " & ".join(vals) + " \\\\")
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table*}", ""]
     return lines
 
