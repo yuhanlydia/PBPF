@@ -1,107 +1,76 @@
 schema: eesd-iclr2027-v1
-claim_status: prospective-locked-experiment-matrix
-
+claim: evidence_aware_self_distillation
 seeds: [1701, 1702, 1703]
-bootstrap_seed: 314159
-bootstrap_replicates: 10000
 
 models:
-  qwen25_1p5b:
-    config: configs/models/qwen2.5-coder-1.5b.yaml
-    required_domains: [runbugrun, codearc]
-  qwen25_7b:
-    config: configs/models/qwen2.5-coder-7b.yaml
-    required_domains: [runbugrun, codearc, humanevalplus, mbppplus, livecodebench_v6]
-  qwen3_8b:
-    config: configs/models/qwen3-8b.yaml
-    required_domains: [runbugrun, codearc]
-  deepseek_6p7b:
-    config: configs/models/deepseek-coder-6.7b.yaml
-    required_domains: [runbugrun, codearc, humanevalplus, mbppplus]
-  seed_coder_8b:
-    config: configs/models/seed-coder-8b.yaml
-    required_domains: [runbugrun, codearc]
-  qwen3_coder_30b:
-    config: configs/models/qwen3-coder-30b-a3b.yaml
-    required_domains: [runbugrun, codearc]
+  primary: configs/models/qwen2.5-coder-7b.yaml
+  cross_family: configs/models/deepseek-coder-6.7b.yaml
+  architecture_replication: configs/models/qwen3-8b.yaml
+  scale_ablation: configs/models/qwen2.5-coder-1.5b.yaml
 
-domains:
-  runbugrun:
-    registry_id: runbugrun
-    role: primary-repair
-    visible: 4
-    mechanism: true
-    distillation: full
-  codearc:
-    registry_id: codearc
-    role: primary-cross-domain
-    visible: 4
-    mechanism: true
-    distillation: full
-  humanevalplus:
-    registry_id: evalplus
-    subset: humanevalplus
-    role: downstream-transfer
-    mechanism: false
-    distillation: transfer-evaluation
-  mbppplus:
-    registry_id: evalplus
-    subset: mbppplus
-    role: downstream-transfer
-    mechanism: false
-    distillation: transfer-evaluation
-  livecodebench_v6:
-    registry_id: livecodebench_v6
-    role: temporal-transfer
-    mechanism: false
-    distillation: transfer-evaluation
-  swebench_lite:
-    registry_id: swebench_lite
-    role: repository-external-validity
-    mechanism: false
-    distillation: optional
+datasets:
+  mechanism:
+    - configs/benchmarks/runbugrun.yaml
+    - configs/benchmarks/codearc.yaml
+  downstream:
+    - configs/benchmarks/evalplus.yaml
+    - configs/benchmarks/livecodebench_v6.yaml
+  optional_repository:
+    - configs/benchmarks/swebench_lite.yaml
 
 evidence:
-  classes: 5
-  alpha_grid: [0.01, 0.1, 0.25, 0.5, 1.0, 2.0, 5.0, 10.0]
-  strength_grid: [0.0, 1.0, 4.0, 16.0]
-  global_mass_grid: [0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0, 8.0]
-  history_sizes: [1, 2, 4, 8]
-  permutation_seeds: [4101, 4102, 4103, 4104, 4105, 4106, 4107, 4108, 4109, 4110]
-  ece_bins: 10
-  concentration_bins_for_n4: [1.0, 1.5, 2.0, 3.0, 4.000001]
+  alphas: [0.01, 0.10, 0.25, 0.50, 1.0, 2.0, 5.0, 10.0]
+  strengths: [0.0, 1.0, 4.0, 16.0]
+  visible_counts: [1, 2, 4, 8]
+  bootstrap_draws: 10000
+  primary_metric: nll
+  secondary_metrics: [brier, ece, accuracy]
+
+mandatory_ablations:
+  - ordinary_vs_fixed_relevance
+  - fixed_vs_effective_same_alpha_0p10
+  - fixed_vs_effective_same_alpha_0p01
+  - full_alpha_strength_factorial
+  - tuned_global_mass_vs_effective
+  - constant_mean_mass_vs_effective
+  - permuted_mass_vs_aligned_mass
+  - visible_history_size
+  - concentration_bins
+  - five_class_vs_binary
 
 distillation:
-  rounds: 3
-  transition_categories: [FIX, REGRESSION, PRESERVED, UNRESOLVED]
-  transition_utility: [1.0, -1.0, 0.0, 0.0]
-  uncertainty_penalty_grid: [0.0, 0.25, 0.5, 1.0]
-  positive_support_only: true
-  anchor:
-    type: previous-policy
-    beta_grid: [0.01, 0.03, 0.1]
-  train_rules:
+  rounds: [0, 1, 2, 3]
+  training_arms:
     - no_update
-    - equal_weight
-    - final_correctness
-    - scalar_confidence
+    - equal_weight_correction_sft
+    - final_correctness_filter
+    - scalar_confidence_weight
     - fixed_mass_dirichlet
-    - eed_mean_no_uncertainty
-    - eed_no_anchor
+    - eed_mean_utility
+    - eed_no_kl
     - eesd_full
+  primary_metrics:
+    - pass_at_1
+    - fix_rate
+    - regression_rate
+    - net_gain
+    - retained_correct_rate
+    - policy_kl
 
 statistics:
-  independent_unit: source_component
+  unit: source_problem
   paired_bootstrap: true
   holm_secondary: true
   report_all_predeclared_cells: true
-  main_metrics: [nll, brier, ece, accuracy]
-  correction_metrics: [pass_at_1, fix_rate, regression_rate, net_gain, retained_correct]
+  forbid_posthoc_cell_dropping: true
 
-gates:
-  mechanism:
-    requirement: "same-alpha or global-mass controlled EED direction positive on >=2 domains"
-  downstream:
-    requirement: ">=1 matched-budget decision or distillation endpoint positive"
-  recursive:
-    requirement: "gain retained after a later self-improvement round; regressions reported"
+paper_tables:
+  - table_1_related_work_gap
+  - table_2_mechanism_cross_model_cross_dataset
+  - table_3_causal_mass_ablations
+  - table_4_one_round_eesd
+  - table_5_recursive_stability
+  - appendix_legacy_apbpf_diagnostics
+  - appendix_full_factorials
+  - appendix_per_seed
+  - appendix_costs
