@@ -24,7 +24,7 @@ def main() -> None:
     p.add_argument("--config", type=Path, default=Path("configs/experiments/eesd_iclr2027.yaml"))
     p.add_argument("--manifest", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
-    p.add_argument("--stage", choices=["mechanism", "score", "train"], required=True)
+    p.add_argument("--stage", choices=["mechanism", "prepare-corrections", "generate-corrections", "score", "train"], required=True)
     p.add_argument("--rules", nargs="*", default=None)
     p.add_argument("--seed", type=int, default=1701)
     p.add_argument("--max-steps", type=int, default=200)
@@ -73,12 +73,60 @@ def main() -> None:
     if not cells:
         raise ValueError("manifest has no correction_cells")
 
+    if args.stage == "prepare-corrections":
+        for cell in cells:
+            cache = Path(cell["cache"]).resolve()
+            if not cache.exists():
+                raise FileNotFoundError(cache)
+            name = f"{cell['dataset']}/{cell['model']}/round{cell['round']}"
+            directory = args.output / "public-corrections" / name
+            if (directory / "audit.json").exists():
+                print(json.dumps({"status": "skip_complete", "cell": name}), flush=True)
+                continue
+            directory.parent.mkdir(parents=True, exist_ok=True)
+            run(
+                [
+                    python,
+                    "scripts/prepare_eesd_public_corrections.py",
+                    "--cache", str(cache),
+                    "--output", str(directory.resolve()),
+                    "--visible", str(cell.get("visible", 4)),
+                ],
+                cwd=root,
+            )
+        return
+
+    if args.stage == "generate-corrections":
+        for cell in cells:
+            name = f"{cell['dataset']}/{cell['model']}/round{cell['round']}"
+            public_bank = args.output / "public-corrections" / name / "public-corrections.jsonl"
+            if not public_bank.exists():
+                raise FileNotFoundError(f"prepare-corrections stage missing: {public_bank}")
+            directory = args.output / "generated-corrections" / name
+            if (directory / "report.json").exists():
+                print(json.dumps({"status": "skip_complete", "cell": name}), flush=True)
+                continue
+            directory.parent.mkdir(parents=True, exist_ok=True)
+            command = [
+                python,
+                "scripts/generate_eesd_corrections.py",
+                "--public-bank", str(public_bank.resolve()),
+                "--model-config", str((root / cell["model_config"]).resolve()),
+                "--domain", cell["domain"],
+                "--output", str(directory.resolve()),
+                "--relevance-strength", str(cell.get("relevance_strength", 16.0)),
+            ]
+            if cell.get("previous_adapter"):
+                command += ["--adapter", str(Path(cell["previous_adapter"]).resolve())]
+            run(command, cwd=root, env=dict(os.environ))
+        return
+
     if args.stage == "score":
         for cell in cells:
-            source = Path(cell["corrections"]).resolve()
-            if not source.exists():
-                raise FileNotFoundError(source)
             name = f"{cell['dataset']}/{cell['model']}/round{cell['round']}"
+            source = args.output / "generated-corrections" / name / "corrections.jsonl"
+            if not source.exists():
+                raise FileNotFoundError(f"generate-corrections stage missing: {source}")
             directory = args.output / "corrections" / name
             if (directory / "summary.json").exists():
                 print(json.dumps({"status": "skip_complete", "cell": name}), flush=True)
