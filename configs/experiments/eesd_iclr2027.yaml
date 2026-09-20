@@ -1,0 +1,104 @@
+schema: eesd-iclr2027-v1
+claim_status: prospective-locked-experiment-matrix
+
+seeds: [1701, 1702, 1703]
+bootstrap_seed: 314159
+bootstrap_replicates: 10000
+
+models:
+  qwen25_1p5b:
+    config: configs/models/qwen2.5-coder-1.5b.yaml
+    required_domains: [runbugrun, codearc]
+  qwen25_7b:
+    config: configs/models/qwen2.5-coder-7b.yaml
+    required_domains: [runbugrun, codearc, humanevalplus, mbppplus, livecodebench_v6]
+  qwen3_8b:
+    config: configs/models/qwen3-8b.yaml
+    required_domains: [runbugrun, codearc]
+  deepseek_6p7b:
+    config: configs/models/deepseek-coder-6.7b.yaml
+    required_domains: [runbugrun, codearc, humanevalplus, mbppplus]
+
+domains:
+  runbugrun:
+    registry_id: runbugrun
+    role: primary-repair
+    visible: 4
+    mechanism: true
+    distillation: full
+  codearc:
+    registry_id: codearc
+    role: primary-cross-domain
+    visible: 4
+    mechanism: true
+    distillation: full
+  humanevalplus:
+    registry_id: evalplus
+    subset: humanevalplus
+    role: functional-transfer
+    visible: 4
+    mechanism: true
+    distillation: one-round
+  mbppplus:
+    registry_id: evalplus
+    subset: mbppplus
+    role: functional-transfer
+    visible: 4
+    mechanism: true
+    distillation: one-round
+  livecodebench_v6:
+    registry_id: livecodebench_v6
+    role: temporal-transfer
+    visible: 4
+    mechanism: true
+    distillation: false
+  swebench_lite:
+    registry_id: swebench_lite
+    role: repository-external-validity
+    mechanism: false
+    distillation: optional
+
+evidence:
+  classes: 5
+  alpha_grid: [0.01, 0.1, 0.25, 0.5, 1.0, 2.0, 5.0, 10.0]
+  strength_grid: [0.0, 1.0, 4.0, 16.0]
+  global_mass_grid: [0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0, 8.0]
+  history_sizes: [1, 2, 4, 8]
+  permutation_seeds: [4101, 4102, 4103, 4104, 4105, 4106, 4107, 4108, 4109, 4110]
+  ece_bins: 10
+  concentration_bins_for_n4: [1.0, 1.5, 2.0, 3.0, 4.000001]
+
+distillation:
+  rounds: 3
+  transition_categories: [FIX, REGRESSION, PRESERVED, UNRESOLVED]
+  transition_utility: [1.0, -1.0, 0.0, -0.25]
+  uncertainty_penalty_grid: [0.0, 0.25, 0.5, 1.0]
+  positive_support_only: true
+  anchor:
+    type: previous-policy
+    beta_grid: [0.01, 0.03, 0.1]
+  train_rules:
+    - no_update
+    - equal_weight
+    - final_correctness
+    - scalar_confidence
+    - fixed_mass_dirichlet
+    - eed_mean_no_uncertainty
+    - eed_no_anchor
+    - eesd_full
+
+statistics:
+  independent_unit: source_component
+  paired_bootstrap: true
+  holm_secondary: true
+  report_all_predeclared_cells: true
+  main_metrics: [nll, brier, ece, accuracy]
+  correction_metrics: [pass_at_1, fix_rate, regression_rate, net_gain, retained_correct]
+
+gates:
+  mechanism:
+    requirement: "same-alpha or global-mass controlled EED direction positive on >=2 domains"
+  downstream:
+    requirement: ">=1 matched-budget decision or distillation endpoint positive"
+  recursive:
+    requirement: "gain retained after a later self-improvement round; regressions reported"
