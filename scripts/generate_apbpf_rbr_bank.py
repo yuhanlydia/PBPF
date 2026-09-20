@@ -60,8 +60,9 @@ def main():
     p.add_argument('--seed', type=int, default=1701)
     p.add_argument('--max-input-tokens', type=int, default=4096)
     p.add_argument('--max-new-tokens', type=int, default=1024)
+    p.add_argument('--candidates', type=int, default=8)
     args = p.parse_args()
-    if min(args.components, args.offset) < 0 or min(args.max_input_tokens, args.max_new_tokens) < 1:
+    if min(args.components, args.offset) < 0 or min(args.max_input_tokens, args.max_new_tokens, args.candidates) < 1:
         raise ValueError('invalid generation limits')
     manifest = json.loads((args.public_root/'manifest.json').read_text())
     if manifest['schema'] != 'apbpf-rbr-generated-materialization-v1' or sha(args.public_root/'tasks.jsonl') != manifest['public_tasks_sha256']:
@@ -81,7 +82,7 @@ def main():
               'prompt_source_sha256': sha(root/'src/pbpf/apbpf/rbr_prompt.py'),
               'inventory_source_sha256': sha(root/'src/pbpf/apbpf/codearc_bank.py'),
               'public_tasks_sha256': manifest['public_tasks_sha256'], 'public_manifest_sha256': sha(args.public_root/'manifest.json'),
-              'split': args.split, 'seed': args.seed, 'offset': args.offset, 'candidates': 8,
+              'split': args.split, 'seed': args.seed, 'offset': args.offset, 'candidates': args.candidates,
               'components': len(rows), 'task_ids': [r['task_id'] for r in rows],
               'source_component_ids': [r['source_component_id'] for r in rows],
               'max_input_tokens': args.max_input_tokens, 'max_new_tokens': args.max_new_tokens,
@@ -116,7 +117,7 @@ def main():
             if not checksum.exists() or checksum.read_text().strip() != sha(path):
                 raise ValueError('resumed candidate record checksum missing or mismatched')
             continue
-        template_kwargs = {'enable_thinking': False} if args.family == 'qwen3_8b' else None
+        template_kwargs = {'enable_thinking': False} if args.family in {'qwen3_8b', 'qwen3_coder_30b'} else None
         prompt, metadata = prompt_for(tokenizer, row, max_input_tokens=args.max_input_tokens,
                                       chat_template_kwargs=template_kwargs)
         task_seed = int.from_bytes(hashlib.sha256(f'{args.seed}:{row["task_id"]}'.encode()).digest()[:4], 'big')
@@ -126,7 +127,7 @@ def main():
             raise ValueError('token count changed after prompt construction')
         with torch.inference_mode():
             generated = model.generate(**inputs, do_sample=True, temperature=.8, top_p=.95,
-                num_return_sequences=8, max_new_tokens=args.max_new_tokens, pad_token_id=tokenizer.pad_token_id)
+                num_return_sequences=args.candidates, max_new_tokens=args.max_new_tokens, pad_token_id=tokenizer.pad_token_id)
         candidates = []
         for j, tokens in enumerate(generated[:, inputs.input_ids.shape[1]:]):
             text = tokenizer.decode(tokens, skip_special_tokens=True); ids = tokens.cpu().tolist()
