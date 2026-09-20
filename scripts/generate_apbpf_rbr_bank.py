@@ -10,8 +10,12 @@ import time
 from pbpf.apbpf.rbr_prompt import prompt_for, extract_program
 from pbpf.apbpf.codearc_bank import load_bank
 
-MODELS = {'qwen': ('Qwen/Qwen2.5-Coder-7B-Instruct', 'c03e6d358207e414f1eca0bb1891e29f1db0e242'),
-          'deepseek': ('deepseek-ai/deepseek-coder-6.7b-instruct', 'e5d64addd26a6a1db0f9b863abf6ee3141936807')}
+MODELS = {
+    'qwen25_1p5b': ('Qwen/Qwen2.5-Coder-1.5B-Instruct', '2e1fd397ee46e1388853d2af2c993145b0f1098a'),
+    'qwen25_7b': ('Qwen/Qwen2.5-Coder-7B-Instruct', 'c03e6d358207e414f1eca0bb1891e29f1db0e242'),
+    'qwen3_8b': ('Qwen/Qwen3-8B', 'b968826d9c46dd6066d109eabc6255188de91218'),
+    'deepseek_6p7b': ('deepseek-ai/deepseek-coder-6.7b-instruct', 'e5d64addd26a6a1db0f9b863abf6ee3141936807'),
+}
 
 
 def sha(path):
@@ -27,7 +31,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--public-root', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
-    p.add_argument('--family', choices=MODELS, default='qwen')
+    p.add_argument('--family', choices=MODELS, default='qwen25_7b')
     p.add_argument('--split', choices=['train', 'development', 'primary'], required=True)
     p.add_argument('--components', type=int, default=0)
     p.add_argument('--offset', type=int, default=0)
@@ -86,6 +90,8 @@ def main():
                 raise ValueError('resumed candidate record checksum missing or mismatched')
             continue
         prompt, metadata = prompt_for(tokenizer, row, max_input_tokens=args.max_input_tokens)
+        if args.family == 'qwen3_8b' and '<think>' in prompt:
+            raise ValueError('Qwen3 generation prompt unexpectedly enables thinking; use the non-thinking chat template')
         task_seed = int.from_bytes(hashlib.sha256(f'{args.seed}:{row["task_id"]}'.encode()).digest()[:4], 'big')
         torch.manual_seed(task_seed)
         inputs = tokenizer(prompt, add_special_tokens=False, return_tensors='pt').to(model.device)
