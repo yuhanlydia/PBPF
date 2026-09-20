@@ -1,0 +1,109 @@
+% Centralized measured tables for the EESD paper.
+% Every number below is inherited from a versioned repository artifact.
+% Do not replace measured negative diagnostics with favorable subsets.
+
+\begin{table}[t]
+\centering
+\caption{Exploratory Effective-Evidence mechanism screen on the legacy RunBugRun assessment.
+The two relevance-weighted estimators make identical argmax predictions on all 594 outcomes.
+Lower NLL is better. The arms select different priors, so this table motivates but does not
+isolate the adaptive-mass effect.}
+\label{tab:eed-core}
+\small
+\begin{tabular}{lrrr}
+\toprule
+Estimator & Selected $\alpha$ & Strength & NLL $\downarrow$ \\
+\midrule
+Ordinary Dirichlet & 0.10 & 0 & 0.458301 \\
+Fixed-mass relevance & 0.10 & 16 & 0.440499 \\
+Effective evidence & 0.01 & 16 & \textbf{0.426433} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Legacy RunBugRun prediction diagnostic over three seeds. This is retained as
+motivation that predictive information need not be an actionable repair signal.}
+\label{tab:legacy-prediction}
+\small
+\begin{tabular}{lrrr}
+\toprule
+Arm & NLL $\downarrow$ & Brier $\downarrow$ & Accuracy $\uparrow$ \\
+\midrule
+No visible evidence & $1.094\pm0.024$ & $0.638\pm0.008$ & $49.30\pm2.32$ \\
+Visible history rate & $0.819\pm0.000$ & $0.393\pm0.000$ & $82.07\pm0.00$ \\
+PBPF & $0.542\pm0.043$ & $0.302\pm0.017$ & $78.76\pm1.16$ \\
+Shuffled pairing & $0.518\pm0.013$ & $0.293\pm0.010$ & $80.10\pm1.58$ \\
+Wrong-candidate evidence & $0.739\pm0.052$ & $0.400\pm0.023$ & $72.57\pm0.92$ \\
+Random matched-radius latent & $1.132\pm0.014$ & $0.669\pm0.008$ & $41.14\pm3.49$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Legacy eight-task frozen-actor repair diagnostic. Better prediction did not
+translate into a repair advantage, motivating an explicit trust/update interface.}
+\label{tab:legacy-repair}
+\small
+\begin{tabular}{lrr}
+\toprule
+Arm & Solved & Future-test pass fraction \\
+\midrule
+No latent & 1/8 & 35.42\% \\
+Random matched-norm latent & 1/8 & 35.42\% \\
+Outcome-histogram latent & 1/8 & 35.42\% \\
+PBPF posterior mean & 0/8 & 22.92\% \\
+PBPF posterior MAP & 0/8 & 22.92\% \\
+PBPF sampled particle & 0/8 & 22.92\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Completed exploratory full-population selection diagnostics inherited from
+the A-PBPF branch. Negative values mean the learned particle selector underperformed
+the strongest matched deterministic comparator. These rows are preserved rather
+than hidden because they motivate separating predictive state from learning trust.}
+\label{tab:legacy-selection}
+\small
+\begin{tabular}{llrr}
+\toprule
+Domain & Generator & Sources & Selection advantage \\
+\midrule
+CodeARC-Replay & Qwen2.5-Coder-7B & 500 & $-0.0120$ \\
+CodeARC-Replay & DeepSeek-Coder-6.7B & 500 & $-0.0180$ \\
+RunBugRun & Qwen2.5-Coder-7B & 500 & $+0.00467$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Planned main-table shells. Fill only from locked EESD runs.
+\begin{table*}[t]
+\centering
+\caption{Locked cross-domain/model mechanism matrix. Cells remain blank until produced
+by the EESD runner under the fixed protocol in configs/experiments/eesd_iclr2027.yaml.}
+\label{tab:eesd-mechanism-matrix}
+\small
+\begin{tabular}{llrrrr}
+\toprule
+Dataset & Model & Fixed NLL & EED NLL & Same-$\alpha$ gain & Global-mass gain \\
+\midrule
+RunBugRun & Qwen2.5-Coder-1.5B & -- & -- & -- & -- \\
+RunBugRun & Qwen2.5-Coder-7B & -- & -- & -- & -- \\
+RunBugRun & Qwen3-8B & -- & -- & -- & -- \\
+RunBugRun & DeepSeek-Coder-6.7B & -- & -- & -- & -- \\
+CodeARC-Replay & Qwen2.5-Coder-1.5B & -- & -- & -- & -- \\
+CodeARC-Replay & Qwen2.5-Coder-7B & -- & -- & -- & -- \\
+CodeARC-Replay & Qwen3-8B & -- & -- & -- & -- \\
+CodeARC-Replay & DeepSeek-Coder-6.7B & -- & -- & -- & -- \\
+HumanEval+ & Qwen2.5-Coder-7B & -- & -- & -- & -- \\
+HumanEval+ & DeepSeek-Coder-6.7B & -- & -- & -- & -- \\
+MBPP+ & Qwen2.5-Coder-7B & -- & -- & -- & -- \\
+MBPP+ & DeepSeek-Coder-6.7B & -- & -- & -- & -- \\
+LiveCodeBench-v6 & Qwen2.5-Coder-7B & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table*}
