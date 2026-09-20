@@ -26,7 +26,7 @@ def main() -> None:
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--stage", choices=["mechanism", "prepare-corrections", "generate-corrections", "score", "train", "transfer"], required=True)
     p.add_argument("--rules", nargs="*", default=None)
-    p.add_argument("--seed", type=int, default=1701)
+    p.add_argument("--seed", type=int, default=None, help="one seed; omit to run all locked seeds")
     p.add_argument("--max-steps", type=int, default=200)
     args = p.parse_args()
 
@@ -34,6 +34,10 @@ def main() -> None:
     manifest = yaml.safe_load(args.manifest.read_text())
     if manifest.get("schema") != "eesd-cache-manifest-v1":
         raise ValueError("unexpected EESD cache manifest schema")
+    locked = yaml.safe_load(args.config.read_text())
+    if locked.get("schema") != "eesd-iclr2027-v1":
+        raise ValueError("unexpected EESD experiment config")
+    seeds = [args.seed] if args.seed is not None else [int(x) for x in locked["seeds"]]
     args.output.mkdir(parents=True, exist_ok=True)
     python = sys.executable
 
@@ -156,29 +160,30 @@ def main() -> None:
             raise ValueError(f"invalid transfer rules: {unknown}")
         for cell in manifest.get("transfer_cells", []):
             name = f"{cell['dataset']}/{cell['model']}"
-            for rule in rules:
-                directory = args.output / "transfer" / name / rule / f"seed{args.seed}"
-                if (directory / "report.json").exists():
-                    print(json.dumps({"status": "skip_complete", "cell": name, "rule": rule}), flush=True)
-                    continue
-                directory.parent.mkdir(parents=True, exist_ok=True)
-                command = [
-                    python,
-                    "scripts/run_eesd_evalplus_transfer.py",
-                    "--dataset", cell["dataset"],
-                    "--model-config", str((root / cell["model_config"]).resolve()),
-                    "--output", str(directory.resolve()),
-                    "--evaluate",
-                ]
-                if rule != "no_update":
-                    adapter = (
-                        args.output / "training" / cell["source_dataset"] / cell["model"]
-                        / f"round{cell['source_round']}" / rule / f"seed{args.seed}" / "adapter"
-                    )
-                    if not adapter.is_dir():
-                        raise FileNotFoundError(f"training adapter missing: {adapter}")
-                    command += ["--adapter", str(adapter.resolve())]
-                run(command, cwd=root, env=dict(os.environ))
+            for seed in seeds:
+                for rule in rules:
+                    directory = args.output / "transfer" / name / rule / f"seed{seed}"
+                    if (directory / "report.json").exists():
+                        print(json.dumps({"status": "skip_complete", "cell": name, "rule": rule, "seed": seed}), flush=True)
+                        continue
+                    directory.parent.mkdir(parents=True, exist_ok=True)
+                    command = [
+                        python,
+                        "scripts/run_eesd_evalplus_transfer.py",
+                        "--dataset", cell["dataset"],
+                        "--model-config", str((root / cell["model_config"]).resolve()),
+                        "--output", str(directory.resolve()),
+                        "--evaluate",
+                    ]
+                    if rule != "no_update":
+                        adapter = (
+                            args.output / "training" / cell["source_dataset"] / cell["model"]
+                            / f"round{cell['source_round']}" / rule / f"seed{seed}" / "adapter"
+                        )
+                        if not adapter.is_dir():
+                            raise FileNotFoundError(f"training adapter missing: {adapter}")
+                        command += ["--adapter", str(adapter.resolve())]
+                    run(command, cwd=root, env=dict(os.environ))
         return
 
     rules = args.rules or [rule for rule in TRAIN_RULES if rule != "no_update"]
@@ -191,26 +196,27 @@ def main() -> None:
         if not scored.exists():
             raise FileNotFoundError(f"score stage missing: {scored}")
         previous = cell.get("previous_adapter")
-        for rule in rules:
-            directory = args.output / "training" / name / rule / f"seed{args.seed}"
-            if (directory / "training-report.json").exists():
-                print(json.dumps({"status": "skip_complete", "cell": name, "rule": rule}), flush=True)
-                continue
-            directory.parent.mkdir(parents=True, exist_ok=True)
-            command = [
-                python,
-                "scripts/run_eesd_weighted_sft.py",
-                "--input", str(scored.resolve()),
-                "--model-config", str((root / cell["model_config"]).resolve()),
-                "--rule", rule,
-                "--output", str(directory.resolve()),
-                "--seed", str(args.seed),
-                "--max-steps", str(args.max_steps),
-                "--anchor-beta", str(cell.get("anchor_beta", 0.03)),
-            ]
-            if previous:
-                command += ["--previous-adapter", str(Path(previous).resolve())]
-            run(command, cwd=root, env=dict(os.environ))
+        for seed in seeds:
+            for rule in rules:
+                directory = args.output / "training" / name / rule / f"seed{seed}"
+                if (directory / "training-report.json").exists():
+                    print(json.dumps({"status": "skip_complete", "cell": name, "rule": rule, "seed": seed}), flush=True)
+                    continue
+                directory.parent.mkdir(parents=True, exist_ok=True)
+                command = [
+                    python,
+                    "scripts/run_eesd_weighted_sft.py",
+                    "--input", str(scored.resolve()),
+                    "--model-config", str((root / cell["model_config"]).resolve()),
+                    "--rule", rule,
+                    "--output", str(directory.resolve()),
+                    "--seed", str(seed),
+                    "--max-steps", str(args.max_steps),
+                    "--anchor-beta", str(cell.get("anchor_beta", 0.03)),
+                ]
+                if previous:
+                    command += ["--previous-adapter", str(Path(previous).resolve())]
+                run(command, cwd=root, env=dict(os.environ))
 
 
 if __name__ == "__main__":
