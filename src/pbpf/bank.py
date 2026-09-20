@@ -275,7 +275,8 @@ class TrajectoryBank:
                 raise ValueError(f"checksum mismatch for {filename}")
 
         def rows(filename: str) -> list[dict[str, Any]]:
-            return [json.loads(line) for line in (source / filename).read_text(encoding="utf-8").splitlines()]
+            with (source / filename).open(encoding="utf-8") as stream:
+                return [json.loads(line) for line in stream]
 
         public_rows = rows("tasks.jsonl")
         tasks = tuple(
@@ -328,15 +329,8 @@ class TrajectoryBank:
         for filename, expected in manifest.get("checksums", {}).items():
             if _file_hash(evaluator_root / filename) != expected:
                 raise ValueError(f"checksum mismatch for evaluator/{filename}")
-        sidecars = {
-            row["task_id"]: row
-            for row in (
-                json.loads(line)
-                for line in (evaluator_root / "task_sidecars.jsonl")
-                .read_text(encoding="utf-8")
-                .splitlines()
-            )
-        }
+        with (evaluator_root / "task_sidecars.jsonl").open(encoding="utf-8") as stream:
+            sidecars = {row["task_id"]: row for row in map(json.loads, stream)}
         tasks = tuple(
             TaskRecord(
                 **{
@@ -354,19 +348,11 @@ class TrajectoryBank:
             trainer_bank.observations,
             trainer_bank.mutant_registry,
         )
-        candidate_outcomes = tuple(
-            (
-                row["candidate_hash"],
-                row["test_id"],
-                row["outcome"],
+        with (evaluator_root / "candidate_outcomes.jsonl").open(encoding="utf-8") as stream:
+            candidate_outcomes = tuple(
+                (row["candidate_hash"], row["test_id"], row["outcome"])
+                for row in map(json.loads, stream)
             )
-            for row in (
-                json.loads(line)
-                for line in (evaluator_root / "candidate_outcomes.jsonl")
-                .read_text(encoding="utf-8")
-                .splitlines()
-            )
-        )
         expected_keys = {
             (candidate.content_hash, test_id)
             for candidate in bank.candidates

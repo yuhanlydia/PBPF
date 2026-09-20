@@ -215,6 +215,21 @@ def test_public_schema_cannot_accept_evaluator_only_fields():
         )
 
 
+@pytest.mark.parametrize("separator", ["\u0085", "\u2028", "\u2029"])
+def test_evaluator_roundtrip_preserves_unicode_in_expected_output(tmp_path, separator):
+    expected = "left" + separator + "right"
+    prepared = _prepared_lcb(tmp_path, [
+        {"id": f"case-{index}", "source": "input", "expected_output": expected}
+        for index in range(5)
+    ])
+    seal_path = tmp_path / "seal.json"
+    seal_candidates(seal_path, [hashlib.sha256(b"candidate").hexdigest()],
+                    experiment_fingerprint="experiment-lcb-order")
+    loaded = load_evaluator_tasks(prepared.evaluator_manifest_path, seal_path,
+                                  experiment_fingerprint="experiment-lcb-order")
+    assert loaded.tasks[0].tests[0].expected_output == expected
+
+
 def test_evaluator_loading_requires_matching_immutable_candidate_seal(tmp_path):
     prepared = _prepared(tmp_path)
     seal_path = tmp_path / "seals" / "candidates.json"

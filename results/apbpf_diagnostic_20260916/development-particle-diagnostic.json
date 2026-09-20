@@ -1,0 +1,265 @@
+{
+  "candidates": 99,
+  "checkpoints": {
+    "1701": "e9568f9f4de97a49bfb9d41a3914b2d2b085c6fa94929f9a02b0a410621ce8c8",
+    "1702": "a1091fa58d4232938954bc32cd1d03bb87cf6b98b09c71de35f82c04f794e969"
+  },
+  "claim_status": "development-only-diagnostic-not-confirmatory",
+  "results": [
+    {
+      "association_gap": 0.03460425138473511,
+      "inference_seed": 51701,
+      "nll": {
+        "aligned": 0.515296995639801,
+        "joint_reversed": 0.5356190800666809,
+        "outcome_shuffled": 0.5499012470245361,
+        "presentation_permuted": 0.5648735761642456
+      },
+      "particles": 8,
+      "permutation_degradation": 0.04957658052444458,
+      "reversal_degradation": 0.020322084426879883,
+      "training_seed": 1701
+    },
+    {
+      "association_gap": -0.017201483249664307,
+      "inference_seed": 51702,
+      "nll": {
+        "aligned": 0.5612558722496033,
+        "joint_reversed": 0.5446659326553345,
+        "outcome_shuffled": 0.544054388999939,
+        "presentation_permuted": 0.5388088822364807
+      },
+      "particles": 8,
+      "permutation_degradation": -0.02244699001312256,
+      "reversal_degradation": -0.0165899395942688,
+      "training_seed": 1701
+    },
+    {
+      "association_gap": 0.018888235092163086,
+      "inference_seed": 51703,
+      "nll": {
+        "aligned": 0.5486909747123718,
+        "joint_reversed": 0.5467429757118225,
+        "outcome_shuffled": 0.5675792098045349,
+        "presentation_permuted": 0.5467166304588318
+      },
+      "particles": 8,
+      "permutation_degradation": -0.001974344253540039,
+      "reversal_degradation": -0.0019479990005493164,
+      "training_seed": 1701
+    },
+    {
+      "association_gap": -0.008608311414718628,
+      "inference_seed": 51701,
+      "nll": {
+        "aligned": 0.5067659616470337,
+        "joint_reversed": 0.49638763070106506,
+        "outcome_shuffled": 0.49815765023231506,
+        "presentation_permuted": 0.4931635558605194
+      },
+      "particles": 32,
+      "permutation_degradation": -0.013602405786514282,
+      "reversal_degradation": -0.010378330945968628,
+      "training_seed": 1701
+    },
+    {
+      "association_gap": -0.0007307827472686768,
+      "inference_seed": 51702,
+      "nll": {
+        "aligned": 0.4851647615432739,
+        "joint_reversed": 0.4809267222881317,
+        "outcome_shuffled": 0.48443397879600525,
+        "presentation_permuted": 0.48299121856689453
+      },
+      "particles": 32,
+      "permutation_degradation": -0.0021735429763793945,
+      "reversal_degradation": -0.004238039255142212,
+      "training_seed": 1701
+    },
+    {
+      "association_gap": 0.003356456756591797,
+      "inference_seed": 51703,
+      "nll": {
+        "aligned": 0.4999196529388428,
+        "joint_reversed": 0.4885096549987793,
+        "outcome_shuffled": 0.5032761096954346,
+        "presentation_permuted": 0.49786341190338135
+      },
+      "particles": 32,
+      "permutation_degradation": -0.0020562410354614258,
+      "reversal_degradation": -0.011409997940063477,
+      "training_seed": 1701
+    },
+    {
+      "association_gap": -0.0006800293922424316,
+      "inference_seed": 51701,
+      "nll": {
+        "aligned": 0.4872932434082031,
+        "joint_reversed": 0.4848805069923401,
+        "outcome_shuffled": 0.4866132140159607,
+        "presentation_permuted": 0.4845367968082428
+      },
+      "particles": 128,
+      "permutation_degradation": -0.002756446599960327,
+      "reversal_degradation": -0.002412736415863037,
+      "training_seed": 1701
+    },
+    {
+      "association_gap": -0.005149155855178833,
+      "inference_seed": 51702,
+      "nll": {
+        "aligned": 0.49212396144866943,
+        "joint_reversed": 0.4874442219734192,
+        "outcome_shuffled": 0.4869748055934906,
+        "presentation_permuted": 0.48614567518234253
+      },
+      "particles": 128,
+      "permutation_degradation": -0.005978286266326904,
+      "reversal_degradation": -0.004679739475250244,
+      "training_seed": 1701
+    },
+    {
+      "association_gap": 0.00020205974578857422,
+      "inference_seed": 51703,
+      "nll": {
+        "aligned": 0.49061498045921326,
+        "joint_reversed": 0.4912671446800232,
+        "outcome_shuffled": 0.49081704020500183,
+        "presentation_permuted": 0.48764804005622864
+      },
+      "particles": 128,
+      "permutation_degradation": -0.002966940402984619,
+      "reversal_degradation": 0.0006521642208099365,
+      "training_seed": 1701
+    },
+    {
+      "association_gap": -0.0044280290603637695,
+      "inference_seed": 51702,
+      "nll": {
+        "aligned": 0.5413222312927246,
+        "joint_reversed": 0.5522122979164124,
+        "outcome_shuffled": 0.5368942022323608,
+        "presentation_permuted": 0.5206971168518066
+      },
+      "particles": 8,
+      "permutation_degradation": -0.02062511444091797,
+      "reversal_degradation": 0.010890066623687744,
+      "training_seed": 1702
+    },
+    {
+      "association_gap": 0.020877838134765625,
+      "inference_seed": 51703,
+      "nll": {
+        "aligned": 0.5413084626197815,
+        "joint_reversed": 0.5633352994918823,
+        "outcome_shuffled": 0.5621863007545471,
+        "presentation_permuted": 0.5574586391448975
+      },
+      "particles": 8,
+      "permutation_degradation": 0.016150176525115967,
+      "reversal_degradation": 0.02202683687210083,
+      "training_seed": 1702
+    },
+    {
+      "association_gap": -0.011720418930053711,
+      "inference_seed": 51704,
+      "nll": {
+        "aligned": 0.5475460290908813,
+        "joint_reversed": 0.5367340445518494,
+        "outcome_shuffled": 0.5358256101608276,
+        "presentation_permuted": 0.5234091877937317
+      },
+      "particles": 8,
+      "permutation_degradation": -0.024136841297149658,
+      "reversal_degradation": -0.010811984539031982,
+      "training_seed": 1702
+    },
+    {
+      "association_gap": -0.0007188916206359863,
+      "inference_seed": 51702,
+      "nll": {
+        "aligned": 0.4680900573730469,
+        "joint_reversed": 0.46784481406211853,
+        "outcome_shuffled": 0.4673711657524109,
+        "presentation_permuted": 0.46019628643989563
+      },
+      "particles": 32,
+      "permutation_degradation": -0.007893770933151245,
+      "reversal_degradation": -0.0002452433109283447,
+      "training_seed": 1702
+    },
+    {
+      "association_gap": 0.007936179637908936,
+      "inference_seed": 51703,
+      "nll": {
+        "aligned": 0.46429622173309326,
+        "joint_reversed": 0.46764272451400757,
+        "outcome_shuffled": 0.4722324013710022,
+        "presentation_permuted": 0.46696555614471436
+      },
+      "particles": 32,
+      "permutation_degradation": 0.0026693344116210938,
+      "reversal_degradation": 0.0033465027809143066,
+      "training_seed": 1702
+    },
+    {
+      "association_gap": -6.0051679611206055e-05,
+      "inference_seed": 51704,
+      "nll": {
+        "aligned": 0.4777197539806366,
+        "joint_reversed": 0.4883735775947571,
+        "outcome_shuffled": 0.4776597023010254,
+        "presentation_permuted": 0.4748114347457886
+      },
+      "particles": 32,
+      "permutation_degradation": -0.0029083192348480225,
+      "reversal_degradation": 0.010653823614120483,
+      "training_seed": 1702
+    },
+    {
+      "association_gap": 0.004332602024078369,
+      "inference_seed": 51702,
+      "nll": {
+        "aligned": 0.46205875277519226,
+        "joint_reversed": 0.4626322090625763,
+        "outcome_shuffled": 0.46639135479927063,
+        "presentation_permuted": 0.465727835893631
+      },
+      "particles": 128,
+      "permutation_degradation": 0.0036690831184387207,
+      "reversal_degradation": 0.0005734562873840332,
+      "training_seed": 1702
+    },
+    {
+      "association_gap": -0.000809401273727417,
+      "inference_seed": 51703,
+      "nll": {
+        "aligned": 0.4652078151702881,
+        "joint_reversed": 0.466429740190506,
+        "outcome_shuffled": 0.46439841389656067,
+        "presentation_permuted": 0.4657265543937683
+      },
+      "particles": 128,
+      "permutation_degradation": 0.0005187392234802246,
+      "reversal_degradation": 0.0012219250202178955,
+      "training_seed": 1702
+    },
+    {
+      "association_gap": 0.00024965405464172363,
+      "inference_seed": 51704,
+      "nll": {
+        "aligned": 0.4710748791694641,
+        "joint_reversed": 0.46969038248062134,
+        "outcome_shuffled": 0.47132453322410583,
+        "presentation_permuted": 0.4677068591117859
+      },
+      "particles": 128,
+      "permutation_degradation": -0.0033680200576782227,
+      "reversal_degradation": -0.0013844966888427734,
+      "training_seed": 1702
+    }
+  ],
+  "schema": "apbpf-development-inference-diagnostic-v1",
+  "source_problems": 32,
+  "split": "development"
+}
