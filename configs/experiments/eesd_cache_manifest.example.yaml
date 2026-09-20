@@ -1,27 +1,29 @@
 schema: eesd-cache-manifest-v1
 
-# Copy this file outside version control, replace paths with immutable cache artifacts,
-# and keep every declared cell. Do not remove cells after inspecting results.
+# Copy to eesd_cache_manifest.yaml and replace only external materialization paths.
+# All candidate banks, mechanism caches, correction banks, adapters, and result tables
+# are created under EESD_OUTPUT. Never delete unfavorable cells after inspecting results.
 mechanism_cells:
-  - {dataset: runbugrun, model: qwen25_1p5b, cache: /ABS/PATH/rbr-qwen25-1p5b.json, validation_split: development, assessment_split: primary, visible: 4}
-  - {dataset: runbugrun, model: qwen25_7b, cache: /ABS/PATH/rbr-qwen25-7b.json, validation_split: development, assessment_split: primary, visible: 4}
-  - {dataset: runbugrun, model: qwen3_8b, cache: /ABS/PATH/rbr-qwen3-8b.json, validation_split: development, assessment_split: primary, visible: 4}
-  - {dataset: runbugrun, model: deepseek_6p7b, cache: /ABS/PATH/rbr-deepseek-6p7b.json, validation_split: development, assessment_split: primary, visible: 4}
-  - {dataset: runbugrun, model: seed_coder_8b, cache: /ABS/PATH/rbr-seed-coder-8b.json, validation_split: development, assessment_split: primary, visible: 4}
-  - {dataset: runbugrun, model: qwen3_coder_30b, cache: /ABS/PATH/rbr-qwen3-coder-30b.json, validation_split: development, assessment_split: primary, visible: 4}
-  - {dataset: codearc, model: qwen25_1p5b, cache: /ABS/PATH/codearc-qwen25-1p5b.json, validation_split: development, assessment_split: primary, visible: 4}
-  - {dataset: codearc, model: qwen25_7b, cache: /ABS/PATH/codearc-qwen25-7b.json, validation_split: development, assessment_split: primary, visible: 4}
-  - {dataset: codearc, model: qwen3_8b, cache: /ABS/PATH/codearc-qwen3-8b.json, validation_split: development, assessment_split: primary, visible: 4}
-  - {dataset: codearc, model: deepseek_6p7b, cache: /ABS/PATH/codearc-deepseek-6p7b.json, validation_split: development, assessment_split: primary, visible: 4}
-  - {dataset: codearc, model: seed_coder_8b, cache: /ABS/PATH/codearc-seed-coder-8b.json, validation_split: development, assessment_split: primary, visible: 4}
-  - {dataset: codearc, model: qwen3_coder_30b, cache: /ABS/PATH/codearc-qwen3-coder-30b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: runbugrun, domain: rbr, model: qwen25_1p5b, family: qwen25_1p5b, public_root: /ABS/PATH/rbr-public-root, evaluator_root: /ABS/PATH/rbr-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: runbugrun, domain: rbr, model: qwen25_7b, family: qwen25_7b, public_root: /ABS/PATH/rbr-public-root, evaluator_root: /ABS/PATH/rbr-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: runbugrun, domain: rbr, model: qwen3_8b, family: qwen3_8b, public_root: /ABS/PATH/rbr-public-root, evaluator_root: /ABS/PATH/rbr-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: runbugrun, domain: rbr, model: deepseek_6p7b, family: deepseek_6p7b, public_root: /ABS/PATH/rbr-public-root, evaluator_root: /ABS/PATH/rbr-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: runbugrun, domain: rbr, model: seed_coder_8b, family: seed_coder_8b, public_root: /ABS/PATH/rbr-public-root, evaluator_root: /ABS/PATH/rbr-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: runbugrun, domain: rbr, model: qwen3_coder_30b, family: qwen3_coder_30b, public_root: /ABS/PATH/rbr-public-root, evaluator_root: /ABS/PATH/rbr-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: codearc, domain: codearc, model: qwen25_1p5b, family: qwen25_1p5b, public_root: /ABS/PATH/codearc-public-root, evaluator_root: /ABS/PATH/codearc-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: codearc, domain: codearc, model: qwen25_7b, family: qwen25_7b, public_root: /ABS/PATH/codearc-public-root, evaluator_root: /ABS/PATH/codearc-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: codearc, domain: codearc, model: qwen3_8b, family: qwen3_8b, public_root: /ABS/PATH/codearc-public-root, evaluator_root: /ABS/PATH/codearc-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: codearc, domain: codearc, model: deepseek_6p7b, family: deepseek_6p7b, public_root: /ABS/PATH/codearc-public-root, evaluator_root: /ABS/PATH/codearc-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: codearc, domain: codearc, model: seed_coder_8b, family: seed_coder_8b, public_root: /ABS/PATH/codearc-public-root, evaluator_root: /ABS/PATH/codearc-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: codearc, domain: codearc, model: qwen3_coder_30b, family: qwen3_coder_30b, public_root: /ABS/PATH/codearc-public-root, evaluator_root: /ABS/PATH/codearc-evaluator-root, development_components: 200, visible: 4}
 
 correction_cells:
   - dataset: runbugrun
     domain: rbr
     model: qwen25_7b
     round: 1
-    cache: /ABS/PATH/rbr-qwen25-7b-train-development.json
+    family: qwen25_7b
+    public_root: /ABS/PATH/rbr-public-root
     model_config: configs/models/qwen2.5-coder-7b.yaml
     previous_adapter: null
     visible: 4
@@ -33,7 +35,8 @@ correction_cells:
     domain: rbr
     model: deepseek_6p7b
     round: 1
-    cache: /ABS/PATH/rbr-deepseek-6p7b-train-development.json
+    family: deepseek_6p7b
+    public_root: /ABS/PATH/rbr-public-root
     model_config: configs/models/deepseek-coder-6.7b.yaml
     previous_adapter: null
     visible: 4
@@ -45,7 +48,8 @@ correction_cells:
     domain: codearc
     model: qwen25_7b
     round: 1
-    cache: /ABS/PATH/codearc-qwen25-7b-train-development.json
+    family: qwen25_7b
+    public_root: /ABS/PATH/codearc-public-root
     model_config: configs/models/qwen2.5-coder-7b.yaml
     previous_adapter: null
     visible: 4
