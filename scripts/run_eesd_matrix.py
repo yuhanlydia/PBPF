@@ -24,7 +24,7 @@ def main() -> None:
     p.add_argument("--config", type=Path, default=Path("configs/experiments/eesd_iclr2027.yaml"))
     p.add_argument("--manifest", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
-    p.add_argument("--stage", choices=["mechanism", "prepare-corrections", "generate-corrections", "score", "train"], required=True)
+    p.add_argument("--stage", choices=["mechanism", "prepare-corrections", "generate-corrections", "score", "train", "transfer"], required=True)
     p.add_argument("--rules", nargs="*", default=None)
     p.add_argument("--seed", type=int, default=1701)
     p.add_argument("--max-steps", type=int, default=200)
@@ -144,6 +144,41 @@ def main() -> None:
                 ],
                 cwd=root,
             )
+        return
+
+    if args.stage == "transfer":
+        rules = args.rules or [
+            "no_update", "equal_weight", "final_correctness",
+            "fixed_mass_dirichlet", "eesd_full",
+        ]
+        unknown = sorted(set(rules) - set(TRAIN_RULES))
+        if unknown:
+            raise ValueError(f"invalid transfer rules: {unknown}")
+        for cell in manifest.get("transfer_cells", []):
+            name = f"{cell['dataset']}/{cell['model']}"
+            for rule in rules:
+                directory = args.output / "transfer" / name / rule / f"seed{args.seed}"
+                if (directory / "report.json").exists():
+                    print(json.dumps({"status": "skip_complete", "cell": name, "rule": rule}), flush=True)
+                    continue
+                directory.parent.mkdir(parents=True, exist_ok=True)
+                command = [
+                    python,
+                    "scripts/run_eesd_evalplus_transfer.py",
+                    "--dataset", cell["dataset"],
+                    "--model-config", str((root / cell["model_config"]).resolve()),
+                    "--output", str(directory.resolve()),
+                    "--evaluate",
+                ]
+                if rule != "no_update":
+                    adapter = (
+                        args.output / "training" / cell["source_dataset"] / cell["model"]
+                        / f"round{cell['source_round']}" / rule / f"seed{args.seed}" / "adapter"
+                    )
+                    if not adapter.is_dir():
+                        raise FileNotFoundError(f"training adapter missing: {adapter}")
+                    command += ["--adapter", str(adapter.resolve())]
+                run(command, cwd=root, env=dict(os.environ))
         return
 
     rules = args.rules or [rule for rule in TRAIN_RULES if rule != "no_update"]
