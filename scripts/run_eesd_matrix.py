@@ -183,6 +183,7 @@ def main() -> None:
                             "--split", "primary",
                             "--candidates", "1",
                             "--seed", str(seed),
+                            "--greedy",
                         ]
                         if rule != "no_update":
                             adapter = (
