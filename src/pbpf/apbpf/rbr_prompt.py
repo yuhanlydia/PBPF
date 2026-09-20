@@ -8,7 +8,7 @@ FIELDS = {'task_id', 'source_component_id', 'split', 'protocol', 'base_bug_id',
           'task_text', 'buggy_code', 'visible_tests'}
 
 
-def prompt_for(tokenizer, row, *, max_input_tokens):
+def prompt_for(tokenizer, row, *, max_input_tokens, chat_template_kwargs=None):
     if set(row) != FIELDS or row['protocol'] != 'RBR-generated-repair':
         raise ValueError('only whitelisted RBR public records accepted')
     if [t['id'] for t in row['visible_tests']] != ['0', '1', '2', '3'] or any(
@@ -29,9 +29,10 @@ def prompt_for(tokenizer, row, *, max_input_tokens):
         for test in row['visible_tests']:
             content += json.dumps({'id': test['id'], 'input': clip(test['input'], 'input'+test['id']),
                                    'expected': clip(test['expected'], 'expected'+test['id'])}, ensure_ascii=False)+'\n'
+        template_kwargs = dict(chat_template_kwargs or {})
         prompt = tokenizer.apply_chat_template([
             {'role': 'system', 'content': 'You repair Python programs and return only complete source code.'},
-            {'role': 'user', 'content': content}], tokenize=False, add_generation_prompt=True)
+            {'role': 'user', 'content': content}], tokenize=False, add_generation_prompt=True, **template_kwargs)
         tokens = tokenizer.encode(prompt, add_special_tokens=False)
         if len(tokens) <= max_input_tokens:
             return prompt, {'input_tokens': len(tokens), 'field_character_cap': cap,
