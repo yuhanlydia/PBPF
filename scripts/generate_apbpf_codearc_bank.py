@@ -137,7 +137,7 @@ def main():
             continue
         task_seed = int.from_bytes(hashlib.sha256(f"{args.seed}:{row['task_id']}".encode()).digest()[:4], "big")
         torch.manual_seed(task_seed)
-        template_kwargs = {"enable_thinking": False} if args.family == "qwen3_8b" else {}
+        template_kwargs = {"enable_thinking": False} if args.family in {"qwen3_8b", "qwen3_coder_30b"} else {}
         prompt = tokenizer.apply_chat_template([
             {"role": "system", "content": "You write Python code that generalizes from observed input-output examples."},
             {"role": "user", "content": row["task_text"]}], tokenize=False, add_generation_prompt=True, **template_kwargs)
