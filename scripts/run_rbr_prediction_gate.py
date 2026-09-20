@@ -247,15 +247,16 @@ def _subset(batch, indices):
 
 
 @torch.no_grad()
-def _predict(model, batch, *, particles, seed, mode, problem_ids=None):
+def _predict(model, batch, *, particles, seed, mode, problem_ids=None, counterfactual_seed=None):
     generator = torch.Generator(device=batch.task.device).manual_seed(seed)
+    history_seed = seed if counterfactual_seed is None else counterfactual_seed
     source = batch
     mode = {"pbpf": "aligned", "shuffled": "outcome_shuffled", "random": "random_latent"}.get(mode, mode)
     if mode not in {"baseline", "aligned", "outcome_shuffled", "joint_reversed", "presentation_permuted",
                     "orderless", "semantics_masked", "wrong_candidate", "random_latent"}:
         raise ValueError(f"unknown prediction control: {mode}")
     if mode == "outcome_shuffled":
-        outcomes = torch.as_tensor(outcome_derangement(batch.outcomes.cpu().numpy(), 4, seed),
+        outcomes = torch.as_tensor(outcome_derangement(batch.outcomes.cpu().numpy(), 4, history_seed),
                                    device=batch.task.device, dtype=torch.long)
         source = BeliefBatch(batch.task, batch.candidate, batch.tests, outcomes)
     elif mode in {"joint_reversed", "presentation_permuted", "orderless"}:
@@ -263,7 +264,7 @@ def _predict(model, batch, *, particles, seed, mode, problem_ids=None):
         if mode == "joint_reversed":
             indices[:, :4] = indices[:, :4][:, ::-1]
         elif mode == "presentation_permuted":
-            indices, _ = joint_permutation(indices, batch.outcomes.cpu().numpy(), 4, seed)
+            indices, _ = joint_permutation(indices, batch.outcomes.cpu().numpy(), 4, history_seed)
         else:
             # Canonical ordering is based solely on public semantic features,
             # never on outcomes, IDs, or evaluator-hidden execution strings.
