@@ -31,6 +31,23 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def tree_sha(directory):
+    """Stable digest for a LoRA adapter directory."""
+    root = Path(directory)
+    if not root.is_dir():
+        raise ValueError('adapter must be a directory')
+    digest = hashlib.sha256()
+    files = [p for p in sorted(root.rglob('*')) if p.is_file()]
+    if not files:
+        raise ValueError('adapter directory is empty')
+    for path in files:
+        rel = path.relative_to(root).as_posix().encode()
+        digest.update(len(rel).to_bytes(4, 'big'))
+        digest.update(rel)
+        digest.update(hashlib.sha256(path.read_bytes()).digest())
+    return digest.hexdigest()
+
+
 def write_once(path, value):
     with Path(path).open("x", encoding="utf-8") as stream:
         stream.write(json.dumps(value, sort_keys=True, ensure_ascii=False, indent=2) + "\n")
@@ -41,6 +58,7 @@ def main():
     parser.add_argument("--public-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--family", choices=MODELS, default="qwen")
+    parser.add_argument("--adapter", type=Path, help="optional previous-round LoRA adapter")
     parser.add_argument("--split", choices=["train", "development", "primary"], required=True)
     parser.add_argument("--components", type=int, default=0, help="0 means all source components")
     parser.add_argument("--offset", type=int, default=0)
@@ -72,7 +90,9 @@ def main():
         if [test["id"] for test in row["visible_tests"]] != ["0", "1", "2", "3"]:
             raise ValueError("generation requires exactly the four public invocations")
     model_id, revision = MODELS[args.family]
+    adapter_sha256 = tree_sha(args.adapter) if args.adapter else None
     config = {"schema": "apbpf-codearc-generation-v1", "family": args.family, "model": model_id, "revision": revision,
+              "adapter_sha256": adapter_sha256,
               "source_sha256": sha(__file__), "public_manifest_sha256": sha(args.public_root / "manifest.json"),
               "public_tasks_sha256": manifest["public_tasks_sha256"], "split": args.split,
               "components": len(tasks), "offset": args.offset, "candidates": args.candidates,
@@ -97,6 +117,9 @@ def main():
     model = AutoModelForCausalLM.from_pretrained(model_id, revision=revision, local_files_only=True,
         device_map={"": 0}, torch_dtype=torch.bfloat16,
         quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16))
+    if args.adapter:
+        from peft import PeftModel
+        model = PeftModel.from_pretrained(model, str(args.adapter), is_trainable=False)
     model.eval()
     started = time.monotonic()
     for index, row in enumerate(tasks):
