@@ -18,6 +18,12 @@ models:
   deepseek_6p7b:
     config: configs/models/deepseek-coder-6.7b.yaml
     required_domains: [runbugrun, codearc, humanevalplus, mbppplus]
+  seed_coder_8b:
+    config: configs/models/seed-coder-8b.yaml
+    required_domains: [runbugrun, codearc]
+  qwen3_coder_30b:
+    config: configs/models/qwen3-coder-30b-a3b.yaml
+    required_domains: [runbugrun, codearc]
 
 domains:
   runbugrun:
