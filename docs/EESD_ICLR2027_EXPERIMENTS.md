@@ -191,3 +191,51 @@ The paper is ready for an ICLR main-paper claim only if:
 If mechanism generalizes but downstream EESD is null, submit as an uncertainty /
 evidence-aggregation paper and remove recursive-improvement claims rather than
 selectively dropping the null endpoint.
+
+
+## 10. Recovered legacy tables from the previous APBPF branch
+
+These tables were present in the longgoal experiment artifacts but were omitted when the 9/17
+paper blueprint narrowed to the Effective-Evidence mechanism. They remain scientifically useful
+as **diagnostic motivation** and must stay visible in the new paper appendix.
+
+### Legacy Table A. Full-primary replication cells
+
+| Domain | Generator | Sources | Candidates | Association gap | 95% CI | Selection advantage | 95% CI |
+|---|---|---:|---:|---:|---|---:|---|
+| CodeARC-Replay | Qwen | 500 | 4000 | -0.002618 | [-0.005301, 0.000065] | -1.20 pp | [-2.20, -0.20] pp |
+| CodeARC-Replay | DeepSeek | 500 | 4000 | -0.002429 | [-0.004866, -0.000044] | -1.80 pp | [-2.93, -0.73] pp |
+| RunBugRun | Qwen | 500 | 4000 | +0.000493 | [-0.005562, 0.006575] | +0.47 pp | [-0.93, 2.00] pp |
+
+### Legacy Table B. Proper scoring versus raw accuracy
+
+| Dataset / generator | learned NLL | learned acc. | history-rate NLL | history-rate acc. |
+|---|---:|---:|---:|---:|
+| CodeARC / Qwen | 0.544627 | 80.09% | 0.822852 | 81.41% |
+| CodeARC / DeepSeek | 0.489617 | 82.26% | 0.787312 | 84.14% |
+| RunBugRun / Qwen | 0.401980 | 87.61% | 0.710813 | 91.30% |
+
+This is directly relevant to EESD: higher categorical accuracy can coexist with substantially
+worse probability quality, so binary correctness and calibrated learning strength cannot be
+treated as interchangeable signals.
+
+### Legacy Table C. CodeARC Qwen selection headroom
+
+| Selector | seed 1701 | seed 1702 | seed 1703 |
+|---|---:|---:|---:|
+| particle | 26.8 | 27.4 | 26.6 |
+| pair-aware | 28.2 | 28.4 | 28.4 |
+| deep sets | 28.0 | 28.0 | 28.4 |
+| no-particle bottleneck | 28.4 | 28.0 | 28.4 |
+| tuned Dirichlet | 28.0 | 28.0 | 28.0 |
+| visible pass rate | 28.0 | 28.0 | 28.0 |
+| cross-fitted deterministic | 28.2 | 28.0 | 28.2 |
+| random expectation | 18.6 | 18.6 | 18.6 |
+| oracle | 30.0 | 30.0 | 30.0 |
+
+Values are selected Pass@1 percentages. The gap between deployed selectors and the 30.0% oracle
+shows decision headroom, while the negative particle advantage shows that a richer predictor alone
+does not automatically exploit that headroom.
+
+These recovered tables support the gap statement:
+**predictive information is not automatically actionable learning information.**
