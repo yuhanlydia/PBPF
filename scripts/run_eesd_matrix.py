@@ -24,7 +24,7 @@ def main() -> None:
     p.add_argument("--config", type=Path, default=Path("configs/experiments/eesd_iclr2027.yaml"))
     p.add_argument("--manifest", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
-    p.add_argument("--stage", choices=["mechanism", "prepare-corrections", "generate-corrections", "score", "train", "fresh", "transfer"], required=True)
+    p.add_argument("--stage", choices=["mechanism", "prepare-corrections", "generate-corrections", "score", "train", "fresh", "transfer", "recursive"], required=True)
     p.add_argument("--rules", nargs="*", default=None)
     p.add_argument("--seed", type=int, default=None, help="one seed; omit to run all locked seeds")
     p.add_argument("--max-steps", type=int, default=200)
@@ -148,6 +148,41 @@ def main() -> None:
                 ],
                 cwd=root,
             )
+        return
+
+    if args.stage == "recursive":
+        cells = manifest.get("recursive_cells", [])
+        if not cells:
+            raise ValueError("manifest has no recursive_cells")
+        for cell in cells:
+            public_root = Path(cell["public_root"]).resolve()
+            evaluator_root = Path(cell["evaluator_root"]).resolve()
+            if not public_root.is_dir() or not evaluator_root.is_dir():
+                raise FileNotFoundError(f"recursive roots missing for {cell['dataset']}/{cell['model']}")
+            for seed in seeds:
+                directory = args.output / "recursive" / cell["dataset"] / cell["model"] / f"seed{seed}"
+                if (directory / "recursive-report.json").exists():
+                    print(json.dumps({"status": "skip_complete", "cell": cell["dataset"], "model": cell["model"], "seed": seed}), flush=True)
+                    continue
+                directory.parent.mkdir(parents=True, exist_ok=True)
+                run(
+                    [
+                        python,
+                        "scripts/run_eesd_recursive.py",
+                        "--config", str(args.config.resolve()),
+                        "--domain", cell["domain"],
+                        "--public-root", str(public_root),
+                        "--evaluator-root", str(evaluator_root),
+                        "--model-config", str((root / cell["model_config"]).resolve()),
+                        "--family", cell["family"],
+                        "--output", str(directory.resolve()),
+                        "--seed", str(seed),
+                        "--rounds", str(cell.get("rounds", 3)),
+                        "--max-steps", str(args.max_steps),
+                    ],
+                    cwd=root,
+                    env=dict(os.environ),
+                )
         return
 
     if args.stage == "fresh":
