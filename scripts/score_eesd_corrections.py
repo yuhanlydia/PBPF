@@ -61,7 +61,7 @@ def main() -> None:
                 continue
             row = json.loads(line)
             required = {
-                "trajectory_id", "source_component_id", "prompt", "correction",
+                "trajectory_id", "source_component_id", "split", "prompt", "correction",
                 "before_outcomes", "after_outcomes", "relevance",
             }
             if required - set(row):
@@ -101,6 +101,10 @@ def main() -> None:
         "uncertainty_penalty": args.uncertainty_penalty,
         "trajectories": len(rows),
         "sources": len({row["source_component_id"] for row in rows}),
+        "split_counts": {
+            split: sum(row["split"] == split for row in rows)
+            for split in sorted({row["split"] for row in rows})
+        },
         "rules": {},
     }
     for rule in TRAIN_RULES:
