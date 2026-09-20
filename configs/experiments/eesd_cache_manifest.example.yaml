@@ -59,3 +59,32 @@ transfer_cells:
   - {dataset: mbpp, model: qwen25_7b, model_config: configs/models/qwen2.5-coder-7b.yaml, source_dataset: runbugrun, source_round: 1}
   - {dataset: humaneval, model: deepseek_6p7b, model_config: configs/models/deepseek-coder-6.7b.yaml, source_dataset: runbugrun, source_round: 1}
   - {dataset: mbpp, model: deepseek_6p7b, model_config: configs/models/deepseek-coder-6.7b.yaml, source_dataset: runbugrun, source_round: 1}
+
+fresh_cells:
+  - dataset: runbugrun
+    domain: rbr
+    model: qwen25_7b
+    family: qwen25_7b
+    model_config: configs/models/qwen2.5-coder-7b.yaml
+    source_dataset: runbugrun
+    source_round: 1
+    public_root: /ABS/PATH/rbr-public-root
+    evaluator_root: /ABS/PATH/rbr-evaluator-root
+  - dataset: codearc
+    domain: codearc
+    model: qwen25_7b
+    family: qwen25_7b
+    model_config: configs/models/qwen2.5-coder-7b.yaml
+    source_dataset: codearc
+    source_round: 1
+    public_root: /ABS/PATH/codearc-public-root
+    evaluator_root: /ABS/PATH/codearc-evaluator-root
+  - dataset: runbugrun
+    domain: rbr
+    model: deepseek_6p7b
+    family: deepseek_6p7b
+    model_config: configs/models/deepseek-coder-6.7b.yaml
+    source_dataset: runbugrun
+    source_round: 1
+    public_root: /ABS/PATH/rbr-public-root
+    evaluator_root: /ABS/PATH/rbr-evaluator-root
