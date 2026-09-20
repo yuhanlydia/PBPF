@@ -13,6 +13,8 @@ def test_registry_contains_preregistered_models_datasets_outcomes_and_provenance
         "Qwen/Qwen2.5-Coder-1.5B-Instruct",
         "Qwen/Qwen2.5-Coder-7B-Instruct",
         "Qwen/Qwen3-8B",
+        "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+        "ByteDance-Seed/Seed-Coder-8B-Instruct",
         "deepseek-ai/deepseek-coder-6.7b-instruct",
     }
     assert {spec.role for spec in DATASETS.values()} == {

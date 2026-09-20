@@ -550,6 +550,8 @@ def test_all_experiment_configs_validate_and_cover_profiles_and_primary_arms():
     paths = sorted((root / "configs" / "experiments").glob("*.yaml"))
     assert {path.stem for path in paths} == {
         "apbpf_iclr2027",
+        "eesd_iclr2027",
+        "eesd_cache_manifest.example",
         "exact_smoke",
         "frozen_7b_16gb",
         "repair_7b_24gb",
@@ -568,7 +570,7 @@ def test_all_experiment_configs_validate_and_cover_profiles_and_primary_arms():
     configs = [
         validate_experiment(load_experiment(path))
         for path in paths
-        if path.stem not in {"apbpf_iclr2027", "iclr_pbpf"}
+        if path.stem not in {"apbpf_iclr2027", "iclr_pbpf", "eesd_iclr2027", "eesd_cache_manifest.example"}
     ]
     assert {config["profile"] for config in configs} == {"cpu", "16gb", "24gb", "h200_formal"}
     required = {

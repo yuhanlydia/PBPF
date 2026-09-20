@@ -51,6 +51,21 @@ def test_baseline_catalog_has_provenance_and_distinguishes_particle_neighbor():
 def test_experiment_configs_are_no_claim_plans_with_fixed_equal_budget_protocol():
     for path in sorted((ROOT / "configs/experiments").glob("*.yaml")):
         raw = load_yaml(path)
+        if raw.get("schema") == "eesd-iclr2027-v1":
+            assert raw["seeds"] == [1701, 1702, 1703]
+            assert raw["statistics"]["report_all_predeclared_cells"] is True
+            assert raw["statistics"]["forbid_posthoc_cell_dropping"] is True
+            for model_path in raw["models"].values():
+                assert load_yaml(ROOT / model_path)["model_id"] in {
+                    spec.model_id for spec in MODELS.values()
+                }
+            continue
+        if raw.get("schema") == "eesd-cache-manifest-v1":
+            cells = raw["mechanism_cells"]
+            assert {cell["dataset"] for cell in cells} == {"runbugrun", "codearc"}
+            assert len({(cell["dataset"], cell["model"]) for cell in cells}) == 12
+            assert all(cell["public_root"] != cell["evaluator_root"] for cell in cells)
+            continue
         if raw.get("schema") == "apbpf-iclr-v1":
             from pbpf.apbpf.config import resolve_config as resolve_apbpf_config
             resolved = resolve_apbpf_config(path, "local_smoke")
