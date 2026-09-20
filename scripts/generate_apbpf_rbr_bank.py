@@ -24,6 +24,23 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def tree_sha(directory):
+    """Stable digest for a LoRA adapter directory."""
+    root = Path(directory)
+    if not root.is_dir():
+        raise ValueError('adapter must be a directory')
+    digest = hashlib.sha256()
+    files = [p for p in sorted(root.rglob('*')) if p.is_file()]
+    if not files:
+        raise ValueError('adapter directory is empty')
+    for path in files:
+        rel = path.relative_to(root).as_posix().encode()
+        digest.update(len(rel).to_bytes(4, 'big'))
+        digest.update(rel)
+        digest.update(hashlib.sha256(path.read_bytes()).digest())
+    return digest.hexdigest()
+
+
 def write_once(path, value):
     with Path(path).open('x') as stream:
         stream.write(json.dumps(value, sort_keys=True, ensure_ascii=False, indent=2)+'\n')
@@ -34,6 +51,7 @@ def main():
     p.add_argument('--public-root', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--family', choices=MODELS, default='qwen')
+    p.add_argument('--adapter', type=Path, help='optional previous-round LoRA adapter')
     p.add_argument('--split', choices=['train', 'development', 'primary'], required=True)
     p.add_argument('--components', type=int, default=0)
     p.add_argument('--offset', type=int, default=0)
@@ -54,9 +72,11 @@ def main():
     if not rows or len({r['source_component_id'] for r in rows}) != len(rows):
         raise ValueError('nonempty unique source inventory required')
     model_id, revision = MODELS[args.family]
+    adapter_sha256 = tree_sha(args.adapter) if args.adapter else None
     root = Path(__file__).resolve().parents[1]
     config = {'schema': 'apbpf-rbr-generation-v1', 'family': args.family, 'model': model_id, 'revision': revision,
-              'source_sha256': sha(__file__), 'prompt_source_sha256': sha(root/'src/pbpf/apbpf/rbr_prompt.py'),
+              'source_sha256': sha(__file__), 'adapter_sha256': adapter_sha256,
+              'prompt_source_sha256': sha(root/'src/pbpf/apbpf/rbr_prompt.py'),
               'inventory_source_sha256': sha(root/'src/pbpf/apbpf/codearc_bank.py'),
               'public_tasks_sha256': manifest['public_tasks_sha256'], 'public_manifest_sha256': sha(args.public_root/'manifest.json'),
               'split': args.split, 'seed': args.seed, 'offset': args.offset, 'candidates': 8,
@@ -83,6 +103,9 @@ def main():
     model = AutoModelForCausalLM.from_pretrained(model_id, revision=revision, local_files_only=True,
         device_map={'': 0}, torch_dtype=torch.bfloat16,
         quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16))
+    if args.adapter:
+        from peft import PeftModel
+        model = PeftModel.from_pretrained(model, str(args.adapter), is_trainable=False)
     model.eval(); started = time.monotonic()
     for i, row in enumerate(rows):
         path = args.output/(row['task_id'].replace('/', '-')+'.json')
