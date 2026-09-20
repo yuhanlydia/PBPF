@@ -89,9 +89,9 @@ def main():
             if not checksum.exists() or checksum.read_text().strip() != sha(path):
                 raise ValueError('resumed candidate record checksum missing or mismatched')
             continue
-        prompt, metadata = prompt_for(tokenizer, row, max_input_tokens=args.max_input_tokens)
-        if args.family == 'qwen3_8b' and '<think>' in prompt:
-            raise ValueError('Qwen3 generation prompt unexpectedly enables thinking; use the non-thinking chat template')
+        template_kwargs = {'enable_thinking': False} if args.family == 'qwen3_8b' else None
+        prompt, metadata = prompt_for(tokenizer, row, max_input_tokens=args.max_input_tokens,
+                                      chat_template_kwargs=template_kwargs)
         task_seed = int.from_bytes(hashlib.sha256(f'{args.seed}:{row["task_id"]}'.encode()).digest()[:4], 'big')
         torch.manual_seed(task_seed)
         inputs = tokenizer(prompt, add_special_tokens=False, return_tensors='pt').to(model.device)
