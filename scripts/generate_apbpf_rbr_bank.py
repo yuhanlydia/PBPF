@@ -17,6 +17,8 @@ MODELS = {
     'qwen25_7b': ('Qwen/Qwen2.5-Coder-7B-Instruct', 'c03e6d358207e414f1eca0bb1891e29f1db0e242'),
     'qwen3_8b': ('Qwen/Qwen3-8B', 'b968826d9c46dd6066d109eabc6255188de91218'),
     'deepseek_6p7b': ('deepseek-ai/deepseek-coder-6.7b-instruct', 'e5d64addd26a6a1db0f9b863abf6ee3141936807'),
+    'seed_coder_8b': ('ByteDance-Seed/Seed-Coder-8B-Instruct', 'c62d428b84d52a7f1bb38d2aa72a79d6d5f5e614'),
+    'qwen3_coder_30b': ('Qwen/Qwen3-Coder-30B-A3B-Instruct', 'b2cff646eb4bb1d68355c01b18ae02e7cf42d120'),
 }
 
 
