@@ -43,14 +43,72 @@ def main() -> None:
 
     if args.stage == "mechanism":
         seen = set()
+        generation_seed = int(locked["seeds"][0])
         for cell in manifest.get("mechanism_cells", []):
             key = cell["dataset"], cell["model"]
             if key in seen:
                 raise ValueError(f"duplicate mechanism cell: {key}")
             seen.add(key)
-            cache = Path(cell["cache"]).resolve()
+            public_root = Path(cell["public_root"]).resolve()
+            evaluator_root = Path(cell["evaluator_root"]).resolve()
+            if not public_root.is_dir() or not evaluator_root.is_dir():
+                raise FileNotFoundError(f"mechanism materialization roots missing for {key}")
+            script = (
+                "scripts/generate_apbpf_rbr_bank.py"
+                if cell["domain"] == "rbr"
+                else "scripts/generate_apbpf_codearc_bank.py"
+            )
+            bank_root = args.output / "mechanism-banks" / cell["dataset"] / cell["model"]
+            development_bank = bank_root / "development"
+            primary_bank = bank_root / "primary"
+            if not (development_bank / "complete.json").exists():
+                development_bank.parent.mkdir(parents=True, exist_ok=True)
+                run(
+                    [
+                        python, script,
+                        "--public-root", str(public_root),
+                        "--output", str(development_bank.resolve()),
+                        "--family", cell["family"],
+                        "--split", "development",
+                        "--components", str(cell.get("development_components", 200)),
+                        "--candidates", "1",
+                        "--seed", str(generation_seed),
+                        "--greedy",
+                    ],
+                    cwd=root,
+                    env=dict(os.environ),
+                )
+            if not (primary_bank / "complete.json").exists():
+                primary_bank.parent.mkdir(parents=True, exist_ok=True)
+                run(
+                    [
+                        python, script,
+                        "--public-root", str(public_root),
+                        "--output", str(primary_bank.resolve()),
+                        "--family", cell["family"],
+                        "--split", "primary",
+                        "--candidates", "1",
+                        "--seed", str(generation_seed),
+                        "--greedy",
+                    ],
+                    cwd=root,
+                    env=dict(os.environ),
+                )
+            cache = args.output / "mechanism-cache" / cell["dataset"] / cell["model"] / "cache.json"
             if not cache.exists():
-                raise FileNotFoundError(cache)
+                cache.parent.mkdir(parents=True, exist_ok=True)
+                run(
+                    [
+                        python,
+                        "scripts/build_eesd_mechanism_cache.py",
+                        "--domain", cell["domain"],
+                        "--evaluator-root", str(evaluator_root),
+                        "--bank", str(development_bank.resolve()),
+                        "--bank", str(primary_bank.resolve()),
+                        "--output", str(cache.resolve()),
+                    ],
+                    cwd=root,
+                )
             directory = args.output / "mechanism" / cell["dataset"] / cell["model"]
             if (directory / "complete.json").exists():
                 print(json.dumps({"status": "skip_complete", "cell": key}), flush=True)
@@ -64,8 +122,8 @@ def main() -> None:
                     "--cache", str(cache),
                     "--dataset", cell["dataset"],
                     "--model", cell["model"],
-                    "--validation-split", cell.get("validation_split", "development"),
-                    "--assessment-split", cell.get("assessment_split", "primary"),
+                    "--validation-split", "development",
+                    "--assessment-split", "primary",
                     "--visible", str(cell.get("visible", 4)),
                     "--output", str(directory.resolve()),
                 ],
@@ -78,23 +136,51 @@ def main() -> None:
         raise ValueError("manifest has no correction_cells")
 
     if args.stage == "prepare-corrections":
+        experience_seed = int(locked["seeds"][0])
         for cell in cells:
-            cache = Path(cell["cache"]).resolve()
-            if not cache.exists():
-                raise FileNotFoundError(cache)
             name = f"{cell['dataset']}/{cell['model']}/round{cell['round']}"
             directory = args.output / "public-corrections" / name
             if (directory / "audit.json").exists():
                 print(json.dumps({"status": "skip_complete", "cell": name}), flush=True)
                 continue
+            public_root = Path(cell["public_root"]).resolve()
+            if not public_root.is_dir():
+                raise FileNotFoundError(f"public materialization missing: {public_root}")
+            script = (
+                "scripts/generate_apbpf_rbr_bank.py"
+                if cell["domain"] == "rbr"
+                else "scripts/generate_apbpf_codearc_bank.py"
+            )
+            original_root = args.output / "correction-original-banks" / name
+            train_bank = original_root / "train"
+            development_bank = original_root / "development"
+            for split, bank in (("train", train_bank), ("development", development_bank)):
+                if (bank / "complete.json").exists():
+                    continue
+                bank.parent.mkdir(parents=True, exist_ok=True)
+                run(
+                    [
+                        python, script,
+                        "--public-root", str(public_root),
+                        "--output", str(bank.resolve()),
+                        "--family", cell["family"],
+                        "--split", split,
+                        "--candidates", "1",
+                        "--seed", str(experience_seed),
+                    ],
+                    cwd=root,
+                    env=dict(os.environ),
+                )
             directory.parent.mkdir(parents=True, exist_ok=True)
             run(
                 [
                     python,
-                    "scripts/prepare_eesd_public_corrections.py",
-                    "--cache", str(cache),
+                    "scripts/prepare_eesd_recursive_corrections.py",
+                    "--domain", cell["domain"],
+                    "--public-root", str(public_root),
+                    "--bank", str(train_bank.resolve()),
+                    "--bank", str(development_bank.resolve()),
                     "--output", str(directory.resolve()),
-                    "--visible", str(cell.get("visible", 4)),
                 ],
                 cwd=root,
             )
