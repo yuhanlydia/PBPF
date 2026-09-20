@@ -24,7 +24,7 @@ def main() -> None:
     p.add_argument("--config", type=Path, default=Path("configs/experiments/eesd_iclr2027.yaml"))
     p.add_argument("--manifest", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
-    p.add_argument("--stage", choices=["mechanism", "prepare-corrections", "generate-corrections", "score", "train", "transfer"], required=True)
+    p.add_argument("--stage", choices=["mechanism", "prepare-corrections", "generate-corrections", "score", "train", "fresh", "transfer"], required=True)
     p.add_argument("--rules", nargs="*", default=None)
     p.add_argument("--seed", type=int, default=None, help="one seed; omit to run all locked seeds")
     p.add_argument("--max-steps", type=int, default=200)
@@ -148,6 +148,84 @@ def main() -> None:
                 ],
                 cwd=root,
             )
+        return
+
+    if args.stage == "fresh":
+        rules = args.rules or [
+            "no_update", "equal_weight", "final_correctness",
+            "fixed_mass_dirichlet", "eesd_full",
+        ]
+        unknown = sorted(set(rules) - set(TRAIN_RULES))
+        if unknown:
+            raise ValueError(f"invalid fresh-eval rules: {unknown}")
+        for cell in manifest.get("fresh_cells", []):
+            name = f"{cell['dataset']}/{cell['model']}"
+            public_root = Path(cell["public_root"]).resolve()
+            evaluator_root = Path(cell["evaluator_root"]).resolve()
+            if not public_root.is_dir() or not evaluator_root.is_dir():
+                raise FileNotFoundError(f"fresh cell roots missing for {name}")
+            for seed in seeds:
+                base_report = None
+                for rule in rules:
+                    bank = args.output / "fresh-banks" / name / rule / f"seed{seed}"
+                    if not (bank / "complete.json").exists():
+                        bank.parent.mkdir(parents=True, exist_ok=True)
+                        script = (
+                            "scripts/generate_apbpf_rbr_bank.py"
+                            if cell["domain"] == "rbr"
+                            else "scripts/generate_apbpf_codearc_bank.py"
+                        )
+                        command = [
+                            python, script,
+                            "--public-root", str(public_root),
+                            "--output", str(bank.resolve()),
+                            "--family", cell["family"],
+                            "--split", "primary",
+                            "--candidates", "1",
+                            "--seed", str(seed),
+                        ]
+                        if rule != "no_update":
+                            adapter = (
+                                args.output / "training" / cell["source_dataset"] / cell["model"]
+                                / f"round{cell['source_round']}" / rule / f"seed{seed}" / "adapter"
+                            )
+                            if not adapter.is_dir():
+                                raise FileNotFoundError(f"training adapter missing: {adapter}")
+                            command += ["--adapter", str(adapter.resolve())]
+                        run(command, cwd=root, env=dict(os.environ))
+                    evaluation = args.output / "fresh-eval" / name / rule / f"seed{seed}"
+                    if not (evaluation / "report.json").exists():
+                        evaluation.parent.mkdir(parents=True, exist_ok=True)
+                        run(
+                            [
+                                python, "scripts/evaluate_eesd_fresh_bank.py",
+                                "--domain", cell["domain"],
+                                "--evaluator-root", str(evaluator_root),
+                                "--bank", str(bank.resolve()),
+                                "--output", str(evaluation.resolve()),
+                            ],
+                            cwd=root,
+                        )
+                    report = evaluation / "report.json"
+                    if rule == "no_update":
+                        base_report = report
+                    else:
+                        if base_report is None or not base_report.exists():
+                            raise FileNotFoundError("base fresh evaluation must run before comparisons")
+                        comparison = (
+                            args.output / "fresh-comparison" / name / rule / f"seed{seed}.json"
+                        )
+                        if not comparison.exists():
+                            comparison.parent.mkdir(parents=True, exist_ok=True)
+                            run(
+                                [
+                                    python, "scripts/compare_eesd_fresh_eval.py",
+                                    "--baseline", str(base_report.resolve()),
+                                    "--method", str(report.resolve()),
+                                    "--output", str(comparison.resolve()),
+                                ],
+                                cwd=root,
+                            )
         return
 
     if args.stage == "transfer":
