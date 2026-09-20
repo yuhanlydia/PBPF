@@ -88,3 +88,21 @@ fresh_cells:
     source_round: 1
     public_root: /ABS/PATH/rbr-public-root
     evaluator_root: /ABS/PATH/rbr-evaluator-root
+
+recursive_cells:
+  - dataset: runbugrun
+    domain: rbr
+    model: qwen25_7b
+    family: qwen25_7b
+    model_config: configs/models/qwen2.5-coder-7b.yaml
+    public_root: /ABS/PATH/rbr-public-root
+    evaluator_root: /ABS/PATH/rbr-evaluator-root
+    rounds: 3
+  - dataset: codearc
+    domain: codearc
+    model: qwen25_7b
+    family: qwen25_7b
+    model_config: configs/models/qwen2.5-coder-7b.yaml
+    public_root: /ABS/PATH/codearc-public-root
+    evaluator_root: /ABS/PATH/codearc-evaluator-root
+    rounds: 3
