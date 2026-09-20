@@ -101,6 +101,7 @@ def validate_scored_record(record: Mapping) -> None:
     required = {
         "trajectory_id",
         "source_component_id",
+        "split",
         "prompt",
         "correction",
         "before_outcomes",
