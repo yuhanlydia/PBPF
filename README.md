@@ -1,3 +1,49 @@
+# EESD ICLR 2027 branch
+
+The active ICLR paper direction on branch `research/eesd-iclr2027` is
+**Effective-Evidence Self-Distillation (EESD)** rather than the legacy PBPF
+repair-conditioning claim. The historical PBPF/A-PBPF results remain versioned
+diagnostics and are not deleted.
+
+Start here:
+
+- experiment lock: [docs/EESD_ICLR2027_EXPERIMENTS.md](docs/EESD_ICLR2027_EXPERIMENTS.md)
+- locked matrix: [configs/experiments/eesd_iclr2027.yaml](configs/experiments/eesd_iclr2027.yaml)
+- cache manifest template: [configs/experiments/eesd_cache_manifest.example.yaml](configs/experiments/eesd_cache_manifest.example.yaml)
+- restored paper tables: [paper/eesd_tables.tex](paper/eesd_tables.tex)
+- mechanism runner: [scripts/run_eesd_evidence_matrix.py](scripts/run_eesd_evidence_matrix.py)
+- correction scorer: [scripts/score_eesd_corrections.py](scripts/score_eesd_corrections.py)
+- shared weighted-SFT trainer: [scripts/run_eesd_weighted_sft.py](scripts/run_eesd_weighted_sft.py)
+- matrix orchestrator: [scripts/run_eesd_matrix.py](scripts/run_eesd_matrix.py)
+
+The mechanism runner predeclares the same-alpha factorial, tuned global-mass
+control, constant-mean-mass control, permuted-mass alignment control, history-size
+sweep, binary-outcome sensitivity, concentration-bin analysis, and 10,000-draw
+paired source-cluster bootstrap. Candidate generation is enabled for the four
+pinned model configs (Qwen2.5-Coder-1.5B, Qwen2.5-Coder-7B, Qwen3-8B non-thinking,
+and DeepSeek-Coder-6.7B) on the RunBugRun/CodeARC generation paths.
+
+After binding immutable cache paths:
+
+```bash
+cp configs/experiments/eesd_cache_manifest.example.yaml \
+   configs/experiments/eesd_cache_manifest.yaml
+# edit only the artifact paths; do not remove unfavorable cells
+bash scripts/run_eesd_iclr.sh
+# explicit GPU stage
+CUDA_VISIBLE_DEVICES=0 python scripts/run_eesd_matrix.py \
+  --config configs/experiments/eesd_iclr2027.yaml \
+  --manifest configs/experiments/eesd_cache_manifest.yaml \
+  --output runs/eesd-iclr2027 --stage train
+```
+
+The old paper package under `paper/pbpf_iclr2027.tex` is preserved for provenance.
+It was prospective from its first commit and therefore never contained the later
+result tables; those tables lived in `results/`, JSON reports, and the EED
+blueprint. EESD tables are now centralized under `paper/eesd_tables.tex`.
+
+---
+
 # PBPF
 
 Candidate-specific particle beliefs for execution-conditioned Python repair.
