@@ -41,23 +41,20 @@ domains:
   humanevalplus:
     registry_id: evalplus
     subset: humanevalplus
-    role: functional-transfer
-    visible: 4
-    mechanism: true
-    distillation: one-round
+    role: downstream-transfer
+    mechanism: false
+    distillation: transfer-evaluation
   mbppplus:
     registry_id: evalplus
     subset: mbppplus
-    role: functional-transfer
-    visible: 4
-    mechanism: true
-    distillation: one-round
+    role: downstream-transfer
+    mechanism: false
+    distillation: transfer-evaluation
   livecodebench_v6:
     registry_id: livecodebench_v6
     role: temporal-transfer
-    visible: 4
-    mechanism: true
-    distillation: false
+    mechanism: false
+    distillation: transfer-evaluation
   swebench_lite:
     registry_id: swebench_lite
     role: repository-external-validity
