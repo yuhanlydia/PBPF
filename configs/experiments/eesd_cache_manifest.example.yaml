@@ -7,10 +7,14 @@ mechanism_cells:
   - {dataset: runbugrun, model: qwen25_7b, cache: /ABS/PATH/rbr-qwen25-7b.json, validation_split: development, assessment_split: primary, visible: 4}
   - {dataset: runbugrun, model: qwen3_8b, cache: /ABS/PATH/rbr-qwen3-8b.json, validation_split: development, assessment_split: primary, visible: 4}
   - {dataset: runbugrun, model: deepseek_6p7b, cache: /ABS/PATH/rbr-deepseek-6p7b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: runbugrun, model: seed_coder_8b, cache: /ABS/PATH/rbr-seed-coder-8b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: runbugrun, model: qwen3_coder_30b, cache: /ABS/PATH/rbr-qwen3-coder-30b.json, validation_split: development, assessment_split: primary, visible: 4}
   - {dataset: codearc, model: qwen25_1p5b, cache: /ABS/PATH/codearc-qwen25-1p5b.json, validation_split: development, assessment_split: primary, visible: 4}
   - {dataset: codearc, model: qwen25_7b, cache: /ABS/PATH/codearc-qwen25-7b.json, validation_split: development, assessment_split: primary, visible: 4}
   - {dataset: codearc, model: qwen3_8b, cache: /ABS/PATH/codearc-qwen3-8b.json, validation_split: development, assessment_split: primary, visible: 4}
   - {dataset: codearc, model: deepseek_6p7b, cache: /ABS/PATH/codearc-deepseek-6p7b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: codearc, model: seed_coder_8b, cache: /ABS/PATH/codearc-seed-coder-8b.json, validation_split: development, assessment_split: primary, visible: 4}
+  - {dataset: codearc, model: qwen3_coder_30b, cache: /ABS/PATH/codearc-qwen3-coder-30b.json, validation_split: development, assessment_split: primary, visible: 4}
   - {dataset: humanevalplus, model: qwen25_7b, cache: /ABS/PATH/humanevalplus-qwen25-7b.json, validation_split: development, assessment_split: primary, visible: 4}
   - {dataset: humanevalplus, model: deepseek_6p7b, cache: /ABS/PATH/humanevalplus-deepseek-6p7b.json, validation_split: development, assessment_split: primary, visible: 4}
   - {dataset: mbppplus, model: qwen25_7b, cache: /ABS/PATH/mbppplus-qwen25-7b.json, validation_split: development, assessment_split: primary, visible: 4}
