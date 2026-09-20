@@ -19,16 +19,13 @@ seeds, metrics, and ablations are fixed here before the new runs.
 |---|---:|---:|---:|---:|---|
 | RunBugRun corrected-stdin | yes | yes | yes | yes | primary repair domain |
 | CodeARC-Replay | yes | yes | yes | yes | cross-domain structured program induction |
-| HumanEval+ | yes | yes | yes | 2 rounds | functional coding transfer |
-| MBPP+ | yes | yes | yes | 2 rounds | broader functional coding transfer |
-| LiveCodeBench v6 temporal slice | yes | yes | optional | no | contamination-mitigated temporal transfer |
+| HumanEval+ | no | official pass@1 | transfer only | no | official EvalPlus downstream transfer |
+| MBPP+ | no | official pass@1 | transfer only | no | official EvalPlus downstream transfer |
+| LiveCodeBench v6 temporal slice | no | pass@1 | optional transfer | no | contamination-mitigated temporal transfer |
 | SWE-bench Lite | no | repair only | optional | no | repository-level external validity, appendix |
 
 RunBugRun and CodeARC use four public executions and the remaining evaluator-only
-executions. HumanEval+/MBPP+ must construct public/hidden partitions once from the
-official EvalPlus test inventory before candidate generation. LiveCodeBench uses a
-frozen post-v5 slice and a public-input/private-outcome replay protocol. Do not pool
-fully hidden-input settings with public-input/private-outcome prediction.
+executions. HumanEval+/MBPP+ are not converted into an artificial EED mechanism protocol. They are official downstream transfer evaluations: adapters learned from RunBugRun corrections are evaluated with EvalPlus Base+Extra pass@1. LiveCodeBench is a later temporal downstream replication. Do not pool these downstream correctness benchmarks with the public-input/private-outcome mechanism estimand.
 
 ## 2. Model matrix
 
@@ -47,8 +44,8 @@ hardware with 4-bit loading.
 
 Minimum paper breadth:
 - all six model settings on RunBugRun and CodeARC mechanism experiments;
-- qwen25_7b and deepseek_6p7b on HumanEval+ and MBPP+;
-- qwen25_7b on LiveCodeBench temporal transfer;
+- qwen25_7b and deepseek_6p7b adapters trained on RunBugRun, then evaluated on HumanEval+ and MBPP+ with the official EvalPlus sanitizer/evaluator;
+- qwen25_7b on LiveCodeBench temporal transfer if the cheaper gates pass;
 - qwen25_7b plus one cross-family model for full one-round EESD;
 - qwen25_7b for the full multi-round recursive study.
 
