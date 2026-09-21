@@ -70,3 +70,11 @@ User requested the large files after all. Publish the complete base archive plus
 final stopped-state overlay at Release `eesd-checkpoint-20260921`. The earlier
 cancellation is superseded. Experiments remain stopped; do not resume generation
 or training during upload. Final receipt/checksums in that Release are authoritative.
+
+## Final backup destination: Hugging Face
+
+User selected `https://huggingface.co/datasets/humanlong/PBPF` for complete backup.
+GitHub already has source/eval commit 8628ea1. The latest migration notes and full
+source history are also preserved in the HF backup as PBPF-source.bundle because
+GitHub CLI authentication expired after that successful push. No experiment jobs
+were resumed.

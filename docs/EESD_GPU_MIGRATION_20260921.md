@@ -1,3 +1,7 @@
+> Final storage destination: https://huggingface.co/datasets/humanlong/PBPF
+> This supersedes references below to the uncreated GitHub Release.
+> Restore using the HF repository RESTORE.md and bundled exact source commit.
+
 > Final decision: the user re-authorized the complete data/run Release backup.
 > Experiment processes are stopped; see release STOP_RECEIPT.json.
 > The final stopped-state overlay supersedes the initial live snapshot.

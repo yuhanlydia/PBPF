@@ -1,3 +1,7 @@
+> Final storage destination: https://huggingface.co/datasets/humanlong/PBPF
+> This supersedes references below to the uncreated GitHub Release.
+> Restore using the HF repository RESTORE.md and bundled exact source commit.
+
 # Completed eval checkpoint — 2026-09-21
 
 12 completed and checksum-verified direct mechanism evals:
