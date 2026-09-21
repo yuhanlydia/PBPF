@@ -7,9 +7,9 @@ Original paths in provenance refer to the old host, and are intentionally preser
 All related experiment processes were stopped; see STOP_RECEIPT.json.
 
 The complete four-model/four-domain study and SFT are NOT complete.
-The user cancelled the 4.5 GB data/run backup upload. Raw data, candidate banks,
-large logs and model weights are therefore not in this Git checkpoint. They remain
-on the original machine. Reproducing/resuming from this Git checkpoint alone may
-require downloading data/models again and regenerating missing candidates.
+The user re-authorized the full data/run backup after initially cancelling it.
+Use the `eesd-checkpoint-20260921` GitHub Release, its RESTORE.md, checksum manifests
+and final stopped-state overlay to restore raw data, candidate banks and setup logs.
+Model weights and environments must be re-downloaded/recreated at locked revisions.
 No trained SFT adapter existed at shutdown. The uncompleted experiment plan is in
 ../../docs/EESD_REMAINING_EXPERIMENTS_20260921.md.

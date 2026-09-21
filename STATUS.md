@@ -63,3 +63,10 @@ verified complete (all sealed file SHA-256 values match); their artifacts are
 checked in under `artifacts/eesd-eval-20260921`. Experiment controllers/workers
 were stopped and GPU compute-process inventory is empty. Full 4×4 experiment
 and SFT remain incomplete. No full-data Release was published.
+
+## Final user decision: full backup re-authorized
+
+User requested the large files after all. Publish the complete base archive plus
+final stopped-state overlay at Release `eesd-checkpoint-20260921`. The earlier
+cancellation is superseded. Experiments remain stopped; do not resume generation
+or training during upload. Final receipt/checksums in that Release are authoritative.
