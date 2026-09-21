@@ -55,3 +55,11 @@
 - Qwen RunBugRun round-1 original training bank has 321 sealed candidates; its 400-source development bank is still generating. The separately launched training pipeline waits for independent training data. No SFT model/adapter has been trained yet.
 - Diversity analysis and direct-profile inference adapters are implemented with focused tests; full reports remain dependent on complete verified inputs. Their scientific conclusions have not been fabricated from software tests.
 - User requested GitHub backup before changing GPUs, including all future experiments. See `docs/EESD_GPU_MIGRATION_20260921.md` and `docs/EESD_REMAINING_EXPERIMENTS_20260921.md`. Source lives on `research/eesd-iclr2027`; run/data snapshot is attached to release `eesd-checkpoint-20260921`. Release publication and verification details are recorded by the upload step.
+
+## Final shutdown and reduced GitHub handoff — 2026-09-21
+
+User cancelled large data/run uploads. Twelve existing direct eval cells were
+verified complete (all sealed file SHA-256 values match); their artifacts are
+checked in under `artifacts/eesd-eval-20260921`. Experiment controllers/workers
+were stopped and GPU compute-process inventory is empty. Full 4×4 experiment
+and SFT remain incomplete. No full-data Release was published.

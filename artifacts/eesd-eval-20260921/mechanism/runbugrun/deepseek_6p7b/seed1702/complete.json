@@ -1,0 +1,11 @@
+{
+  "execution_profile": "direct-no-sandbox",
+  "files": {
+    "cache.json": "05a77c0f230a92ae21cc95bc2383c488c925f2cb616db65c5a9ae5557b9cc3e2",
+    "direct-binding.json": "ac09019e4cc6b9172ce8cca63d473f2258a732e8bb7636810570ca5cffdd7d73",
+    "report/complete.json": "5d19f21c27652addb302812c5c74da51604d54ee8a944973d5e5b6418fedb2c2",
+    "report/predictions.npz": "8198e19ec7b336edbb32742162a58b1c6cf492aaab2cd00c94f611c0d7f66e5c",
+    "report/report.json": "908cf801ec49fffd4358dd01f56ff021ebf063763d46f08b5b265d2e9dd45eda"
+  },
+  "schema": "eesd-direct-mechanism-complete-v1"
+}

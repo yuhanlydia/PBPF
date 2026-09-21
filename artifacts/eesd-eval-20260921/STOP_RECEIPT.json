@@ -1,0 +1,125 @@
+{
+  "timestamp": "2026-09-21T06:27:27.735064+00:00",
+  "reason": "user_requested_stop_after_github_backup",
+  "status": "experiment_processes_stopped_not_experiments_complete",
+  "processes": [
+    {
+      "pid": 304351,
+      "ppid": 1,
+      "sid": 304351,
+      "state": "T",
+      "start_ticks": 353706227,
+      "argv": [
+        "/root/PBPF/.venv/bin/python",
+        "/root/PBPF/runs/eesd-setup/run_replay_cell_v4.py",
+        "--manifest",
+        "/root/PBPF/runs/eesd-setup/replay-generation-manifest-20260920.json",
+        "--manifest-sha256",
+        "f0fcced94556984ec554f272a5adcf2df1f05d1d2d62f09a3f5120fa82f81f52",
+        "--cell-key",
+        "replay-apps_replay-deepseek_6p7b-seed1703",
+        "--output",
+        "/root/PBPF/runs/eesd-20260920",
+        "--wrapper-sha256",
+        "bfdf9b24d8e9468f94dea2184ecff92c67a04c7a90be083457e59201bb36fc23"
+      ]
+    },
+    {
+      "pid": 308484,
+      "ppid": 304351,
+      "sid": 304351,
+      "state": "R",
+      "start_ticks": 353947918,
+      "argv": [
+        "/root/PBPF/.venv/bin/python",
+        "/root/PBPF/scripts/generate_eesd_replay_bank.py",
+        "--bundle",
+        "/root/PBPF/runs/eesd-data/replay-extension-locked-20260920",
+        "--admission-sha256",
+        "73d96f7b0054726aef27b007e8a789ea22a739cfd338e9d096360261dbfbd40f",
+        "--domain",
+        "apps_replay",
+        "--family",
+        "deepseek_6p7b",
+        "--split",
+        "primary",
+        "--seed",
+        "1703",
+        "--output",
+        "/root/PBPF/runs/eesd-20260920/replay-mechanism-banks/apps_replay/deepseek_6p7b/seed1703/primary"
+      ]
+    },
+    {
+      "pid": 324984,
+      "ppid": 1,
+      "sid": 324984,
+      "state": "T",
+      "start_ticks": 354061488,
+      "argv": [
+        "/root/PBPF/.venv/bin/python",
+        "/root/PBPF/runs/eesd-setup/run-qwen-training-bank-preparation-20260921.py"
+      ]
+    },
+    {
+      "pid": 341104,
+      "ppid": 1,
+      "sid": 341104,
+      "state": "T",
+      "start_ticks": 354098615,
+      "argv": [
+        "/root/PBPF/.venv/bin/python",
+        "/root/PBPF/runs/eesd-setup/run-qwen-direct-training-pipeline-20260921.py"
+      ]
+    },
+    {
+      "pid": 389142,
+      "ppid": 1,
+      "sid": 389142,
+      "state": "T",
+      "start_ticks": 354246278,
+      "argv": [
+        "/root/PBPF/.venv/bin/python",
+        "/root/PBPF/runs/eesd-setup/recover_joint_generation_v4.py",
+        "--recovery-sha256",
+        "49932b005b5042be349129b9dd0557a3c6d6e295d3d3f8373708b108c1b8a3da",
+        "--recovery-record",
+        "/root/PBPF/runs/eesd-setup/v4-recovery-running-20260921.json",
+        "--adopt",
+        "--receipt",
+        "/root/PBPF/runs/eesd-setup/v4-recovery-adoption-20260921.json",
+        "--replay-manifest",
+        "/root/PBPF/runs/eesd-setup/replay-generation-manifest-20260920.json",
+        "--manifest-sha256",
+        "f0fcced94556984ec554f272a5adcf2df1f05d1d2d62f09a3f5120fa82f81f52"
+      ]
+    },
+    {
+      "pid": 415041,
+      "ppid": 324984,
+      "sid": 324984,
+      "state": "R",
+      "start_ticks": 354355777,
+      "argv": [
+        "/root/PBPF/.venv/bin/python",
+        "/root/PBPF/scripts/generate_apbpf_rbr_bank.py",
+        "--public-root",
+        "/root/PBPF/runs/eesd-data/rbr-public",
+        "--output",
+        "/root/PBPF/runs/eesd-direct-20260921/correction-original-banks/runbugrun/qwen25_7b/round1/development",
+        "--family",
+        "qwen25_7b",
+        "--split",
+        "development",
+        "--candidates",
+        "1",
+        "--seed",
+        "1701"
+      ]
+    }
+  ],
+  "forced_kill_pids": [],
+  "remaining_pids": [],
+  "previous_pause_owner": "qwen-training-bank-preparation-20260921\n",
+  "interpretation": "Partial jobs were interrupted for migration, not scored as model failures. Historical running/PID status is not live state.",
+  "gpu_processes_after": ""
+}
