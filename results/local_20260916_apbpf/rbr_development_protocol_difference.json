@@ -1,0 +1,66 @@
+{
+  "old_cache_sha256": "ba6ca9ed9af2f90331e4d7d1373fbb0f3242f716ec826a11202660a8c49844f5",
+  "new_cache_sha256": "ce9acd40ae2ee178532c777e318595b08a8965662c3355f9afc9666fe6e1f2a7",
+  "original_timeout_unattested": true,
+  "scope": "development-only comparison; original test metrics excluded",
+  "differences": {
+    "train": {
+      "old_candidates": 6362,
+      "new_candidates": 6392,
+      "recovered_candidates": [
+        "15534",
+        "167586",
+        "21396",
+        "219487",
+        "22599",
+        "24078",
+        "24754",
+        "251112",
+        "309041",
+        "315514",
+        "330813",
+        "332180",
+        "358344",
+        "38138",
+        "38142",
+        "38148",
+        "411420",
+        "427145",
+        "430607",
+        "451215",
+        "456923",
+        "456967",
+        "499416",
+        "533704",
+        "570911",
+        "606337",
+        "637529",
+        "666964",
+        "691349",
+        "717041",
+        "760723",
+        "77092"
+      ],
+      "newly_rejected_candidates": [
+        "632938",
+        "703775"
+      ],
+      "common_candidates": 6360,
+      "candidates_with_changed_outcomes": 11,
+      "changed_test_outcomes": 72
+    },
+    "development": {
+      "old_candidates": 1264,
+      "new_candidates": 1267,
+      "recovered_candidates": [
+        "19793",
+        "322213",
+        "693886"
+      ],
+      "newly_rejected_candidates": [],
+      "common_candidates": 1264,
+      "candidates_with_changed_outcomes": 1,
+      "changed_test_outcomes": 10
+    }
+  }
+}

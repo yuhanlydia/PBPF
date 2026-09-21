@@ -1,0 +1,209 @@
+{
+  "scope": "two newly rejected training fixed-program controls; both input modes at fixed2secondstimeout; no new candidate filter or threshold tuning",
+  "source_sha256": "3598e2641c2b26e099d80f2c558ddb5722deff678b1612b0e0d0d7bebcabe884",
+  "results": [
+    {
+      "task_id": "632938",
+      "problem_id": "p03298",
+      "repeat": 1,
+      "stdin_mode": "literal",
+      "timeout_seconds": 2,
+      "code_sha256": "c540c03ea4f8cb8c55c218910520b4a538fbb07906cb71473622fb9aa28229b8",
+      "outcomes": [
+        "PASS",
+        "PASS",
+        "TIMEOUT",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "failures": [
+        {
+          "test_id": "666255",
+          "returncode": null,
+          "timed_out": true,
+          "outcome": "TIMEOUT"
+        }
+      ]
+    },
+    {
+      "task_id": "632938",
+      "problem_id": "p03298",
+      "repeat": 1,
+      "stdin_mode": "official_terminal_newline",
+      "timeout_seconds": 2,
+      "code_sha256": "c540c03ea4f8cb8c55c218910520b4a538fbb07906cb71473622fb9aa28229b8",
+      "outcomes": [
+        "PASS",
+        "PASS",
+        "TIMEOUT",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "TIMEOUT",
+        "PASS"
+      ],
+      "failures": [
+        {
+          "test_id": "666255",
+          "returncode": null,
+          "timed_out": true,
+          "outcome": "TIMEOUT"
+        },
+        {
+          "test_id": "666271",
+          "returncode": null,
+          "timed_out": true,
+          "outcome": "TIMEOUT"
+        }
+      ]
+    },
+    {
+      "task_id": "632938",
+      "problem_id": "p03298",
+      "repeat": 2,
+      "stdin_mode": "literal",
+      "timeout_seconds": 2,
+      "code_sha256": "c540c03ea4f8cb8c55c218910520b4a538fbb07906cb71473622fb9aa28229b8",
+      "outcomes": [
+        "PASS",
+        "PASS",
+        "TIMEOUT",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "failures": [
+        {
+          "test_id": "666255",
+          "returncode": null,
+          "timed_out": true,
+          "outcome": "TIMEOUT"
+        }
+      ]
+    },
+    {
+      "task_id": "632938",
+      "problem_id": "p03298",
+      "repeat": 2,
+      "stdin_mode": "official_terminal_newline",
+      "timeout_seconds": 2,
+      "code_sha256": "c540c03ea4f8cb8c55c218910520b4a538fbb07906cb71473622fb9aa28229b8",
+      "outcomes": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "TIMEOUT",
+        "PASS"
+      ],
+      "failures": [
+        {
+          "test_id": "666271",
+          "returncode": null,
+          "timed_out": true,
+          "outcome": "TIMEOUT"
+        }
+      ]
+    },
+    {
+      "task_id": "703775",
+      "problem_id": "p03458",
+      "repeat": 1,
+      "stdin_mode": "literal",
+      "timeout_seconds": 2,
+      "code_sha256": "90ab596d01fabc5aa4592db127652aceca002843f3a566b095152c2e865cecb3",
+      "outcomes": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "failures": []
+    },
+    {
+      "task_id": "703775",
+      "problem_id": "p03458",
+      "repeat": 1,
+      "stdin_mode": "official_terminal_newline",
+      "timeout_seconds": 2,
+      "code_sha256": "90ab596d01fabc5aa4592db127652aceca002843f3a566b095152c2e865cecb3",
+      "outcomes": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "failures": []
+    },
+    {
+      "task_id": "703775",
+      "problem_id": "p03458",
+      "repeat": 2,
+      "stdin_mode": "literal",
+      "timeout_seconds": 2,
+      "code_sha256": "90ab596d01fabc5aa4592db127652aceca002843f3a566b095152c2e865cecb3",
+      "outcomes": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "failures": []
+    },
+    {
+      "task_id": "703775",
+      "problem_id": "p03458",
+      "repeat": 2,
+      "stdin_mode": "official_terminal_newline",
+      "timeout_seconds": 2,
+      "code_sha256": "90ab596d01fabc5aa4592db127652aceca002843f3a566b095152c2e865cecb3",
+      "outcomes": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "failures": []
+    }
+  ],
+  "interpretation": "p03298 times out under both input modes; p03458 passes both modes on rerun. At least some selection variation is due to execution stability, so full-cache changes cannot be attributed solely to stdin."
+}

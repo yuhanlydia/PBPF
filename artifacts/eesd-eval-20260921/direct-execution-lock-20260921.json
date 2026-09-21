@@ -1,0 +1,72 @@
+{
+  "schema": "eesd-direct-execution-lock-v1",
+  "profile": "direct-no-sandbox",
+  "manifest": {
+    "path": "/root/PBPF/runs/eesd-setup/manifest.yaml",
+    "sha256": "3c4ba67fabd17926f37442668247cd8a7a863467aa37545ea739851fb464c073"
+  },
+  "config": {
+    "path": "/root/PBPF/runs/eesd-setup/mechanism-config.lock.yaml",
+    "sha256": "ae3712ab7eee2fa10f6fd28b72cc29a1253dbc2d9e9dd2c4346bae373f5dd2ad"
+  },
+  "runtime": {
+    "builder": {
+      "path": "/root/PBPF/.venv/bin/python",
+      "sha256": "1e761eb19d6f2594ab8dc64bd99ad4e1753589f3bf1ec199e4eef3aaa21e3930",
+      "version": "3.11.16"
+    },
+    "candidate": {
+      "path": "/usr/bin/python3",
+      "sha256": "7d51cd6b48b521277f5caa4610a82126e315fa2be4df069823a8b1eeb5bd4a86",
+      "version": "Python 3.10.12"
+    },
+    "platform": "Linux-5.15.0-179-generic-x86_64-with-glibc2.35",
+    "candidate_uid": 65534,
+    "candidate_gid": 65534,
+    "supplementary_groups": [],
+    "isolation": "none",
+    "limits": {
+      "address_space_bytes": 1073741824,
+      "output_file_bytes": 8388608,
+      "open_files": 64,
+      "processes_per_uid": 64,
+      "core_bytes": 0
+    }
+  },
+  "timeout_seconds": 6.0,
+  "max_workers": 4,
+  "probe": {
+    "stdin": {
+      "code": "import os\nprint(os.getuid())\n",
+      "test": {
+        "input": "",
+        "expected": "65534\n"
+      }
+    },
+    "call": {
+      "code": "def add(a,b):\n    return a+b\n",
+      "test": {
+        "input": "print(add(2,3))",
+        "expected": "5",
+        "expected_error": false
+      }
+    }
+  },
+  "sources": {
+    "src/pbpf/eesd/direct_runtime.py": "7cdcc2c6bc573c62a5a9842e48144528601a84b06452084c37433b1404bc182f",
+    "src/pbpf/apbpf/direct_execution.py": "aa2a3a435d22c9ef27229b4b5858fff07dd0638ba5e5e87b182699eef477c821",
+    "scripts/run_eesd_direct_mechanism_cell.py": "67ddcfc52dfe1d2e94d3379ef6a833b1a2633f694414ca2850c36df0e32fb65a",
+    "scripts/build_eesd_mechanism_cache.py": "2f5b04411681f6610f75a6165b5acb8222c6a31380f8e2520270a1bba530e47c",
+    "scripts/run_eesd_matrix.py": "d76355077386f304bf5f82bb64fc032b6210d443b654fae7b2a03e65b609b9cb",
+    "scripts/run_eesd_evidence_matrix.py": "09d016fb8b9caf6c8b7829a56550ce99f4d1fbefb83a1091a60396a6026aff85",
+    "src/pbpf/eesd/evidence.py": "f825e0a70a41d2c9e3a8b96aafc89ea54d70c6b36337b90697c906e93758d7be",
+    "src/pbpf/apbpf/codearc_execution.py": "e55bbd0fc69e2efb847524932dbf0e6ef0a22d8142dc869ca2c655c2b17d21e9",
+    "src/pbpf/apbpf/rbr_execution.py": "b7f1dfc3044e9d35364a60b68be3a3355db784ab2cf7ad09b16c8bfda880a659",
+    "src/pbpf/apbpf/codearc_bank.py": "cc479620ee4a4922a060be466092a027881f35ab8203cc5b7f9154d7dc29cdfc",
+    "src/pbpf/eesd/replay_admission.py": "453576aeb2be06f7385e61e802a7327bf87b2b2d2ad0686d1dfc056886207e2f"
+  },
+  "amendment": {
+    "path": "/root/PBPF/docs/EESD_EXECUTION_REVIEW_20260921.md",
+    "sha256": "3aac9c84fb78c4c0b33c649c521f16b870d9c9817192aa0549bf8df2a8467ced"
+  }
+}

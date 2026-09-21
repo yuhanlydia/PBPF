@@ -1,0 +1,8 @@
+{
+  "train_items": 4,
+  "development_items": 1,
+  "development_sources_before_token_cap": 1,
+  "excluded": [],
+  "selection": "all training candidates; lexicographically first development candidate per source; fixed token cap",
+  "primary_used_for_training_or_checkpoint_selection": false
+}

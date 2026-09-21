@@ -1,3 +1,94 @@
+# EESD ICLR 2027 branch
+
+The active ICLR paper direction on branch `research/eesd-iclr2027` is
+**Effective-Evidence Self-Distillation (EESD)** rather than the legacy PBPF
+repair-conditioning claim. Historical PBPF/A-PBPF results are preserved as
+diagnostics; they were never deleted from `results/`.
+
+## Start here
+
+- experiment lock: [docs/EESD_ICLR2027_EXPERIMENTS.md](docs/EESD_ICLR2027_EXPERIMENTS.md)
+- locked hyperparameters/matrix: [configs/experiments/eesd_iclr2027.yaml](configs/experiments/eesd_iclr2027.yaml)
+- external-path manifest template: [configs/experiments/eesd_cache_manifest.example.yaml](configs/experiments/eesd_cache_manifest.example.yaml)
+- measured + planned paper tables: [paper/eesd_tables.tex](paper/eesd_tables.tex)
+- evidence matrix: [scripts/run_eesd_evidence_matrix.py](scripts/run_eesd_evidence_matrix.py)
+- public correction firewall: [scripts/prepare_eesd_recursive_corrections.py](scripts/prepare_eesd_recursive_corrections.py)
+- correction generation/re-execution: [scripts/generate_eesd_corrections.py](scripts/generate_eesd_corrections.py)
+- all-rule correction scoring: [scripts/score_eesd_corrections.py](scripts/score_eesd_corrections.py)
+- shared QLoRA trainer: [scripts/run_eesd_weighted_sft.py](scripts/run_eesd_weighted_sft.py)
+- fresh Pass@1 evaluator: [scripts/evaluate_eesd_fresh_bank.py](scripts/evaluate_eesd_fresh_bank.py)
+- closed-loop recursive study: [scripts/run_eesd_recursive.py](scripts/run_eesd_recursive.py)
+- official EvalPlus transfer: [scripts/run_eesd_evalplus_transfer.py](scripts/run_eesd_evalplus_transfer.py)
+- results-to-LaTeX renderer: [scripts/render_eesd_tables.py](scripts/render_eesd_tables.py)
+- resumable orchestrator: [scripts/run_eesd_matrix.py](scripts/run_eesd_matrix.py)
+
+## Locked empirical breadth
+
+The mechanism study is **2 execution domains x 6 model settings**:
+RunBugRun and CodeARC-Replay crossed with Qwen2.5-Coder-1.5B,
+Qwen2.5-Coder-7B, Qwen3-8B (non-thinking), DeepSeek-Coder-6.7B,
+Seed-Coder-8B, and Qwen3-Coder-30B-A3B. Each cell uses 200 development
+source components and the full 500-source primary population, with one sealed
+candidate per source.
+
+The mechanism runner includes same-alpha comparisons, full alpha x relevance
+strength factorials, a tuned global-mass baseline, constant-mean-mass control,
+ten aligned-vs-permuted-mass controls, history-size sweeps, binary-outcome
+sensitivity, concentration-bin analysis, NLL/Brier/ECE/accuracy, and 10,000-draw
+paired source-cluster bootstrap intervals.
+
+Downstream evidence is separate from the transductive probability mechanism:
+- one-round fresh all-tests Pass@1 on RunBugRun and CodeARC;
+- cross-family RunBugRun replication with DeepSeek-Coder-6.7B;
+- official HumanEval+ and MBPP+ Base+Extra Pass@1 transfer after RunBugRun distillation;
+- three-round closed-loop equal-weight-vs-EESD studies on RunBugRun and CodeARC;
+- fixes, regressions, retained correctness, and net gain are reported with Pass@1.
+
+Training/fresh/transfer/recursive runs use the fixed seeds 1701, 1702, 1703.
+Experience collection is stochastic under a fixed seed; fresh primary evaluation
+is deterministic greedy one-candidate Pass@1.
+
+## Run
+
+```bash
+git fetch origin research/eesd-iclr2027
+git switch research/eesd-iclr2027
+python -m pip install -e '.[test,ml,experiment]'
+
+cp configs/experiments/eesd_cache_manifest.example.yaml \
+   configs/experiments/eesd_cache_manifest.yaml
+# Edit only public_root/evaluator_root paths. Keep every declared cell.
+
+# CPU/public preparation + mechanism work; resumes completed artifacts.
+bash scripts/run_eesd_iclr.sh
+
+# Explicit GPU stages can be distributed across workers.
+CUDA_VISIBLE_DEVICES=0 python scripts/run_eesd_matrix.py \
+  --config configs/experiments/eesd_iclr2027.yaml \
+  --manifest configs/experiments/eesd_cache_manifest.yaml \
+  --output runs/eesd-iclr2027 --stage generate-corrections
+
+CUDA_VISIBLE_DEVICES=0 python scripts/run_eesd_matrix.py \
+  --config configs/experiments/eesd_iclr2027.yaml \
+  --manifest configs/experiments/eesd_cache_manifest.yaml \
+  --output runs/eesd-iclr2027 --stage train
+
+# Then run fresh / transfer / recursive and render tables.
+python scripts/run_eesd_matrix.py --config configs/experiments/eesd_iclr2027.yaml \
+  --manifest configs/experiments/eesd_cache_manifest.yaml \
+  --output runs/eesd-iclr2027 --stage render
+```
+
+The old `paper/pbpf_iclr2027.tex` is preserved for provenance. It was a
+prospective manuscript from its first commit, which is why it did not contain
+the later completed tables. Those measurements lived in `results/`, JSON
+reports, and the EED blueprint. The EESD branch now centralizes measured and
+planned tables in `paper/eesd_tables.tex`; completed new artifacts can be
+rendered automatically to `paper/generated_eesd_results.tex`.
+
+
+---
+
 # PBPF
 
 Candidate-specific particle beliefs for execution-conditioned Python repair.

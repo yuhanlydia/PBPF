@@ -1,0 +1,172 @@
+{
+  "captured_at": "2026-09-16T23:52:59.775535+00:00",
+  "previous_turn_classification": "progress: completed and published all prior refit comparisons and third repair fit",
+  "this_turn_classification": "progress: implemented and executed six-cell prior/posterior assignment mechanism audit; verified all archived predictions and summary means",
+  "completed_diagnostic": "codearc-refit-assignment-v1",
+  "live": {
+    "rbr_qwen_generation_status.json": {
+      "status": "running",
+      "pid": 296032,
+      "current": "rbr-qwen-primary500",
+      "process_exists_at_snapshot": true,
+      "process_command": "/usr/bin/python3 -u - ",
+      "process_start_ticks": "63262182"
+    },
+    "rbr_deepseek_generation_status.json": {
+      "status": "running",
+      "pid": 1117848,
+      "current": "rbr-deepseek-train321",
+      "process_exists_at_snapshot": true,
+      "process_command": ".venv/bin/python -u scripts/run_local_rbr_replication_generation.py --run-root local/longgoal --previous-pid 3469598 ",
+      "process_start_ticks": "63664004"
+    },
+    "rbr-qwen-full-evaluation-v1/status.json": {
+      "status": "waiting_for_generation",
+      "pid": 593161,
+      "current": "evaluate-development-remainder",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_bank_evaluation.py --domain rbr --public-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public --evaluator-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator --train-bank /data/cwj/PBPF/local/longgoal/rbr-qwen-train321 --development-pilot-bank /data/cwj/PBPF/local/longgoal/rbr-qwen-development-pilot16 --development-remainder-bank /data/cwj/PBPF/local/longgoal/rbr-qwen-development384 --primary-bank /data/cwj/PBPF/local/longgoal/rbr-qwen-primary500 --output /data/cwj/PBPF/local/longgoal/rbr-qwen-full-evaluation-v1 --generation-status /data/cwj/PBPF/local/longgoal/rbr_qwen_generation_status.json ",
+      "process_start_ticks": "63371596"
+    },
+    "rbr-deepseek-full-evaluation-v1/status.json": {
+      "status": "waiting_for_generation",
+      "pid": 1118014,
+      "current": "evaluate-development-pilot",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_bank_evaluation.py --domain rbr --public-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public --evaluator-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator --train-bank /data/cwj/PBPF/local/longgoal/rbr-deepseek-train321 --development-pilot-bank /data/cwj/PBPF/local/longgoal/rbr-deepseek-development-pilot16 --development-remainder-bank /data/cwj/PBPF/local/longgoal/rbr-deepseek-development384 --primary-bank /data/cwj/PBPF/local/longgoal/rbr-deepseek-primary500 --output /data/cwj/PBPF/local/longgoal/rbr-deepseek-full-evaluation-v1 --generation-status /data/cwj/PBPF/local/longgoal/rbr_deepseek_generation_status.json ",
+      "process_start_ticks": "63664127"
+    },
+    "rbr-qwen-generated-prediction-v1/status.json": {
+      "status": "complete",
+      "pid": 1172374,
+      "current": "prediction-seed1703",
+      "process_inspection": "skipped terminal status; avoids PID reuse"
+    },
+    "rbr-deepseek-generated-prediction-v1/status.json": {
+      "status": "waiting_for_development_execution",
+      "pid": 1172375,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_generated_prediction.py --domain rbr --evaluation-root /data/cwj/PBPF/local/longgoal/rbr-deepseek-full-evaluation-v1 --public-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public --evaluator-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator --output /data/cwj/PBPF/local/longgoal/rbr-deepseek-generated-prediction-v1 ",
+      "process_start_ticks": "63712042"
+    },
+    "codearc-deepseek-full-replication-cell-v1/status.json": {
+      "status": "complete",
+      "pid": 2668935,
+      "current": "selection",
+      "process_inspection": "skipped terminal status; avoids PID reuse"
+    },
+    "rbr-qwen-full-replication-cell-v1/status.json": {
+      "status": "waiting_for_full_execution",
+      "pid": 2668938,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_full_replication_cell.py --evaluation-root /data/cwj/PBPF/local/longgoal/rbr-qwen-full-evaluation-v1 --public-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public --evaluator-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator --domain rbr --family qwen --output /data/cwj/PBPF/local/longgoal/rbr-qwen-full-replication-cell-v1 ",
+      "process_start_ticks": "64404822"
+    },
+    "rbr-deepseek-full-replication-cell-v1/status.json": {
+      "status": "waiting_for_full_execution",
+      "pid": 2668942,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_full_replication_cell.py --evaluation-root /data/cwj/PBPF/local/longgoal/rbr-deepseek-full-evaluation-v1 --public-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public --evaluator-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator --domain rbr --family deepseek --output /data/cwj/PBPF/local/longgoal/rbr-deepseek-full-replication-cell-v1 ",
+      "process_start_ticks": "64404822"
+    },
+    "codearc-packet-repair-v1/status.json": {
+      "status": "running",
+      "pid": 2533538,
+      "current": "generate-seed1701",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_packet_repair.py --packet-root /data/cwj/PBPF/local/longgoal/codearc-repair-packets-v1 --output /data/cwj/PBPF/local/longgoal/codearc-packet-repair-v1 --domain codearc --gpu 2 ",
+      "process_start_ticks": "64331942"
+    },
+    "codearc-packet-repair-evaluation-v1/status.json": {
+      "status": "waiting_for_generation",
+      "pid": 2546736,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_packet_repair_evaluation.py --generation-root /data/cwj/PBPF/local/longgoal/codearc-packet-repair-v1 --packet-root /data/cwj/PBPF/local/longgoal/codearc-repair-packets-v1 --evaluator-root /data/cwj/PBPF/local/longgoal/codearc-evaluator-v1 --output /data/cwj/PBPF/local/longgoal/codearc-packet-repair-evaluation-v1 ",
+      "process_start_ticks": "64337760"
+    },
+    "apbpf-real-full-pipeline-v2/status.json": {
+      "status": "waiting_for_full_banks_and_replication_replay",
+      "pid": 3137406,
+      "waiting_on": [
+        "qwen_public_banks",
+        "rbr_deepseek_full_replay"
+      ],
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_apbpf_full_pipeline.py --run-root /data/cwj/PBPF/local/longgoal --materialized-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs --output /data/cwj/PBPF/local/longgoal/apbpf-real-full-pipeline-v2 --gpu 0 ",
+      "process_start_ticks": "64605641"
+    },
+    "codearc-qwen-history-rate-v1/status.json": {
+      "status": "complete",
+      "pid": 3107872,
+      "process_inspection": "skipped terminal status; avoids PID reuse"
+    },
+    "codearc-deepseek-history-rate-v1/status.json": {
+      "status": "complete",
+      "pid": 3107873,
+      "process_inspection": "skipped terminal status; avoids PID reuse"
+    },
+    "rbr-qwen-history-rate-v1/status.json": {
+      "status": "waiting_for_fitting",
+      "pid": 3107874,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_apbpf_history_rate_ablation.py --wait-for-cell /data/cwj/PBPF/local/longgoal/rbr-qwen-full-replication-cell-v1 --output /data/cwj/PBPF/local/longgoal/rbr-qwen-history-rate-v1 ",
+      "process_start_ticks": "64590786"
+    },
+    "rbr-deepseek-history-rate-v1/status.json": {
+      "status": "waiting_for_fitting",
+      "pid": 3107878,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_apbpf_history_rate_ablation.py --wait-for-cell /data/cwj/PBPF/local/longgoal/rbr-deepseek-full-replication-cell-v1 --output /data/cwj/PBPF/local/longgoal/rbr-deepseek-history-rate-v1 ",
+      "process_start_ticks": "64590787"
+    },
+    "codearc-particle-sensitivity-v1/status.json": {
+      "status": "complete",
+      "pid": 3271959,
+      "current": "semantic-seed1703-p128",
+      "process_inspection": "skipped terminal status; avoids PID reuse"
+    },
+    "codearc-semantic-p32-training-v1/status.json": {
+      "status": "complete",
+      "pid": 3553251,
+      "current": "semantic-p32-seed1703",
+      "process_inspection": "skipped terminal status; avoids PID reuse"
+    },
+    "codearc-semantic-p32-comparison-v1/status.json": {
+      "status": "complete",
+      "pid": 3905918,
+      "process_inspection": "skipped terminal status; avoids PID reuse"
+    },
+    "codearc-prior-training-v1/status.json": {
+      "status": "complete",
+      "pid": 326300,
+      "current": "prior-no-resample-seed1703",
+      "process_inspection": "skipped terminal status; avoids PID reuse"
+    },
+    "codearc-prior-comparison-v1/status.json": {
+      "status": "complete",
+      "pid": 403943,
+      "process_inspection": "skipped terminal status; avoids PID reuse"
+    },
+    "rbr-deepseek-parallel-handoff-v2/status.json": {
+      "status": "waiting_for_qwen_and_idle_gpu0",
+      "pid": 796796,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/coordinate_rbr_replication_gpus.py --run-root /data/cwj/PBPF/local/longgoal --output /data/cwj/PBPF/local/longgoal/rbr-deepseek-parallel-handoff-v2 ",
+      "process_start_ticks": "65280428"
+    },
+    "codearc-refit-assignment-v1/status.json": {
+      "status": "complete",
+      "pid": 1180858,
+      "current": "new-seed1703",
+      "process_inspection": "skipped terminal status; avoids PID reuse"
+    }
+  },
+  "generation_counts": {
+    "rbr-qwen-primary500": 434,
+    "rbr-deepseek-train321": 153
+  },
+  "repair_latest_progress": "{\"generated\": 187, \"task_id\": \"CodeARC/181/qwen/3\", \"arm\": \"no_latent\", \"tokens\": 60, \"seconds\": 1.9629991858964786}",
+  "sealed_real_stages_completed": 1,
+  "real_stage_adapters_provided": 21,
+  "scope": "local exploratory work continues; original failed scientific gates remain unchanged"
+}

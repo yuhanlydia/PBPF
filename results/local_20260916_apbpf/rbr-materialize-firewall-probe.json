@@ -1,0 +1,7 @@
+{
+  "public_tasks": 1221,
+  "visible_tests_each": 4,
+  "raw_data_unmounted": true,
+  "evaluator_artifacts_unmounted": true,
+  "scope": "actual public-only generator sandbox probe; no generation claim"
+}

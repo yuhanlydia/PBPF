@@ -1,0 +1,78 @@
+{
+  "captured_at": "2026-09-16T23:52:05.589755+00:00",
+  "six_archives_and_all_summary_means_verified": true,
+  "max_reference_probability_error": 5.811452865600586e-07,
+  "all_source_files_verified": 109,
+  "descriptive_three_seed_mean": {
+    "old": {
+      "centered_log_likelihood_ratio_rms": {
+        "full": 0.0017465441875780623,
+        "mixed_visible": 0.005452625531082352
+      },
+      "posterior_total_variation": {
+        "full": 0.0005039078532718122,
+        "mixed_visible": 0.0015731755217226844
+      },
+      "future_probability_max_difference": {
+        "full": 8.652308194238383e-05,
+        "mixed_visible": 0.0002701208577491343
+      },
+      "prior_future_nll": {
+        "full": 0.7388036297813754,
+        "mixed_visible": 0.850214170694562
+      },
+      "posterior_future_nll": {
+        "full": 0.49370141150718205,
+        "mixed_visible": 0.7184887600016886
+      },
+      "history_nll_gain": {
+        "full": 0.24510221827419335,
+        "mixed_visible": 0.13172541069287333
+      },
+      "history_future_total_variation": {
+        "full": 0.19648742179075876,
+        "mixed_visible": 0.134456733862559
+      }
+    },
+    "new": {
+      "centered_log_likelihood_ratio_rms": {
+        "full": 0.0059902905486524105,
+        "mixed_visible": 0.018701395640770595
+      },
+      "posterior_total_variation": {
+        "full": 0.0011147630284540355,
+        "mixed_visible": 0.0034802359684060016
+      },
+      "future_probability_max_difference": {
+        "full": 0.00025095399663162726,
+        "mixed_visible": 0.000783466132512937
+      },
+      "prior_future_nll": {
+        "full": 0.7593302259583492,
+        "mixed_visible": 0.8287545971045308
+      },
+      "posterior_future_nll": {
+        "full": 0.45230885656970155,
+        "mixed_visible": 0.6851444765196978
+      },
+      "history_nll_gain": {
+        "full": 0.30702136938864755,
+        "mixed_visible": 0.14361012058483302
+      },
+      "history_future_total_variation": {
+        "full": 0.2729192078113556,
+        "mixed_visible": 0.1607955793539683
+      }
+    }
+  },
+  "finding": "Both models use history substantially; prior-only NLL is worse after refit while history-conditioned NLL improves. Outcome-assignment sensitivity increases but remains small on this sampled support. The static-only improvement hypothesis is not supported. This does not establish count-only dependence or an exact continuous posterior claim.",
+  "next_diagnostic_direction": "Inspect test-by-diagnosis-latent interaction capacity and training gradient allocation, without retuning primary or changing active workers.",
+  "targeted_checks": {
+    "tests": [
+      "tests/apbpf/test_likelihood_assignment_audit.py",
+      "tests/apbpf/test_prior_training_debug.py"
+    ],
+    "result": "2 passed in 4.17s",
+    "log_sha256": "b386809d7b125f98f6cb5826d99b874f692772269c1077be7bf07f3ab5974e48"
+  }
+}

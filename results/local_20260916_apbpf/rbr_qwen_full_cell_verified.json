@@ -1,0 +1,14 @@
+{
+  "captured_at": "2026-09-17T01:18:12.079974+00:00",
+  "qwen_primary_source_files_verified": 500,
+  "qwen_primary_bank_receipt_sha256": "e4f3bfad495f8188ab98ba90654fd80bba30fdf88cc2efe79909bf5895a2dad4",
+  "qwen_cache_sha256": "4af78c8a7856ae4996c3643bc803b849d9c976f06b518b14cf8998045ae3dc39",
+  "association_raw_predictions_sha256": {
+    "1701": "0dad8ce3a6818452a13a80ed7cb519be61ef751af8b722c8e1e2fa82e0de7f51",
+    "1702": "4457ad7b3bc5c0d45b2a99e88c568d5ec92e31da23b0457bdc22c9671345d3c5",
+    "1703": "6fd3faeb3f160f510d90e34a161138550f12c2452d3868b2238755e2a5637917"
+  },
+  "association_gap_independently_recomputed": 0.0004925118060090661,
+  "three_seed_training_report_checkpoint_and_selection_input_bindings_verified": true,
+  "scope": "full500-source standalone exploratory cell, not sealed real-stage completion; association/selection CIs cross zero; hard-bank development minimum still fails"
+}

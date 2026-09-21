@@ -373,10 +373,12 @@ def _validate_gate_decision(result, identity, config, dependencies=None):
 
 def _identity(resolved, stage, dependencies, failed_gates):
     smoke = resolved.backend == "fake"
+    exploratory = resolved.config['execution']['claim_status'] == 'exploratory-predeclared'
     return {"schema": SCHEMA, "stage": stage, "fingerprint": resolved.fingerprint,
             "backend": resolved.backend, "dependencies": {name: value.checksum for name, value in dependencies.items()},
-            "confirmatory": not smoke and not failed_gates,
-            "claim_status": "smoke-only-no-claim" if smoke else ("exploratory-after-failed-gate" if failed_gates else "prospective-gated"),
+            "confirmatory": not smoke and not exploratory and not failed_gates,
+            "claim_status": "smoke-only-no-claim" if smoke else ('exploratory-predeclared' if exploratory else
+                            ("exploratory-after-failed-gate" if failed_gates else "prospective-gated")),
             "failed_gates": list(failed_gates)}
 
 
@@ -389,17 +391,19 @@ def command_for(resolved, stage, directory):
     return [replacements.get(token, token) for token in configured]
 
 
-def retry_command(resolved, root, stage, *, continue_exploratory=False):
+def retry_command(resolved, root, stage, *, continue_exploratory=False, through_stage=None):
     argv = [sys.executable, "-m", "pbpf.apbpf.cli", "rerun-stage", "--config", str(resolved.source),
             "--profile", resolved.profile, "--output-root", str(Path(root).parent), "--stage", stage]
     if resolved.site:
         argv += ["--site", str(resolved.site)]
     if continue_exploratory:
         argv.append("--continue-exploratory")
+    if through_stage is not None:
+        argv += ['--through-stage', through_stage]
     return argv
 
 
-def run_after_changes_command(resolved, root, *, continue_exploratory=False):
+def run_after_changes_command(resolved, root, *, continue_exploratory=False, through_stage=None):
     """Start/resume the new fingerprint produced by changed code or provisioning."""
     argv = [sys.executable, "-m", "pbpf.apbpf.cli", "run", "--config", str(resolved.source),
             "--profile", resolved.profile, "--output-root", str(Path(root).parent), "--resume"]
@@ -407,14 +411,19 @@ def run_after_changes_command(resolved, root, *, continue_exploratory=False):
         argv += ["--site", str(resolved.site)]
     if continue_exploratory:
         argv.append("--continue-exploratory")
+    if through_stage is not None:
+        argv += ['--through-stage', through_stage]
     return argv
 
 
-def doctor(resolved):
+def doctor(resolved, *, through_stage=None):
+    if through_stage is not None and through_stage not in STAGES:
+        raise ValueError('unknown terminal stage')
+    required = STAGES if through_stage is None else STAGES[:STAGES.index(through_stage)+1]
     commands = resolved.config["site"]["commands"]
-    missing = [name for name in STAGES if not commands.get(name)] if resolved.backend == "real" else []
+    missing = [name for name in required if not commands.get(name)] if resolved.backend == "real" else []
     revisions = resolved.config["site"]["worker_revisions"]
-    missing_revisions = ([name for name in STAGES if commands.get(name) and not revisions.get(name)]
+    missing_revisions = ([name for name in required if commands.get(name) and not revisions.get(name)]
                          if resolved.backend == "real" else [])
     missing_paths = {}
     unavailable = {}
@@ -427,11 +436,15 @@ def doctor(resolved):
         if not Path(cwd).is_dir():
             missing_paths["working_directory"] = {"path": cwd, "reason": "directory does not exist"}
         for name, argv in commands.items():
+            if name not in required:
+                continue
             if argv:
                 executable = str(Path(cwd) / argv[0]) if "/" in argv[0] and not Path(argv[0]).is_absolute() else argv[0]
                 if shutil.which(executable) is None:
                     unavailable[name] = argv[0]
         for name, value in resolved.config["site"]["worker_files"].items():
+            if name not in required:
+                continue
             if value is None:
                 continue
             path = Path(value)
@@ -450,11 +463,11 @@ def doctor(resolved):
             "missing_worker_revisions": missing_revisions,
             "unavailable_executables": unavailable,
             "worker_revision_mismatches": revision_mismatches,
-            "commands": commands, "stages": list(STAGES), "dependencies": DEPENDENCIES,
+            "commands": commands, "stages": list(STAGES), "required_stages": list(required), "dependencies": DEPENDENCIES,
             "note": "Readiness checks provisioning only; no worker or experiment has run."}
 
 
-def _execute_stage(resolved, root, identity, dependencies, *, fail_smoke_gate=None):
+def _execute_stage(resolved, root, identity, dependencies, *, fail_smoke_gate=None, through_stage=None):
     stage = identity["stage"]
     attempts = _attempts(root, stage)
     number = int(attempts[-1].name.split("-")[1]) + 1 if attempts else 1
@@ -478,7 +491,7 @@ def _execute_stage(resolved, root, identity, dependencies, *, fail_smoke_gate=No
             if stage in GATE_STAGES:
                 result["gate"] = {"passed": stage != fail_smoke_gate, "reason": "synthetic smoke control; not a scientific decision"}
         else:
-            diagnostics = doctor(resolved)
+            diagnostics = doctor(resolved, through_stage=through_stage)
             if not diagnostics["ready"]:
                 details = {name: diagnostics[name] for name in
                            ("missing_commands", "missing_worker_revisions", "missing_paths",
@@ -518,9 +531,9 @@ def _execute_stage(resolved, root, identity, dependencies, *, fail_smoke_gate=No
         if stage in GATE_STAGES and not result["gate"]["passed"]:
             write_once(directory / "gate-failure.json", {**identity, "decision": result["gate"],
                        "retry_command": retry_command(resolved, root, stage,
-                                                      continue_exploratory=bool(identity["failed_gates"])),
+                                                      continue_exploratory=bool(identity["failed_gates"]), through_stage=through_stage),
                        "run_after_changes_command": run_after_changes_command(
-                           resolved, root, continue_exploratory=bool(identity["failed_gates"])),
+                           resolved, root, continue_exploratory=bool(identity["failed_gates"]), through_stage=through_stage),
                        "remediation": "Stop confirmatory claims; --continue-exploratory permits only explicitly nonconfirmatory downstream artifacts."})
         files = {file.relative_to(directory).as_posix(): _sha(file) for file in directory.rglob("*") if file.is_file()}
         write_once(directory / "complete.json", {"identity_hash": digest(identity), "files": files})
@@ -530,9 +543,9 @@ def _execute_stage(resolved, root, identity, dependencies, *, fail_smoke_gate=No
                    "command": argv, "command_display": shlex.join(argv) if argv else None,
                    "returncode": getattr(exc, "returncode", None),
                    "retry_command": retry_command(resolved, root, stage,
-                                                  continue_exploratory=bool(identity["failed_gates"])),
+                                                  continue_exploratory=bool(identity["failed_gates"]), through_stage=through_stage),
                    "run_after_changes_command": run_after_changes_command(
-                       resolved, root, continue_exploratory=bool(identity["failed_gates"])),
+                       resolved, root, continue_exploratory=bool(identity["failed_gates"]), through_stage=through_stage),
                    "remediation": "Inspect stderr.log, provision/fix the real worker, then rerun; changed config/source uses a new fingerprint.",
                    "synthetic_fallback": False}
         write_once(directory / "failure.json", failure)
@@ -545,13 +558,16 @@ def _descendants(stage):
 
 
 def run_pipeline(resolved, root, *, resume=False, continue_exploratory=False,
-                 rerun_stage=None, fail_smoke_gate=None):
+                 rerun_stage=None, fail_smoke_gate=None, through_stage=None):
     """Resume matching immutable inputs; reruns append attempts for the suffix."""
     root = Path(root).resolve()
     if root.name != resolved.fingerprint:
         raise ValueError("run directory must be named by the exact configuration fingerprint")
     if rerun_stage is not None and rerun_stage not in STAGES:
         raise ValueError("unknown rerun stage")
+    if through_stage is not None and (through_stage not in STAGES or
+            (rerun_stage is not None and STAGES.index(through_stage) < STAGES.index(rerun_stage))):
+        raise ValueError('terminal stage must be known and not precede rerun stage')
     if fail_smoke_gate is not None and (resolved.backend != "fake" or fail_smoke_gate not in GATE_STAGES):
         raise ValueError("failure injection is available only for smoke gate stages")
     root.mkdir(parents=True, exist_ok=True)
@@ -583,12 +599,15 @@ def run_pipeline(resolved, root, *, resume=False, continue_exploratory=False,
                 if latest is not None and (latest / "identity.json").exists() and stage not in forced:
                     if _read(latest / "identity.json") != identity:
                         raise ValueError(f"{stage}: partial attempt identity mismatch; explicit rerun required")
-                result = _execute_stage(resolved, root, identity, dependencies, fail_smoke_gate=fail_smoke_gate)
+                result = _execute_stage(resolved, root, identity, dependencies,
+                                        fail_smoke_gate=fail_smoke_gate, through_stage=through_stage)
             results[stage] = result
             if stage in GATE_STAGES and not result.value["gate"]["passed"]:
                 failed.append({"stage": stage, "checksum": result.checksum})
                 if not continue_exploratory:
                     raise GateFailure(f"{stage} failed; downstream stages stopped. --continue-exploratory labels all subsequent work nonconfirmatory.")
+            if stage == through_stage:
+                break
         return report_run(resolved, root)
 
 
@@ -637,5 +656,7 @@ def report_run(resolved, root, *, require_complete=False):
     eligible = complete and resolved.backend == "real" and not failed and all(item.identity["confirmatory"] for item in results.values())
     return {"schema": SCHEMA, "fingerprint": resolved.fingerprint, "run_directory": str(root),
             "complete": complete, "backend": resolved.backend, "failed_gates": failed,
-            "claim_status": "smoke-only-no-claim" if resolved.backend == "fake" else ("exploratory-after-failed-gate" if failed else "prospective-gated"),
+            "claim_status": "smoke-only-no-claim" if resolved.backend == "fake" else
+                ('exploratory-predeclared' if resolved.config['execution']['claim_status'] == 'exploratory-predeclared'
+                 else ("exploratory-after-failed-gate" if failed else "prospective-gated")),
             "main_table_eligible": eligible, "stages": stages}

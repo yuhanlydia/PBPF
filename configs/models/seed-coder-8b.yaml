@@ -1,0 +1,4 @@
+role: cross_family_replication
+model_id: ByteDance-Seed/Seed-Coder-8B-Instruct
+revision: c62d428b84d52a7f1bb38d2aa72a79d6d5f5e614
+license: MIT

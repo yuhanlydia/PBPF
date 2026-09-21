@@ -1,0 +1,65 @@
+{
+  "codearc-deepseek-full-replication-cell-v1": {
+    "pid": 2668935,
+    "command": [
+      "/data/cwj/PBPF/.venv/bin/python",
+      "-u",
+      "scripts/run_local_full_replication_cell.py",
+      "--evaluation-root",
+      "/data/cwj/PBPF/local/longgoal/codearc-deepseek-full-evaluation-v2",
+      "--public-root",
+      "/data/cwj/PBPF/local/longgoal/codearc-public-v1",
+      "--evaluator-root",
+      "/data/cwj/PBPF/local/longgoal/codearc-evaluator-v1",
+      "--domain",
+      "codearc",
+      "--family",
+      "deepseek",
+      "--output",
+      "/data/cwj/PBPF/local/longgoal/codearc-deepseek-full-replication-cell-v1"
+    ],
+    "launched_at": "2026-09-16T21:00:26.266166+00:00"
+  },
+  "rbr-qwen-full-replication-cell-v1": {
+    "pid": 2668938,
+    "command": [
+      "/data/cwj/PBPF/.venv/bin/python",
+      "-u",
+      "scripts/run_local_full_replication_cell.py",
+      "--evaluation-root",
+      "/data/cwj/PBPF/local/longgoal/rbr-qwen-full-evaluation-v1",
+      "--public-root",
+      "/data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public",
+      "--evaluator-root",
+      "/data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator",
+      "--domain",
+      "rbr",
+      "--family",
+      "qwen",
+      "--output",
+      "/data/cwj/PBPF/local/longgoal/rbr-qwen-full-replication-cell-v1"
+    ],
+    "launched_at": "2026-09-16T21:00:26.266802+00:00"
+  },
+  "rbr-deepseek-full-replication-cell-v1": {
+    "pid": 2668942,
+    "command": [
+      "/data/cwj/PBPF/.venv/bin/python",
+      "-u",
+      "scripts/run_local_full_replication_cell.py",
+      "--evaluation-root",
+      "/data/cwj/PBPF/local/longgoal/rbr-deepseek-full-evaluation-v1",
+      "--public-root",
+      "/data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public",
+      "--evaluator-root",
+      "/data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator",
+      "--domain",
+      "rbr",
+      "--family",
+      "deepseek",
+      "--output",
+      "/data/cwj/PBPF/local/longgoal/rbr-deepseek-full-replication-cell-v1"
+    ],
+    "launched_at": "2026-09-16T21:00:26.267762+00:00"
+  }
+}

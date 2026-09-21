@@ -1,0 +1,64 @@
+{
+  "schema": "apbpf-development-mechanism-diagnostic-v1",
+  "scope": "development-only; original held-out records not used",
+  "variants": [
+    {
+      "variant": "expanded_default",
+      "aligned_nll": 0.4561805169334733,
+      "best_strong_baseline_nll": 0.3679414669263217,
+      "association_gap": -0.0030809747986495495,
+      "eligible_count": 365,
+      "constant_count": 899,
+      "eligible_gap": -0.010669461451470852,
+      "late_train_gap_mean": 0.01893861507996917,
+      "all_gate_passes": false
+    },
+    {
+      "variant": "association10",
+      "aligned_nll": 0.46699107929645367,
+      "best_strong_baseline_nll": 0.3679414669263217,
+      "association_gap": 0.0011482223635539412,
+      "eligible_count": 365,
+      "constant_count": 899,
+      "eligible_gap": 0.003976306412369013,
+      "late_train_gap_mean": 0.014493722282350064,
+      "all_gate_passes": false
+    },
+    {
+      "variant": "association10_invariance1",
+      "aligned_nll": 0.4710864514628272,
+      "best_strong_baseline_nll": 0.3679414669263217,
+      "association_gap": 0.003965348470956087,
+      "eligible_count": 365,
+      "constant_count": 899,
+      "eligible_gap": 0.013732053339481354,
+      "late_train_gap_mean": 0.010969587694853544,
+      "all_gate_passes": false
+    },
+    {
+      "variant": "richer_semantics",
+      "aligned_nll": 0.46518433545822796,
+      "best_strong_baseline_nll": 0.39246335947187444,
+      "association_gap": 0.00703735277056694,
+      "eligible_count": 365,
+      "constant_count": 899,
+      "eligible_gap": 0.024370448663830757,
+      "late_train_gap_mean": 0.03862067330628634,
+      "all_gate_passes": false
+    }
+  ],
+  "findings": [
+    "899/1264 assessment candidates have constant visible outcomes; shuffling these histories produces exactly zero association gap.",
+    "A 0.03 full-population gap would require about 0.104 gap among the 365 eligible candidates; do not replace the full-population estimand with eligible-only results.",
+    "Best wider-hash variant has positive but inadequate full-population gap and still trails strong deterministic baselines.",
+    "Semantic representation limitation and optimization insufficiency remain hypotheses, not demonstrated root causes."
+  ],
+  "next_iteration": {
+    "hypothesis": "1000 optimization steps insufficient for the generative/future multi-objective loss; test 3000 steps with the same inner validation and assessment sources",
+    "variants": [
+      "default_3000",
+      "richer_semantics_3000"
+    ],
+    "fixed_evaluation": "original development only, seeds1701; no original test access; no lowered gates"
+  }
+}

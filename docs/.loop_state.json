@@ -1,0 +1,16 @@
+{
+  "phase": "codearc-bank-reextraction-and-semantic-feature-iteration",
+  "status_file": "local/longgoal/status.json",
+  "iteration": 3,
+  "objective": "Complete outstanding PBPF/A-PBPF experiments and evidence-driven debug iterations",
+  "test_population_policy": "held-out; any repeated test-informed exploration nonconfirmatory",
+  "external_resources": "unavailable; local continuation explicitly authorized",
+  "pipeline_status": "local/longgoal/codearc_pipeline_status.json",
+  "pending": [
+    "CodeARC full bank execution and hard-bank audit",
+    "CodeARC prediction training and association",
+    "DeepSeek full development/training replication",
+    "RBR semantic three-seed replication and corrected repair pilot",
+    "Remaining exploratory downstream experiments and true stage adapters"
+  ]
+}

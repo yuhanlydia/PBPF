@@ -1,0 +1,112 @@
+{
+  "seed_estimand": "mean paired per-example loss across all three fixed seeds; whole-source resampling across seeds",
+  "seeds": [
+    1701,
+    1702,
+    1703
+  ],
+  "primary_candidates": 4000,
+  "source_components": 500,
+  "future_examples_per_seed": 24000,
+  "metrics": {
+    "baseline": {
+      "nll": 0.48961720004648085,
+      "brier": 0.2624755357275244,
+      "accuracy": 0.822625,
+      "nll_gain_vs_baseline": 0.0
+    },
+    "aligned": {
+      "nll": 0.48961720004648085,
+      "brier": 0.2624755357275244,
+      "accuracy": 0.822625,
+      "nll_gain_vs_baseline": 0.0
+    },
+    "history_rate": {
+      "nll": 0.7873115089415669,
+      "brier": 0.370104938271605,
+      "accuracy": 0.8414166666666667,
+      "nll_gain_vs_baseline": -0.29769430889508613
+    }
+  },
+  "comparisons": {
+    "history_rate": {
+      "unit": "source_component",
+      "clusters": 500,
+      "replicates": 10000,
+      "mean_nll_gap": 0.297694308110925,
+      "ci95": [
+        0.2682436273869259,
+        0.3240612079231095
+      ],
+      "estimand": "future-example-weighted; whole-source-component resampling"
+    }
+  },
+  "per_seed_comparisons": {
+    "1701": {
+      "history_rate": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.3004729622689632,
+        "ci95": [
+          0.2709632650298129,
+          0.3269482506510085
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    },
+    "1702": {
+      "history_rate": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.2954397671278575,
+        "ci95": [
+          0.2633932472003186,
+          0.3238528832208046
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    },
+    "1703": {
+      "history_rate": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.2971701949359543,
+        "ci95": [
+          0.26842792004156885,
+          0.3235132345830525
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      }
+    }
+  },
+  "schema": "apbpf-history-rate-ablation-v1",
+  "dataset": "codearc_replay",
+  "cache_sha256": "fbbe930dfa26b7463210d9f21939b6f4f1c5a2b6fea01349f07e53f5bbffce99",
+  "alpha": 1.0,
+  "fitted_parameters": 0,
+  "public_observations": 4,
+  "estimand": "fixed-alpha categorical history-rate versus each fitted aligned predictor; full primary sources",
+  "scope": "required supplementary prediction ablation; does not replace tuned-Dirichlet fairness or association gates",
+  "bindings": {
+    "1701": {
+      "training_report_sha256": "46bb149b9bca14d86e8ac5d84230f355bc8fb04e09b243757a33fbac53f9476f",
+      "predictions_sha256": "db1d228cfd5a4140297658d9d3e68099da9fc905f5b67694efb20c279290f4db",
+      "controls_sha256": "a387a6e08aee7fee380bf04e2b5c91a06f2d3beb9384c9339fca6ea0fb862d3f"
+    },
+    "1702": {
+      "training_report_sha256": "be50f1138b71d01950c9de8f2c67cb3bfeaf58b8a220b214b48c304327c6e654",
+      "predictions_sha256": "7bfaabae068d36df9fd56a29f72f19ac942881ac32732cd866beac95f29cccd9",
+      "controls_sha256": "f9ecdceaea8b6f6647064e7278b320d19f5388828ce08207974a9c6f155a5f96"
+    },
+    "1703": {
+      "training_report_sha256": "eeb00847ee0fa5fbcaf819662272694ad8f9ecb0fc9f47c3cccb794dd0842e88",
+      "predictions_sha256": "ada2e2d5c0f0f8e86f2dc6d4e0cefaf737e91f78af46a1115189d3ab87a18cbc",
+      "controls_sha256": "860f755a69fb5d6409bb26f79429ef2cb94ce5f0524d9b69b34e40d92eb75502"
+    }
+  },
+  "training_status_sha256": "709ba625845b85f57f214d255118c4c1b72f573ffecb151caf758601d9ddfc51",
+  "probabilities_sha256": "38259a10efaac91f8ed0f707d1f46a2e5dd52048936b1225f326e17db9c66e3c"
+}

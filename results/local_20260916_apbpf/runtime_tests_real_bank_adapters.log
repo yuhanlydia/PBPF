@@ -1,0 +1,143 @@
+..............................................................F......... [  9%]
+........................................................................ [ 18%]
+........................................................................ [ 27%]
+........................................................................ [ 36%]
+........................................................................ [ 46%]
+........................................................................ [ 55%]
+........................................................................ [ 64%]
+........................................................................ [ 73%]
+........................................................................ [ 82%]
+......................................FF................................ [ 92%]
+..............................................................           [100%]
+=================================== FAILURES ===================================
+________________ test_repair_execution_uses_same_stdin_protocol ________________
+
+    def test_repair_execution_uses_same_stdin_protocol():
+        path = Path(__file__).resolve().parents[2] / 'scripts/run_rbr_repair_gate.py'
+        spec = importlib.util.spec_from_file_location('repair_stdin_contract', path)
+        module = importlib.util.module_from_spec(spec)
+>       spec.loader.exec_module(module)
+
+tests/apbpf/test_rbr_execution.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<frozen importlib._bootstrap_external>:995: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+scripts/run_rbr_repair_gate.py:53: in <module>
+    @dataclass(frozen=True)
+     ^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/dataclasses.py:1258: in wrap
+    return _process_class(cls, init, repr, eq, order, unsafe_hash,
+/usr/lib/python3.12/dataclasses.py:983: in _process_class
+    and _is_type(type, cls, dataclasses, dataclasses.KW_ONLY,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+annotation = 'str', cls = <class 'repair_stdin_contract.ContinuationTrace'>
+a_module = <module 'dataclasses' from '/usr/lib/python3.12/dataclasses.py'>
+a_type = <dataclasses._KW_ONLY_TYPE object at 0x79283e352510>
+is_type_predicate = <function _is_kw_only at 0x79283e1d4d60>
+
+    def _is_type(annotation, cls, a_module, a_type, is_type_predicate):
+        # Given a type annotation string, does it refer to a_type in
+        # a_module?  For example, when checking that annotation denotes a
+        # ClassVar, then a_module is typing, and a_type is
+        # typing.ClassVar.
+    
+        # It's possible to look up a_module given a_type, but it involves
+        # looking in sys.modules (again!), and seems like a waste since
+        # the caller already knows a_module.
+    
+        # - annotation is a string type annotation
+        # - cls is the class that this annotation was found in
+        # - a_module is the module we want to match
+        # - a_type is the type in that module we want to match
+        # - is_type_predicate is a function called with (obj, a_module)
+        #   that determines if obj is of the desired type.
+    
+        # Since this test does not do a local namespace lookup (and
+        # instead only a module (global) lookup), there are some things it
+        # gets wrong.
+    
+        # With string annotations, cv0 will be detected as a ClassVar:
+        #   CV = ClassVar
+        #   @dataclass
+        #   class C0:
+        #     cv0: CV
+    
+        # But in this example cv1 will not be detected as a ClassVar:
+        #   @dataclass
+        #   class C1:
+        #     CV = ClassVar
+        #     cv1: CV
+    
+        # In C1, the code in this function (_is_type) will look up "CV" in
+        # the module and not find it, so it will not consider cv1 as a
+        # ClassVar.  This is a fairly obscure corner case, and the best
+        # way to fix it would be to eval() the string "CV" with the
+        # correct global and local namespaces.  However that would involve
+        # a eval() penalty for every single field of every dataclass
+        # that's defined.  It was judged not worth it.
+    
+        match = _MODULE_IDENTIFIER_RE.match(annotation)
+        if match:
+            ns = None
+            module_name = match.group(1)
+            if not module_name:
+                # No module name, assume the class's module did
+                # "from dataclasses import InitVar".
+>               ns = sys.modules.get(cls.__module__).__dict__
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?
+
+/usr/lib/python3.12/dataclasses.py:749: AttributeError
+_____ test_fresh_local_runs_have_identical_scientific_leaves_and_packages ______
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-94/test_fresh_local_runs_have_ide0')
+
+    def test_fresh_local_runs_have_identical_scientific_leaves_and_packages(tmp_path):
+        reports = []
+        leaves = []
+        for name in ("first", "second"):
+            root = tmp_path / name
+            run = cli("run", "--resume", root=root)
+>           assert run.returncode == 0, run.stderr
+E           AssertionError: pbpf-iclr: bounded verifier unit exceeded deadline
+E             
+E           assert 2 == 0
+E            +  where 2 = CompletedProcess(args=['/data/cwj/PBPF/.venv/bin/python', '-m', 'pbpf.iclr_cli', 'run', '--resume', '--config', '/data...h_local_runs_have_ide0/first'], returncode=2, stdout='', stderr='pbpf-iclr: bounded verifier unit exceeded deadline\n').returncode
+
+tests/test_iclr_cli.py:67: AssertionError
+_______________ test_local_dag_has_no_optional_import_or_socket ________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x79271a1bc1a0>
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-94/test_local_dag_has_no_optional0')
+capsys = <_pytest.capture.CaptureFixture object at 0x79271a1be1b0>
+
+    def test_local_dag_has_no_optional_import_or_socket(monkeypatch, tmp_path, capsys):
+        original = builtins.__import__
+        def blocked(name, *args, **kwargs):
+            if name.split(".")[0] in {"torch", "transformers", "datasets", "socket", "requests", "huggingface_hub"}:
+                raise AssertionError("forbidden offline dependency: " + name)
+            return original(name, *args, **kwargs)
+        monkeypatch.setattr(builtins, "__import__", blocked)
+        main = importlib.import_module("pbpf.iclr_cli").main
+>       assert main(["run", "--config", str(CONFIG), "--profile", "local_cpu",
+                     "--output-root", str(tmp_path), "--resume"]) == 0
+E       AssertionError: assert 2 == 0
+E        +  where 2 = <function main at 0x79271a38ab60>(['run', '--config', '/data/cwj/PBPF/configs/experiments/iclr_pbpf.yaml', '--profile', 'local_cpu', '--output-root', ...])
+
+tests/test_iclr_cli.py:88: AssertionError
+----------------------------- Captured stderr call -----------------------------
+pbpf-iclr: bounded verifier unit exceeded deadline
+=============================== warnings summary ===============================
+tests/apbpf/test_smc_acquisition.py::test_batched_diagnostic_scores_match_shipped_adapter
+  /data/cwj/PBPF/src/pbpf/apbpf/acquisition.py:340: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
+    diagnosis = torch.as_tensor(state.diagnosis_particles, device=self.device, dtype=self.dtype)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/apbpf/test_rbr_execution.py::test_repair_execution_uses_same_stdin_protocol
+FAILED tests/test_iclr_cli.py::test_fresh_local_runs_have_identical_scientific_leaves_and_packages
+FAILED tests/test_iclr_cli.py::test_local_dag_has_no_optional_import_or_socket
+3 failed, 779 passed, 1 warning in 409.14s (0:06:49)

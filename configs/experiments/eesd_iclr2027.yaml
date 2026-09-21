@@ -1,0 +1,82 @@
+schema: eesd-iclr2027-v1
+claim: evidence_aware_self_distillation
+seeds: [1701, 1702, 1703]
+bootstrap_seed: 314159
+# See docs/EESD_EXECUTION_LOCK_20260920.md for prospective technical settings.
+
+models:
+  primary: configs/models/qwen2.5-coder-7b.yaml
+  cross_family: configs/models/deepseek-coder-6.7b.yaml
+  second_cross_family: configs/models/seed-coder-8b.yaml
+  third_cross_family: configs/models/starcoder2-15b.yaml
+
+datasets:
+  mechanism:
+    - configs/benchmarks/runbugrun.yaml
+    - configs/benchmarks/codearc.yaml
+  downstream:
+    - configs/benchmarks/evalplus.yaml
+    - configs/benchmarks/livecodebench_v6.yaml
+  optional_repository:
+    - configs/benchmarks/swebench_lite.yaml
+
+evidence:
+  alphas: [0.01, 0.10, 0.25, 0.50, 1.0, 2.0, 5.0, 10.0]
+  strengths: [0.0, 1.0, 4.0, 16.0]
+  visible_counts: [1, 2, 4, 8]
+  bootstrap_draws: 10000
+  global_mass_grid: [0.25, 0.5, 1, 2, 4, 8, 16]
+  ece_bins: 10
+  permutation_seeds: [1701, 1702, 1703]
+  concentration_bins_for_n4: [1, 2, 3, 4]
+  primary_metric: nll
+  secondary_metrics: [brier, ece, accuracy]
+
+mandatory_ablations:
+  - ordinary_vs_fixed_relevance
+  - fixed_vs_effective_same_alpha_0p10
+  - fixed_vs_effective_same_alpha_0p01
+  - full_alpha_strength_factorial
+  - tuned_global_mass_vs_effective
+  - constant_mean_mass_vs_effective
+  - permuted_mass_vs_aligned_mass
+  - visible_history_size
+  - concentration_bins
+  - five_class_vs_binary
+
+distillation:
+  rounds: [0, 1, 2, 3]
+  training_arms:
+    - no_update
+    - equal_weight_correction_sft
+    - final_correctness_filter
+    - scalar_confidence_weight
+    - fixed_mass_dirichlet
+    - eed_mean_utility
+    - eed_no_kl
+    - eesd_full
+  primary_metrics:
+    - pass_at_1
+    - fix_rate
+    - regression_rate
+    - net_gain
+    - retained_correct_rate
+    - policy_kl
+
+statistics:
+  unit: source_problem
+  paired_bootstrap: true
+  holm_secondary: true
+  report_all_predeclared_cells: true
+  forbid_posthoc_cell_dropping: true
+
+paper_tables:
+  - table_1_related_work_gap
+  - table_2_mechanism_cross_model_cross_dataset
+  - table_3_causal_mass_ablations
+  - table_4_one_round_eesd
+  - table_5_recursive_stability
+  - appendix_legacy_apbpf_diagnostics
+  - appendix_full_factorials
+  - appendix_per_seed
+  - appendix_costs

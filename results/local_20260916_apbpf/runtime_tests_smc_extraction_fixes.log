@@ -1,0 +1,108 @@
+........................................................................ [  9%]
+........................................................................ [ 19%]
+........................................................................ [ 28%]
+........................................................................ [ 38%]
+........................................................................ [ 48%]
+........................................................................ [ 57%]
+........................................................................ [ 67%]
+...............................................F........................ [ 77%]
+........................................................................ [ 86%]
+...FF................................................................... [ 96%]
+............................                                             [100%]
+=================================== FAILURES ===================================
+______ test_rpc_deadline_applies_to_individual_cases_not_whole_inventory _______
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-64/test_rpc_deadline_applies_to_i0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x74ae357454c0>
+
+    def test_rpc_deadline_applies_to_individual_cases_not_whole_inventory(tmp_path, monkeypatch):
+        import pbpf.runner.evaluator as module
+        from pbpf.runner.evaluator import seal_final
+        manifest = private_manifest(tmp_path)
+        row = json.loads(manifest.read_bytes())
+        row["tasks"][0]["tests"] = [dict(row["tasks"][0]["tests"][1], test_id=f"h{i}") for i in range(3)]
+        manifest.write_bytes(canonical_bytes(row))
+        c = candidate()
+        mapping = [{"key": ["fake", "fake", "t", 1701, "pbpf"], "source_hash": c.source_hash, "version_id": c.version_id}]
+        seal = seal_final(tmp_path / "seal.json", mapping=mapping, expected_keys=[mapping[0]["key"]], fingerprint="f"*64, code={c.source_hash:c.source})
+        slow = [sys.executable, "-I", "-c", "import time,json; time.sleep(.15); print(json.dumps({'outcome':'PASS'}))"]
+        calls = []
+        original_rpc = module._rpc
+        def traced_rpc(request):
+            calls.append(request)
+            return original_rpc(request)
+        monkeypatch.setattr(module, "_rpc", traced_rpc)
+        evaluator = HiddenEvaluator(manifest, fingerprint="f"*64, output_root=tmp_path / "out", mode="smoke",
+            manifest_hash=digest(row), sandbox_command=slow, case_seconds=.5, rpc_overhead_seconds=2.)
+>       assert evaluator.evaluate(seal, code={c.source_hash:c.source})["results"][0]["outcome"] == "PASS"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round1.py:155:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src/pbpf/runner/evaluator.py:559: in evaluate
+    _rpc(dict(unit, action="case", case_id=test_id))
+tests/runner/test_review_round1.py:151: in traced_rpc
+    return original_rpc(request)
+           ^^^^^^^^^^^^^^^^^^^^^
+src/pbpf/runner/evaluator.py:448: in _rpc
+    result = _bounded_process([sys.executable, "-I", "-c", script], payload=canonical_bytes(request), cwd=directory,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+command = ['/data/cwj/PBPF/.venv/bin/python', '-I', '-c', "import sys; sys.path.insert(0, '/data/cwj/PBPF/src'); from pbpf.runner.evaluator import _worker; _worker()"]
+
+    def _bounded_process(command, *, payload, env, timeout, cwd=None):
+        process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            close_fds=True, env=env, cwd=cwd, start_new_session=not _IN_WORKER)
+        try:
+            stdout, stderr = process.communicate(payload, timeout=timeout)
+            return subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
+        except subprocess.TimeoutExpired:
+            _kill_process(process)
+            process.communicate()
+>           raise ValueError("bounded verifier unit exceeded deadline") from None
+E           ValueError: bounded verifier unit exceeded deadline
+
+src/pbpf/runner/evaluator.py:466: ValueError
+________ test_local_all_commands_share_run_id_resume_and_verify_package ________
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-64/test_local_all_commands_share_0')
+
+    def test_local_all_commands_share_run_id_resume_and_verify_package(tmp_path):
+        outputs = {}
+        for command in ("doctor", "prepare", "run", "aggregate", "verify", "package"):
+            result = cli(command, "--resume", root=tmp_path)
+>           assert result.returncode == 0, (command, result.stdout, result.stderr)
+E           AssertionError: ('run', '', 'pbpf-iclr: bounded verifier unit exceeded deadline
+E             ')
+E           assert 2 == 0
+E            +  where 2 = CompletedProcess(args=['/data/cwj/PBPF/.venv/bin/python', '-m', 'pbpf.iclr_cli', 'run', '--resume', '--config', '/data...t_local_all_commands_share_0'], returncode=2, stdout='', stderr='pbpf-iclr: bounded verifier unit exceeded deadline\n').returncode
+
+tests/test_iclr_cli.py:44: AssertionError
+_____ test_fresh_local_runs_have_identical_scientific_leaves_and_packages ______
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-64/test_fresh_local_runs_have_ide0')
+
+    def test_fresh_local_runs_have_identical_scientific_leaves_and_packages(tmp_path):
+        reports = []
+        leaves = []
+        for name in ("first", "second"):
+            root = tmp_path / name
+            run = cli("run", "--resume", root=root)
+>           assert run.returncode == 0, run.stderr
+E           AssertionError: pbpf-iclr: bounded verifier unit exceeded deadline
+E
+E           assert 2 == 0
+E            +  where 2 = CompletedProcess(args=['/data/cwj/PBPF/.venv/bin/python', '-m', 'pbpf.iclr_cli', 'run', '--resume', '--config', '/data...h_local_runs_have_ide0/first'], returncode=2, stdout='', stderr='pbpf-iclr: bounded verifier unit exceeded deadline\n').returncode
+
+tests/test_iclr_cli.py:67: AssertionError
+=============================== warnings summary ===============================
+tests/apbpf/test_smc_acquisition.py::test_batched_diagnostic_scores_match_shipped_adapter
+  /data/cwj/PBPF/src/pbpf/apbpf/acquisition.py:340: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
+    diagnosis = torch.as_tensor(state.diagnosis_particles, device=self.device, dtype=self.dtype)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/runner/test_review_round1.py::test_rpc_deadline_applies_to_individual_cases_not_whole_inventory
+FAILED tests/test_iclr_cli.py::test_local_all_commands_share_run_id_resume_and_verify_package
+FAILED tests/test_iclr_cli.py::test_fresh_local_runs_have_identical_scientific_leaves_and_packages
+3 failed, 745 passed, 1 warning in 593.42s (0:09:53)

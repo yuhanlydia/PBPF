@@ -1,0 +1,938 @@
+{
+  "schema": "eesd-handoff-tasks-v1",
+  "snapshot_utc": "2026-09-21T06:16:02.308900+00:00",
+  "snapshot_kind": "read-only file inventory; sealed generation/direct file checksums rechecked; not all scientific verifiers rerun",
+  "scope": {
+    "families": [
+      "qwen25_7b",
+      "deepseek_6p7b",
+      "seed_coder_8b",
+      "starcoder2_15b"
+    ],
+    "mechanism_datasets": [
+      "runbugrun",
+      "codearc",
+      "apps_replay",
+      "codecontests_replay"
+    ],
+    "seeds": [
+      1701,
+      1702,
+      1703
+    ],
+    "planned_mechanism_cell_seeds": 48,
+    "future_tasks_all_covered": true,
+    "all_tasks_one_click_runnable": false
+  },
+  "observed_counts": {
+    "original_generation_split_banks": 24,
+    "original_generation_complete_cell_seeds": 12,
+    "replay_generation_split_banks": 10,
+    "replay_generation_complete_cell_seeds": 4,
+    "direct_original_scored_cell_seeds": 12,
+    "replay_scored_cell_seeds": 0,
+    "direct_prepared_banks": 0,
+    "direct_correction_generations": 0,
+    "training_reports": 0,
+    "zero_weight_training_receipts": 0
+  },
+  "correction_original_bank_progress": {
+    "train": {
+      "path": "runs/eesd-direct-20260921/correction-original-banks/runbugrun/qwen25_7b/round1/train",
+      "sealed": true,
+      "candidate_checksums_present": 321,
+      "planned_sources": 321
+    },
+    "development": {
+      "path": "runs/eesd-direct-20260921/correction-original-banks/runbugrun/qwen25_7b/round1/development",
+      "sealed": false,
+      "candidate_checksums_present": 120,
+      "planned_sources": 400
+    }
+  },
+  "evidence": {
+    "original_generation": [
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/codearc/deepseek_6p7b/seed1701/development/complete.json",
+        "sha256": "bb9ad268c78e37f24bdf19acfab06eeb2b9cb04ccb144e2e8b1e35a3e57d05ef",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/codearc/deepseek_6p7b/seed1701/primary/complete.json",
+        "sha256": "a28fa1f49d635cab42e85b6e4d5bcac89fa537dbdc687cd2624a87a99c8a4fc0",
+        "candidate_count": 500
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/codearc/deepseek_6p7b/seed1702/development/complete.json",
+        "sha256": "5c380d99330b87a427e4ba312070481e12f988296f5f57546ee94ca6daf369c2",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/codearc/deepseek_6p7b/seed1702/primary/complete.json",
+        "sha256": "12289b77cc215f46a48bda7065ec7268c53cf9c1366a7e51f6b3f1b7acc882ad",
+        "candidate_count": 500
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/codearc/deepseek_6p7b/seed1703/development/complete.json",
+        "sha256": "ce7333611ce51ba952b28b3e3599e88178f28ba93fb4b10ce76b094487789a14",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/codearc/deepseek_6p7b/seed1703/primary/complete.json",
+        "sha256": "9da5482cacac0f987fe7ea47970b058750be83b684f3cf3129798d28ac51fbd4",
+        "candidate_count": 500
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/codearc/qwen25_7b/seed1701/development/complete.json",
+        "sha256": "2e39e9879f994a8b3c2ebc5c63fe2efffc652556c29541227907245c31899198",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/codearc/qwen25_7b/seed1701/primary/complete.json",
+        "sha256": "32f8d2222e246223b904c750b121e6784124dbb86ff47edfcbb637afc604f0c9",
+        "candidate_count": 500
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/codearc/qwen25_7b/seed1702/development/complete.json",
+        "sha256": "d9d370a1196b91ad58ae723ca7b0e58a910d959b874cdc2cd6475f47cc128cf4",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/codearc/qwen25_7b/seed1702/primary/complete.json",
+        "sha256": "dcaa50442466536173b7d5683f7a2b447ad749eebadc65a16173a96f7c165055",
+        "candidate_count": 500
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/codearc/qwen25_7b/seed1703/development/complete.json",
+        "sha256": "d09fc723e4bc460e224d4be8c5a506d7190094020410b36ed900065b6a3575f9",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/codearc/qwen25_7b/seed1703/primary/complete.json",
+        "sha256": "db3ea71591325399b586af65f9e117148333078536773d3355f96d88dce34b86",
+        "candidate_count": 500
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/runbugrun/deepseek_6p7b/seed1701/development/complete.json",
+        "sha256": "35586eb3b8342131ddf06e5bf3417f43505f77a55da88d3efc50c1989f32e165",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/runbugrun/deepseek_6p7b/seed1701/primary/complete.json",
+        "sha256": "395d69d26400110900b2a81ae0a285f36e77c7256e393c7c663b35746018487d",
+        "candidate_count": 500
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/runbugrun/deepseek_6p7b/seed1702/development/complete.json",
+        "sha256": "b61aa8cdb512d6f23eeea28ba665012b7d8bed1f91c789dde8ffc8935d785017",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/runbugrun/deepseek_6p7b/seed1702/primary/complete.json",
+        "sha256": "731c4644e484738239479a9ed793ef43f6f24a6db17ca9f53215e7b2e1419eec",
+        "candidate_count": 500
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/runbugrun/deepseek_6p7b/seed1703/development/complete.json",
+        "sha256": "eed8ad02f4301c82505ca868eac8fbebe08a964077097ac29c9d28e6720c0111",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/runbugrun/deepseek_6p7b/seed1703/primary/complete.json",
+        "sha256": "084b27d8ff76ac6c0599e74c53ea801795dda178c8685236505ff0fd8258040d",
+        "candidate_count": 500
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/runbugrun/qwen25_7b/seed1701/development/complete.json",
+        "sha256": "44c2ee090f690b4c5b1583b6ee9ea53af234b8ca5915d467477fc80efbf06f1c",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/runbugrun/qwen25_7b/seed1701/primary/complete.json",
+        "sha256": "8b703b19ed695ad4ee11d12ae0a0d878ea74d8e30648756519377e09c5cbd37b",
+        "candidate_count": 500
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/runbugrun/qwen25_7b/seed1702/development/complete.json",
+        "sha256": "01d739ecc19d5a0982f0cb36268ae85333bca04063055dda361aa43659ad7edc",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/runbugrun/qwen25_7b/seed1702/primary/complete.json",
+        "sha256": "fa471751ce7dc42f6437d35fa6933b595989655851247d71789c61a5637b809b",
+        "candidate_count": 500
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/runbugrun/qwen25_7b/seed1703/development/complete.json",
+        "sha256": "8e658a015c6f868cb444327f71ce01f72d7d1dd7625e1b904be150c028a59887",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/mechanism-banks/runbugrun/qwen25_7b/seed1703/primary/complete.json",
+        "sha256": "be54a00eead09f03bdcbab774e825a99bbb2dd684ebb5e36146dc6b6f45a033c",
+        "candidate_count": 500
+      }
+    ],
+    "replay_generation": [
+      {
+        "path": "runs/eesd-20260920/replay-mechanism-banks/apps_replay/deepseek_6p7b/seed1701/development/complete.json",
+        "sha256": "484b13805c50f53b018b1ebee946ece442bec37100de86beaecb78d5eb0166a1",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/replay-mechanism-banks/apps_replay/deepseek_6p7b/seed1701/primary/complete.json",
+        "sha256": "f2e70312d5c560e4f2538cfb057d082bc39ed6ab7025377d40d8669380dd47e6",
+        "candidate_count": 500
+      },
+      {
+        "path": "runs/eesd-20260920/replay-mechanism-banks/apps_replay/deepseek_6p7b/seed1702/development/complete.json",
+        "sha256": "d2da35c6c85b9d3315a719394b3009f996f4f96cb3461126440f29fe9eca2239",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/replay-mechanism-banks/apps_replay/deepseek_6p7b/seed1703/development/complete.json",
+        "sha256": "1d5442cfa4b7b519b958b229097596359a2f7b9a7a53d7d44483bea87dce9736",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/replay-mechanism-banks/apps_replay/qwen25_7b/seed1701/development/complete.json",
+        "sha256": "0e94ce9b1c9900e3b9092a27b4c109dea279b515220f4843ccc34c330a36caa2",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/replay-mechanism-banks/apps_replay/qwen25_7b/seed1701/primary/complete.json",
+        "sha256": "74f16e569df4bb1f87f0e9a377f20d9e00d7b136afef4c3c4562000be253fe3b",
+        "candidate_count": 500
+      },
+      {
+        "path": "runs/eesd-20260920/replay-mechanism-banks/apps_replay/qwen25_7b/seed1702/development/complete.json",
+        "sha256": "76c25777c1725969e7e9c9fbd82e0ed378f684c3a791695f000f1a3ad8257d14",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/replay-mechanism-banks/apps_replay/qwen25_7b/seed1702/primary/complete.json",
+        "sha256": "863629d865435a3c0a9d03a40c4f1b1582ea13cdf32c08010a4d6f6d32fad1e1",
+        "candidate_count": 500
+      },
+      {
+        "path": "runs/eesd-20260920/replay-mechanism-banks/apps_replay/qwen25_7b/seed1703/development/complete.json",
+        "sha256": "22a111a91573b104c5507ea0fc91e8c58929b97aa1055f9f508c26c562e60214",
+        "candidate_count": 200
+      },
+      {
+        "path": "runs/eesd-20260920/replay-mechanism-banks/apps_replay/qwen25_7b/seed1703/primary/complete.json",
+        "sha256": "7b7bab45f287fc5f6da03cb39bf626b54993c89417f54b99782aa8262d9f8d57",
+        "candidate_count": 500
+      }
+    ],
+    "direct_original_cells": [
+      {
+        "path": "runs/eesd-direct-20260921/mechanism/codearc/deepseek_6p7b/seed1701/complete.json",
+        "sha256": "afde5b39a6ee9ab23a7f879a35bf39c72cdc749acb07e79f936bb1cc2b8c2669",
+        "candidate_count": 700
+      },
+      {
+        "path": "runs/eesd-direct-20260921/mechanism/codearc/deepseek_6p7b/seed1702/complete.json",
+        "sha256": "7ec66e441729f3d51f446d4660a4b8ffbce72c5908b6a408b89525632a9e1a46",
+        "candidate_count": 700
+      },
+      {
+        "path": "runs/eesd-direct-20260921/mechanism/codearc/deepseek_6p7b/seed1703/complete.json",
+        "sha256": "8e16b1ac07e5b117b9eca43d1eaecbc026f70c817b55360fd5eafd826102ece5",
+        "candidate_count": 700
+      },
+      {
+        "path": "runs/eesd-direct-20260921/mechanism/codearc/qwen25_7b/seed1701/complete.json",
+        "sha256": "a9e0a751fc43fd7e1112f464e44dd26cc88bc0733f1515bb9146691ed4abfe16",
+        "candidate_count": 700
+      },
+      {
+        "path": "runs/eesd-direct-20260921/mechanism/codearc/qwen25_7b/seed1702/complete.json",
+        "sha256": "163e9fc76f1cc35d57139d19f9308bcf2e801479f75dea9c701f36a10be1c9b3",
+        "candidate_count": 700
+      },
+      {
+        "path": "runs/eesd-direct-20260921/mechanism/codearc/qwen25_7b/seed1703/complete.json",
+        "sha256": "dcaa2b40a981ce6f7858e719e565ba4436278130d6035e7236744f1e5f3f1d7d",
+        "candidate_count": 700
+      },
+      {
+        "path": "runs/eesd-direct-20260921/mechanism/runbugrun/deepseek_6p7b/seed1701/complete.json",
+        "sha256": "df62c58efebff44eb851cce9df0d973046c8ba3b75311a2908bf856b242b7d29",
+        "candidate_count": 700
+      },
+      {
+        "path": "runs/eesd-direct-20260921/mechanism/runbugrun/deepseek_6p7b/seed1702/complete.json",
+        "sha256": "272d8b60dce2de811cd7a27c2b9fd48bf9cedb7e90714bc38e0f5adae7a02b63",
+        "candidate_count": 700
+      },
+      {
+        "path": "runs/eesd-direct-20260921/mechanism/runbugrun/deepseek_6p7b/seed1703/complete.json",
+        "sha256": "1d539f13969c7f93206cc546b129f9b7cfaf74ff192cfe465fe723f22fc699fc",
+        "candidate_count": 700
+      },
+      {
+        "path": "runs/eesd-direct-20260921/mechanism/runbugrun/qwen25_7b/seed1701/complete.json",
+        "sha256": "76b2550c91ef6e67918b22a809e9831dea7ca8e88b0c0301b9edcc6e91f246d8",
+        "candidate_count": 700
+      },
+      {
+        "path": "runs/eesd-direct-20260921/mechanism/runbugrun/qwen25_7b/seed1702/complete.json",
+        "sha256": "15c85d076a164f2ec17d9665c487b6c3e92b3bbef3383f1a871cdafb96516629",
+        "candidate_count": 700
+      },
+      {
+        "path": "runs/eesd-direct-20260921/mechanism/runbugrun/qwen25_7b/seed1703/complete.json",
+        "sha256": "8a13741756b3c0f6d4715046885a98415e3c629d64da6cdbbaa11243bfb9c423",
+        "candidate_count": 700
+      }
+    ],
+    "direct_correction_receipts": []
+  },
+  "tasks": [
+    {
+      "id": "mechanism_generation",
+      "scope": {
+        "families": 4,
+        "datasets": 4,
+        "seeds": 3,
+        "cell_seed_runs": 48,
+        "split_banks": 96,
+        "candidates": 33600
+      },
+      "depends_on": [],
+      "scripts": [
+        "runs/eesd-setup/generate_mechanism_banks.py",
+        "scripts/generate_eesd_replay_bank.py",
+        "scripts/plan_eesd_replay_generation.py"
+      ],
+      "command_template": [
+        ".venv/bin/python",
+        "runs/eesd-setup/generate_mechanism_banks.py",
+        "--manifest",
+        "<one_original_cell_manifest>",
+        "--output",
+        "runs/eesd-20260920",
+        "--seed",
+        "<1701|1702|1703>"
+      ],
+      "inputs": [
+        "runs/eesd-setup/manifest.yaml",
+        "runs/eesd-setup/replay-generation-manifest-20260920.json",
+        "runs/eesd-setup/joint-generation-v4-handoff.json"
+      ],
+      "outputs": [
+        "runs/eesd-20260920/mechanism-banks",
+        "runs/eesd-20260920/replay-mechanism-banks"
+      ],
+      "status_at_snapshot": "in_progress",
+      "remaining_work": [
+        "Complete all 4 families including Seed/StarCoder; seal both 200 development and 500 primary per run.",
+        "Keep original and Replay generator/prompt hashes unchanged; every seed must remain represented.",
+        "Replay uses the exact per-split argv in replay-generation-manifest-20260920.json, after verifying its source/input hashes; original and Replay command lines are not interchangeable."
+      ]
+    },
+    {
+      "id": "mechanism_direct_execution",
+      "scope": {
+        "original_runs": 24,
+        "replay_runs": 24,
+        "tests_per_candidate": 10
+      },
+      "depends_on": [
+        "mechanism_generation"
+      ],
+      "scripts": [
+        "scripts/run_eesd_direct_mechanism_cell.py",
+        "scripts/build_eesd_replay_mechanism_cache.py",
+        "scripts/run_eesd_replay_evidence.py"
+      ],
+      "command_template": [
+        ".venv/bin/python",
+        "scripts/run_eesd_direct_mechanism_cell.py",
+        "--manifest",
+        "runs/eesd-setup/manifest.yaml",
+        "--manifest-sha256",
+        "<actual_sha>",
+        "--config",
+        "runs/eesd-setup/mechanism-config.lock.yaml",
+        "--config-sha256",
+        "<actual_sha>",
+        "--results-root",
+        "runs/eesd-20260920",
+        "--execution-lock",
+        "runs/eesd-setup/direct-execution-lock-20260921.json",
+        "--execution-lock-sha256",
+        "<actual_sha>",
+        "--domain",
+        "<rbr|codearc>",
+        "--family",
+        "<family>",
+        "--seed",
+        "<seed>",
+        "--workers",
+        "4",
+        "--output",
+        "runs/eesd-direct-20260921/mechanism/<dataset>/<family>/seed<seed>"
+      ],
+      "inputs": [
+        "sealed generation banks",
+        "direct execution lock/amendment",
+        "public/evaluator data seals"
+      ],
+      "outputs": [
+        "direct cache.json + report/ + direct-binding.json + complete.json"
+      ],
+      "status_at_snapshot": "original_in_progress_replay_direct_adapter_missing",
+      "remaining_work": [
+        "Original direct runner only supports rbr/codearc. Replay cache builder remains tied to isolated execution lock and cannot be relabeled direct.",
+        "Implement/seal separate direct Replay executor/cache/report provenance before Replay scoring; do not edit old locks or synthesize old bindings."
+      ]
+    },
+    {
+      "id": "mechanism_49_contrasts_inference",
+      "scope": {
+        "contrasts_per_domain_model": 49,
+        "separate_domain_groups": [
+          [
+            "runbugrun",
+            "codearc"
+          ],
+          [
+            "apps_replay",
+            "codecontests_replay"
+          ]
+        ],
+        "per_group_primary_slots": 8,
+        "per_group_secondary_slots": 1560
+      },
+      "depends_on": [
+        "mechanism_direct_execution"
+      ],
+      "scripts": [
+        "scripts/report_eesd_direct_inference.py",
+        "scripts/report_eesd_replay_inference.py"
+      ],
+      "command_template": [
+        ".venv/bin/python",
+        "scripts/report_eesd_direct_inference.py",
+        "--statistical-lock",
+        "<new_direct_statistical_lock>",
+        "--statistical-lock-sha256",
+        "<actual_sha>",
+        "--results-root",
+        "runs/eesd-direct-20260921",
+        "--output",
+        "<new_report_dir>",
+        "--preflight-only"
+      ],
+      "inputs": [
+        "all 24 complete cell/seed reports in each domain group",
+        "new execution-profile-specific statistical binding"
+      ],
+      "outputs": [
+        "A9 public support seals",
+        "49 contrast receipts",
+        "complete 8/1560 family reports"
+      ],
+      "status_at_snapshot": "pending_complete_family",
+      "remaining_work": [
+        "Freeze original direct statistical source closure before report. Current adapter is implemented; root owns final lock publication.",
+        "Replay inference entrypoint currently expects original Replay isolated cache bindings; direct profile needs a thin adapter/new statistical binding.",
+        "Seal all public A9 support before assessment reconstruction; retain all missing/unsupported slots. No joint study-wide FWER claim across groups or profiles."
+      ]
+    },
+    {
+      "id": "diversity_exploratory",
+      "scope": {
+        "role": "supplementary exploratory",
+        "three_seed_primary_only": true
+      },
+      "depends_on": [
+        "mechanism_direct_execution"
+      ],
+      "scripts": [
+        "scripts/report_eesd_diversity.py"
+      ],
+      "command_template": [
+        ".venv/bin/python",
+        "scripts/report_eesd_diversity.py",
+        "--manifest",
+        "runs/eesd-setup/manifest.yaml",
+        "--manifest-sha256",
+        "<actual_sha>",
+        "--results-root",
+        "runs/eesd-20260920",
+        "--domain",
+        "<rbr|codearc>",
+        "--family",
+        "<family>",
+        "--direct-cell",
+        "1701=<direct_cell>",
+        "--direct-cell",
+        "1702=<direct_cell>",
+        "--direct-cell",
+        "1703=<direct_cell>",
+        "--output",
+        "<new_diversity_dir>"
+      ],
+      "inputs": [
+        "three sealed primary banks and corresponding direct cells"
+      ],
+      "outputs": [
+        "descriptive code/AST/outcome diversity summaries"
+      ],
+      "status_at_snapshot": "implemented_waiting_per_cell_coverage",
+      "remaining_work": [
+        "Keep exploratory label; do not add unplanned confirmatory tests to original Holm families.",
+        "Replay diversity has no demonstrated direct-domain adapter yet; implement explicitly if extending to new domains."
+      ]
+    },
+    {
+      "id": "public_corrections",
+      "scope": {
+        "manifest_correction_cells": 3,
+        "cells": [
+          {
+            "dataset": "runbugrun",
+            "family": "qwen25_7b"
+          },
+          {
+            "dataset": "runbugrun",
+            "family": "deepseek_6p7b"
+          },
+          {
+            "dataset": "codearc",
+            "family": "qwen25_7b"
+          }
+        ]
+      },
+      "depends_on": [],
+      "scripts": [
+        "scripts/prepare_eesd_direct_corrections.py",
+        "scripts/generate_eesd_direct_corrections.py"
+      ],
+      "command_template": [
+        ".venv/bin/python",
+        "scripts/prepare_eesd_direct_corrections.py",
+        "--execution-lock",
+        "runs/eesd-setup/direct-execution-lock-20260921.json",
+        "--execution-lock-sha256",
+        "<actual_sha>",
+        "--domain",
+        "<rbr|codearc>",
+        "--public-root",
+        "<public_root>",
+        "--bank",
+        "<sealed_train_bank>",
+        "--bank",
+        "<sealed_development_bank>",
+        "--output",
+        "runs/eesd-direct-20260921/public-corrections/<dataset>/<family>/round1"
+      ],
+      "inputs": [
+        "one-candidate current-teacher train/development banks",
+        "public tests only"
+      ],
+      "outputs": [
+        "public-corrections.jsonl",
+        "corrections.jsonl",
+        "direct-profile.json receipts"
+      ],
+      "status_at_snapshot": "qwen_rbr_original_banks_in_progress",
+      "remaining_work": [
+        "Finish Qwen RBR train321/development400 bank pair, then prepare/generate. Prepare equivalent bank pairs for DeepSeek RBR and Qwen CodeARC using their actual public inventories.",
+        "Generate corrections via generate_eesd_direct_corrections.py --public-bank <prepared/public-corrections.jsonl> --model-config <pinned_yaml> --domain <domain> --output <new_generation_dir> plus both execution-lock flags.",
+        "Retain original correction NF4/greedy/prompt/weight rules; direct receipt is separate from mechanism-generation profile.",
+        "Keep generated trajectories in generated-corrections/<dataset>/<family>/round1, and create scored output separately at corrections/<dataset>/<family>/round1: scorer is create-once and downstream trainer expects that fixed scored layout."
+      ]
+    },
+    {
+      "id": "credibility_and_scoring",
+      "scope": {
+        "utility_order": [
+          "FIX",
+          "REGRESSION",
+          "PRESERVED",
+          "UNRESOLVED"
+        ],
+        "utility": [
+          1,
+          -1,
+          0,
+          0
+        ]
+      },
+      "depends_on": [
+        "public_corrections"
+      ],
+      "scripts": [
+        "scripts/score_eesd_corrections.py",
+        "scripts/report_eesd_correction_credibility.py"
+      ],
+      "command_template": [
+        ".venv/bin/python",
+        "scripts/score_eesd_corrections.py",
+        "--input",
+        "<corrections.jsonl>",
+        "--config",
+        "configs/experiments/eesd_downstream_prospective_20260920.yaml",
+        "--output",
+        "<new_scored_dir>",
+        "--alpha",
+        "0.1",
+        "--uncertainty-penalty",
+        "0.5"
+      ],
+      "inputs": [
+        "sealed direct correction trajectories",
+        "downstream utility config"
+      ],
+      "outputs": [
+        "scored-corrections.jsonl",
+        "summary.json",
+        "independent credibility evaluation/report"
+      ],
+      "status_at_snapshot": "not_started",
+      "remaining_work": [
+        "Preserve direct receipt ancestry when scoring; scoring itself is CPU math.",
+        "Credibility --evaluator-root executes old isolated backend: add direct-profile evaluation adapter or pass a correctly sealed independent direct --evaluation-dir with adapted verifier. Never train/select on hidden credibility outcomes."
+      ]
+    },
+    {
+      "id": "single_round_training",
+      "scope": {
+        "cells": 3,
+        "seeds": [
+          1701,
+          1702,
+          1703
+        ],
+        "outcomes_including_no_update": 72,
+        "planned_gpu_updates_before_zero_weight_exceptions": 63,
+        "rules": [
+          "no_update",
+          "equal_weight",
+          "final_correctness",
+          "scalar_confidence",
+          "fixed_mass_dirichlet",
+          "eed_mean_no_uncertainty",
+          "eed_no_anchor",
+          "eesd_full"
+        ]
+      },
+      "depends_on": [
+        "credibility_and_scoring"
+      ],
+      "scripts": [
+        "scripts/plan_eesd_training_budget.py",
+        "scripts/run_eesd_downstream.py",
+        "scripts/run_eesd_weighted_sft.py"
+      ],
+      "command_template": [
+        ".venv/bin/python",
+        "scripts/run_eesd_downstream.py",
+        "--config",
+        "configs/experiments/eesd_downstream_prospective_20260920.yaml",
+        "--manifest",
+        "<one_cell_manifest>",
+        "--output",
+        "<matching_downstream_root>",
+        "--stage",
+        "train",
+        "--seed",
+        "<seed>",
+        "--response-token-budget",
+        "<sealed_cell_seed_budget>"
+      ],
+      "inputs": [
+        "scored train/development trajectories",
+        "pinned model config",
+        "sealed budget plan per cell/seed"
+      ],
+      "outputs": [
+        "7 bound adapter trees per cell/seed when estimable",
+        "training-binding/training-report or zero-weight outcome receipts"
+      ],
+      "status_at_snapshot": "not_started",
+      "remaining_work": [
+        "First run plan_eesd_training_budget.py --input <scored> --scoring-summary <summary> --model-config <yaml> --output <plan.json> --seeds 1701 1702 1703; reference200steps/16microbatches; no numeric token budget inferred here.",
+        "Use per-cell/seed derived budget, not a single arbitrary budget across heterogeneous cells. Verify anchored SFT GPU memory readiness.",
+        "No_update is a baseline outcome, not a trained adapter. Valid zero-positive-weight training is non-estimable with0tokens/noadapter; retain it and continue independent tasks."
+      ]
+    },
+    {
+      "id": "fresh_single_round_evaluation",
+      "scope": {
+        "planned_policy_seed_outcomes": 72
+      },
+      "depends_on": [
+        "single_round_training"
+      ],
+      "scripts": [
+        "scripts/run_eesd_downstream.py",
+        "scripts/evaluate_eesd_fresh_bank.py",
+        "scripts/compare_eesd_fresh_eval.py"
+      ],
+      "command_template": [
+        ".venv/bin/python",
+        "scripts/run_eesd_downstream.py",
+        "--config",
+        "configs/experiments/eesd_downstream_prospective_20260920.yaml",
+        "--manifest",
+        "<selected_fresh_manifest>",
+        "--output",
+        "<matching_downstream_root>",
+        "--stage",
+        "fresh",
+        "--seed",
+        "<seed>"
+      ],
+      "inputs": [
+        "bound adapters or explicit non-estimable outcomes",
+        "fresh primary candidate banks"
+      ],
+      "outputs": [
+        "Pass@1/fix/regression/netgain/retention reports",
+        "baseline comparisons"
+      ],
+      "status_at_snapshot": "requires_direct_evaluator_adapter",
+      "remaining_work": [
+        "Existing fresh path invokes old isolated evaluator; implement a direct execution/provenance variant before running this command under new profile.",
+        "No fallback adapter for zero-weight arms; retain missing-policy main-analysis rows. Generation GPU and CPU evaluation may overlap only with verified resource admission."
+      ]
+    },
+    {
+      "id": "recursive_shared_teacher",
+      "scope": {
+        "cells": 2,
+        "family": "qwen25_7b",
+        "datasets": [
+          "runbugrun",
+          "codearc"
+        ],
+        "seeds": [
+          1701,
+          1702,
+          1703
+        ],
+        "rounds": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "update_arms": [
+          "equal_weight",
+          "eesd_full"
+        ],
+        "planned_updates_before_zero_weight_exceptions": 36
+      },
+      "depends_on": [
+        "public_corrections",
+        "single_round_training",
+        "fresh_single_round_evaluation"
+      ],
+      "scripts": [
+        "scripts/run_eesd_recursive.py",
+        "scripts/summarize_eesd_recursive_trajectories.py",
+        "scripts/run_eesd_downstream.py"
+      ],
+      "command_template": [
+        ".venv/bin/python",
+        "scripts/run_eesd_downstream.py",
+        "--config",
+        "configs/experiments/eesd_downstream_prospective_20260920.yaml",
+        "--manifest",
+        "<recursive_manifest>",
+        "--output",
+        "<new_recursive_root>",
+        "--stage",
+        "recursive",
+        "--seed",
+        "<seed>",
+        "--response-token-budget",
+        "<sealed_shared_budget>",
+        "--experience-policy",
+        "shared_eesd_teacher"
+      ],
+      "inputs": [
+        "recursive shared-teacher lock",
+        "common starting teacher/shared scored bank/common explicit budget"
+      ],
+      "outputs": [
+        "round0–3 policy evaluations",
+        "update-inputs.json",
+        "teacher-relative and cumulative summaries"
+      ],
+      "status_at_snapshot": "requires_direct_orchestration_adapter",
+      "remaining_work": [
+        "Original recursive script hardcodes prepare/generate/fresh evaluator subprocesses; direct wrappers are not yet wired into it. Use independent adapter, do not claim main mode is already direct runnable.",
+        "EESD is predetermined continuing teacher; equal_weight each round starts from that same teacher, not its own preceding control.",
+        "If continuing EESD is non-estimable, descendants become blocked_dependency; never silently count unchanged teacher as recursive improvement."
+      ]
+    },
+    {
+      "id": "evalplus_transfer",
+      "scope": {
+        "source_dataset": "runbugrun",
+        "families": [
+          "qwen25_7b",
+          "deepseek_6p7b"
+        ],
+        "benchmarks": [
+          "humaneval",
+          "mbpp"
+        ],
+        "seeds": [
+          1701,
+          1702,
+          1703
+        ],
+        "existing_transfer_rules": [
+          "no_update",
+          "equal_weight",
+          "final_correctness",
+          "fixed_mass_dirichlet",
+          "eesd_full"
+        ],
+        "planned_policy_seed_benchmark_outcomes": 60
+      },
+      "depends_on": [
+        "single_round_training"
+      ],
+      "scripts": [
+        "scripts/run_eesd_evalplus_transfer.py",
+        "scripts/evaluate_eesd_evalplus_isolated.py",
+        "scripts/run_eesd_downstream.py"
+      ],
+      "command_template": [
+        ".venv/bin/python",
+        "scripts/run_eesd_downstream.py",
+        "--config",
+        "configs/experiments/eesd_downstream_prospective_20260920.yaml",
+        "--manifest",
+        "<transfer_manifest>",
+        "--output",
+        "<matching_downstream_root>",
+        "--stage",
+        "transfer",
+        "--seed",
+        "<seed>",
+        "--public-data-root",
+        "runs/eesd-data/evalplus-locked/public",
+        "--public-manifest-sha256",
+        "<actual_sha>"
+      ],
+      "inputs": [
+        "RunBugRun trained adapters",
+        "EvalPlus0.3.1 locked HEv0.1.10/MBPPv0.2.0 public/private materialization"
+      ],
+      "outputs": [
+        "public-only samples+generation reports",
+        "official sanitizer/evaluator Base and Base+Extra reports"
+      ],
+      "status_at_snapshot": "generation_entrypoint_ready_evaluation_direct_adapter_missing",
+      "remaining_work": [
+        "Generation must not read canonical solutions/base/plus inputs.",
+        "Official isolated evaluator still requires bwrap; implement explicitly user-authorized direct official EvalPlus profile with official scoring semantics and new receipts. Existing --evaluate deliberately refuses unsafe implicit fallback.",
+        "Retain all5controls and zero-policy missing rows; do not describe future evaluation as already done."
+      ]
+    },
+    {
+      "id": "optional_lcb",
+      "scope": {
+        "required": false,
+        "role": "optional temporal downstream replication",
+        "family": "qwen25_7b"
+      },
+      "depends_on": [
+        "evalplus_transfer"
+      ],
+      "scripts": [
+        "scripts/materialize_eesd_livecodebench.py"
+      ],
+      "command_template": [
+        ".venv/bin/python",
+        "scripts/materialize_eesd_livecodebench.py",
+        "--receipt",
+        "runs/eesd-setup/livecodebench-release-v6-receipt.json",
+        "--receipt-sha256",
+        "<actual_sha>",
+        "--inventory",
+        "<reviewed_inventory>",
+        "--output",
+        "<new_lcb_public_private_root>"
+      ],
+      "inputs": [
+        "six downloaded release_v6 test JSONLs/revision and SHA receipt"
+      ],
+      "outputs": [
+        "prospective temporal split/public inputs/private evaluator",
+        "optional transfer report"
+      ],
+      "status_at_snapshot": "downloaded_not_formally_evaluated",
+      "remaining_work": [
+        "LCB is not one of the4mechanism domains and not a mandatory count filler. Implement/review downstream protocol/runtime without executing untrusted builder or deserializing private pickle ad hoc."
+      ]
+    },
+    {
+      "id": "optional_swebench",
+      "scope": {
+        "required": false,
+        "role": "repository-level appendix"
+      },
+      "depends_on": [],
+      "scripts": [
+        "configs/benchmarks/swebench_lite.yaml"
+      ],
+      "command_template": [],
+      "inputs": [
+        "separately reviewed dataset/environment/protocol"
+      ],
+      "outputs": [
+        "optional repository repair appendix"
+      ],
+      "status_at_snapshot": "optional_not_queued",
+      "remaining_work": [
+        "No implemented/authorized automatic repository evaluation schedule is inferred from the presence of a config."
+      ]
+    },
+    {
+      "id": "final_reporting_and_backup",
+      "scope": {
+        "required": true
+      },
+      "depends_on": [
+        "mechanism_49_contrasts_inference",
+        "diversity_exploratory",
+        "credibility_and_scoring",
+        "fresh_single_round_evaluation",
+        "recursive_shared_teacher",
+        "evalplus_transfer"
+      ],
+      "scripts": [
+        "scripts/summarize_eesd_generation_costs.py",
+        "scripts/summarize_eesd_recursive_trajectories.py"
+      ],
+      "command_template": [
+        "Render only after required seals are present; retain missing/negative/non-estimable rows."
+      ],
+      "inputs": [
+        "all phase receipts",
+        "generation/training token counts",
+        "source/model/data locks"
+      ],
+      "outputs": [
+        "paper tables1–5 and appendices",
+        "GitHub handoff snapshot/manifests/source code",
+        "external large-artifact inventory"
+      ],
+      "status_at_snapshot": "pending",
+      "remaining_work": [
+        "Keep huge model/dataset/artifact blobs in a separately checksummed storage backup; GitHub code/receipts alone is not proof all artifact bytes were uploaded.",
+        "Record Git commit/remote and actual successful push separately; this task does not perform a push."
+      ]
+    }
+  ]
+}

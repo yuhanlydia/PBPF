@@ -1,0 +1,13 @@
+{
+  "captured_at": "2026-09-16T23:25:26.580291+00:00",
+  "reason": "superseded before handoff to schedule largest declared remaining bank first; no running generation interrupted",
+  "previous_state": {
+    "status": "waiting_for_qwen_and_idle_gpu0",
+    "pid": 764520,
+    "plan_sha256": "3d011462ee427bfff9addbc7a8081db0dd96bdf5bf601abacfbfbcc0a5a8df60"
+  },
+  "old_source_sha256": "528cfb827d193b5a98ee7670a4d8639f978be5acdf1dc9900293779bc27b0529",
+  "generation_owner_unchanged": 1117848,
+  "handoff_never_started": true,
+  "childless_waiter_verified": true
+}

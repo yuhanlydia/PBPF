@@ -1,0 +1,38 @@
+{
+  "captured_at": "2026-09-17T01:32:27.340505+00:00",
+  "seed": 1701,
+  "all_model_report_population_receipts_verified": true,
+  "variant_binding_verified": true,
+  "frozen_source_files_verified": 108,
+  "assessment_population_identical_to_weight1": true,
+  "all_four_strong_baseline_absolute_metrics_identical_to_weight1": true,
+  "baseline_comparison_note": "NLL, accuracy and Brier match exactly. Relative nll_gain_vs_baseline changes because the learned prior-only baseline changes; it is not an absolute baseline metric.",
+  "selected_development_step_from_history": 500,
+  "best_inner_validation_nll": 0.505646311147827,
+  "weight100_aligned_nll": 0.45599139708359926,
+  "weight1_aligned_nll": 0.4561877372461172,
+  "association": {
+    "ci95": [
+      -6.400537940983971e-05,
+      3.565098702286675e-05
+    ],
+    "clusters": 400,
+    "estimand": "future-example-weighted; whole-source-component resampling",
+    "mean_nll_gap": -1.4425239896809217e-05,
+    "replicates": 10000,
+    "unit": "source_component"
+  },
+  "gate": {
+    "association_passes": false,
+    "association_threshold": 0.03,
+    "baseline_fairness_passes": false,
+    "baseline_margin": 0.02,
+    "baseline_status": "evaluated",
+    "controls_worse_than_aligned": true,
+    "full_gate_passes": false,
+    "max_degradation_fraction": 0.25,
+    "pair_invariance_passes": false,
+    "particles_necessary_claim_allowed": false
+  },
+  "scope": "first complete seed only; full three-seed numerical replay and paired comparison pending; unchanged original gates failed"
+}

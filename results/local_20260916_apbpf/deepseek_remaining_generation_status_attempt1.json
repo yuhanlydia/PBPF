@@ -1,0 +1,73 @@
+{
+  "status": "needs_debug",
+  "pid": 3880143,
+  "gpu": 2,
+  "source_sha256": {
+    "scripts/generate_apbpf_codearc_replication_bank.py": "8727a14011d63707c42e36daecc910254b6c0a91c3c0e7c68af8e8678b0c62b8",
+    "scripts/apbpf_generator_sandbox.sh": "4891ed0edfd435e4ea3af2c805007d78f2bd8e85060e6b3e9e1f6e691315b9de",
+    "src/pbpf/apbpf/codearc_prompt.py": "af90a56dccb76fd01137fce70d93196091c071d652bf56e90832309f112c0242"
+  },
+  "scope": "Complete unchanged DeepSeek source-component replication inventory; public-only generation; no efficacy claim",
+  "runs": {
+    "codearc-deepseek-train212": {
+      "status": "complete",
+      "command": [
+        "bash",
+        "scripts/apbpf_generator_sandbox.sh",
+        "/data/cwj/PBPF/local/longgoal/codearc-public-v1",
+        "/data/cwj/PBPF/local/longgoal/codearc-deepseek-train212",
+        "/data/cwj/PBPF/.venv/bin/python",
+        "-u",
+        "scripts/generate_apbpf_codearc_replication_bank.py",
+        "--public-root",
+        "/input",
+        "--output",
+        "/output",
+        "--split",
+        "train",
+        "--components",
+        "212",
+        "--offset",
+        "0",
+        "--candidates",
+        "8",
+        "--max-new-tokens",
+        "512",
+        "--model-proof",
+        "/output/model-proof.json"
+      ],
+      "returncode": 0
+    },
+    "codearc-deepseek-development384": {
+      "status": "execution_failed",
+      "command": [
+        "bash",
+        "scripts/apbpf_generator_sandbox.sh",
+        "/data/cwj/PBPF/local/longgoal/codearc-public-v1",
+        "/data/cwj/PBPF/local/longgoal/codearc-deepseek-development384",
+        "/data/cwj/PBPF/.venv/bin/python",
+        "-u",
+        "scripts/generate_apbpf_codearc_replication_bank.py",
+        "--public-root",
+        "/input",
+        "--output",
+        "/output",
+        "--split",
+        "development",
+        "--components",
+        "384",
+        "--offset",
+        "16",
+        "--candidates",
+        "8",
+        "--max-new-tokens",
+        "512",
+        "--model-proof",
+        "/output/model-proof.json"
+      ],
+      "returncode": 1
+    }
+  },
+  "current": "codearc-deepseek-development384",
+  "error": "RuntimeError('codearc-deepseek-development384 failed')"
+}

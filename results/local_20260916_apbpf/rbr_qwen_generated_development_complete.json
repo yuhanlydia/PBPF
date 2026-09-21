@@ -1,0 +1,116 @@
+{
+  "captured_at": "2026-09-16T22:23:06.451425+00:00",
+  "status": "complete",
+  "source_status_sha256": "fcfbd8cc385bcc0273ab184315865f620bda7082e00f124db747c4acfe3daa14",
+  "cache_sha256": "6394649b96ed13976e0373a6e88b9a6321b4d3d154bb24363518a64210fe3026",
+  "counts": {
+    "development": 512,
+    "test": 3200,
+    "train": 2056
+  },
+  "source_counts": {
+    "development": 64,
+    "test": 400,
+    "train": 257
+  },
+  "all_checkpoint_receipts_verified": true,
+  "seeds": [
+    {
+      "seed": 1701,
+      "association": {
+        "ci95": [
+          -0.002614838833610217,
+          0.031803879658381135
+        ],
+        "clusters": 400,
+        "estimand": "future-example-weighted; whole-source-component resampling",
+        "mean_nll_gap": 0.014145702123641968,
+        "replicates": 10000,
+        "unit": "source_component"
+      },
+      "aligned_nll": 0.41915110713219605,
+      "gate": {
+        "association_passes": false,
+        "association_threshold": 0.03,
+        "baseline_fairness_passes": false,
+        "baseline_margin": 0.02,
+        "baseline_status": "evaluated",
+        "controls_worse_than_aligned": true,
+        "full_gate_passes": false,
+        "max_degradation_fraction": 0.25,
+        "pair_invariance_passes": false,
+        "particles_necessary_claim_allowed": false
+      },
+      "receipt": {
+        "prediction-seed1701.json": "276b61be103a04775092f79d20e0c579d1739e959ee9ab7659ffcee5e15ba7bc",
+        "prediction-seed1701.population.json": "0675cf194363d054049ae8234aa216e799f86ce987e3eb424f9c547d76ec80c7",
+        "prediction-seed1701.pt": "858aa31c46ef8880cef479a1dbfead967b05bbe355b966dbc6719b8866bd6c4c"
+      }
+    },
+    {
+      "seed": 1702,
+      "association": {
+        "ci95": [
+          -0.0022873801191647847,
+          0.018889996170997608
+        ],
+        "clusters": 400,
+        "estimand": "future-example-weighted; whole-source-component resampling",
+        "mean_nll_gap": 0.007906213402748108,
+        "replicates": 10000,
+        "unit": "source_component"
+      },
+      "aligned_nll": 0.4079329973249116,
+      "gate": {
+        "association_passes": false,
+        "association_threshold": 0.03,
+        "baseline_fairness_passes": false,
+        "baseline_margin": 0.02,
+        "baseline_status": "evaluated",
+        "controls_worse_than_aligned": true,
+        "full_gate_passes": false,
+        "max_degradation_fraction": 0.25,
+        "pair_invariance_passes": false,
+        "particles_necessary_claim_allowed": false
+      },
+      "receipt": {
+        "prediction-seed1702.json": "f565311a99e11baf9cbbc9cedc5f74be588faf560c27de59985f8341004d6446",
+        "prediction-seed1702.population.json": "2af205b9cdff35704689d5e723ca3133ee735b7bcd07627fa1f9ae68b0b90c2a",
+        "prediction-seed1702.pt": "c798f7a1838dcbf99e389a5b05f46376f35380bb50184de6cf18327a19fe2df5"
+      }
+    },
+    {
+      "seed": 1703,
+      "association": {
+        "ci95": [
+          -0.008041107257207235,
+          0.009548559288183845
+        ],
+        "clusters": 400,
+        "estimand": "future-example-weighted; whole-source-component resampling",
+        "mean_nll_gap": 0.0009395075030624866,
+        "replicates": 10000,
+        "unit": "source_component"
+      },
+      "aligned_nll": 0.43249331010659847,
+      "gate": {
+        "association_passes": false,
+        "association_threshold": 0.03,
+        "baseline_fairness_passes": false,
+        "baseline_margin": 0.02,
+        "baseline_status": "evaluated",
+        "controls_worse_than_aligned": false,
+        "full_gate_passes": false,
+        "max_degradation_fraction": 0.25,
+        "pair_invariance_passes": true,
+        "particles_necessary_claim_allowed": false
+      },
+      "receipt": {
+        "prediction-seed1703.json": "00aecc3506f22c8ff99f3e46cca306e75402761b99133c3caaa96841fe41fa97",
+        "prediction-seed1703.population.json": "fc860f00a32fe995fdcf0970383a83c5539272443046ae648eb3cdd718cbd5d6",
+        "prediction-seed1703.pt": "7cbe96be80c67311b74377267530a26256898ebb648a5c6d68b7072c374ad1c2"
+      }
+    }
+  ],
+  "scope": "All three fixed generated RBR Qwen development seeds; original primary excluded. Individual source-bootstrap intervals, no pooled interval or sealed-stage claim."
+}

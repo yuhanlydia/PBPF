@@ -1,0 +1,559 @@
+{
+  "captured_at": "2026-09-16T22:24:28.096574+00:00",
+  "real_stage_adapters_provided": 21,
+  "sealed_real_stages_completed": 1,
+  "development_execution": {
+    "captured_at": "2026-09-16T22:09:52.352610+00:00",
+    "domain": "runbugrun",
+    "family": "qwen",
+    "development_sources": 400,
+    "candidates": 3200,
+    "tests": 32000,
+    "test_passes": 19467,
+    "all_ten_pass": 1576,
+    "mixed_groups": 231,
+    "all_fail_groups": 82,
+    "all_pass_groups": 87,
+    "minimum_mixed_groups": 300,
+    "development_hardness_passes": false,
+    "bindings": {
+      "development-pilot": {
+        "bank_complete_sha256": "ab691eb293f91a5e815f41fc61eb96ca725f7a7f691b72fe49815be234c42618",
+        "execution_sha256": "ed88817cfe7f2c8d3e9e9afc32414a3a81441603a13cff4a782ded45b9bc379c",
+        "groups_sha256": "24f359435e1899662cf1ba32683be4c90362bb1375ea0017e496276fa3fa37b3"
+      },
+      "development-remainder": {
+        "bank_complete_sha256": "9c58317a041d8b6e89ceb065c846a740b3ee92bfb40e936bcdc96545714a21a9",
+        "execution_sha256": "0e84043b22a5d08188de2e98fc9ad63763ce350e9362439a1192d6b43877a41a",
+        "groups_sha256": "c7f3a707d26f3a8cacec7942ecb49492c5891faf77bd4d6ed82a81a9a9dbbbd4"
+      }
+    },
+    "development_cache_sha256": "6394649b96ed13976e0373a6e88b9a6321b4d3d154bb24363518a64210fe3026",
+    "fitting_counts": {
+      "development": 512,
+      "test": 3200,
+      "train": 2056
+    },
+    "fitting_source_counts": {
+      "development": 64,
+      "test": 400,
+      "train": 257
+    },
+    "original_primary_sources_excluded": true,
+    "future_expected_answers_redacted": true,
+    "scope": "complete generated RBR development execution and source/firewall audit; primary execution and sealed hard-bank gate remain pending"
+  },
+  "completed_individual_seeds": {
+    "rbr-qwen-generated-prediction-v1/prediction-seed1701.json": {
+      "results_sha256": "276b61be103a04775092f79d20e0c579d1739e959ee9ab7659ffcee5e15ba7bc",
+      "gate": {
+        "association_passes": false,
+        "association_threshold": 0.03,
+        "baseline_fairness_passes": false,
+        "baseline_margin": 0.02,
+        "baseline_status": "evaluated",
+        "controls_worse_than_aligned": true,
+        "full_gate_passes": false,
+        "max_degradation_fraction": 0.25,
+        "pair_invariance_passes": false,
+        "particles_necessary_claim_allowed": false
+      },
+      "association": {
+        "ci95": [
+          -0.002614838833610217,
+          0.031803879658381135
+        ],
+        "clusters": 400,
+        "estimand": "future-example-weighted; whole-source-component resampling",
+        "mean_nll_gap": 0.014145702123641968,
+        "replicates": 10000,
+        "unit": "source_component"
+      },
+      "aligned_nll": 0.41915110713219605,
+      "scope": "development_assessment_only"
+    },
+    "codearc-semantic-p32-training-v1/semantic-p32-seed1701.json": {
+      "results_sha256": "b08efffdbec346e09f722825798226251fedd61116671ec9c0810c508c13f588",
+      "gate": {
+        "association_passes": false,
+        "association_threshold": 0.03,
+        "baseline_fairness_passes": false,
+        "baseline_margin": 0.02,
+        "baseline_status": "evaluated",
+        "controls_worse_than_aligned": true,
+        "full_gate_passes": false,
+        "max_degradation_fraction": 0.25,
+        "pair_invariance_passes": true,
+        "particles_necessary_claim_allowed": false
+      },
+      "association": {
+        "ci95": [
+          -0.005455248306194941,
+          0.012829465727011363
+        ],
+        "clusters": 400,
+        "estimand": "future-example-weighted; whole-source-component resampling",
+        "mean_nll_gap": 0.0037303129211068153,
+        "replicates": 10000,
+        "unit": "source_component"
+      },
+      "aligned_nll": 0.4830489475808556,
+      "scope": "development_assessment_only"
+    }
+  },
+  "generation_counts": {
+    "rbr-qwen-primary500": 96,
+    "rbr-deepseek-train321": 100
+  },
+  "live": {
+    "rbr_qwen_generation_status.json": {
+      "status": "running",
+      "pid": 296032,
+      "gpu": 0,
+      "public_root": "/data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public",
+      "materialize_fingerprint": "1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6",
+      "scope": "public-only fixed-source generated RBR banks; all candidates retained; no scientific gate claim",
+      "current": "rbr-qwen-primary500",
+      "process_exists_at_snapshot": true,
+      "process_command": "/usr/bin/python3 -u - ",
+      "process_start_ticks": "63262182"
+    },
+    "rbr_deepseek_generation_status.json": {
+      "status": "running",
+      "pid": 1117848,
+      "gpu": 1,
+      "previous_pid": 3469598,
+      "previous_process_start_ticks": "62813479",
+      "public_root": "/data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public",
+      "public_tasks_sha256": "3b1fcc94872c4ae7137e5b709476ba43dd2dbd757f8c2e1d83ad2bdb6c0309fd",
+      "model_proof_sha256": "d8bb587d950061e60f68f114a82f28bfed2361761c498bab66c4f9b14ed29ac7",
+      "decode_batch_size": 1,
+      "candidates_per_source": 8,
+      "max_new_tokens": 1024,
+      "scope": "exploratory predeclared RBR DeepSeek replication; public-only fixed sources",
+      "current": "rbr-deepseek-train321",
+      "process_exists_at_snapshot": true,
+      "process_command": ".venv/bin/python -u scripts/run_local_rbr_replication_generation.py --run-root local/longgoal --previous-pid 3469598 ",
+      "process_start_ticks": "63664004"
+    },
+    "rbr-qwen-full-evaluation-v1/status.json": {
+      "status": "waiting_for_generation",
+      "pid": 593161,
+      "domain": "rbr",
+      "banks": {
+        "train": "/data/cwj/PBPF/local/longgoal/rbr-qwen-train321",
+        "development-pilot": "/data/cwj/PBPF/local/longgoal/rbr-qwen-development-pilot16",
+        "development-remainder": "/data/cwj/PBPF/local/longgoal/rbr-qwen-development384",
+        "primary": "/data/cwj/PBPF/local/longgoal/rbr-qwen-primary500"
+      },
+      "scope": "exploratory standalone full-population replay; no sealed stage completion",
+      "public_tasks_sha256": "3b1fcc94872c4ae7137e5b709476ba43dd2dbd757f8c2e1d83ad2bdb6c0309fd",
+      "pending": [
+        "primary"
+      ],
+      "current": "evaluate-development-remainder",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_bank_evaluation.py --domain rbr --public-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public --evaluator-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator --train-bank /data/cwj/PBPF/local/longgoal/rbr-qwen-train321 --development-pilot-bank /data/cwj/PBPF/local/longgoal/rbr-qwen-development-pilot16 --development-remainder-bank /data/cwj/PBPF/local/longgoal/rbr-qwen-development384 --primary-bank /data/cwj/PBPF/local/longgoal/rbr-qwen-primary500 --output /data/cwj/PBPF/local/longgoal/rbr-qwen-full-evaluation-v1 --generation-status /data/cwj/PBPF/local/longgoal/rbr_qwen_generation_status.json ",
+      "process_start_ticks": "63371596"
+    },
+    "rbr-deepseek-full-evaluation-v1/status.json": {
+      "status": "waiting_for_generation",
+      "pid": 1118014,
+      "domain": "rbr",
+      "banks": {
+        "train": "/data/cwj/PBPF/local/longgoal/rbr-deepseek-train321",
+        "development-pilot": "/data/cwj/PBPF/local/longgoal/rbr-deepseek-development-pilot16",
+        "development-remainder": "/data/cwj/PBPF/local/longgoal/rbr-deepseek-development384",
+        "primary": "/data/cwj/PBPF/local/longgoal/rbr-deepseek-primary500"
+      },
+      "scope": "exploratory standalone full-population replay; no sealed stage completion",
+      "public_tasks_sha256": "3b1fcc94872c4ae7137e5b709476ba43dd2dbd757f8c2e1d83ad2bdb6c0309fd",
+      "pending": [
+        "train",
+        "development-remainder",
+        "primary"
+      ],
+      "current": "evaluate-development-pilot",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_bank_evaluation.py --domain rbr --public-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public --evaluator-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator --train-bank /data/cwj/PBPF/local/longgoal/rbr-deepseek-train321 --development-pilot-bank /data/cwj/PBPF/local/longgoal/rbr-deepseek-development-pilot16 --development-remainder-bank /data/cwj/PBPF/local/longgoal/rbr-deepseek-development384 --primary-bank /data/cwj/PBPF/local/longgoal/rbr-deepseek-primary500 --output /data/cwj/PBPF/local/longgoal/rbr-deepseek-full-evaluation-v1 --generation-status /data/cwj/PBPF/local/longgoal/rbr_deepseek_generation_status.json ",
+      "process_start_ticks": "63664127"
+    },
+    "rbr-qwen-generated-prediction-v1/status.json": {
+      "status": "complete",
+      "pid": 1172374,
+      "domain": "rbr",
+      "seeds": [
+        1701,
+        1702,
+        1703
+      ],
+      "device": "cpu",
+      "evaluation_role": "development_assessment_only",
+      "original_primary_excluded": true,
+      "expected_feature_visibility": "observed-four-only",
+      "scope": "standalone generated-bank prediction; unchanged gates; no main-table claim",
+      "current": "prediction-seed1703",
+      "cache_sha256": "6394649b96ed13976e0373a6e88b9a6321b4d3d154bb24363518a64210fe3026",
+      "counts": {
+        "development": 512,
+        "test": 3200,
+        "train": 2056
+      },
+      "problem_counts": {
+        "development": 64,
+        "test": 400,
+        "train": 257
+      },
+      "generator_identity": {
+        "max_new_tokens": 1024,
+        "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+        "revision": "c03e6d358207e414f1eca0bb1891e29f1db0e242",
+        "seed": 1701,
+        "temperature": 0.8,
+        "top_p": 0.95
+      },
+      "process_exists_at_snapshot": false
+    },
+    "rbr-deepseek-generated-prediction-v1/status.json": {
+      "status": "waiting_for_development_execution",
+      "pid": 1172375,
+      "domain": "rbr",
+      "seeds": [
+        1701,
+        1702,
+        1703
+      ],
+      "device": "cpu",
+      "evaluation_role": "development_assessment_only",
+      "original_primary_excluded": true,
+      "expected_feature_visibility": "observed-four-only",
+      "scope": "standalone generated-bank prediction; unchanged gates; no main-table claim",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_generated_prediction.py --domain rbr --evaluation-root /data/cwj/PBPF/local/longgoal/rbr-deepseek-full-evaluation-v1 --public-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public --evaluator-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator --output /data/cwj/PBPF/local/longgoal/rbr-deepseek-generated-prediction-v1 ",
+      "process_start_ticks": "63712042"
+    },
+    "codearc-deepseek-full-replication-cell-v1/status.json": {
+      "status": "complete",
+      "pid": 2668935,
+      "domain": "codearc",
+      "family": "deepseek",
+      "seeds": [
+        1701,
+        1702,
+        1703
+      ],
+      "primary_sources": 500,
+      "scope": "standalone full-population replication cell; no sealed-stage or scientific-gate pass implied",
+      "current": "selection",
+      "cell_sha256": "4cdd6024d3bd02c535c1dd3f3482c7606b2875565ddf62120e7ed539c0705253",
+      "process_exists_at_snapshot": false
+    },
+    "rbr-qwen-full-replication-cell-v1/status.json": {
+      "status": "waiting_for_full_execution",
+      "pid": 2668938,
+      "domain": "rbr",
+      "family": "qwen",
+      "seeds": [
+        1701,
+        1702,
+        1703
+      ],
+      "primary_sources": 500,
+      "scope": "standalone full-population replication cell; no sealed-stage or scientific-gate pass implied",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_full_replication_cell.py --evaluation-root /data/cwj/PBPF/local/longgoal/rbr-qwen-full-evaluation-v1 --public-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public --evaluator-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator --domain rbr --family qwen --output /data/cwj/PBPF/local/longgoal/rbr-qwen-full-replication-cell-v1 ",
+      "process_start_ticks": "64404822"
+    },
+    "rbr-deepseek-full-replication-cell-v1/status.json": {
+      "status": "waiting_for_full_execution",
+      "pid": 2668942,
+      "domain": "rbr",
+      "family": "deepseek",
+      "seeds": [
+        1701,
+        1702,
+        1703
+      ],
+      "primary_sources": 500,
+      "scope": "standalone full-population replication cell; no sealed-stage or scientific-gate pass implied",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_full_replication_cell.py --evaluation-root /data/cwj/PBPF/local/longgoal/rbr-deepseek-full-evaluation-v1 --public-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public --evaluator-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator --domain rbr --family deepseek --output /data/cwj/PBPF/local/longgoal/rbr-deepseek-full-replication-cell-v1 ",
+      "process_start_ticks": "64404822"
+    },
+    "codearc-packet-repair-v1/status.json": {
+      "status": "running",
+      "pid": 2533538,
+      "packets": {
+        "1701": {
+          "path": "/data/cwj/PBPF/local/longgoal/codearc-repair-packets-v1/actor-seed1701",
+          "manifest_sha256": "c7505c5fdb0d98b7808a2e378bd6a752f11245784e8065dfd2ee3836c36b56c4"
+        },
+        "1702": {
+          "path": "/data/cwj/PBPF/local/longgoal/codearc-repair-packets-v1/actor-seed1702",
+          "manifest_sha256": "e4cc70f7f5e2f28e433984989de0f0829eccbf3589ba166d77be3c66af3deed4"
+        },
+        "1703": {
+          "path": "/data/cwj/PBPF/local/longgoal/codearc-repair-packets-v1/actor-seed1703",
+          "manifest_sha256": "376fe74b96deab275abb98338fdc0abbeedd263227b4376a9e891f6bbc3e54d7"
+        }
+      },
+      "seeds": [
+        1701,
+        1702,
+        1703
+      ],
+      "max_new_tokens": 512,
+      "gpu": 2,
+      "domain": "codearc",
+      "smoke_only": false,
+      "scope": "supportive exploratory repair after failed upstream gates; no efficacy claim before fresh evaluation",
+      "current": "train-seed1702",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_packet_repair.py --packet-root /data/cwj/PBPF/local/longgoal/codearc-repair-packets-v1 --output /data/cwj/PBPF/local/longgoal/codearc-packet-repair-v1 --domain codearc --gpu 2 ",
+      "process_start_ticks": "64331942"
+    },
+    "codearc-packet-repair-evaluation-v1/status.json": {
+      "status": "waiting_for_generation",
+      "pid": 2546736,
+      "seeds": [
+        1701,
+        1702,
+        1703
+      ],
+      "domain": "codearc",
+      "smoke_only": false,
+      "timeout_seconds": 6.0,
+      "scope": "fresh isolated execution of all generated arms; exploratory supportive repair",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_packet_repair_evaluation.py --generation-root /data/cwj/PBPF/local/longgoal/codearc-packet-repair-v1 --packet-root /data/cwj/PBPF/local/longgoal/codearc-repair-packets-v1 --evaluator-root /data/cwj/PBPF/local/longgoal/codearc-evaluator-v1 --output /data/cwj/PBPF/local/longgoal/codearc-packet-repair-evaluation-v1 ",
+      "process_start_ticks": "64337760"
+    },
+    "apbpf-real-full-pipeline-v2/status.json": {
+      "status": "waiting_for_full_banks_and_replication_replay",
+      "pid": 3137406,
+      "planned_stages": [
+        "materialize",
+        "hard_bank_lock",
+        "execution_cache",
+        "hard_bank",
+        "hard_bank_gate",
+        "train_baselines",
+        "train_belief",
+        "baseline_fairness_gate",
+        "association",
+        "association_gate",
+        "pair_invariance_gate",
+        "oracle_headroom",
+        "oracle_headroom_gate",
+        "active_testing",
+        "active_testing_gate",
+        "selection",
+        "selection_gate",
+        "repair",
+        "replication",
+        "replication_gate",
+        "paper_tables"
+      ],
+      "claim_status": "exploratory-predeclared",
+      "fresh_candidate_generation": false,
+      "fresh_primary_family_execution": true,
+      "fresh_replication_family_execution": false,
+      "fresh_replication_fitting": true,
+      "gpu": "0",
+      "scope": "all 21 local adapters provisioned; neither execution completion nor gate success implied",
+      "waiting_on": [
+        "qwen_public_banks",
+        "rbr_deepseek_full_replay"
+      ],
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_apbpf_full_pipeline.py --run-root /data/cwj/PBPF/local/longgoal --materialized-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs --output /data/cwj/PBPF/local/longgoal/apbpf-real-full-pipeline-v2 --gpu 0 ",
+      "process_start_ticks": "64605641"
+    },
+    "codearc-qwen-history-rate-v1/status.json": {
+      "status": "complete",
+      "pid": 3107872,
+      "scope": "standalone required ablation, not a sealed DAG stage",
+      "alpha": 1.0,
+      "results_sha256": "5e2f31c6d4a1a8794828edabb550e5d3f2b03508c3a49f518767f4064ce7a3ce",
+      "gap": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.2782250043445629,
+        "ci95": [
+          0.24595271313965414,
+          0.30724729178115107
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "process_exists_at_snapshot": false
+    },
+    "codearc-deepseek-history-rate-v1/status.json": {
+      "status": "complete",
+      "pid": 3107873,
+      "scope": "standalone required ablation, not a sealed DAG stage",
+      "alpha": 1.0,
+      "results_sha256": "70028f0868fc56bb435289e25d63554103e5d5fd32bae586fb30ee72dac2a570",
+      "gap": {
+        "unit": "source_component",
+        "clusters": 500,
+        "replicates": 10000,
+        "mean_nll_gap": 0.297694308110925,
+        "ci95": [
+          0.2682436273869259,
+          0.3240612079231095
+        ],
+        "estimand": "future-example-weighted; whole-source-component resampling"
+      },
+      "process_exists_at_snapshot": false
+    },
+    "rbr-qwen-history-rate-v1/status.json": {
+      "status": "waiting_for_fitting",
+      "pid": 3107874,
+      "scope": "standalone required ablation, not a sealed DAG stage",
+      "alpha": 1.0,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_apbpf_history_rate_ablation.py --wait-for-cell /data/cwj/PBPF/local/longgoal/rbr-qwen-full-replication-cell-v1 --output /data/cwj/PBPF/local/longgoal/rbr-qwen-history-rate-v1 ",
+      "process_start_ticks": "64590786"
+    },
+    "rbr-deepseek-history-rate-v1/status.json": {
+      "status": "waiting_for_fitting",
+      "pid": 3107878,
+      "scope": "standalone required ablation, not a sealed DAG stage",
+      "alpha": 1.0,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_apbpf_history_rate_ablation.py --wait-for-cell /data/cwj/PBPF/local/longgoal/rbr-deepseek-full-replication-cell-v1 --output /data/cwj/PBPF/local/longgoal/rbr-deepseek-history-rate-v1 ",
+      "process_start_ticks": "64590787"
+    },
+    "codearc-particle-sensitivity-v1/status.json": {
+      "status": "complete",
+      "pid": 3271959,
+      "plan_sha256": "fdb9d5c51ff6f4f37bc9852eecb56182c98df226ddfe6f2e35490418548d3e30",
+      "current": "semantic-seed1703-p128",
+      "control": "presentation_permuted",
+      "results_sha256": "14363cadb49c3e33880c3bfd077f0858b1b9c63d527e9830812e859af7220d1d",
+      "process_exists_at_snapshot": false
+    },
+    "codearc-semantic-p32-training-v1/status.json": {
+      "status": "running",
+      "pid": 3553251,
+      "plan_sha256": "68c2cec61257044d70887205c68af3873188f4360e6bd9151518c5dc9c4ddec6",
+      "current": "semantic-p32-seed1702",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_particle_training_debug.py --development-root /data/cwj/PBPF/local/longgoal/codearc-semantic-debug-v1 --sensitivity-root /data/cwj/PBPF/local/longgoal/codearc-particle-sensitivity-v1 --output /data/cwj/PBPF/local/longgoal/codearc-semantic-p32-training-v1 ",
+      "process_start_ticks": "64749368"
+    },
+    "codearc-semantic-p32-comparison-v1/status.json": {
+      "status": "waiting_for_all_refits",
+      "pid": 3905918,
+      "plan_sha256": "cc3aeea98f06df7aa4bbdd72ba7541236fa766cca5e58923c0af6e569501f625",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/summarize_apbpf_particle_training.py --training-root /data/cwj/PBPF/local/longgoal/codearc-semantic-p32-training-v1 --development-root /data/cwj/PBPF/local/longgoal/codearc-semantic-debug-v1 --sensitivity-root /data/cwj/PBPF/local/longgoal/codearc-particle-sensitivity-v1 --output /data/cwj/PBPF/local/longgoal/codearc-semantic-p32-comparison-v1 --wait ",
+      "process_start_ticks": "64856162"
+    }
+  },
+  "same_inference_budget_comparison": {
+    "pid": 3905918,
+    "status": "waiting_for_all_refits",
+    "plan_sha256": "cc3aeea98f06df7aa4bbdd72ba7541236fa766cca5e58923c0af6e569501f625"
+  },
+  "claim": "partial development diagnostics; complete seed aggregation and primary experiments still pending",
+  "rbr_all_three_development_seeds": [
+    {
+      "seed": 1701,
+      "association": {
+        "ci95": [
+          -0.002614838833610217,
+          0.031803879658381135
+        ],
+        "clusters": 400,
+        "estimand": "future-example-weighted; whole-source-component resampling",
+        "mean_nll_gap": 0.014145702123641968,
+        "replicates": 10000,
+        "unit": "source_component"
+      },
+      "aligned_nll": 0.41915110713219605,
+      "gate": {
+        "association_passes": false,
+        "association_threshold": 0.03,
+        "baseline_fairness_passes": false,
+        "baseline_margin": 0.02,
+        "baseline_status": "evaluated",
+        "controls_worse_than_aligned": true,
+        "full_gate_passes": false,
+        "max_degradation_fraction": 0.25,
+        "pair_invariance_passes": false,
+        "particles_necessary_claim_allowed": false
+      },
+      "receipt": {
+        "prediction-seed1701.json": "276b61be103a04775092f79d20e0c579d1739e959ee9ab7659ffcee5e15ba7bc",
+        "prediction-seed1701.population.json": "0675cf194363d054049ae8234aa216e799f86ce987e3eb424f9c547d76ec80c7",
+        "prediction-seed1701.pt": "858aa31c46ef8880cef479a1dbfead967b05bbe355b966dbc6719b8866bd6c4c"
+      }
+    },
+    {
+      "seed": 1702,
+      "association": {
+        "ci95": [
+          -0.0022873801191647847,
+          0.018889996170997608
+        ],
+        "clusters": 400,
+        "estimand": "future-example-weighted; whole-source-component resampling",
+        "mean_nll_gap": 0.007906213402748108,
+        "replicates": 10000,
+        "unit": "source_component"
+      },
+      "aligned_nll": 0.4079329973249116,
+      "gate": {
+        "association_passes": false,
+        "association_threshold": 0.03,
+        "baseline_fairness_passes": false,
+        "baseline_margin": 0.02,
+        "baseline_status": "evaluated",
+        "controls_worse_than_aligned": true,
+        "full_gate_passes": false,
+        "max_degradation_fraction": 0.25,
+        "pair_invariance_passes": false,
+        "particles_necessary_claim_allowed": false
+      },
+      "receipt": {
+        "prediction-seed1702.json": "f565311a99e11baf9cbbc9cedc5f74be588faf560c27de59985f8341004d6446",
+        "prediction-seed1702.population.json": "2af205b9cdff35704689d5e723ca3133ee735b7bcd07627fa1f9ae68b0b90c2a",
+        "prediction-seed1702.pt": "c798f7a1838dcbf99e389a5b05f46376f35380bb50184de6cf18327a19fe2df5"
+      }
+    },
+    {
+      "seed": 1703,
+      "association": {
+        "ci95": [
+          -0.008041107257207235,
+          0.009548559288183845
+        ],
+        "clusters": 400,
+        "estimand": "future-example-weighted; whole-source-component resampling",
+        "mean_nll_gap": 0.0009395075030624866,
+        "replicates": 10000,
+        "unit": "source_component"
+      },
+      "aligned_nll": 0.43249331010659847,
+      "gate": {
+        "association_passes": false,
+        "association_threshold": 0.03,
+        "baseline_fairness_passes": false,
+        "baseline_margin": 0.02,
+        "baseline_status": "evaluated",
+        "controls_worse_than_aligned": false,
+        "full_gate_passes": false,
+        "max_degradation_fraction": 0.25,
+        "pair_invariance_passes": true,
+        "particles_necessary_claim_allowed": false
+      },
+      "receipt": {
+        "prediction-seed1703.json": "00aecc3506f22c8ff99f3e46cca306e75402761b99133c3caaa96841fe41fa97",
+        "prediction-seed1703.population.json": "fc860f00a32fe995fdcf0970383a83c5539272443046ae648eb3cdd718cbd5d6",
+        "prediction-seed1703.pt": "7cbe96be80c67311b74377267530a26256898ebb648a5c6d68b7072c374ad1c2"
+      }
+    }
+  ]
+}

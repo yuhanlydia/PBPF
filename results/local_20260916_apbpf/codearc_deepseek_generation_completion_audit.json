@@ -1,0 +1,40 @@
+{
+  "schema": "apbpf-replication-generation-completion-audit-v1",
+  "captured_at": "2026-09-16T20:34:06.078504+00:00",
+  "preserved_oom_groups": 110,
+  "preserved_groups_byte_identical": true,
+  "generation_identity_unchanged": true,
+  "runtime_change": {
+    "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"
+  },
+  "banks": {
+    "codearc-deepseek-train212": {
+      "sources": 212,
+      "candidates": 1696,
+      "complete_sha256": "0c9b453094aa338c3d54859070d1f13c8a02eb5cbfc1d5c5775b3436f73d418e",
+      "run_sha256": "b6cb801808156129d297f41b141a4f978dd387615db022755e2f307cb3eee30a"
+    },
+    "codearc-deepseek-pilot16": {
+      "sources": 16,
+      "candidates": 128,
+      "complete_sha256": "330e9045cce856ee8f279018946d34a60846a50f7f02ffaed65dc6b2a3548584",
+      "run_sha256": "af0646a6aba96b6d4252ab7c8780fcd81df77335367fc3dd683ccd6670164b92"
+    },
+    "codearc-deepseek-development384": {
+      "sources": 384,
+      "candidates": 3072,
+      "complete_sha256": "311de0eac7e8544f6191875c848c8fe75f6fabc8fed2561019edd109bdf5d8cb",
+      "run_sha256": "932493dba9e600b69c36420e08690becdc222dc9bd442c0262b040ae5abbb3b1"
+    },
+    "codearc-deepseek-primary500": {
+      "sources": 500,
+      "candidates": 4000,
+      "complete_sha256": "2b35e845fc57455b376684c5ffe9d49b3cc4915e982b55c8ef82b191cd9e6c20",
+      "run_sha256": "18ef3ba0231607813adfc247b266cca5e88958fd3f1aa1c17cd560201efaf883"
+    }
+  },
+  "scope": "generation completion and recovery integrity only; no efficacy or replication gate claim",
+  "total_sources": 1112,
+  "total_candidates": 8896,
+  "source_disjointness_verified": true
+}

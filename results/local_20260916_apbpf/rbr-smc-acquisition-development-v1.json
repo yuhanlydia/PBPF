@@ -1,0 +1,197 @@
+{
+  "schema": "apbpf-development-smc-acquisition-replay-v1",
+  "seed": 1701,
+  "cache_sha256": "01ec954e544125cdf869e7fab971172bb8c5f09be42f184724502b7237d6c77d",
+  "checkpoint_sha256": "e4cb7a6b7afc871da8c01dd20c2ef6ceb23c14f5e14ed0c1bb1a8f0d8a50d051",
+  "source_sha256": {
+    "scripts/run_apbpf_smc_acquisition_replay.py": "5b886f3a529f8883c89837538bef1434a56a458e0ca9117e0c6b30282fb427ef",
+    "src/pbpf/apbpf/smc_acquisition.py": "fcadc1528530684d40ab1ee97a0bdb4a33aa86c991a7d32fa8613be203852299",
+    "src/pbpf/belief/model.py": "e98fe0f1933233f2c4cf7c86aec1e60c7893a232a6842bd84db3a111c5f376fc",
+    "src/pbpf/real_gate.py": "33af0b5cd294a24328f10d8df108098cd270b4cca60f5c5ee2f733e6e475117f"
+  },
+  "device": "cuda",
+  "batch_size": 64,
+  "policies": [
+    "fixed",
+    "random",
+    "diagnostic_mi",
+    "predictive_entropy",
+    "joint_particle_mi"
+  ],
+  "budgets": [
+    1,
+    2,
+    4
+  ],
+  "particles": 8,
+  "public_pool": 4,
+  "future_targets": 6,
+  "inference": "trained SMC: first selected observation conditions root proposal; same common noise and resampling uniforms for every policy/subset; selected-history replay",
+  "diagnostic_mi": "diagnosis components crossed with difficulty marginal; selection only",
+  "joint_particle_mi": "original weighted joint SMC particles; required nuisance-sensitive ablation",
+  "future_scoring": "original weighted joint SMC posterior for every policy",
+  "oracle": "best canonical public subset on evaluator future NLL, upper bound only",
+  "scope": "nonconfirmatory development-only; upstream gates failed",
+  "budget_semantics": "exact cached public observation counts, not new sandbox executions",
+  "population": {
+    "candidates": 1264,
+    "source_components": 200
+  },
+  "summary": {
+    "1": {
+      "fixed": {
+        "nll": 0.6263496130076138,
+        "nll_advantage_over_fixed": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "random": {
+        "nll": 0.6326874578332348,
+        "nll_advantage_over_fixed": -0.006337844825620892,
+        "ci95": [
+          -0.027310954605752162,
+          0.014284641415547335
+        ]
+      },
+      "diagnostic_mi": {
+        "nll": 0.6206667608962657,
+        "nll_advantage_over_fixed": 0.005682852111348123,
+        "ci95": [
+          -0.023707336181237465,
+          0.0326438739182108
+        ]
+      },
+      "predictive_entropy": {
+        "nll": 0.6313734014326007,
+        "nll_advantage_over_fixed": -0.0050237884249868265,
+        "ci95": [
+          -0.035622608172717694,
+          0.0222023156855206
+        ]
+      },
+      "joint_particle_mi": {
+        "nll": 0.6224744492347984,
+        "nll_advantage_over_fixed": 0.003875163772815392,
+        "ci95": [
+          -0.027809150969442135,
+          0.03151811413188519
+        ]
+      },
+      "oracle": {
+        "nll": 0.5254773823662272,
+        "nll_advantage_over_fixed": 0.10087223064138667,
+        "ci95": [
+          0.0820223857461727,
+          0.12220256063971359
+        ]
+      }
+    },
+    "2": {
+      "fixed": {
+        "nll": 0.5101263730429144,
+        "nll_advantage_over_fixed": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "random": {
+        "nll": 0.5252662101438277,
+        "nll_advantage_over_fixed": -0.015139837100913253,
+        "ci95": [
+          -0.03126323890800877,
+          0.00046677774186177197
+        ]
+      },
+      "diagnostic_mi": {
+        "nll": 0.5167129236796109,
+        "nll_advantage_over_fixed": -0.006586550636696413,
+        "ci95": [
+          -0.029440688644664058,
+          0.014081458167533192
+        ]
+      },
+      "predictive_entropy": {
+        "nll": 0.5282818192639683,
+        "nll_advantage_over_fixed": -0.01815544622105385,
+        "ci95": [
+          -0.04301378594919496,
+          0.0026548982555853443
+        ]
+      },
+      "joint_particle_mi": {
+        "nll": 0.5155795129479738,
+        "nll_advantage_over_fixed": -0.005453139905059388,
+        "ci95": [
+          -0.030634906476020372,
+          0.01607454759335147
+        ]
+      },
+      "oracle": {
+        "nll": 0.4265984257895358,
+        "nll_advantage_over_fixed": 0.08352794725337863,
+        "ci95": [
+          0.0702500104391107,
+          0.09827239983126555
+        ]
+      }
+    },
+    "4": {
+      "fixed": {
+        "nll": 0.4476290165922184,
+        "nll_advantage_over_fixed": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "random": {
+        "nll": 0.452214302047144,
+        "nll_advantage_over_fixed": -0.004585285454925605,
+        "ci95": [
+          -0.016103051020582657,
+          0.005922084999759424
+        ]
+      },
+      "diagnostic_mi": {
+        "nll": 0.4496075846608492,
+        "nll_advantage_over_fixed": -0.0019785680686308367,
+        "ci95": [
+          -0.01988927800357775,
+          0.013757575597694858
+        ]
+      },
+      "predictive_entropy": {
+        "nll": 0.45880554135857377,
+        "nll_advantage_over_fixed": -0.011176524766355377,
+        "ci95": [
+          -0.028721887596489633,
+          0.0036719079337974667
+        ]
+      },
+      "joint_particle_mi": {
+        "nll": 0.4486027543751311,
+        "nll_advantage_over_fixed": -0.0009737377829126672,
+        "ci95": [
+          -0.020448596071541876,
+          0.015559553741227899
+        ]
+      },
+      "oracle": {
+        "nll": 0.4476290165922184,
+        "nll_advantage_over_fixed": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      }
+    }
+  },
+  "bootstrap": "10000 whole-source draws; shared draws across policies; future-example weighted",
+  "limitations": [
+    "Only four public query candidates; budget four changes ordering only.",
+    "No threshold stopping or confirmatory active-testing gate claim."
+  ]
+}

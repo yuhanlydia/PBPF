@@ -1,0 +1,37 @@
+........................................................................ [  9%]
+........................................................................ [ 19%]
+........................................................................ [ 29%]
+........................................................................ [ 39%]
+........................................................................ [ 49%]
+........................................................................ [ 59%]
+........................................................................ [ 69%]
+........................................................................ [ 79%]
+.........................................................F.............. [ 89%]
+........................................................................ [ 98%]
+........                                                                 [100%]
+=================================== FAILURES ===================================
+_______________ test_local_dag_has_no_optional_import_or_socket ________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x759fca8d9610>
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-55/test_local_dag_has_no_optional0')
+capsys = <_pytest.capture.CaptureFixture object at 0x759fca8d8e60>
+
+    def test_local_dag_has_no_optional_import_or_socket(monkeypatch, tmp_path, capsys):
+        original = builtins.__import__
+        def blocked(name, *args, **kwargs):
+            if name.split(".")[0] in {"torch", "transformers", "datasets", "socket", "requests", "huggingface_hub"}:
+                raise AssertionError("forbidden offline dependency: " + name)
+            return original(name, *args, **kwargs)
+        monkeypatch.setattr(builtins, "__import__", blocked)
+        main = importlib.import_module("pbpf.iclr_cli").main
+>       assert main(["run", "--config", str(CONFIG), "--profile", "local_cpu",
+                     "--output-root", str(tmp_path), "--resume"]) == 0
+E       AssertionError: assert 2 == 0
+E        +  where 2 = <function main at 0x759fcaa971a0>(['run', '--config', '/data/cwj/PBPF/configs/experiments/iclr_pbpf.yaml', '--profile', 'local_cpu', '--output-root', ...])
+
+tests/test_iclr_cli.py:88: AssertionError
+----------------------------- Captured stderr call -----------------------------
+pbpf-iclr: bounded verifier unit exceeded deadline
+=========================== short test summary info ============================
+FAILED tests/test_iclr_cli.py::test_local_dag_has_no_optional_import_or_socket
+1 failed, 727 passed in 349.93s (0:05:49)

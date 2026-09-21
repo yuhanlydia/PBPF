@@ -23,6 +23,7 @@ def _parser():
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--continue-exploratory", action="store_true")
     parser.add_argument("--stage", choices=STAGES)
+    parser.add_argument('--through-stage', choices=STAGES, help='explicit partial execution/provisioning; verify still requires all stages')
     parser.add_argument("--fail-smoke-gate", choices=GATE_STAGES, help="explicit synthetic gate-stop control; fake backend only")
     return parser
 
@@ -36,6 +37,8 @@ def main(argv=None):
     args = parser.parse_args(values)
     if (args.command == "rerun-stage") != (args.stage is not None):
         parser.error("--stage is required only for rerun-stage")
+    if args.through_stage is not None and args.command not in {'doctor', 'run', 'rerun-stage'}:
+        parser.error('--through-stage applies only to doctor/run/rerun-stage')
     if args.command not in {"run", "rerun-stage"} and (args.resume or args.continue_exploratory or args.fail_smoke_gate):
         parser.error("execution flags apply only to run/rerun-stage")
     try:
@@ -43,13 +46,14 @@ def main(argv=None):
         resolved = resolve_config(args.config, args.profile, site=args.site or os.environ.get("PBPF_APBPF_SITE"))
         directory = Path(args.output_root).resolve() / resolved.fingerprint
         if args.command == "doctor":
-            response = doctor(resolved)
+            response = doctor(resolved, through_stage=args.through_stage)
             print(json.dumps(response, sort_keys=True))
             return 0 if response["ready"] else 2
         if args.command in {"run", "rerun-stage"}:
             response = run_pipeline(resolved, directory, resume=args.resume,
                                     continue_exploratory=args.continue_exploratory,
-                                    rerun_stage=args.stage, fail_smoke_gate=args.fail_smoke_gate)
+                                    rerun_stage=args.stage, fail_smoke_gate=args.fail_smoke_gate,
+                                    through_stage=args.through_stage)
         else:
             response = report_run(resolved, directory, require_complete=args.command == "verify")
         print(json.dumps(response, sort_keys=True))

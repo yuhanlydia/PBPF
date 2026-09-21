@@ -30,6 +30,8 @@ from pbpf.real_gate import (FrozenTextEncoder, classify_execution, compare_predi
                            RBR_CACHE_SCHEMA, bounded_execution_record, validate_rbr_cache,
                            public_test_text, clustered_nll_gap, association_strata)
 from pbpf.apbpf.counterfactual import outcome_derangement, joint_permutation
+from pbpf.apbpf.rbr_splits import select_sources
+from pbpf.apbpf.rbr_execution import canonical_stdin
 from pbpf.registry import OUTCOMES
 from pbpf.train_belief import train_belief_step
 
@@ -105,7 +107,7 @@ def _execute(payload):
             actual, stderr, returncode, timed_out = "", "", None, False
             try:
                 result = subprocess.run(
-                    ["/usr/bin/python3", "-I", str(source)], input=case["input"], text=True,
+                    ["/usr/bin/python3", "-I", str(source)], input=canonical_stdin(case["input"]), text=True,
                     capture_output=True, timeout=timeout, cwd=directory,
                     env={"PATH": "/usr/bin:/bin", "LANG": "C.UTF-8", "PYTHONHASHSEED": "0"},
                 )
@@ -124,7 +126,8 @@ def _execute(payload):
 def prepare(root: Path, descriptions_root: Path, descriptions_archive: Path, cache: Path, *,
             train_problems: int, dev_problems: int,
             test_problems: int, candidates_per_problem: int, tests_per_candidate: int,
-            workers: int, timeout: float, seed: int) -> dict:
+            workers: int, timeout: float, seed: int,
+            source_split_policy: str = "official-exclusive") -> dict:
     for name, expected in EXPECTED_MD5.items():
         path = root / name
         if not path.is_file() or _md5(path) != expected:
@@ -157,17 +160,9 @@ def prepare(root: Path, descriptions_root: Path, descriptions_archive: Path, cac
                 and len(tests[row["problem_id"]]) >= tests_per_candidate]
         bugs[split] = rows
         problem_sets[split] = {row["problem_id"] for row in rows}
-    train_only = problem_sets["train"] - problem_sets["test"]
-    test_only = problem_sets["test"] - problem_sets["train"]
-    ranked_train = sorted(train_only, key=lambda value: _rank(seed, "train-problem", value))
-    ranked_test = sorted(test_only, key=lambda value: _rank(seed, "test-problem", value))
-    selected = {
-        "train": set(ranked_train[:train_problems]),
-        "development": set(ranked_train[train_problems:train_problems + dev_problems]),
-        "test": set(ranked_test[:test_problems]),
-    }
-    if any(len(selected[name]) != cap for name, cap in (("train", train_problems), ("development", dev_problems), ("test", test_problems))):
-        raise ValueError("requested caps exceed source-disjoint eligible problems")
+    selected = select_sources(problem_sets["train"], problem_sets["test"],
+        train_count=train_problems, development_count=dev_problems, test_count=test_problems,
+        seed=seed, policy=source_split_policy)
 
     jobs = []
     for target_split, source_split in (("train", "train"), ("development", "train"), ("test", "test")):
@@ -211,7 +206,25 @@ def prepare(root: Path, descriptions_root: Path, descriptions_archive: Path, cac
         "problem_counts": {split: len({row["problem_id"] for row in records if row["split"] == split}) for split in selected},
         "rejected_fixed_candidates": rejected_fixed,
         "population_policy": "all selected buggy candidates, including all-pass; fixed-program validity screen",
+        "source_split_policy": source_split_policy,
         "execution_fields_visibility": "evaluator-only unless explicitly whitelisted by protocol",
+        "execution_protocol": {
+            "stdin_policy": "official-terminal-newline-if-missing",
+            "scoring_policy": "line/token match; absolute numeric tolerance 1e-4",
+            "timeout_seconds": timeout,
+            "runner": "legacy-isolated-python-subprocess",
+            "source_sha256": {
+                str(path.relative_to(Path(__file__).resolve().parents[1])): _sha256(path)
+                for path in (Path(__file__).resolve(),
+                    Path(__file__).resolve().parents[1] / "src/pbpf/apbpf/rbr_execution.py")
+            },
+        },
+        "preparation_parameters": {
+            "train_problems": train_problems, "dev_problems": dev_problems,
+            "test_problems": test_problems, "candidates_per_problem": candidates_per_problem,
+            "tests_per_candidate": tests_per_candidate, "workers": workers,
+            "selected_candidates_before_fixed_screen": len(jobs),
+        },
     }
     cache.write_text(json.dumps(payload, sort_keys=True) + "\n")
     return payload
@@ -234,15 +247,16 @@ def _subset(batch, indices):
 
 
 @torch.no_grad()
-def _predict(model, batch, *, particles, seed, mode, problem_ids=None):
+def _predict(model, batch, *, particles, seed, mode, problem_ids=None, counterfactual_seed=None):
     generator = torch.Generator(device=batch.task.device).manual_seed(seed)
+    history_seed = seed if counterfactual_seed is None else counterfactual_seed
     source = batch
     mode = {"pbpf": "aligned", "shuffled": "outcome_shuffled", "random": "random_latent"}.get(mode, mode)
     if mode not in {"baseline", "aligned", "outcome_shuffled", "joint_reversed", "presentation_permuted",
                     "orderless", "semantics_masked", "wrong_candidate", "random_latent"}:
         raise ValueError(f"unknown prediction control: {mode}")
     if mode == "outcome_shuffled":
-        outcomes = torch.as_tensor(outcome_derangement(batch.outcomes.cpu().numpy(), 4, seed),
+        outcomes = torch.as_tensor(outcome_derangement(batch.outcomes.cpu().numpy(), 4, history_seed),
                                    device=batch.task.device, dtype=torch.long)
         source = BeliefBatch(batch.task, batch.candidate, batch.tests, outcomes)
     elif mode in {"joint_reversed", "presentation_permuted", "orderless"}:
@@ -250,7 +264,7 @@ def _predict(model, batch, *, particles, seed, mode, problem_ids=None):
         if mode == "joint_reversed":
             indices[:, :4] = indices[:, :4][:, ::-1]
         elif mode == "presentation_permuted":
-            indices, _ = joint_permutation(indices, batch.outcomes.cpu().numpy(), 4, seed)
+            indices, _ = joint_permutation(indices, batch.outcomes.cpu().numpy(), 4, history_seed)
         else:
             # Canonical ordering is based solely on public semantic features,
             # never on outcomes, IDs, or evaluator-hidden execution strings.
@@ -393,8 +407,11 @@ def train_and_evaluate(payload: dict, output: Path, *, feature_dim: int, latent_
                        difficulty_dim: int = 8, association_weight: float = 1.,
                        invariance_weight: float = .1, association_margin: float = .03,
                        expected_is_public: bool = False, strong_baselines: bool = True,
-                       bootstrap_replicates: int = 10000) -> dict:
+                       bootstrap_replicates: int = 10000, feature_cache: Path | None = None) -> dict:
     validate_rbr_cache(payload)
+    dataset = payload.get("dataset", "runbugrun")
+    if dataset == "codearc_replay" and expected_is_public:
+        raise ValueError("CodeARC future expected outputs are evaluator-only")
     if output.exists() or output.with_suffix(".pt").exists():
         raise FileExistsError("gate outputs are create-once; use a new output path")
     if min(steps, batch_size, particles) < 1:
@@ -407,11 +424,25 @@ def train_and_evaluate(payload: dict, output: Path, *, feature_dim: int, latent_
               "association_weight": association_weight, "invariance_weight": invariance_weight,
               "association_margin": association_margin, "expected_is_public": expected_is_public,
               "strong_baselines": strong_baselines, "bootstrap_replicates": bootstrap_replicates}
+    evaluation_role = payload.get("evaluation_role", "standalone_held_out_diagnostic")
+    config["evaluation_role"] = evaluation_role
+    encoder = FrozenTextEncoder(feature_dim)
+    if feature_cache is not None:
+        from pbpf.apbpf.semantic_cache import FrozenSemanticCache
+        encoder = FrozenSemanticCache(feature_cache)
+        if encoder.dimension != feature_dim:
+            raise ValueError("feature cache dimension differs from model configuration")
+        if (encoder.manifest["expected_is_public"] != expected_is_public
+                or encoder.manifest["evaluation_role"] != evaluation_role):
+            raise ValueError("feature cache visibility/evaluation role mismatch")
+        payload_digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
+        if encoder.manifest["source_payload_sha256"] != payload_digest:
+            raise ValueError("semantic features were extracted for another source population")
+        config.update(encoder_type="frozen_code_model", feature_cache_manifest_sha256=encoder.manifest_sha256)
     config_hash = hashlib.sha256(json.dumps(config, sort_keys=True).encode()).hexdigest()
     torch.manual_seed(seed)
     np.random.seed(seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    encoder = FrozenTextEncoder(feature_dim)
     rows = payload["records"]
     by_split = {name: [row for row in rows if row["split"] == name] for name in ("train", "development", "test")}
     if any(not values for values in by_split.values()):
@@ -509,7 +540,11 @@ def train_and_evaluate(payload: dict, output: Path, *, feature_dim: int, latent_
     baseline_passes = strong_baselines and all(bootstrap[name]["mean_nll_gap"] >= .02
                                               and bootstrap[name]["ci95"][0] > 0 for name in required_baselines)
     report = {
-        "schema": "apbpf-rbr-association-gate-v1", "device": str(device), "seed": seed,
+        "schema": "apbpf-codearc-association-gate-v1" if dataset == "codearc_replay" else "apbpf-rbr-association-gate-v1",
+        "dataset": dataset, "device": str(device), "seed": seed,
+        "evaluation_role": evaluation_role,
+        "claim_status": "nonconfirmatory-development" if evaluation_role == "development_assessment_only"
+                        else "standalone-diagnostic-not-staged-confirmatory",
         "config": config, "config_sha256": config_hash,
         "cache_sha256": cache_hash,
         "locked_population": population,
@@ -528,7 +563,8 @@ def train_and_evaluate(payload: dict, output: Path, *, feature_dim: int, latent_
             "controls_worse_than_aligned": controls_worse,
             "baseline_fairness_passes": baseline_passes, "baseline_margin": .02,
             "baseline_status": "evaluated" if strong_baselines else "missing_fail_closed",
-            "particles_necessary_claim_allowed": bool(apbpf and baseline_passes),
+            "particles_necessary_claim_allowed": bool(apbpf and baseline_passes
+                and evaluation_role != "development_assessment_only"),
             "full_gate_passes": bool(apbpf and association_passes and invariance_passes and controls_worse and baseline_passes),
         },
         "cluster_bootstrap": bootstrap,
@@ -561,6 +597,9 @@ def main():
     parser.add_argument("--cache", type=Path, default=Path("results/rbr_real_gate_dataset.json"))
     parser.add_argument("--output", type=Path, default=Path("results/rbr_gate_b_result.json"))
     parser.add_argument("--prepare", action="store_true")
+    parser.add_argument("--prepare-only", action="store_true", help="create and validate the cache without model fitting")
+    parser.add_argument("--source-split-policy", choices=["official-exclusive", "expanded-train-exclusive-test"],
+                        default="official-exclusive", help="expanded training is an explicitly new data-scale experiment")
     parser.add_argument("--train-problems", type=int, default=160)
     parser.add_argument("--dev-problems", type=int, default=32)
     parser.add_argument("--test-problems", type=int, default=96)
@@ -569,6 +608,7 @@ def main():
     parser.add_argument("--workers", type=int, default=min(24, os.cpu_count() or 1))
     parser.add_argument("--timeout", type=float, default=2.0)
     parser.add_argument("--feature-dim", type=int, default=256)
+    parser.add_argument("--feature-cache", type=Path, help="verified frozen code-model public-text feature cache")
     parser.add_argument("--latent-dim", type=int, default=32)
     parser.add_argument("--hidden-dim", type=int, default=192)
     parser.add_argument("--particles", type=int, default=8)
@@ -591,15 +631,21 @@ def main():
         train_problems=args.train_problems,
         dev_problems=args.dev_problems, test_problems=args.test_problems,
         candidates_per_problem=args.candidates_per_problem, tests_per_candidate=args.tests_per_candidate,
-        workers=args.workers, timeout=args.timeout, seed=args.seed) if args.prepare or not args.cache.exists() else json.loads(args.cache.read_text())
+        workers=args.workers, timeout=args.timeout, seed=args.seed,
+        source_split_policy=args.source_split_policy) if args.prepare or not args.cache.exists() else json.loads(args.cache.read_text())
     validate_rbr_cache(payload)
+    if args.prepare_only:
+        print(json.dumps({"cache": str(args.cache), "counts": payload["counts"],
+                          "problem_counts": payload["problem_counts"],
+                          "source_split_policy": payload.get("source_split_policy", "official-exclusive")}), flush=True)
+        return
     train_and_evaluate(payload, args.output, feature_dim=args.feature_dim, latent_dim=args.latent_dim,
         hidden_dim=args.hidden_dim, particles=args.particles, steps=args.steps, batch_size=args.batch_size,
         learning_rate=args.learning_rate, seed=args.seed, apbpf=args.apbpf,
         difficulty_dim=args.difficulty_dim, association_weight=args.association_weight,
         invariance_weight=args.invariance_weight, association_margin=args.association_margin,
         expected_is_public=args.expected_is_public, strong_baselines=not args.skip_strong_baselines,
-        bootstrap_replicates=args.bootstrap_replicates)
+        bootstrap_replicates=args.bootstrap_replicates, feature_cache=args.feature_cache)
 
 
 if __name__ == "__main__":

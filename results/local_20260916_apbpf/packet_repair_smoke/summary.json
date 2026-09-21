@@ -1,0 +1,38 @@
+{
+  "no_latent": {
+    "sources": 1,
+    "hidden_successes": 1,
+    "all_ten_successes": 1,
+    "future_pass_fraction": 1.0
+  },
+  "mean": {
+    "sources": 1,
+    "hidden_successes": 1,
+    "all_ten_successes": 1,
+    "future_pass_fraction": 1.0
+  },
+  "map": {
+    "sources": 1,
+    "hidden_successes": 1,
+    "all_ten_successes": 1,
+    "future_pass_fraction": 1.0
+  },
+  "random": {
+    "sources": 1,
+    "hidden_successes": 1,
+    "all_ten_successes": 1,
+    "future_pass_fraction": 1.0
+  },
+  "sample_once": {
+    "sources": 1,
+    "hidden_successes": 1,
+    "all_ten_successes": 1,
+    "future_pass_fraction": 1.0
+  },
+  "token_remix_fault": {
+    "sources": 1,
+    "hidden_successes": 1,
+    "all_ten_successes": 1,
+    "future_pass_fraction": 1.0
+  }
+}

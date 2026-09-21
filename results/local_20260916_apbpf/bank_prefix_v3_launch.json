@@ -1,0 +1,17 @@
+{
+  "pid": 1528513,
+  "command": [
+    "/data/cwj/PBPF/.venv/bin/python",
+    "-u",
+    "scripts/run_local_apbpf_bank_prefix.py",
+    "--run-root",
+    "/data/cwj/PBPF/local/longgoal",
+    "--output",
+    "/data/cwj/PBPF/local/longgoal/apbpf-real-bank-prefix-v3",
+    "--through-stage",
+    "pair_invariance_gate",
+    "--continue-exploratory"
+  ],
+  "replaces": "apbpf-real-bank-prefix-v2",
+  "scope": "11 adapters queued; only1 real stage completed; thresholds unchanged"
+}

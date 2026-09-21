@@ -1,0 +1,30 @@
+{
+  "audit": {
+    "all_fail_groups": 350,
+    "all_pass_groups": 43,
+    "candidates_per_group": 8,
+    "groups": 500,
+    "headroom": 0.019999999999999962,
+    "hidden_oracle_pass_at_k": 0.3,
+    "mixed_groups": 107,
+    "population_digest": "93924e4697bc16b8102e7b82d1f832cfc96f57d672019a146f7074b111344643",
+    "provenance": "codearc-bank-sha256:fc707e9004b3b56b358d6d09699a4e8eab8e23a87cfd88b4180d6a3df986b5c3",
+    "saturated": false,
+    "split": "primary",
+    "visible_score_tie_groups": 409,
+    "visible_selected_pass_at_1": 0.28,
+    "visible_tests": 4
+  },
+  "content_sha256": "e1e38603f7abb00d87e26e04238101f668c57b18d26ce858b5764f21b81291d7",
+  "gate": {
+    "confirmatory_500_to_1000_groups": true,
+    "passes": false,
+    "pilot_300_mixed_groups": false,
+    "pilot_primary_source_disjoint": false,
+    "visible_below_hidden_oracle": true
+  },
+  "lock_artifact_sha256": "eab8677b8e9d83cdcca6f4ef429d93c508378026815cc4b5260824a10d406077",
+  "lock_payload_sha256": "147ce3e45ffe95f525c7e69e7e42868ec3f8cbaab41bb3164aebd9466f26c757",
+  "schema": "apbpf-hard-bank-audit-v2",
+  "status": "audit_only"
+}

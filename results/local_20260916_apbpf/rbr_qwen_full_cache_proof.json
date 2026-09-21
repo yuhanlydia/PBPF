@@ -1,0 +1,71 @@
+{
+  "schema": "apbpf-full-replay-cache-proof-v1",
+  "domain": "rbr",
+  "family": "qwen",
+  "generator": {
+    "family": "qwen",
+    "id": "Qwen/Qwen2.5-Coder-7B-Instruct",
+    "revision": "c03e6d358207e414f1eca0bb1891e29f1db0e242",
+    "role": "primary"
+  },
+  "counts": {
+    "train": 2568,
+    "development": 3200,
+    "test": 4000
+  },
+  "problem_counts": {
+    "train": 321,
+    "development": 400,
+    "test": 500
+  },
+  "source_bindings": [
+    {
+      "bank": "/data/cwj/PBPF/local/longgoal/rbr-qwen-train321",
+      "bank_complete_sha256": "d05584f7c1723c5feac85b7bef6b295cd9741f5c8da3aca5b32e9f444a1e374c",
+      "run_sha256": "129bac72943177621a411b4210f728da22271e4e8b5fe4d115a44dd9f94786ab",
+      "executions": {
+        "all": "a8a672e4a605ffee43383f187edc0a6674db8ba117a52bbf2277c8ac1a6d9e71"
+      }
+    },
+    {
+      "bank": "/data/cwj/PBPF/local/longgoal/rbr-qwen-development-pilot16",
+      "bank_complete_sha256": "ab691eb293f91a5e815f41fc61eb96ca725f7a7f691b72fe49815be234c42618",
+      "run_sha256": "f177e2cfb1b415466f9ecbb70289db54a1f5fb435584f85bf2ae41440e2363f3",
+      "executions": {
+        "all": "ed88817cfe7f2c8d3e9e9afc32414a3a81441603a13cff4a782ded45b9bc379c"
+      }
+    },
+    {
+      "bank": "/data/cwj/PBPF/local/longgoal/rbr-qwen-development384",
+      "bank_complete_sha256": "9c58317a041d8b6e89ceb065c846a740b3ee92bfb40e936bcdc96545714a21a9",
+      "run_sha256": "dde2b72c58932a942f5d0bfd50cef58891bb67f8ad56ab267a80111816770450",
+      "executions": {
+        "all": "0e84043b22a5d08188de2e98fc9ad63763ce350e9362439a1192d6b43877a41a"
+      }
+    },
+    {
+      "bank": "/data/cwj/PBPF/local/longgoal/rbr-qwen-primary500",
+      "bank_complete_sha256": "e4f3bfad495f8188ab98ba90654fd80bba30fdf88cc2efe79909bf5895a2dad4",
+      "run_sha256": "7342a2bbd95da64d012f496a5c4b86775b74676165b4cf940e82004ddc1f580b",
+      "executions": {
+        "visible": "01f4e32a073fc8d80ef59fbcce846cf08a40b4e6405ae6cbe9a4e74a2e63f40e",
+        "hidden": "b13a3e7899c791cfb924ffe155cec594381b419e34d2d3250f4d32b9a3d41540",
+        "pre_hidden_lock": "e94ccb017f32ed450e09b2f2a2ef18492ec5bba1bbbdfdc0c474a69b025ab926"
+      }
+    }
+  ],
+  "task_bindings": {
+    "public": {
+      "tasks_sha256": "3b1fcc94872c4ae7137e5b709476ba43dd2dbd757f8c2e1d83ad2bdb6c0309fd",
+      "manifest_sha256": "27dda6a6eca39d3f39283196944a4ffe52a5905d6535156991922ba3813912f7"
+    },
+    "evaluator": {
+      "tasks_sha256": "db1bc75472b1f3e64c69203abcb48503bd2d7177b781913af78ac7ce7f7bfb11",
+      "manifest_sha256": "e03f0bc4f21e91d97d57a6bb4baf81250d3af08769c7212c9858d612973d0336"
+    }
+  },
+  "evaluation_status_sha256": "6d357db2d2f848f5e4ddb0f4b3aad4c3270f217d969c170095c0b54ef1b19774",
+  "scope": "assembly from existing full replay; not fresh stage execution or efficacy evidence",
+  "cache_sha256": "4af78c8a7856ae4996c3643bc803b849d9c976f06b518b14cf8998045ae3dc39",
+  "builder_sha256": "9d9793604a7c5223ab1897e1edbc3c0d212701e31b32062496a29ee0f6d56fa2"
+}

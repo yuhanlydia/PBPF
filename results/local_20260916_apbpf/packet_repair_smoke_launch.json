@@ -1,0 +1,23 @@
+{
+  "pid": 2434253,
+  "command": [
+    "/data/cwj/PBPF/.venv/bin/python",
+    "-u",
+    "scripts/run_local_packet_repair.py",
+    "--packet-root",
+    "/data/cwj/PBPF/local/longgoal/packet-repair-smoke-input-v1",
+    "--output",
+    "/data/cwj/PBPF/local/longgoal/packet-repair-smoke-v1",
+    "--domain",
+    "codearc",
+    "--gpu",
+    "2",
+    "--seeds",
+    "1701",
+    "--steps",
+    "1",
+    "--max-new-tokens",
+    "32",
+    "--smoke-only"
+  ]
+}

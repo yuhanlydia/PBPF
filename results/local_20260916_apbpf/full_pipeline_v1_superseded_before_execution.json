@@ -1,0 +1,8 @@
+{
+  "status": "superseded_before_any_stage_execution",
+  "pid": 2970017,
+  "start_ticks": "64540620",
+  "reason": "audit found required fixed-alpha history_rate ablation missing from full-stage evidence; add supplemental exact-population scoring without changing gates",
+  "successor": "apbpf-real-full-pipeline-v2",
+  "no_running_stage_interrupted": true
+}

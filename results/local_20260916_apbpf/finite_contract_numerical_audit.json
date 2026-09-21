@@ -1,0 +1,30 @@
+{
+  "captured_at": "2026-09-16T21:33:19.728715+00:00",
+  "summary_sha256": "c7dda2d6a5fe85c9b011cf6343b5eef36412c56790d855aeadcd2ccade3cfa81",
+  "recomputed_metrics": true,
+  "splits": {
+    "train": {
+      "cases": 50000,
+      "median_kl": 2.063748181837064,
+      "relative_future_nll_gap": 0.031930159123718084,
+      "hpd_coverage": 0.79888,
+      "passed": false
+    },
+    "development": {
+      "cases": 5000,
+      "median_kl": 2.0938277729126185,
+      "relative_future_nll_gap": 0.033189973811793,
+      "hpd_coverage": 0.799,
+      "passed": false
+    },
+    "test": {
+      "cases": 5000,
+      "median_kl": 2.1084183269785273,
+      "relative_future_nll_gap": 0.03362606442101663,
+      "hpd_coverage": 0.7994,
+      "passed": false
+    }
+  },
+  "scope": "all existing finite archives verified and all reported per-arm aggregate metrics recomputed; not formal S1 completion",
+  "limitation": "historical execution source hashes absent; no retrospective immutable source-provenance claim"
+}

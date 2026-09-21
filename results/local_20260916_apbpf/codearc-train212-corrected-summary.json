@@ -1,0 +1,25 @@
+{
+  "schema": "apbpf-codearc-evaluation-v3",
+  "reference_control": false,
+  "phase": "all",
+  "bank_complete_sha256": "7a138c6aaa5ed6e947b8b1770ebeabbf319540bac739102ce9484acc15779e20",
+  "population_lock_sha256": null,
+  "task_manifest_sha256": "3ef20a07b7f9714f57f13af3980c67fa7c3c9c1c4fcc9ec298a6a4b6f464e0fd",
+  "timeout": 6.0,
+  "candidate_count": 1696,
+  "split": "train",
+  "source_sha256": {
+    "scripts/evaluate_apbpf_codearc_bank.py": "716b1c009e5ebe3a99fec9bab24fd948f82c54bf14bfe588776f8761432bf964",
+    "src/pbpf/apbpf/codearc_bank.py": "c75d6562b9577f6a8ab80fcc25b5354afe798afc73fa43931492553b9490dff8",
+    "src/pbpf/apbpf/codearc_execution.py": "e55bbd0fc69e2efb847524932dbf0e6ef0a22d8142dc869ca2c655c2b17d21e9"
+  },
+  "tests": 16960,
+  "all_pass": 263,
+  "test_passes": 5939,
+  "reference_behavior_matches": 5939,
+  "dictionary_order_only_mismatches": 0,
+  "scoring_policy": "exact stripped stdout; version-normalized exception strings; timeouts remain TIMEOUT and never PASS",
+  "scope": "exploratory replay diagnostic; not sealed stage evidence",
+  "full_results_sha256": "d4ca571098945ee2947acfe01fc7db9a1c24edbc76d76974a35d5958793b49d7",
+  "full_results_local_path": "local/longgoal/codearc-train212-evaluation-v5/results.json"
+}

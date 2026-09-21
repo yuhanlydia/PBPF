@@ -1,0 +1,29 @@
+{
+  "domain": "codearc_replay",
+  "family": "qwen",
+  "seeds": [
+    1701,
+    1702,
+    1703
+  ],
+  "primary_sources": 500,
+  "primary_candidates": 4000,
+  "bootstrap_draws": 10000,
+  "association_gap": -0.0026179607957601547,
+  "association_ci95": [
+    -0.005301363542344836,
+    6.507917907502909e-05
+  ],
+  "selection_advantage": -0.012,
+  "selection_ci95": [
+    -0.022,
+    -0.002
+  ],
+  "cache_sha256": "ceac963cacb3e8f6cb38992233ea8c99503ad339f190d22499e5117afb87533b",
+  "bindings": {
+    "cache_proof": "f0fe91646c439ccf19e243f9d584821d117481b0614348bbc751c444782f4561",
+    "association": "a8363d03893642b5f10dc851dedee1c8d6209154f0ab8acb5035990f62866beb",
+    "selection": "082d41868b78444ce69cf5ad0cfc3b4030657b1074fc05410c3d195500e82ed3"
+  },
+  "scope": "existing completed standalone full-primary Qwen diagnostic; failed upstream gates retained; no sealed-stage completion"
+}

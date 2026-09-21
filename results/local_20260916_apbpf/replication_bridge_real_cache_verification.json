@@ -1,0 +1,8 @@
+{
+  "cache": "codearc/cache.json",
+  "cache_sha256": "fbbe930dfa26b7463210d9f21939b6f4f1c5a2b6fea01349f07e53f5bbffce99",
+  "proof": "codearc/proof.json",
+  "proof_sha256": "bc3143f9b3f49a9c2078c5f76296217d450c652d385e32bf2cb87461f0a7cfac",
+  "scope": "real complete CodeARC DeepSeek replay reconstruction and root-import engineering check; not sealed-stage completion",
+  "source_sha256": "f3128c9d73918f0d0bee8b70ab50e3517f4e1bedd3b2c1424bdc5a83154b7fe5"
+}

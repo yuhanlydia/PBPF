@@ -1,0 +1,108 @@
+schema: eesd-cache-manifest-v1
+
+# Copy to eesd_cache_manifest.yaml and replace only external materialization paths.
+# All candidate banks, mechanism caches, correction banks, adapters, and result tables
+# are created under EESD_OUTPUT. Never delete unfavorable cells after inspecting results.
+mechanism_cells:
+  - {dataset: runbugrun, domain: rbr, model: seed_coder_8b, family: seed_coder_8b, public_root: /ABS/PATH/rbr-public-root, evaluator_root: /ABS/PATH/rbr-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: runbugrun, domain: rbr, model: qwen25_7b, family: qwen25_7b, public_root: /ABS/PATH/rbr-public-root, evaluator_root: /ABS/PATH/rbr-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: runbugrun, domain: rbr, model: starcoder2_15b, family: starcoder2_15b, public_root: /ABS/PATH/rbr-public-root, evaluator_root: /ABS/PATH/rbr-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: runbugrun, domain: rbr, model: deepseek_6p7b, family: deepseek_6p7b, public_root: /ABS/PATH/rbr-public-root, evaluator_root: /ABS/PATH/rbr-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: codearc, domain: codearc, model: seed_coder_8b, family: seed_coder_8b, public_root: /ABS/PATH/codearc-public-root, evaluator_root: /ABS/PATH/codearc-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: codearc, domain: codearc, model: qwen25_7b, family: qwen25_7b, public_root: /ABS/PATH/codearc-public-root, evaluator_root: /ABS/PATH/codearc-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: codearc, domain: codearc, model: starcoder2_15b, family: starcoder2_15b, public_root: /ABS/PATH/codearc-public-root, evaluator_root: /ABS/PATH/codearc-evaluator-root, development_components: 200, visible: 4}
+  - {dataset: codearc, domain: codearc, model: deepseek_6p7b, family: deepseek_6p7b, public_root: /ABS/PATH/codearc-public-root, evaluator_root: /ABS/PATH/codearc-evaluator-root, development_components: 200, visible: 4}
+
+correction_cells:
+  - dataset: runbugrun
+    domain: rbr
+    model: qwen25_7b
+    round: 1
+    family: qwen25_7b
+    public_root: /ABS/PATH/rbr-public-root
+    model_config: configs/models/qwen2.5-coder-7b.yaml
+    previous_adapter: null
+    visible: 4
+    relevance_strength: 16.0
+    alpha: 0.1
+    uncertainty_penalty: 0.5
+    anchor_beta: 0.03
+  - dataset: runbugrun
+    domain: rbr
+    model: deepseek_6p7b
+    round: 1
+    family: deepseek_6p7b
+    public_root: /ABS/PATH/rbr-public-root
+    model_config: configs/models/deepseek-coder-6.7b.yaml
+    previous_adapter: null
+    visible: 4
+    relevance_strength: 16.0
+    alpha: 0.1
+    uncertainty_penalty: 0.5
+    anchor_beta: 0.03
+  - dataset: codearc
+    domain: codearc
+    model: qwen25_7b
+    round: 1
+    family: qwen25_7b
+    public_root: /ABS/PATH/codearc-public-root
+    model_config: configs/models/qwen2.5-coder-7b.yaml
+    previous_adapter: null
+    visible: 4
+    relevance_strength: 16.0
+    alpha: 0.1
+    uncertainty_penalty: 0.5
+    anchor_beta: 0.03
+
+transfer_cells:
+  - {dataset: humaneval, model: qwen25_7b, model_config: configs/models/qwen2.5-coder-7b.yaml, source_dataset: runbugrun, source_round: 1}
+  - {dataset: mbpp, model: qwen25_7b, model_config: configs/models/qwen2.5-coder-7b.yaml, source_dataset: runbugrun, source_round: 1}
+  - {dataset: humaneval, model: deepseek_6p7b, model_config: configs/models/deepseek-coder-6.7b.yaml, source_dataset: runbugrun, source_round: 1}
+  - {dataset: mbpp, model: deepseek_6p7b, model_config: configs/models/deepseek-coder-6.7b.yaml, source_dataset: runbugrun, source_round: 1}
+
+fresh_cells:
+  - dataset: runbugrun
+    domain: rbr
+    model: qwen25_7b
+    family: qwen25_7b
+    model_config: configs/models/qwen2.5-coder-7b.yaml
+    source_dataset: runbugrun
+    source_round: 1
+    public_root: /ABS/PATH/rbr-public-root
+    evaluator_root: /ABS/PATH/rbr-evaluator-root
+  - dataset: codearc
+    domain: codearc
+    model: qwen25_7b
+    family: qwen25_7b
+    model_config: configs/models/qwen2.5-coder-7b.yaml
+    source_dataset: codearc
+    source_round: 1
+    public_root: /ABS/PATH/codearc-public-root
+    evaluator_root: /ABS/PATH/codearc-evaluator-root
+  - dataset: runbugrun
+    domain: rbr
+    model: deepseek_6p7b
+    family: deepseek_6p7b
+    model_config: configs/models/deepseek-coder-6.7b.yaml
+    source_dataset: runbugrun
+    source_round: 1
+    public_root: /ABS/PATH/rbr-public-root
+    evaluator_root: /ABS/PATH/rbr-evaluator-root
+
+recursive_cells:
+  - dataset: runbugrun
+    domain: rbr
+    model: qwen25_7b
+    family: qwen25_7b
+    model_config: configs/models/qwen2.5-coder-7b.yaml
+    public_root: /ABS/PATH/rbr-public-root
+    evaluator_root: /ABS/PATH/rbr-evaluator-root
+    rounds: 3
+  - dataset: codearc
+    domain: codearc
+    model: qwen25_7b
+    family: qwen25_7b
+    model_config: configs/models/qwen2.5-coder-7b.yaml
+    public_root: /ABS/PATH/codearc-public-root
+    evaluator_root: /ABS/PATH/codearc-evaluator-root
+    rounds: 3

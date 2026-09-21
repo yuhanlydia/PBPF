@@ -22,11 +22,12 @@ from torch.nn import functional as F
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 from pbpf.apbpf.stages import RUNNER_LINEAGE_SCHEMA, load_stage_attempt
+from pbpf.apbpf.rbr_execution import canonical_stdin
 from pbpf.belief.features import BeliefBatch
 from pbpf.belief.model import NeuralBeliefModel
 from pbpf.conditioning.mixture import sample_components_once, whole_sequence_mixture_loss
 from pbpf.conditioning.soft_prompt import SoftPrefixProjector
-from pbpf.real_gate import FrozenTextEncoder, fit_histogram_latent, render_repair_prompt
+from pbpf.real_gate import FrozenTextEncoder, fit_histogram_latent, render_repair_prompt, public_test_text
 from pbpf.registry import OUTCOMES
 
 
@@ -312,10 +313,12 @@ def _clean(text):
     return (match.group(1) if match else text).strip()
 
 
-def _features(rows, encoder, device):
+def _features(rows, encoder, device, *, expected_is_public=None):
     task = np.stack([encoder(row["task_text"]) for row in rows])
     candidate = np.stack([encoder(row["candidate"]) for row in rows])
-    tests = np.stack([[encoder(case["input"]) for case in row["tests"]] for row in rows])
+    tests = np.stack([[encoder(case["input"] if expected_is_public is None else
+                              public_test_text(case, expected_is_public=expected_is_public))
+                       for case in row["tests"]] for row in rows])
     outcomes = np.asarray([[OUTCOMES.index(value) for value in row["outcomes"]] for row in rows])
     return BeliefBatch(torch.tensor(task, device=device), torch.tensor(candidate, device=device),
         torch.tensor(tests, device=device), torch.tensor(outcomes, dtype=torch.long, device=device))
@@ -324,6 +327,8 @@ def _features(rows, encoder, device):
 @torch.no_grad()
 def _posterior(rows, checkpoint, *, batch_size, device):
     saved = torch.load(checkpoint, map_location="cpu", weights_only=False)
+    if saved.get("encoder_type") == "frozen_code_model":
+        raise ValueError("this repair adapter needs an online code-model encoder for semantic checkpoints; hash fallback forbidden")
     difficulty_dim = saved.get("difficulty_dim")
     model = NeuralBeliefModel(saved["feature_dim"], saved["latent_dim"], saved["hidden_dim"],
                               difficulty_dim=difficulty_dim).to(device)
@@ -333,7 +338,8 @@ def _posterior(rows, checkpoint, *, batch_size, device):
     latents, weights = [], []
     generator = torch.Generator(device=device).manual_seed(saved["seed"] + 880_000)
     for start in range(0, len(rows), batch_size):
-        batch = _features(rows[start:start + batch_size], encoder, device)
+        batch = _features(rows[start:start + batch_size], encoder, device,
+                          expected_is_public=saved.get("expected_is_public"))
         trace = model.filter(batch, particles=8, visible_steps=4, generator=generator)
         posterior = trace.latents[:, 3]
         # A-PBPF actor conditioning is diagnosis-only. Difficulty remains useful
@@ -429,7 +435,11 @@ def _mixture_nll(model, projector, ids, labels, z, log_weights, *, conditioned=T
     # Keep the full vocabulary tensor in actor dtype. Casting all logits to
     # float32 adds ~1.8 GB at the 1,536-token cap on Qwen and can OOM before CE;
     # PyTorch's fused CE performs its own stable accumulation.
-    logits = model(**actor_inputs, use_cache=False).logits[:, :-1]
+    # We compute the exact mixture loss below. Passing labels here additionally
+    # computes the actor's unused full-vocabulary FP32 CE, which can exhaust a
+    # 24 GB GPU during eight-particle validation without changing the logits.
+    forward_inputs = {key: value for key, value in actor_inputs.items() if key != "labels"}
+    logits = model(**forward_inputs, use_cache=False).logits[:, :-1]
     shifted = actor_inputs["labels"][:, 1:]
     target_mask = shifted[0] != -100
     targets = shifted[0, target_mask]
@@ -696,7 +706,7 @@ def _execute(code, cases, timeout=2.0):
         source.write_text(code)
         for case in cases:
             try:
-                result = subprocess.run(["/usr/bin/python3", "-I", str(source)], input=case["input"],
+                result = subprocess.run(["/usr/bin/python3", "-I", str(source)], input=canonical_stdin(case["input"]),
                     text=True, capture_output=True, timeout=timeout, cwd=directory,
                     env={"PATH": "/usr/bin:/bin", "LANG": "C.UTF-8", "PYTHONHASHSEED": "0"})
                 outcome = "RUNTIME_EXCEPTION" if result.returncode else (
@@ -776,6 +786,8 @@ def evaluate(payload, belief_checkpoint, projector_checkpoint, data_root, output
             "generated_tokens": sum(row["generated_tokens"] for row in values),
             "generation_seconds": sum(row["generation_seconds"] for row in values)}
     result = {"schema": "pbpf-rbr-repair-gate-v2", "seed": seed, "arms": list(arms),
+        "execution_protocol": {"stdin_policy": "official-terminal-newline-if-missing",
+                               "timeout_seconds": 2.0, "numeric_absolute_tolerance": 1e-4},
         "matched": {"same_tasks": True, "same_prompt": True, "same_actor": MODEL_ID,
                     "same_revision": MODEL_REVISION,
                     "prefix_tokens_by_arm": {arm: (0 if arm == "no_latent" else 8) for arm in arms},

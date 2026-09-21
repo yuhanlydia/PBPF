@@ -1,0 +1,810 @@
+........................................................................ [  9%]
+........................................................................ [ 18%]
+........................................................................ [ 28%]
+........................................................................ [ 37%]
+........................................................................ [ 46%]
+........................................................................ [ 56%]
+........................................................................ [ 65%]
+............................F.........................................F. [ 75%]
+..FFFFFFFF.F..............FFF...FFFFFFF................................. [ 84%]
+........................................................................ [ 93%]
+................................................                         [100%]
+=================================== FAILURES ===================================
+________ test_formal_factory_is_explicit_hash_checked_and_never_offline ________
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_formal_factory_is_explici0')
+
+    def test_formal_factory_is_explicit_hash_checked_and_never_offline(tmp_path):
+        module = importlib.import_module("pbpf.runner.formal")
+        with pytest.raises(ValueError, match="production.*factory"):
+            module.load_factory({})
+        path = tmp_path / "factory.py"
+        path.write_text("from pbpf.runner.formal import FormalFactory\nclass Adapter(FormalFactory):\n    def preflight(self, **kwargs): return None\n    def work_keys(self, stage): return [[stage]]\n    def execute(self, context, key): return {'backend': 'test-owned-dispatch-only'}\ndef create_factory(): return Adapter()\n")
+        site = {"factory": str(path), "factory_sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+>       factory = module.load_factory(site)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_iclr_formal.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/pbpf/runner/formal.py:72: in load_factory
+    _trusted_dependency_path(source)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_formal_factory_is_explici0/factory.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+______ test_external_authority_rejects_forgery_same_uid_expiry_and_replay ______
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_external_authority_reject0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620a21cbc0>
+
+    def test_external_authority_rejects_forgery_same_uid_expiry_and_replay(tmp_path, monkeypatch):
+        """Crypto/replay unit fixture, not a positive real-OS formal integration."""
+        import hashlib
+        import hmac
+        import time
+        from pbpf.runner.evaluator import TrustedEvaluatorService, ExternalSandboxSpec
+        key = tmp_path / "authority.key"
+        key.write_bytes(b"k"*32)
+        key.chmod(0o400)
+        private, public, nonces = (tmp_path / n for n in ("private", "public", "nonces"))
+        for directory in (private, public, nonces):
+            directory.mkdir(mode=0o700)
+        wrapper = tmp_path / "wrapper.py"
+        wrapper.write_text(SANDBOX[-1])
+>       spec = ExternalSandboxSpec(command=("/usr/bin/python3", "-I", str(wrapper)),
+            dependency_files=("/usr/bin/python3", str(wrapper)), container_digest="sha256:"+"a"*64)
+
+tests/runner/test_review_round1.py:214: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_external_authority_reject0/wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+____________ test_invalid_capability_reads_no_request_selected_seal ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_invalid_capability_reads_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620afc7e00>
+
+    def test_invalid_capability_reads_no_request_selected_seal(tmp_path, monkeypatch):
+>       service, key = service_fixture(tmp_path)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round2.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_invalid_capability_reads_0/trusted-wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+_____ test_capability_binds_seal_bytes_and_executes_one_validated_snapshot _____
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_capability_binds_seal_byt0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620afc5b50>
+
+    def test_capability_binds_seal_bytes_and_executes_one_validated_snapshot(tmp_path, monkeypatch):
+>       service, _ = service_fixture(tmp_path, monkeypatch)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round2.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_capability_binds_seal_byt0/trusted-wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+__________ test_validated_seal_snapshot_is_not_reread_after_path_swap __________
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_validated_seal_snapshot_i0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620afc6f90>
+
+    def test_validated_seal_snapshot_is_not_reread_after_path_swap(tmp_path, monkeypatch):
+>       service, _ = service_fixture(tmp_path, monkeypatch)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round2.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_validated_seal_snapshot_i0/trusted-wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+______________ test_parser_error_has_no_secret_exception_context _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_parser_error_has_no_secre0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620ad07680>
+
+    def test_parser_error_has_no_secret_exception_context(tmp_path, monkeypatch):
+>       service, _ = service_fixture(tmp_path, monkeypatch)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round2.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_parser_error_has_no_secre0/trusted-wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+__ test_seal_root_is_pinned_and_rejects_traversal_or_symlink_leaf[traversal] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_seal_root_is_pinned_and_r0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620ad04080>
+attack = 'traversal'
+
+    @pytest.mark.parametrize("attack", ["traversal", "symlink", "root_replacement"])
+    def test_seal_root_is_pinned_and_rejects_traversal_or_symlink_leaf(tmp_path, monkeypatch, attack):
+>       service, key = service_fixture(tmp_path, monkeypatch)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_seal_root_is_pinned_and_r0/trusted-wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+___ test_seal_root_is_pinned_and_rejects_traversal_or_symlink_leaf[symlink] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_seal_root_is_pinned_and_r1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620ad04620>
+attack = 'symlink'
+
+    @pytest.mark.parametrize("attack", ["traversal", "symlink", "root_replacement"])
+    def test_seal_root_is_pinned_and_rejects_traversal_or_symlink_leaf(tmp_path, monkeypatch, attack):
+>       service, key = service_fixture(tmp_path, monkeypatch)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_seal_root_is_pinned_and_r1/trusted-wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+_ test_seal_root_is_pinned_and_rejects_traversal_or_symlink_leaf[root_replacement] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_seal_root_is_pinned_and_r2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620ad059a0>
+attack = 'root_replacement'
+
+    @pytest.mark.parametrize("attack", ["traversal", "symlink", "root_replacement"])
+    def test_seal_root_is_pinned_and_rejects_traversal_or_symlink_leaf(tmp_path, monkeypatch, attack):
+>       service, key = service_fixture(tmp_path, monkeypatch)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_seal_root_is_pinned_and_r2/trusted-wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+_ test_original_backend_symlink_swap_after_validation_cannot_change_execution __
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_original_backend_symlink_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620ad04590>
+
+    def test_original_backend_symlink_swap_after_validation_cannot_change_execution(tmp_path, monkeypatch):
+        import pbpf.runner.evaluator as module
+        good, bad, link = (tmp_path / name for name in ("good.py", "bad.py", "current.py"))
+        good.write_text("import json; print(json.dumps({'outcome':'PASS'}))")
+        bad.write_text("import json; print(json.dumps({'outcome':'WRONG_OUTPUT'}))")
+        link.symlink_to(good)
+>       service, _ = service_fixture(tmp_path, monkeypatch, sandbox=["/usr/bin/python3", str(link)])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round2.py:149: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_original_backend_symlink_0/good.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+_____________ test_nonce_directory_replacement_cannot_reset_replay _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_nonce_directory_replaceme0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620afc65d0>
+
+    def test_nonce_directory_replacement_cannot_reset_replay(tmp_path, monkeypatch):
+>       service, _ = service_fixture(tmp_path, monkeypatch)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round2.py:172: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_nonce_directory_replaceme0/trusted-wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+_____ test_private_root_swap_between_hash_and_parse_never_uses_replacement _____
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_private_root_swap_between0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620afc48f0>
+
+    def test_private_root_swap_between_hash_and_parse_never_uses_replacement(tmp_path, monkeypatch):
+>       service, _ = service_fixture(tmp_path, monkeypatch)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round3.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_private_root_swap_between0/trusted-wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+______ test_private_manifest_symlink_is_rejected_even_inside_private_root ______
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_private_manifest_symlink_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620ad05fd0>
+
+    def test_private_manifest_symlink_is_rejected_even_inside_private_root(tmp_path, monkeypatch):
+>       service, _ = service_fixture(tmp_path, monkeypatch)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round3.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_private_manifest_symlink_0/trusted-wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+_____________ test_private_root_has_no_generator_writable_ancestor _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_private_root_has_no_gener0')
+
+    def test_private_root_has_no_generator_writable_ancestor(tmp_path):
+>       service, key = service_fixture(tmp_path)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round3.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_private_root_has_no_gener0/trusted-wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+________ test_declared_dependency_mutation_invalidates_formal_dispatch _________
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_declared_dependency_mutat0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620a20aed0>
+
+    def test_declared_dependency_mutation_invalidates_formal_dispatch(tmp_path, monkeypatch):
+        from pbpf.runner.evaluator import ExternalSandboxSpec
+        wrapper, config = tmp_path / "wrapper.py", tmp_path / "config.json"
+        wrapper.write_text("import json; print(json.dumps({'outcome':'PASS'}))")
+        config.write_text('{"locked": 1}')
+>       spec = ExternalSandboxSpec(command=("/usr/bin/python3", "-I", str(wrapper)),
+            dependency_files=("/usr/bin/python3", str(wrapper), str(config)), container_digest="sha256:"+"a"*64)
+
+tests/runner/test_review_round3.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_declared_dependency_mutat0/wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+____ test_declared_dependency_symlink_retarget_invalidates_formal_dispatch _____
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_declared_dependency_symli0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620ad07d10>
+
+    def test_declared_dependency_symlink_retarget_invalidates_formal_dispatch(tmp_path, monkeypatch):
+        from pbpf.runner.evaluator import ExternalSandboxSpec
+        wrapper, config, other, alias = (tmp_path / name for name in ("wrapper.py", "one.json", "two.json", "config.json"))
+        wrapper.write_text("import json; print(json.dumps({'outcome':'PASS'}))")
+        config.write_text("1")
+        other.write_text("2")
+        alias.symlink_to(config)
+>       spec = ExternalSandboxSpec(command=("/usr/bin/python3", "-I", str(wrapper)),
+            dependency_files=("/usr/bin/python3", str(wrapper), str(alias)), container_digest="sha256:"+"a"*64)
+
+tests/runner/test_review_round3.py:90: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_declared_dependency_symli0/wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+______ test_formal_task4_publication_validates_descriptor_snapshots[None] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_formal_task4_publication_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620a208ce0>
+change = None
+
+    @pytest.mark.parametrize("change", [None, "checksum", "inventory", "publication", "symlink"])
+    def test_formal_task4_publication_validates_descriptor_snapshots(tmp_path, monkeypatch, change):
+>       service, _ = service_fixture(tmp_path, monkeypatch)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round3.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_formal_task4_publication_0/trusted-wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+____ test_formal_task4_publication_validates_descriptor_snapshots[checksum] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_formal_task4_publication_1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620a208530>
+change = 'checksum'
+
+    @pytest.mark.parametrize("change", [None, "checksum", "inventory", "publication", "symlink"])
+    def test_formal_task4_publication_validates_descriptor_snapshots(tmp_path, monkeypatch, change):
+>       service, _ = service_fixture(tmp_path, monkeypatch)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round3.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_formal_task4_publication_1/trusted-wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+___ test_formal_task4_publication_validates_descriptor_snapshots[inventory] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_formal_task4_publication_2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620a208d70>
+change = 'inventory'
+
+    @pytest.mark.parametrize("change", [None, "checksum", "inventory", "publication", "symlink"])
+    def test_formal_task4_publication_validates_descriptor_snapshots(tmp_path, monkeypatch, change):
+>       service, _ = service_fixture(tmp_path, monkeypatch)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round3.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_formal_task4_publication_2/trusted-wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+__ test_formal_task4_publication_validates_descriptor_snapshots[publication] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_formal_task4_publication_3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620a208530>
+change = 'publication'
+
+    @pytest.mark.parametrize("change", [None, "checksum", "inventory", "publication", "symlink"])
+    def test_formal_task4_publication_validates_descriptor_snapshots(tmp_path, monkeypatch, change):
+>       service, _ = service_fixture(tmp_path, monkeypatch)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round3.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_formal_task4_publication_3/trusted-wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+____ test_formal_task4_publication_validates_descriptor_snapshots[symlink] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_formal_task4_publication_4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76620ad073b0>
+change = 'symlink'
+
+    @pytest.mark.parametrize("change", [None, "checksum", "inventory", "publication", "symlink"])
+    def test_formal_task4_publication_validates_descriptor_snapshots(tmp_path, monkeypatch, change):
+>       service, _ = service_fixture(tmp_path, monkeypatch)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/runner/test_review_round3.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/runner/test_review_round2.py:40: in service_fixture
+    sandbox = ExternalSandboxSpec(command=tuple(sandbox), dependency_files=tuple(dependencies), container_digest="sha256:"+"a"*64)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:6: in __init__
+    ???
+src/pbpf/runner/evaluator.py:213: in __post_init__
+    _trusted_dependency_path(Path(path))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root123/pytest-82/test_formal_task4_publication_4/trusted-wrapper.py')
+
+    def _trusted_dependency_path(path):
+        # Preserve declared symlink paths as well as resolved targets. In
+        # particular a generator-owned link in /tmp is not a trusted dependency.
+        for entry in (path, *path.parents):
+            info = entry.lstat()
+            if info.st_uid not in {0, os.getuid()}:
+                raise ValueError("sandbox dependency link or parent is not trusted-owned")
+            if not stat.S_ISLNK(info.st_mode) and stat.S_IMODE(info.st_mode) & 0o022:
+                if not (entry != path and stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_ISVTX):
+>                   raise ValueError("sandbox dependency has generator-writable parent or file")
+E                   ValueError: sandbox dependency has generator-writable parent or file
+
+src/pbpf/runner/evaluator.py:134: ValueError
+=============================== warnings summary ===============================
+tests/apbpf/test_smc_acquisition.py::test_batched_diagnostic_scores_match_shipped_adapter
+  /data/cwj/PBPF/src/pbpf/apbpf/acquisition.py:340: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
+    diagnosis = torch.as_tensor(state.diagnosis_particles, device=self.device, dtype=self.dtype)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/runner/test_iclr_formal.py::test_formal_factory_is_explicit_hash_checked_and_never_offline
+FAILED tests/runner/test_review_round1.py::test_external_authority_rejects_forgery_same_uid_expiry_and_replay
+FAILED tests/runner/test_review_round2.py::test_invalid_capability_reads_no_request_selected_seal
+FAILED tests/runner/test_review_round2.py::test_capability_binds_seal_bytes_and_executes_one_validated_snapshot
+FAILED tests/runner/test_review_round2.py::test_validated_seal_snapshot_is_not_reread_after_path_swap
+FAILED tests/runner/test_review_round2.py::test_parser_error_has_no_secret_exception_context
+FAILED tests/runner/test_review_round2.py::test_seal_root_is_pinned_and_rejects_traversal_or_symlink_leaf[traversal]
+FAILED tests/runner/test_review_round2.py::test_seal_root_is_pinned_and_rejects_traversal_or_symlink_leaf[symlink]
+FAILED tests/runner/test_review_round2.py::test_seal_root_is_pinned_and_rejects_traversal_or_symlink_leaf[root_replacement]
+FAILED tests/runner/test_review_round2.py::test_original_backend_symlink_swap_after_validation_cannot_change_execution
+FAILED tests/runner/test_review_round2.py::test_nonce_directory_replacement_cannot_reset_replay
+FAILED tests/runner/test_review_round3.py::test_private_root_swap_between_hash_and_parse_never_uses_replacement
+FAILED tests/runner/test_review_round3.py::test_private_manifest_symlink_is_rejected_even_inside_private_root
+FAILED tests/runner/test_review_round3.py::test_private_root_has_no_generator_writable_ancestor
+FAILED tests/runner/test_review_round3.py::test_declared_dependency_mutation_invalidates_formal_dispatch
+FAILED tests/runner/test_review_round3.py::test_declared_dependency_symlink_retarget_invalidates_formal_dispatch
+FAILED tests/runner/test_review_round3.py::test_formal_task4_publication_validates_descriptor_snapshots[None]
+FAILED tests/runner/test_review_round3.py::test_formal_task4_publication_validates_descriptor_snapshots[checksum]
+FAILED tests/runner/test_review_round3.py::test_formal_task4_publication_validates_descriptor_snapshots[inventory]
+FAILED tests/runner/test_review_round3.py::test_formal_task4_publication_validates_descriptor_snapshots[publication]
+FAILED tests/runner/test_review_round3.py::test_formal_task4_publication_validates_descriptor_snapshots[symlink]
+21 failed, 747 passed, 1 warning in 463.07s (0:07:43)

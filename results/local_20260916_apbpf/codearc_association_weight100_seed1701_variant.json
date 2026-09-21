@@ -1,0 +1,12 @@
+{
+  "plan_sha256": "313cdf3476018abbebf196da148159e6663813c413fe0b44267bd80a490f7e99",
+  "model_class": "run_apbpf_prior_training_debug.PriorTrainingBelief",
+  "inference_variant": "prior_no_resample",
+  "association_weight": 100.0,
+  "seed": 1701,
+  "artifact_receipt": {
+    "association-weight100-seed1701.json": "9fc66908fbe80c76ac550d2e9f6252fe3a26d34746f935c3dccabdc03fb01347",
+    "association-weight100-seed1701.population.json": "9bf0811fb20f6469aabc1df88a00209671d3b0ba8c05891a3c2a2ee362a5a36a",
+    "association-weight100-seed1701.pt": "01a3f5084222d9f45bd90598af6d424539932f5e7138217782244ee75030c6c8"
+  }
+}

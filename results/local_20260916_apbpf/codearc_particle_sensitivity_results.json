@@ -1,0 +1,1816 @@
+{
+  "plan_sha256": "fdb9d5c51ff6f4f37bc9852eecb56182c98df226ddfe6f2e35490418548d3e30",
+  "results": {
+    "lexical": {
+      "8": {
+        "seed_estimand": "mean paired per-example loss across all three fixed seeds; whole-source resampling across seeds",
+        "seeds": [
+          1701,
+          1702,
+          1703
+        ],
+        "primary_candidates": 3200,
+        "source_components": 400,
+        "future_examples_per_seed": 19200,
+        "metrics": {
+          "baseline": {
+            "nll": 0.5382998880841232,
+            "brier": 0.29344177065494625,
+            "accuracy": 0.801875,
+            "nll_gain_vs_baseline": 0.0
+          },
+          "presentation_permuted": {
+            "nll": 0.5365287582190102,
+            "brier": 0.2922427649616731,
+            "accuracy": 0.8028645833333333,
+            "nll_gain_vs_baseline": 0.001771129865112843
+          },
+          "outcome_shuffled": {
+            "nll": 0.5370478764585097,
+            "brier": 0.2927870002044508,
+            "accuracy": 0.8028298611111111,
+            "nll_gain_vs_baseline": 0.0012520116256135474
+          },
+          "aligned": {
+            "nll": 0.5382998880841232,
+            "brier": 0.29344177065494625,
+            "accuracy": 0.801875,
+            "nll_gain_vs_baseline": 0.0
+          },
+          "joint_reversed": {
+            "nll": 0.53541575374496,
+            "brier": 0.2918266575265902,
+            "accuracy": 0.8035416666666667,
+            "nll_gain_vs_baseline": 0.0028841343391632288
+          }
+        },
+        "comparisons": {
+          "joint_reversed": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": -0.0028841341845691204,
+            "ci95": [
+              -0.006386801732911004,
+              0.0005684049261940849
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          },
+          "outcome_shuffled": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": -0.001252011745236814,
+            "ci95": [
+              -0.004251569933361478,
+              0.0016221096515655494
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          },
+          "presentation_permuted": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": -0.0017711299005895853,
+            "ci95": [
+              -0.004336859703063965,
+              0.0007267954134278819
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          }
+        },
+        "per_seed_comparisons": {
+          "1701": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.0025655142962932587,
+              "ci95": [
+                -0.007420051117738088,
+                0.0024061257193485892
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0011261113686487079,
+              "ci95": [
+                -0.0036625472704569497,
+                0.005914924194415409
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.0011111159110441804,
+              "ci95": [
+                -0.00481982825199763,
+                0.0026638395488262174
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          },
+          "1702": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.002782388823106885,
+              "ci95": [
+                -0.006775499562422435,
+                0.0012597982436418525
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.0015974194975569844,
+              "ci95": [
+                -0.005287718534469604,
+                0.0019563362350066447
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.001847528968937695,
+              "ci95": [
+                -0.005866764277219772,
+                0.001996837054689724
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          },
+          "1703": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.003304499899968505,
+              "ci95": [
+                -0.00719509236017863,
+                0.0005315841821332765
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.0032847272232174873,
+              "ci95": [
+                -0.006558855255444845,
+                -0.00011931383237242724
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.002354744588956237,
+              "ci95": [
+                -0.005494281301895778,
+                0.0006775634263952564
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          }
+        },
+        "particle_diversity": {
+          "1701": [
+            {
+              "prefix": 1,
+              "mean_ess": 6.0310468673706055,
+              "mean_ess_fraction": 0.7538808584213257,
+              "mean_unique_initial_particles": 7.570937633514404,
+              "mean_unique_fraction": 0.9463672041893005,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.11562500149011612
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 6.0245537757873535,
+              "mean_ess_fraction": 0.7530692219734192,
+              "mean_unique_initial_particles": 7.069687366485596,
+              "mean_unique_fraction": 0.8837109208106995,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.13781249523162842
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 6.107110500335693,
+              "mean_ess_fraction": 0.7633888125419617,
+              "mean_unique_initial_particles": 6.586249828338623,
+              "mean_unique_fraction": 0.8232812285423279,
+              "single_ancestor_fraction": 0.0003124999930150807,
+              "resampled_fraction": 0.13718749582767487
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 6.1493401527404785,
+              "mean_ess_fraction": 0.7686675190925598,
+              "mean_unique_initial_particles": 6.21875,
+              "mean_unique_fraction": 0.77734375,
+              "single_ancestor_fraction": 0.0006249999860301614,
+              "resampled_fraction": 0.11187499761581421
+            }
+          ],
+          "1702": [
+            {
+              "prefix": 1,
+              "mean_ess": 6.173849582672119,
+              "mean_ess_fraction": 0.7717311978340149,
+              "mean_unique_initial_particles": 7.85031270980835,
+              "mean_unique_fraction": 0.9812890887260437,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.04281250014901161
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 6.033852577209473,
+              "mean_ess_fraction": 0.7542315721511841,
+              "mean_unique_initial_particles": 7.388437271118164,
+              "mean_unique_fraction": 0.9235546588897705,
+              "single_ancestor_fraction": 0.0003124999930150807,
+              "resampled_fraction": 0.12125000357627869
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 6.054513454437256,
+              "mean_ess_fraction": 0.756814181804657,
+              "mean_unique_initial_particles": 6.922812461853027,
+              "mean_unique_fraction": 0.8653515577316284,
+              "single_ancestor_fraction": 0.0003124999930150807,
+              "resampled_fraction": 0.1287499964237213
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 6.097869873046875,
+              "mean_ess_fraction": 0.7622337341308594,
+              "mean_unique_initial_particles": 6.554062366485596,
+              "mean_unique_fraction": 0.8192577958106995,
+              "single_ancestor_fraction": 0.0006249999860301614,
+              "resampled_fraction": 0.11031249910593033
+            }
+          ],
+          "1703": [
+            {
+              "prefix": 1,
+              "mean_ess": 5.974031925201416,
+              "mean_ess_fraction": 0.746753990650177,
+              "mean_unique_initial_particles": 7.64718770980835,
+              "mean_unique_fraction": 0.9558984637260437,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.10187499970197678
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 5.981911659240723,
+              "mean_ess_fraction": 0.7477389574050903,
+              "mean_unique_initial_particles": 7.105000019073486,
+              "mean_unique_fraction": 0.8881250023841858,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.15187500417232513
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 6.100245475769043,
+              "mean_ess_fraction": 0.7625306844711304,
+              "mean_unique_initial_particles": 6.570937633514404,
+              "mean_unique_fraction": 0.8213672041893005,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.15187500417232513
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 6.1575517654418945,
+              "mean_ess_fraction": 0.7696939706802368,
+              "mean_unique_initial_particles": 6.179375171661377,
+              "mean_unique_fraction": 0.7724218964576721,
+              "single_ancestor_fraction": 0.0003124999930150807,
+              "resampled_fraction": 0.11937499791383743
+            }
+          ]
+        }
+      },
+      "32": {
+        "seed_estimand": "mean paired per-example loss across all three fixed seeds; whole-source resampling across seeds",
+        "seeds": [
+          1701,
+          1702,
+          1703
+        ],
+        "primary_candidates": 3200,
+        "source_components": 400,
+        "future_examples_per_seed": 19200,
+        "metrics": {
+          "baseline": {
+            "nll": 0.5067788691896892,
+            "brier": 0.27545387285006623,
+            "accuracy": 0.8156597222222223,
+            "nll_gain_vs_baseline": 0.0
+          },
+          "presentation_permuted": {
+            "nll": 0.5063866932897482,
+            "brier": 0.27518362579217887,
+            "accuracy": 0.8162673611111111,
+            "nll_gain_vs_baseline": 0.00039217589994108365
+          },
+          "outcome_shuffled": {
+            "nll": 0.5068848341132596,
+            "brier": 0.2755524171946468,
+            "accuracy": 0.8164409722222222,
+            "nll_gain_vs_baseline": -0.00010596492357022733
+          },
+          "aligned": {
+            "nll": 0.5067788691896892,
+            "brier": 0.27545387285006623,
+            "accuracy": 0.8156597222222223,
+            "nll_gain_vs_baseline": 0.0
+          },
+          "joint_reversed": {
+            "nll": 0.506668646905848,
+            "brier": 0.27527597594612485,
+            "accuracy": 0.8167013888888889,
+            "nll_gain_vs_baseline": 0.00011022228384123943
+          }
+        },
+        "comparisons": {
+          "joint_reversed": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": -0.00011022248509107158,
+            "ci95": [
+              -0.0015818322234683567,
+              0.0013246258729034
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          },
+          "outcome_shuffled": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": 0.0001059649366652593,
+            "ci95": [
+              -0.0010884932776292165,
+              0.0012930088076326576
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          },
+          "presentation_permuted": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": -0.0003921759780496359,
+            "ci95": [
+              -0.0014725645515653823,
+              0.0006803733673360609
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          }
+        },
+        "per_seed_comparisons": {
+          "1701": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 8.580982830608264e-05,
+              "ci95": [
+                -0.002316939522822698,
+                0.0024232146044572194
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0014664537739008665,
+              "ci95": [
+                -0.0005885846329232057,
+                0.003608859181404112
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.0005485512083396316,
+              "ci95": [
+                -0.0026392750938733418,
+                0.001456146659950415
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          },
+          "1702": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.0005773946759290993,
+              "ci95": [
+                -0.0026151220401128134,
+                0.0014043384119868279
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.0003827824257314205,
+              "ci95": [
+                -0.0020732416808605194,
+                0.0012282128930091855
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.00038550246972590685,
+              "ci95": [
+                -0.0021038076231877007,
+                0.0012720454012354213
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          },
+          "1703": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.00016091763973236084,
+              "ci95": [
+                -0.0017844589153925578,
+                0.002104867413640022
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.0007657764945179224,
+              "ci95": [
+                -0.0023992125938336055,
+                0.0008068821964164568
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.00024247425608336926,
+              "ci95": [
+                -0.0016747750788927078,
+                0.0012066202511390048
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          }
+        },
+        "particle_diversity": {
+          "1701": [
+            {
+              "prefix": 1,
+              "mean_ess": 23.29895782470703,
+              "mean_ess_fraction": 0.7280924320220947,
+              "mean_unique_initial_particles": 29.617813110351562,
+              "mean_unique_fraction": 0.9255566596984863,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.17781250178813934
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 23.697460174560547,
+              "mean_ess_fraction": 0.7405456304550171,
+              "mean_unique_initial_particles": 27.289688110351562,
+              "mean_unique_fraction": 0.8528027534484863,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.17624999582767487
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 24.425981521606445,
+              "mean_ess_fraction": 0.7633119225502014,
+              "mean_unique_initial_particles": 25.040311813354492,
+              "mean_unique_fraction": 0.7825097441673279,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.17812499403953552
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 24.824182510375977,
+              "mean_ess_fraction": 0.7757557034492493,
+              "mean_unique_initial_particles": 23.255311965942383,
+              "mean_unique_fraction": 0.7267284989356995,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.14624999463558197
+            }
+          ],
+          "1702": [
+            {
+              "prefix": 1,
+              "mean_ess": 23.40926742553711,
+              "mean_ess_fraction": 0.7315396070480347,
+              "mean_unique_initial_particles": 31.253124237060547,
+              "mean_unique_fraction": 0.9766601324081421,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.057500001043081284
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 23.331026077270508,
+              "mean_ess_fraction": 0.7290945649147034,
+              "mean_unique_initial_particles": 28.977811813354492,
+              "mean_unique_fraction": 0.9055566191673279,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.1587499976158142
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 23.517192840576172,
+              "mean_ess_fraction": 0.7349122762680054,
+              "mean_unique_initial_particles": 26.956249237060547,
+              "mean_unique_fraction": 0.8423827886581421,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.15031249821186066
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 23.856395721435547,
+              "mean_ess_fraction": 0.7455123662948608,
+              "mean_unique_initial_particles": 25.256563186645508,
+              "mean_unique_fraction": 0.7892675995826721,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.13562500476837158
+            }
+          ],
+          "1703": [
+            {
+              "prefix": 1,
+              "mean_ess": 22.756370544433594,
+              "mean_ess_fraction": 0.7111365795135498,
+              "mean_unique_initial_particles": 30.027812957763672,
+              "mean_unique_fraction": 0.9383691549301147,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.15843750536441803
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 23.99251937866211,
+              "mean_ess_fraction": 0.7497662305831909,
+              "mean_unique_initial_particles": 26.894062042236328,
+              "mean_unique_fraction": 0.8404394388198853,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.23874999582767487
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 24.950170516967773,
+              "mean_ess_fraction": 0.7796928286552429,
+              "mean_unique_initial_particles": 24.239999771118164,
+              "mean_unique_fraction": 0.7574999928474426,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.20624999701976776
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 25.263050079345703,
+              "mean_ess_fraction": 0.7894703149795532,
+              "mean_unique_initial_particles": 22.458436965942383,
+              "mean_unique_fraction": 0.7018261551856995,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.15281249582767487
+            }
+          ]
+        }
+      },
+      "128": {
+        "seed_estimand": "mean paired per-example loss across all three fixed seeds; whole-source resampling across seeds",
+        "seeds": [
+          1701,
+          1702,
+          1703
+        ],
+        "primary_candidates": 3200,
+        "source_components": 400,
+        "future_examples_per_seed": 19200,
+        "metrics": {
+          "baseline": {
+            "nll": 0.4980180155335162,
+            "brier": 0.27022754254489423,
+            "accuracy": 0.8193576388888889,
+            "nll_gain_vs_baseline": 0.0
+          },
+          "presentation_permuted": {
+            "nll": 0.4979024358201288,
+            "brier": 0.2701389573752741,
+            "accuracy": 0.8196006944444445,
+            "nll_gain_vs_baseline": 0.00011557971338748872
+          },
+          "outcome_shuffled": {
+            "nll": 0.4983479123098094,
+            "brier": 0.27044061504473704,
+            "accuracy": 0.8191319444444445,
+            "nll_gain_vs_baseline": -0.00032989677629317063
+          },
+          "aligned": {
+            "nll": 0.4980180155335162,
+            "brier": 0.27022754254489423,
+            "accuracy": 0.8193576388888889,
+            "nll_gain_vs_baseline": 0.0
+          },
+          "joint_reversed": {
+            "nll": 0.49786334798448395,
+            "brier": 0.2701965426781082,
+            "accuracy": 0.8196527777777778,
+            "nll_gain_vs_baseline": 0.00015466754903229124
+          }
+        },
+        "comparisons": {
+          "joint_reversed": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": -0.00015466749027837068,
+            "ci95": [
+              -0.0009292729116148419,
+              0.0005567415853341419
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          },
+          "outcome_shuffled": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": 0.00032989674946293235,
+            "ci95": [
+              -0.00015826460387971663,
+              0.0008177569392654624
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          },
+          "presentation_permuted": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": -0.00011557975085452199,
+            "ci95": [
+              -0.0006571098847521676,
+              0.0004087616321113374
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          }
+        },
+        "per_seed_comparisons": {
+          "1701": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0009889861103147268,
+              "ci95": [
+                -8.391979802399868e-05,
+                0.0020783718079328533
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.000892166281118989,
+              "ci95": [
+                3.1023443055649674e-05,
+                0.0017797235896189997
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.00018048046331387013,
+              "ci95": [
+                -0.0007685340568423271,
+                0.0011247941826780636
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          },
+          "1702": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.00013419125752989203,
+              "ci95": [
+                -0.0008688911696275076,
+                0.0011398071274161337
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0006449561333283782,
+              "ci95": [
+                -0.000194906880458196,
+                0.001509041051069895
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.00013859033060725778,
+              "ci95": [
+                -0.0007370762837429841,
+                0.0010499594757954278
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          },
+          "1703": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.001587179722264409,
+              "ci95": [
+                -0.0030907801389694215,
+                -0.0002968747864166897
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.0005474321078509092,
+              "ci95": [
+                -0.0017620963305234908,
+                0.00044103220850229204
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.0006658100173808634,
+              "ci95": [
+                -0.0018755838821331659,
+                0.00032163806942601936
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          }
+        },
+        "particle_diversity": {
+          "1701": [
+            {
+              "prefix": 1,
+              "mean_ess": 91.50540924072266,
+              "mean_ess_fraction": 0.7148860096931458,
+              "mean_unique_initial_particles": 117.63749694824219,
+              "mean_unique_fraction": 0.9190429449081421,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.1990624964237213
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 95.97248840332031,
+              "mean_ess_fraction": 0.7497850656509399,
+              "mean_unique_initial_particles": 106.5034408569336,
+              "mean_unique_fraction": 0.8320581316947937,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.21562500298023224
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 98.62629699707031,
+              "mean_ess_fraction": 0.7705179452896118,
+              "mean_unique_initial_particles": 97.50250244140625,
+              "mean_unique_fraction": 0.7617383003234863,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.1821874976158142
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 101.038818359375,
+              "mean_ess_fraction": 0.7893657684326172,
+              "mean_unique_initial_particles": 89.93062591552734,
+              "mean_unique_fraction": 0.7025830149650574,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.16437500715255737
+            }
+          ],
+          "1702": [
+            {
+              "prefix": 1,
+              "mean_ess": 91.06596374511719,
+              "mean_ess_fraction": 0.711452841758728,
+              "mean_unique_initial_particles": 125.15750122070312,
+              "mean_unique_fraction": 0.9777929782867432,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.05531249940395355
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 91.95923614501953,
+              "mean_ess_fraction": 0.7184315323829651,
+              "mean_unique_initial_particles": 115.3246841430664,
+              "mean_unique_fraction": 0.9009740948677063,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.17468750476837158
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 93.88583374023438,
+              "mean_ess_fraction": 0.733483076095581,
+              "mean_unique_initial_particles": 106.33343505859375,
+              "mean_unique_fraction": 0.8307299613952637,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.17031249403953552
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 95.70646667480469,
+              "mean_ess_fraction": 0.7477067708969116,
+              "mean_unique_initial_particles": 98.96281433105469,
+              "mean_unique_fraction": 0.7731469869613647,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.1521874964237213
+            }
+          ],
+          "1703": [
+            {
+              "prefix": 1,
+              "mean_ess": 89.62136840820312,
+              "mean_ess_fraction": 0.7001669406890869,
+              "mean_unique_initial_particles": 118.38249969482422,
+              "mean_unique_fraction": 0.9248632788658142,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.20218749344348907
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 97.57857513427734,
+              "mean_ess_fraction": 0.7623326182365417,
+              "mean_unique_initial_particles": 103.99812316894531,
+              "mean_unique_fraction": 0.8124853372573853,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.2828125059604645
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 102.6396713256836,
+              "mean_ess_fraction": 0.8018724322319031,
+              "mean_unique_initial_particles": 92.75531005859375,
+              "mean_unique_fraction": 0.7246508598327637,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.2306250035762787
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 104.92735290527344,
+              "mean_ess_fraction": 0.8197449445724487,
+              "mean_unique_initial_particles": 84.8046875,
+              "mean_unique_fraction": 0.66253662109375,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.17812499403953552
+            }
+          ]
+        }
+      }
+    },
+    "semantic": {
+      "8": {
+        "seed_estimand": "mean paired per-example loss across all three fixed seeds; whole-source resampling across seeds",
+        "seeds": [
+          1701,
+          1702,
+          1703
+        ],
+        "primary_candidates": 3200,
+        "source_components": 400,
+        "future_examples_per_seed": 19200,
+        "metrics": {
+          "baseline": {
+            "nll": 0.5068259795846397,
+            "brier": 0.27519354373522714,
+            "accuracy": 0.8184722222222223,
+            "nll_gain_vs_baseline": 0.0
+          },
+          "presentation_permuted": {
+            "nll": 0.5089334720656594,
+            "brier": 0.27671943823473294,
+            "accuracy": 0.8164756944444445,
+            "nll_gain_vs_baseline": -0.002107492481019716
+          },
+          "outcome_shuffled": {
+            "nll": 0.5125802057203299,
+            "brier": 0.27933311953276624,
+            "accuracy": 0.8134548611111111,
+            "nll_gain_vs_baseline": -0.005754226135690241
+          },
+          "aligned": {
+            "nll": 0.5068259795846397,
+            "brier": 0.27519354373522714,
+            "accuracy": 0.8184722222222223,
+            "nll_gain_vs_baseline": 0.0
+          },
+          "joint_reversed": {
+            "nll": 0.5138737200036135,
+            "brier": 0.280197916440739,
+            "accuracy": 0.8144097222222222,
+            "nll_gain_vs_baseline": -0.007047740418973822
+          }
+        },
+        "comparisons": {
+          "joint_reversed": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": 0.007047740742564201,
+            "ci95": [
+              -0.0020258587731255425,
+              0.016446432802412245
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          },
+          "outcome_shuffled": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": 0.005754225887358189,
+            "ci95": [
+              -0.0017977822919686634,
+              0.013506027910444468
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          },
+          "presentation_permuted": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": 0.0021074919495731592,
+            "ci95": [
+              -0.003737630678547753,
+              0.007559414651658796
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          }
+        },
+        "per_seed_comparisons": {
+          "1701": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.008048835210502148,
+              "ci95": [
+                0.0009904965336124103,
+                0.015467044591903683
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.009284175001084805,
+              "ci95": [
+                0.0033526898721853893,
+                0.015406535585721335
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.004698469769209623,
+              "ci95": [
+                0.00012008622785409298,
+                0.00959288305044174
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          },
+          "1702": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.008253605104982853,
+              "ci95": [
+                -0.0032835751970609027,
+                0.02016315416495005
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0065694330260157585,
+              "ci95": [
+                -0.004232181062300999,
+                0.017652973810831703
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0038639612030237913,
+              "ci95": [
+                -0.005463010013103485,
+                0.012790879229704536
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          },
+          "1703": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.00484077911823988,
+              "ci95": [
+                -0.007573372026284535,
+                0.01775399049123128
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0014090704498812556,
+              "ci95": [
+                -0.009240872303644815,
+                0.012070595920085896
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.0022399534936994314,
+              "ci95": [
+                -0.011163396994272868,
+                0.00639879235625267
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          }
+        },
+        "particle_diversity": {
+          "1701": [
+            {
+              "prefix": 1,
+              "mean_ess": 6.067866325378418,
+              "mean_ess_fraction": 0.7584832906723022,
+              "mean_unique_initial_particles": 7.300624847412109,
+              "mean_unique_fraction": 0.9125781059265137,
+              "single_ancestor_fraction": 0.0012499999720603228,
+              "resampled_fraction": 0.17937499284744263
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 6.098156929016113,
+              "mean_ess_fraction": 0.7622696161270142,
+              "mean_unique_initial_particles": 6.720624923706055,
+              "mean_unique_fraction": 0.8400781154632568,
+              "single_ancestor_fraction": 0.0018749999580904841,
+              "resampled_fraction": 0.16218750178813934
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 6.149980545043945,
+              "mean_ess_fraction": 0.7687475681304932,
+              "mean_unique_initial_particles": 6.231562614440918,
+              "mean_unique_fraction": 0.7789453268051147,
+              "single_ancestor_fraction": 0.002812500111758709,
+              "resampled_fraction": 0.14406250417232513
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 6.255558967590332,
+              "mean_ess_fraction": 0.7819448709487915,
+              "mean_unique_initial_particles": 5.810625076293945,
+              "mean_unique_fraction": 0.7263281345367432,
+              "single_ancestor_fraction": 0.0031250000465661287,
+              "resampled_fraction": 0.13249999284744263
+            }
+          ],
+          "1702": [
+            {
+              "prefix": 1,
+              "mean_ess": 6.250952243804932,
+              "mean_ess_fraction": 0.7813690304756165,
+              "mean_unique_initial_particles": 6.968124866485596,
+              "mean_unique_fraction": 0.8710156083106995,
+              "single_ancestor_fraction": 0.004687500186264515,
+              "resampled_fraction": 0.2574999928474426
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 6.255781173706055,
+              "mean_ess_fraction": 0.7819726467132568,
+              "mean_unique_initial_particles": 6.602187633514404,
+              "mean_unique_fraction": 0.8252734541893005,
+              "single_ancestor_fraction": 0.004687500186264515,
+              "resampled_fraction": 0.10062500089406967
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 6.273447036743164,
+              "mean_ess_fraction": 0.7841808795928955,
+              "mean_unique_initial_particles": 6.269374847412109,
+              "mean_unique_fraction": 0.7836718559265137,
+              "single_ancestor_fraction": 0.004687500186264515,
+              "resampled_fraction": 0.10593750327825546
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 6.295530796051025,
+              "mean_ess_fraction": 0.7869413495063782,
+              "mean_unique_initial_particles": 5.987812519073486,
+              "mean_unique_fraction": 0.7484765648841858,
+              "single_ancestor_fraction": 0.004999999888241291,
+              "resampled_fraction": 0.09593749791383743
+            }
+          ],
+          "1703": [
+            {
+              "prefix": 1,
+              "mean_ess": 6.188417911529541,
+              "mean_ess_fraction": 0.7735522389411926,
+              "mean_unique_initial_particles": 7.019999980926514,
+              "mean_unique_fraction": 0.8774999976158142,
+              "single_ancestor_fraction": 0.012812499888241291,
+              "resampled_fraction": 0.23718750476837158
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 6.209661483764648,
+              "mean_ess_fraction": 0.776207685470581,
+              "mean_unique_initial_particles": 6.630624771118164,
+              "mean_unique_fraction": 0.8288280963897705,
+              "single_ancestor_fraction": 0.012812499888241291,
+              "resampled_fraction": 0.10656250268220901
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 6.248485088348389,
+              "mean_ess_fraction": 0.7810606360435486,
+              "mean_unique_initial_particles": 6.260312557220459,
+              "mean_unique_fraction": 0.7825390696525574,
+              "single_ancestor_fraction": 0.013437500223517418,
+              "resampled_fraction": 0.11187499761581421
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 6.254932880401611,
+              "mean_ess_fraction": 0.7818666100502014,
+              "mean_unique_initial_particles": 5.980312347412109,
+              "mean_unique_fraction": 0.7475390434265137,
+              "single_ancestor_fraction": 0.013437500223517418,
+              "resampled_fraction": 0.09062500298023224
+            }
+          ]
+        }
+      },
+      "32": {
+        "seed_estimand": "mean paired per-example loss across all three fixed seeds; whole-source resampling across seeds",
+        "seeds": [
+          1701,
+          1702,
+          1703
+        ],
+        "primary_candidates": 3200,
+        "source_components": 400,
+        "future_examples_per_seed": 19200,
+        "metrics": {
+          "baseline": {
+            "nll": 0.4796405202728512,
+            "brier": 0.2607062727283918,
+            "accuracy": 0.8284201388888889,
+            "nll_gain_vs_baseline": 0.0
+          },
+          "presentation_permuted": {
+            "nll": 0.48008303347268105,
+            "brier": 0.2608095560725468,
+            "accuracy": 0.8288888888888889,
+            "nll_gain_vs_baseline": -0.00044251319982992947
+          },
+          "outcome_shuffled": {
+            "nll": 0.4806830816073955,
+            "brier": 0.2613409546078179,
+            "accuracy": 0.8267534722222222,
+            "nll_gain_vs_baseline": -0.0010425613345443265
+          },
+          "aligned": {
+            "nll": 0.4796405202728512,
+            "brier": 0.2607062727283918,
+            "accuracy": 0.8284201388888889,
+            "nll_gain_vs_baseline": 0.0
+          },
+          "joint_reversed": {
+            "nll": 0.48066088594503226,
+            "brier": 0.26124571565358623,
+            "accuracy": 0.8280555555555555,
+            "nll_gain_vs_baseline": -0.0010203656721810526
+          }
+        },
+        "comparisons": {
+          "joint_reversed": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": 0.0010203657438978553,
+            "ci95": [
+              -0.003439959519439273,
+              0.005750945912467107
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          },
+          "outcome_shuffled": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": 0.0010425614891573787,
+            "ci95": [
+              -0.0025058292150497434,
+              0.004843403021494548
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          },
+          "presentation_permuted": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": 0.000442513293819502,
+            "ci95": [
+              -0.002700064222017924,
+              0.0033608731097645225
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          }
+        },
+        "per_seed_comparisons": {
+          "1701": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.0010088805574923754,
+              "ci95": [
+                -0.003449753572543462,
+                0.0013986863990624742
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.0008358929771929979,
+              "ci95": [
+                -0.0029060032566388446,
+                0.0012323502227663992
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.00022332156368065625,
+              "ci95": [
+                -0.0026501691689093908,
+                0.0021646738052368162
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          },
+          "1702": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0033344861585646868,
+              "ci95": [
+                -0.0038522009849548335,
+                0.010667604903380071
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0033517794217914343,
+              "ci95": [
+                -0.0029073600172996516,
+                0.009689467549324034
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.003118156921118498,
+              "ci95": [
+                -0.0023924412926038105,
+                0.00854407280683517
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          },
+          "1703": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0007354918052442372,
+              "ci95": [
+                -0.0052842677732308704,
+                0.007263848245143883
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0006117979646660388,
+              "ci95": [
+                -0.0047285170853137975,
+                0.006557431976000466
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.0015672956360504031,
+              "ci95": [
+                -0.006338816026846567,
+                0.002776828527450561
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          }
+        },
+        "particle_diversity": {
+          "1701": [
+            {
+              "prefix": 1,
+              "mean_ess": 23.749570846557617,
+              "mean_ess_fraction": 0.7421740889549255,
+              "mean_unique_initial_particles": 28.36343765258789,
+              "mean_unique_fraction": 0.8863574266433716,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.2549999952316284
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 24.519269943237305,
+              "mean_ess_fraction": 0.7662271857261658,
+              "mean_unique_initial_particles": 25.49593734741211,
+              "mean_unique_fraction": 0.7967480421066284,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.21562500298023224
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 25.12554931640625,
+              "mean_ess_fraction": 0.7851734161376953,
+              "mean_unique_initial_particles": 23.088125228881836,
+              "mean_unique_fraction": 0.7215039134025574,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.19187499582767487
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 25.3668270111084,
+              "mean_ess_fraction": 0.7927133440971375,
+              "mean_unique_initial_particles": 21.482812881469727,
+              "mean_unique_fraction": 0.671337902545929,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.14562499523162842
+            }
+          ],
+          "1702": [
+            {
+              "prefix": 1,
+              "mean_ess": 25.257156372070312,
+              "mean_ess_fraction": 0.7892861366271973,
+              "mean_unique_initial_particles": 25.813125610351562,
+              "mean_unique_fraction": 0.8066601753234863,
+              "single_ancestor_fraction": 0.0003124999930150807,
+              "resampled_fraction": 0.41093748807907104
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 25.07331085205078,
+              "mean_ess_fraction": 0.7835409641265869,
+              "mean_unique_initial_particles": 24.196250915527344,
+              "mean_unique_fraction": 0.7561328411102295,
+              "single_ancestor_fraction": 0.0003124999930150807,
+              "resampled_fraction": 0.1262499988079071
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 25.130380630493164,
+              "mean_ess_fraction": 0.7853243947029114,
+              "mean_unique_initial_particles": 22.775625228881836,
+              "mean_unique_fraction": 0.7117382884025574,
+              "single_ancestor_fraction": 0.0003124999930150807,
+              "resampled_fraction": 0.13312500715255737
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 25.173063278198242,
+              "mean_ess_fraction": 0.7866582274436951,
+              "mean_unique_initial_particles": 21.607500076293945,
+              "mean_unique_fraction": 0.6752343773841858,
+              "single_ancestor_fraction": 0.0003124999930150807,
+              "resampled_fraction": 0.1106249988079071
+            }
+          ],
+          "1703": [
+            {
+              "prefix": 1,
+              "mean_ess": 25.241147994995117,
+              "mean_ess_fraction": 0.7887858748435974,
+              "mean_unique_initial_particles": 26.229999542236328,
+              "mean_unique_fraction": 0.8196874856948853,
+              "single_ancestor_fraction": 0.0012499999720603228,
+              "resampled_fraction": 0.38093748688697815
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 25.12982749938965,
+              "mean_ess_fraction": 0.7853071093559265,
+              "mean_unique_initial_particles": 24.500938415527344,
+              "mean_unique_fraction": 0.7656543254852295,
+              "single_ancestor_fraction": 0.0012499999720603228,
+              "resampled_fraction": 0.13062499463558197
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 24.899106979370117,
+              "mean_ess_fraction": 0.7780970931053162,
+              "mean_unique_initial_particles": 23.046249389648438,
+              "mean_unique_fraction": 0.7201952934265137,
+              "single_ancestor_fraction": 0.0012499999720603228,
+              "resampled_fraction": 0.12468750029802322
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 25.142576217651367,
+              "mean_ess_fraction": 0.7857055068016052,
+              "mean_unique_initial_particles": 21.73468780517578,
+              "mean_unique_fraction": 0.6792089939117432,
+              "single_ancestor_fraction": 0.0012499999720603228,
+              "resampled_fraction": 0.1237500011920929
+            }
+          ]
+        }
+      },
+      "128": {
+        "seed_estimand": "mean paired per-example loss across all three fixed seeds; whole-source resampling across seeds",
+        "seeds": [
+          1701,
+          1702,
+          1703
+        ],
+        "primary_candidates": 3200,
+        "source_components": 400,
+        "future_examples_per_seed": 19200,
+        "metrics": {
+          "baseline": {
+            "nll": 0.47196319800670544,
+            "brier": 0.2566511547606117,
+            "accuracy": 0.8327256944444444,
+            "nll_gain_vs_baseline": 0.0
+          },
+          "presentation_permuted": {
+            "nll": 0.472354696679843,
+            "brier": 0.25683505389474615,
+            "accuracy": 0.8331423611111111,
+            "nll_gain_vs_baseline": -0.00039149867313752906
+          },
+          "outcome_shuffled": {
+            "nll": 0.472766368991298,
+            "brier": 0.2575484666763979,
+            "accuracy": 0.8320486111111111,
+            "nll_gain_vs_baseline": -0.0008031709845925264
+          },
+          "aligned": {
+            "nll": 0.47196319800670544,
+            "brier": 0.2566511547606117,
+            "accuracy": 0.8327256944444444,
+            "nll_gain_vs_baseline": 0.0
+          },
+          "joint_reversed": {
+            "nll": 0.4728746953532391,
+            "brier": 0.2575206617064088,
+            "accuracy": 0.83234375,
+            "nll_gain_vs_baseline": -0.000911497346533696
+          }
+        },
+        "comparisons": {
+          "joint_reversed": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": 0.0009114971617236733,
+            "ci95": [
+              -0.0011211923658847808,
+              0.003190610031286874
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          },
+          "outcome_shuffled": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": 0.0008031709585338831,
+            "ci95": [
+              -0.0010942768885029686,
+              0.002984102090199788
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          },
+          "presentation_permuted": {
+            "unit": "source_component",
+            "clusters": 400,
+            "replicates": 10000,
+            "mean_nll_gap": 0.0003914986446034163,
+            "ci95": [
+              -0.0009379207955466375,
+              0.001720154331790076
+            ],
+            "estimand": "future-example-weighted; whole-source-component resampling"
+          }
+        },
+        "per_seed_comparisons": {
+          "1701": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0005432894686236978,
+              "ci95": [
+                -0.0007932691487173239,
+                0.0019085488220055896
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0008327987743541598,
+              "ci95": [
+                -0.0004473630065719286,
+                0.002137484947840373
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.00036810481105931103,
+              "ci95": [
+                -0.0009781926721334456,
+                0.0017565783162911727
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          },
+          "1702": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0014360406203195453,
+              "ci95": [
+                -0.001911006142695745,
+                0.005114197671413422
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0017824895912781358,
+              "ci95": [
+                -0.0011229828720291455,
+                0.0050690459708372755
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0013328585773706436,
+              "ci95": [
+                -0.0008018720149993897,
+                0.0036052459379037212
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          },
+          "1703": {
+            "joint_reversed": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": 0.0007551616290584207,
+              "ci95": [
+                -0.002299724494417508,
+                0.004339407632748286
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "outcome_shuffled": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.00020577554823830724,
+              "ci95": [
+                -0.003455316205819448,
+                0.003542503625154493
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            },
+            "presentation_permuted": {
+              "unit": "source_component",
+              "clusters": 400,
+              "replicates": 10000,
+              "mean_nll_gap": -0.0005264675710350275,
+              "ci95": [
+                -0.0026525591264168424,
+                0.0015607154990235953
+              ],
+              "estimand": "future-example-weighted; whole-source-component resampling"
+            }
+          }
+        },
+        "particle_diversity": {
+          "1701": [
+            {
+              "prefix": 1,
+              "mean_ess": 94.7751235961914,
+              "mean_ess_fraction": 0.7404306530952454,
+              "mean_unique_initial_particles": 111.77937316894531,
+              "mean_unique_fraction": 0.8732763528823853,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.28999999165534973
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 99.2641372680664,
+              "mean_ess_fraction": 0.7755010724067688,
+              "mean_unique_initial_particles": 99.16218566894531,
+              "mean_unique_fraction": 0.7747045755386353,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.24437500536441803
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 100.9892349243164,
+              "mean_ess_fraction": 0.7889783978462219,
+              "mean_unique_initial_particles": 90.46156311035156,
+              "mean_unique_fraction": 0.7067309617996216,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.18562500178813934
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 102.30316162109375,
+              "mean_ess_fraction": 0.7992434501647949,
+              "mean_unique_initial_particles": 83.65219116210938,
+              "mean_unique_fraction": 0.6535327434539795,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.15437500178813934
+            }
+          ],
+          "1702": [
+            {
+              "prefix": 1,
+              "mean_ess": 102.81214904785156,
+              "mean_ess_fraction": 0.8032199144363403,
+              "mean_unique_initial_particles": 99.49937438964844,
+              "mean_unique_fraction": 0.7773388624191284,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.4884375035762787
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 100.718017578125,
+              "mean_ess_fraction": 0.7868595123291016,
+              "mean_unique_initial_particles": 93.59249877929688,
+              "mean_unique_fraction": 0.7311913967132568,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.12531250715255737
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 100.7522201538086,
+              "mean_ess_fraction": 0.7871267199516296,
+              "mean_unique_initial_particles": 87.91218566894531,
+              "mean_unique_fraction": 0.6868139505386353,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.14124999940395355
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 100.59078216552734,
+              "mean_ess_fraction": 0.7858654856681824,
+              "mean_unique_initial_particles": 83.51094055175781,
+              "mean_unique_fraction": 0.6524292230606079,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.11468750238418579
+            }
+          ],
+          "1703": [
+            {
+              "prefix": 1,
+              "mean_ess": 102.62863159179688,
+              "mean_ess_fraction": 0.8017861843109131,
+              "mean_unique_initial_particles": 101.47406005859375,
+              "mean_unique_fraction": 0.7927660942077637,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.45218750834465027
+            },
+            {
+              "prefix": 2,
+              "mean_ess": 101.7685775756836,
+              "mean_ess_fraction": 0.7950670123100281,
+              "mean_unique_initial_particles": 94.26187133789062,
+              "mean_unique_fraction": 0.7364208698272705,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.1393750011920929
+            },
+            {
+              "prefix": 3,
+              "mean_ess": 100.65743255615234,
+              "mean_ess_fraction": 0.7863861918449402,
+              "mean_unique_initial_particles": 88.5625,
+              "mean_unique_fraction": 0.69189453125,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.1328125
+            },
+            {
+              "prefix": 4,
+              "mean_ess": 100.4643783569336,
+              "mean_ess_fraction": 0.7848779559135437,
+              "mean_unique_initial_particles": 83.79499816894531,
+              "mean_unique_fraction": 0.6546484231948853,
+              "single_ancestor_fraction": 0.0,
+              "resampled_fraction": 0.11937499791383743
+            }
+          ]
+        }
+      }
+    }
+  },
+  "scope": "development-only exploratory numerical diagnostic; no new trained-method or confirmatory claim"
+}

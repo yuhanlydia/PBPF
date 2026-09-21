@@ -1,0 +1,41 @@
+{
+  "captured_at": "2026-09-16T22:09:52.352610+00:00",
+  "domain": "runbugrun",
+  "family": "qwen",
+  "development_sources": 400,
+  "candidates": 3200,
+  "tests": 32000,
+  "test_passes": 19467,
+  "all_ten_pass": 1576,
+  "mixed_groups": 231,
+  "all_fail_groups": 82,
+  "all_pass_groups": 87,
+  "minimum_mixed_groups": 300,
+  "development_hardness_passes": false,
+  "bindings": {
+    "development-pilot": {
+      "bank_complete_sha256": "ab691eb293f91a5e815f41fc61eb96ca725f7a7f691b72fe49815be234c42618",
+      "execution_sha256": "ed88817cfe7f2c8d3e9e9afc32414a3a81441603a13cff4a782ded45b9bc379c",
+      "groups_sha256": "24f359435e1899662cf1ba32683be4c90362bb1375ea0017e496276fa3fa37b3"
+    },
+    "development-remainder": {
+      "bank_complete_sha256": "9c58317a041d8b6e89ceb065c846a740b3ee92bfb40e936bcdc96545714a21a9",
+      "execution_sha256": "0e84043b22a5d08188de2e98fc9ad63763ce350e9362439a1192d6b43877a41a",
+      "groups_sha256": "c7f3a707d26f3a8cacec7942ecb49492c5891faf77bd4d6ed82a81a9a9dbbbd4"
+    }
+  },
+  "development_cache_sha256": "6394649b96ed13976e0373a6e88b9a6321b4d3d154bb24363518a64210fe3026",
+  "fitting_counts": {
+    "development": 512,
+    "test": 3200,
+    "train": 2056
+  },
+  "fitting_source_counts": {
+    "development": 64,
+    "test": 400,
+    "train": 257
+  },
+  "original_primary_sources_excluded": true,
+  "future_expected_answers_redacted": true,
+  "scope": "complete generated RBR development execution and source/firewall audit; primary execution and sealed hard-bank gate remain pending"
+}

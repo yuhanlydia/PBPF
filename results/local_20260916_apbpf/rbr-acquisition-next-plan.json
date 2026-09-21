@@ -1,0 +1,33 @@
+{
+  "iteration": 3,
+  "recorded_at": "2026-09-17T00:09:32.374180+08:00",
+  "evidence": {
+    "oracle_advantage_budget1": 0.0676248206384469,
+    "oracle_advantage_budget2": 0.054248263113388394,
+    "diagnostic_mi_advantage_budget1": 0.006556839675522998,
+    "diagnostic_mi_advantage_budget2": -0.006435768920791626,
+    "upstream_gates": "failed; exploratory only"
+  },
+  "hypothesis": "The shipped acquisition adapter updates fixed root-prior particles with parallel mean-field Bayes; the predictor was trained with amortized SMC proposals. Compare SMC-refresh acquisition to quantify this inference mismatch; do not assert it is the root cause in advance.",
+  "next_experiment": {
+    "same_checkpoint": "development-sweep-v1/expanded_default.pt",
+    "same_cache": "development-sweep-v1/development_cache.json",
+    "fixed_budgets": [
+      1,
+      2,
+      4
+    ],
+    "public_query_pool": 4,
+    "future_target_tests": 6,
+    "policies": [
+      "fixed",
+      "random",
+      "diagnostic_mi",
+      "predictive_entropy"
+    ],
+    "inference": "recompute trained SMC posterior from selected public history with common noise, then diagnostic MI; future outcomes used only by scoring/oracle",
+    "roles": "development-only; no primary data",
+    "oracle": "canonical subsets; no oracle hidden-outcome access in executable policies"
+  },
+  "raw_acquisition_records_sha256": "7c91377011de46809f52b5ee6a6541e4068fd0e55628a9d844c457d1082ee6aa"
+}

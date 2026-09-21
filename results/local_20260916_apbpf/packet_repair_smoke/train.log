@@ -1,0 +1,4 @@
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:03<00:09,  3.19s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:17<00:19,  9.82s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:23<00:08,  8.12s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:23<00:00,  4.97s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:23<00:00,  5.97s/it]
+{"step": 1, "loss": 63.57722473144531, "gradient_norm": 397.4165954589844, "task_id": "CodeARC/169/qwen/4"}
+{"step": 1, "validation": {"no_latent": 2.4196551396296573, "pbpf": 2.36957887502817, "target_tokens": 13, "items": 1}}
+{"step": 1, "complete": true, "elapsed_seconds": 5.5644039689796045, "best_validation_nll": 2.36957887502817}

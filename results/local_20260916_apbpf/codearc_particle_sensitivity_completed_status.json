@@ -1,0 +1,766 @@
+{
+  "status": "complete",
+  "pid": 3271959,
+  "plan_sha256": "fdb9d5c51ff6f4f37bc9852eecb56182c98df226ddfe6f2e35490418548d3e30",
+  "runs": {
+    "lexical-seed1701-p8": {
+      "status": "complete",
+      "predictions_sha256": "63d36adc871a2fd777e5cd028f4421f995c73dd60f9c91510ec612a0751b8f9f",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 6.0310468673706055,
+          "mean_ess_fraction": 0.7538808584213257,
+          "mean_unique_initial_particles": 7.570937633514404,
+          "mean_unique_fraction": 0.9463672041893005,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.11562500149011612
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 6.0245537757873535,
+          "mean_ess_fraction": 0.7530692219734192,
+          "mean_unique_initial_particles": 7.069687366485596,
+          "mean_unique_fraction": 0.8837109208106995,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.13781249523162842
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 6.107110500335693,
+          "mean_ess_fraction": 0.7633888125419617,
+          "mean_unique_initial_particles": 6.586249828338623,
+          "mean_unique_fraction": 0.8232812285423279,
+          "single_ancestor_fraction": 0.0003124999930150807,
+          "resampled_fraction": 0.13718749582767487
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 6.1493401527404785,
+          "mean_ess_fraction": 0.7686675190925598,
+          "mean_unique_initial_particles": 6.21875,
+          "mean_unique_fraction": 0.77734375,
+          "single_ancestor_fraction": 0.0006249999860301614,
+          "resampled_fraction": 0.11187499761581421
+        }
+      ]
+    },
+    "lexical-seed1701-p32": {
+      "status": "complete",
+      "predictions_sha256": "09400e133502e8ba8617e0dca830b8b26159a99628603a6a610ff13609b9f31d",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 23.29895782470703,
+          "mean_ess_fraction": 0.7280924320220947,
+          "mean_unique_initial_particles": 29.617813110351562,
+          "mean_unique_fraction": 0.9255566596984863,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.17781250178813934
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 23.697460174560547,
+          "mean_ess_fraction": 0.7405456304550171,
+          "mean_unique_initial_particles": 27.289688110351562,
+          "mean_unique_fraction": 0.8528027534484863,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.17624999582767487
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 24.425981521606445,
+          "mean_ess_fraction": 0.7633119225502014,
+          "mean_unique_initial_particles": 25.040311813354492,
+          "mean_unique_fraction": 0.7825097441673279,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.17812499403953552
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 24.824182510375977,
+          "mean_ess_fraction": 0.7757557034492493,
+          "mean_unique_initial_particles": 23.255311965942383,
+          "mean_unique_fraction": 0.7267284989356995,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.14624999463558197
+        }
+      ]
+    },
+    "lexical-seed1701-p128": {
+      "status": "complete",
+      "predictions_sha256": "e49b200514b76ab0dbedfadd8560601ae6d1450086e7f9844b67eeb4dc1fb40e",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 91.50540924072266,
+          "mean_ess_fraction": 0.7148860096931458,
+          "mean_unique_initial_particles": 117.63749694824219,
+          "mean_unique_fraction": 0.9190429449081421,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.1990624964237213
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 95.97248840332031,
+          "mean_ess_fraction": 0.7497850656509399,
+          "mean_unique_initial_particles": 106.5034408569336,
+          "mean_unique_fraction": 0.8320581316947937,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.21562500298023224
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 98.62629699707031,
+          "mean_ess_fraction": 0.7705179452896118,
+          "mean_unique_initial_particles": 97.50250244140625,
+          "mean_unique_fraction": 0.7617383003234863,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.1821874976158142
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 101.038818359375,
+          "mean_ess_fraction": 0.7893657684326172,
+          "mean_unique_initial_particles": 89.93062591552734,
+          "mean_unique_fraction": 0.7025830149650574,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.16437500715255737
+        }
+      ]
+    },
+    "lexical-seed1702-p8": {
+      "status": "complete",
+      "predictions_sha256": "23b7a1bd8a5082bfd485b28403c63a02373e8f8107b0e415f253b99abd6e6c0a",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 6.173849582672119,
+          "mean_ess_fraction": 0.7717311978340149,
+          "mean_unique_initial_particles": 7.85031270980835,
+          "mean_unique_fraction": 0.9812890887260437,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.04281250014901161
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 6.033852577209473,
+          "mean_ess_fraction": 0.7542315721511841,
+          "mean_unique_initial_particles": 7.388437271118164,
+          "mean_unique_fraction": 0.9235546588897705,
+          "single_ancestor_fraction": 0.0003124999930150807,
+          "resampled_fraction": 0.12125000357627869
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 6.054513454437256,
+          "mean_ess_fraction": 0.756814181804657,
+          "mean_unique_initial_particles": 6.922812461853027,
+          "mean_unique_fraction": 0.8653515577316284,
+          "single_ancestor_fraction": 0.0003124999930150807,
+          "resampled_fraction": 0.1287499964237213
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 6.097869873046875,
+          "mean_ess_fraction": 0.7622337341308594,
+          "mean_unique_initial_particles": 6.554062366485596,
+          "mean_unique_fraction": 0.8192577958106995,
+          "single_ancestor_fraction": 0.0006249999860301614,
+          "resampled_fraction": 0.11031249910593033
+        }
+      ]
+    },
+    "lexical-seed1702-p32": {
+      "status": "complete",
+      "predictions_sha256": "a05d85db91ae12a84562f43853c115aaf49b571b5e2c5facb5cfe84714a523e1",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 23.40926742553711,
+          "mean_ess_fraction": 0.7315396070480347,
+          "mean_unique_initial_particles": 31.253124237060547,
+          "mean_unique_fraction": 0.9766601324081421,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.057500001043081284
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 23.331026077270508,
+          "mean_ess_fraction": 0.7290945649147034,
+          "mean_unique_initial_particles": 28.977811813354492,
+          "mean_unique_fraction": 0.9055566191673279,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.1587499976158142
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 23.517192840576172,
+          "mean_ess_fraction": 0.7349122762680054,
+          "mean_unique_initial_particles": 26.956249237060547,
+          "mean_unique_fraction": 0.8423827886581421,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.15031249821186066
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 23.856395721435547,
+          "mean_ess_fraction": 0.7455123662948608,
+          "mean_unique_initial_particles": 25.256563186645508,
+          "mean_unique_fraction": 0.7892675995826721,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.13562500476837158
+        }
+      ]
+    },
+    "lexical-seed1702-p128": {
+      "status": "complete",
+      "predictions_sha256": "281fb43203be84a01eb149d878f381cdb88e8d925a8b3471e8407566408ceb23",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 91.06596374511719,
+          "mean_ess_fraction": 0.711452841758728,
+          "mean_unique_initial_particles": 125.15750122070312,
+          "mean_unique_fraction": 0.9777929782867432,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.05531249940395355
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 91.95923614501953,
+          "mean_ess_fraction": 0.7184315323829651,
+          "mean_unique_initial_particles": 115.3246841430664,
+          "mean_unique_fraction": 0.9009740948677063,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.17468750476837158
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 93.88583374023438,
+          "mean_ess_fraction": 0.733483076095581,
+          "mean_unique_initial_particles": 106.33343505859375,
+          "mean_unique_fraction": 0.8307299613952637,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.17031249403953552
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 95.70646667480469,
+          "mean_ess_fraction": 0.7477067708969116,
+          "mean_unique_initial_particles": 98.96281433105469,
+          "mean_unique_fraction": 0.7731469869613647,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.1521874964237213
+        }
+      ]
+    },
+    "lexical-seed1703-p8": {
+      "status": "complete",
+      "predictions_sha256": "2643d7527eddd7fa362781b4c716397a65c24a5da10be145668d643e826151bf",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 5.974031925201416,
+          "mean_ess_fraction": 0.746753990650177,
+          "mean_unique_initial_particles": 7.64718770980835,
+          "mean_unique_fraction": 0.9558984637260437,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.10187499970197678
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 5.981911659240723,
+          "mean_ess_fraction": 0.7477389574050903,
+          "mean_unique_initial_particles": 7.105000019073486,
+          "mean_unique_fraction": 0.8881250023841858,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.15187500417232513
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 6.100245475769043,
+          "mean_ess_fraction": 0.7625306844711304,
+          "mean_unique_initial_particles": 6.570937633514404,
+          "mean_unique_fraction": 0.8213672041893005,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.15187500417232513
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 6.1575517654418945,
+          "mean_ess_fraction": 0.7696939706802368,
+          "mean_unique_initial_particles": 6.179375171661377,
+          "mean_unique_fraction": 0.7724218964576721,
+          "single_ancestor_fraction": 0.0003124999930150807,
+          "resampled_fraction": 0.11937499791383743
+        }
+      ]
+    },
+    "lexical-seed1703-p32": {
+      "status": "complete",
+      "predictions_sha256": "7a35d179c0212652bee65db621223cac91a3540bfe428f2a23a7bd1ff6f6a086",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 22.756370544433594,
+          "mean_ess_fraction": 0.7111365795135498,
+          "mean_unique_initial_particles": 30.027812957763672,
+          "mean_unique_fraction": 0.9383691549301147,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.15843750536441803
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 23.99251937866211,
+          "mean_ess_fraction": 0.7497662305831909,
+          "mean_unique_initial_particles": 26.894062042236328,
+          "mean_unique_fraction": 0.8404394388198853,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.23874999582767487
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 24.950170516967773,
+          "mean_ess_fraction": 0.7796928286552429,
+          "mean_unique_initial_particles": 24.239999771118164,
+          "mean_unique_fraction": 0.7574999928474426,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.20624999701976776
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 25.263050079345703,
+          "mean_ess_fraction": 0.7894703149795532,
+          "mean_unique_initial_particles": 22.458436965942383,
+          "mean_unique_fraction": 0.7018261551856995,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.15281249582767487
+        }
+      ]
+    },
+    "lexical-seed1703-p128": {
+      "status": "complete",
+      "predictions_sha256": "aff5709698a040a99853b662e3b071c29e41878d4cd2b963c3746caa432044ca",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 89.62136840820312,
+          "mean_ess_fraction": 0.7001669406890869,
+          "mean_unique_initial_particles": 118.38249969482422,
+          "mean_unique_fraction": 0.9248632788658142,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.20218749344348907
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 97.57857513427734,
+          "mean_ess_fraction": 0.7623326182365417,
+          "mean_unique_initial_particles": 103.99812316894531,
+          "mean_unique_fraction": 0.8124853372573853,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.2828125059604645
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 102.6396713256836,
+          "mean_ess_fraction": 0.8018724322319031,
+          "mean_unique_initial_particles": 92.75531005859375,
+          "mean_unique_fraction": 0.7246508598327637,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.2306250035762787
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 104.92735290527344,
+          "mean_ess_fraction": 0.8197449445724487,
+          "mean_unique_initial_particles": 84.8046875,
+          "mean_unique_fraction": 0.66253662109375,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.17812499403953552
+        }
+      ]
+    },
+    "semantic-seed1701-p8": {
+      "status": "complete",
+      "predictions_sha256": "e55e54c9130b9c2769e8c0a3121534c62c05d95df0a7d2f07924fa3dcb5158c7",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 6.067866325378418,
+          "mean_ess_fraction": 0.7584832906723022,
+          "mean_unique_initial_particles": 7.300624847412109,
+          "mean_unique_fraction": 0.9125781059265137,
+          "single_ancestor_fraction": 0.0012499999720603228,
+          "resampled_fraction": 0.17937499284744263
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 6.098156929016113,
+          "mean_ess_fraction": 0.7622696161270142,
+          "mean_unique_initial_particles": 6.720624923706055,
+          "mean_unique_fraction": 0.8400781154632568,
+          "single_ancestor_fraction": 0.0018749999580904841,
+          "resampled_fraction": 0.16218750178813934
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 6.149980545043945,
+          "mean_ess_fraction": 0.7687475681304932,
+          "mean_unique_initial_particles": 6.231562614440918,
+          "mean_unique_fraction": 0.7789453268051147,
+          "single_ancestor_fraction": 0.002812500111758709,
+          "resampled_fraction": 0.14406250417232513
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 6.255558967590332,
+          "mean_ess_fraction": 0.7819448709487915,
+          "mean_unique_initial_particles": 5.810625076293945,
+          "mean_unique_fraction": 0.7263281345367432,
+          "single_ancestor_fraction": 0.0031250000465661287,
+          "resampled_fraction": 0.13249999284744263
+        }
+      ]
+    },
+    "semantic-seed1701-p32": {
+      "status": "complete",
+      "predictions_sha256": "ca015e225a4477f7983383467ba0a758298f7705764857df7b05a5ee1fc30314",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 23.749570846557617,
+          "mean_ess_fraction": 0.7421740889549255,
+          "mean_unique_initial_particles": 28.36343765258789,
+          "mean_unique_fraction": 0.8863574266433716,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.2549999952316284
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 24.519269943237305,
+          "mean_ess_fraction": 0.7662271857261658,
+          "mean_unique_initial_particles": 25.49593734741211,
+          "mean_unique_fraction": 0.7967480421066284,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.21562500298023224
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 25.12554931640625,
+          "mean_ess_fraction": 0.7851734161376953,
+          "mean_unique_initial_particles": 23.088125228881836,
+          "mean_unique_fraction": 0.7215039134025574,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.19187499582767487
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 25.3668270111084,
+          "mean_ess_fraction": 0.7927133440971375,
+          "mean_unique_initial_particles": 21.482812881469727,
+          "mean_unique_fraction": 0.671337902545929,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.14562499523162842
+        }
+      ]
+    },
+    "semantic-seed1701-p128": {
+      "status": "complete",
+      "predictions_sha256": "8ff06238edd523c62ae83713ee85628b0b5642f94e0b729bfd0c0dc02fe907f8",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 94.7751235961914,
+          "mean_ess_fraction": 0.7404306530952454,
+          "mean_unique_initial_particles": 111.77937316894531,
+          "mean_unique_fraction": 0.8732763528823853,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.28999999165534973
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 99.2641372680664,
+          "mean_ess_fraction": 0.7755010724067688,
+          "mean_unique_initial_particles": 99.16218566894531,
+          "mean_unique_fraction": 0.7747045755386353,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.24437500536441803
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 100.9892349243164,
+          "mean_ess_fraction": 0.7889783978462219,
+          "mean_unique_initial_particles": 90.46156311035156,
+          "mean_unique_fraction": 0.7067309617996216,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.18562500178813934
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 102.30316162109375,
+          "mean_ess_fraction": 0.7992434501647949,
+          "mean_unique_initial_particles": 83.65219116210938,
+          "mean_unique_fraction": 0.6535327434539795,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.15437500178813934
+        }
+      ]
+    },
+    "semantic-seed1702-p8": {
+      "status": "complete",
+      "predictions_sha256": "c0c51597b509f880a235530c56a425630457ed6e2d57da53e29c397b50329da0",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 6.250952243804932,
+          "mean_ess_fraction": 0.7813690304756165,
+          "mean_unique_initial_particles": 6.968124866485596,
+          "mean_unique_fraction": 0.8710156083106995,
+          "single_ancestor_fraction": 0.004687500186264515,
+          "resampled_fraction": 0.2574999928474426
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 6.255781173706055,
+          "mean_ess_fraction": 0.7819726467132568,
+          "mean_unique_initial_particles": 6.602187633514404,
+          "mean_unique_fraction": 0.8252734541893005,
+          "single_ancestor_fraction": 0.004687500186264515,
+          "resampled_fraction": 0.10062500089406967
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 6.273447036743164,
+          "mean_ess_fraction": 0.7841808795928955,
+          "mean_unique_initial_particles": 6.269374847412109,
+          "mean_unique_fraction": 0.7836718559265137,
+          "single_ancestor_fraction": 0.004687500186264515,
+          "resampled_fraction": 0.10593750327825546
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 6.295530796051025,
+          "mean_ess_fraction": 0.7869413495063782,
+          "mean_unique_initial_particles": 5.987812519073486,
+          "mean_unique_fraction": 0.7484765648841858,
+          "single_ancestor_fraction": 0.004999999888241291,
+          "resampled_fraction": 0.09593749791383743
+        }
+      ]
+    },
+    "semantic-seed1702-p32": {
+      "status": "complete",
+      "predictions_sha256": "088b2eb10296969869f548b1b5d9fd46f8323a55163eac0daeb205991d516d13",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 25.257156372070312,
+          "mean_ess_fraction": 0.7892861366271973,
+          "mean_unique_initial_particles": 25.813125610351562,
+          "mean_unique_fraction": 0.8066601753234863,
+          "single_ancestor_fraction": 0.0003124999930150807,
+          "resampled_fraction": 0.41093748807907104
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 25.07331085205078,
+          "mean_ess_fraction": 0.7835409641265869,
+          "mean_unique_initial_particles": 24.196250915527344,
+          "mean_unique_fraction": 0.7561328411102295,
+          "single_ancestor_fraction": 0.0003124999930150807,
+          "resampled_fraction": 0.1262499988079071
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 25.130380630493164,
+          "mean_ess_fraction": 0.7853243947029114,
+          "mean_unique_initial_particles": 22.775625228881836,
+          "mean_unique_fraction": 0.7117382884025574,
+          "single_ancestor_fraction": 0.0003124999930150807,
+          "resampled_fraction": 0.13312500715255737
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 25.173063278198242,
+          "mean_ess_fraction": 0.7866582274436951,
+          "mean_unique_initial_particles": 21.607500076293945,
+          "mean_unique_fraction": 0.6752343773841858,
+          "single_ancestor_fraction": 0.0003124999930150807,
+          "resampled_fraction": 0.1106249988079071
+        }
+      ]
+    },
+    "semantic-seed1702-p128": {
+      "status": "complete",
+      "predictions_sha256": "5735056352eb4f7b5b9d3c756a72f179215677da7a64e23e28773f4f9571741d",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 102.81214904785156,
+          "mean_ess_fraction": 0.8032199144363403,
+          "mean_unique_initial_particles": 99.49937438964844,
+          "mean_unique_fraction": 0.7773388624191284,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.4884375035762787
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 100.718017578125,
+          "mean_ess_fraction": 0.7868595123291016,
+          "mean_unique_initial_particles": 93.59249877929688,
+          "mean_unique_fraction": 0.7311913967132568,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.12531250715255737
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 100.7522201538086,
+          "mean_ess_fraction": 0.7871267199516296,
+          "mean_unique_initial_particles": 87.91218566894531,
+          "mean_unique_fraction": 0.6868139505386353,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.14124999940395355
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 100.59078216552734,
+          "mean_ess_fraction": 0.7858654856681824,
+          "mean_unique_initial_particles": 83.51094055175781,
+          "mean_unique_fraction": 0.6524292230606079,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.11468750238418579
+        }
+      ]
+    },
+    "semantic-seed1703-p8": {
+      "status": "complete",
+      "predictions_sha256": "0a2e9efdf2ece2f6d58c51aa1f9b35c9f5e16474b1373dee24c06b69327127d6",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 6.188417911529541,
+          "mean_ess_fraction": 0.7735522389411926,
+          "mean_unique_initial_particles": 7.019999980926514,
+          "mean_unique_fraction": 0.8774999976158142,
+          "single_ancestor_fraction": 0.012812499888241291,
+          "resampled_fraction": 0.23718750476837158
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 6.209661483764648,
+          "mean_ess_fraction": 0.776207685470581,
+          "mean_unique_initial_particles": 6.630624771118164,
+          "mean_unique_fraction": 0.8288280963897705,
+          "single_ancestor_fraction": 0.012812499888241291,
+          "resampled_fraction": 0.10656250268220901
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 6.248485088348389,
+          "mean_ess_fraction": 0.7810606360435486,
+          "mean_unique_initial_particles": 6.260312557220459,
+          "mean_unique_fraction": 0.7825390696525574,
+          "single_ancestor_fraction": 0.013437500223517418,
+          "resampled_fraction": 0.11187499761581421
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 6.254932880401611,
+          "mean_ess_fraction": 0.7818666100502014,
+          "mean_unique_initial_particles": 5.980312347412109,
+          "mean_unique_fraction": 0.7475390434265137,
+          "single_ancestor_fraction": 0.013437500223517418,
+          "resampled_fraction": 0.09062500298023224
+        }
+      ]
+    },
+    "semantic-seed1703-p32": {
+      "status": "complete",
+      "predictions_sha256": "4471014416d94ff828c1ce635a1c07b1991350c79dd8de08d2bbe43fe3123cfc",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 25.241147994995117,
+          "mean_ess_fraction": 0.7887858748435974,
+          "mean_unique_initial_particles": 26.229999542236328,
+          "mean_unique_fraction": 0.8196874856948853,
+          "single_ancestor_fraction": 0.0012499999720603228,
+          "resampled_fraction": 0.38093748688697815
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 25.12982749938965,
+          "mean_ess_fraction": 0.7853071093559265,
+          "mean_unique_initial_particles": 24.500938415527344,
+          "mean_unique_fraction": 0.7656543254852295,
+          "single_ancestor_fraction": 0.0012499999720603228,
+          "resampled_fraction": 0.13062499463558197
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 24.899106979370117,
+          "mean_ess_fraction": 0.7780970931053162,
+          "mean_unique_initial_particles": 23.046249389648438,
+          "mean_unique_fraction": 0.7201952934265137,
+          "single_ancestor_fraction": 0.0012499999720603228,
+          "resampled_fraction": 0.12468750029802322
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 25.142576217651367,
+          "mean_ess_fraction": 0.7857055068016052,
+          "mean_unique_initial_particles": 21.73468780517578,
+          "mean_unique_fraction": 0.6792089939117432,
+          "single_ancestor_fraction": 0.0012499999720603228,
+          "resampled_fraction": 0.1237500011920929
+        }
+      ]
+    },
+    "semantic-seed1703-p128": {
+      "status": "complete",
+      "predictions_sha256": "13f36c7de25b66f5d1351df1af5756dc860abe945c7ec833bb4cb0dbe0f6fc25",
+      "diversity": [
+        {
+          "prefix": 1,
+          "mean_ess": 102.62863159179688,
+          "mean_ess_fraction": 0.8017861843109131,
+          "mean_unique_initial_particles": 101.47406005859375,
+          "mean_unique_fraction": 0.7927660942077637,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.45218750834465027
+        },
+        {
+          "prefix": 2,
+          "mean_ess": 101.7685775756836,
+          "mean_ess_fraction": 0.7950670123100281,
+          "mean_unique_initial_particles": 94.26187133789062,
+          "mean_unique_fraction": 0.7364208698272705,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.1393750011920929
+        },
+        {
+          "prefix": 3,
+          "mean_ess": 100.65743255615234,
+          "mean_ess_fraction": 0.7863861918449402,
+          "mean_unique_initial_particles": 88.5625,
+          "mean_unique_fraction": 0.69189453125,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.1328125
+        },
+        {
+          "prefix": 4,
+          "mean_ess": 100.4643783569336,
+          "mean_ess_fraction": 0.7848779559135437,
+          "mean_unique_initial_particles": 83.79499816894531,
+          "mean_unique_fraction": 0.6546484231948853,
+          "single_ancestor_fraction": 0.0,
+          "resampled_fraction": 0.11937499791383743
+        }
+      ]
+    }
+  },
+  "current": "semantic-seed1703-p128",
+  "control": "presentation_permuted",
+  "results_sha256": "14363cadb49c3e33880c3bfd077f0858b1b9c63d527e9830812e859af7220d1d"
+}

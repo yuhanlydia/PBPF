@@ -1,0 +1,69 @@
+{
+  "captured_at": "2026-09-16T23:43:07.644970+00:00",
+  "seed": 1703,
+  "training_steps": 1500,
+  "complete": true,
+  "checkpoint_sha256": "b5cbccddfe60e26ee4aa333e549923f0dd2afd92c355e83c5c86103a6b9dbb5a",
+  "run_sha256": "fb6664af4ebaf48a6b2f12ae4a541a117d5a65c650424c2b9878e8f6b809a382",
+  "training_population_sha256": "102c53d7982700d53deb0f5b6008c30e7880e6c9a4a25c180726851eba9c1838",
+  "best_step": 1000,
+  "best_validation_nll": 0.7495716989668861,
+  "saved_projector_is_best_development_checkpoint": true,
+  "validation_history": [
+    {
+      "step": 250,
+      "validation": {
+        "no_latent": 1.260503250446096,
+        "pbpf": 0.7773313257079203,
+        "target_tokens": 34047,
+        "items": 394
+      }
+    },
+    {
+      "step": 500,
+      "validation": {
+        "no_latent": 1.260503250446096,
+        "pbpf": 0.7779671046430432,
+        "target_tokens": 34047,
+        "items": 394
+      }
+    },
+    {
+      "step": 750,
+      "validation": {
+        "no_latent": 1.260503250446096,
+        "pbpf": 0.7620328861448555,
+        "target_tokens": 34047,
+        "items": 394
+      }
+    },
+    {
+      "step": 1000,
+      "validation": {
+        "no_latent": 1.260503250446096,
+        "pbpf": 0.7495716989668861,
+        "target_tokens": 34047,
+        "items": 394
+      }
+    },
+    {
+      "step": 1250,
+      "validation": {
+        "no_latent": 1.260503250446096,
+        "pbpf": 0.7546852998531565,
+        "target_tokens": 34047,
+        "items": 394
+      }
+    },
+    {
+      "step": 1500,
+      "validation": {
+        "no_latent": 1.260503250446096,
+        "pbpf": 0.7576015784631417,
+        "target_tokens": 34047,
+        "items": 394
+      }
+    }
+  ],
+  "scope": "All three projector fits complete; full six-arm generated-code evaluation still required; teacher-forced loss is not repair success"
+}

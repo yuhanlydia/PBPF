@@ -1,0 +1,35 @@
+{
+  "created_at": "2026-09-16T23:43:23.444504+08:00",
+  "hypothesis": "optimization insufficiency at 1000 steps; only training/development used",
+  "seed": 1701,
+  "steps": 3000,
+  "cache": "local/longgoal/development-sweep-v1/development_cache.json",
+  "cache_sha256": "01ec954e544125cdf869e7fab971172bb8c5f09be42f184724502b7237d6c77d",
+  "source_sha256": {
+    "scripts/run_rbr_prediction_gate.py": "d67b8d29c5df766693b29ca263254899730540b54ac82b0439994725d6a437ac",
+    "src/pbpf/train_belief.py": "71b23e9a536ef8bf799a37169c16d2d1ab2b3787aff9335d84bf07834d7dfd9e",
+    "src/pbpf/belief/losses.py": "f2d38e36030b5165b2ef47ce1c2d99fa3c88169414b364b23faa7b7d679e97fe",
+    "src/pbpf/real_gate.py": "1646a4dfc920a14c8b497fce0788b24e2506ca472360a81c5471cffd4a839acd"
+  },
+  "variants": {
+    "default_3000": {
+      "gpu": 0,
+      "extra": []
+    },
+    "richer_semantics_3000": {
+      "gpu": 2,
+      "extra": [
+        "--association-weight",
+        "10",
+        "--invariance-weight",
+        "1",
+        "--feature-dim",
+        "1024",
+        "--hidden-dim",
+        "256"
+      ]
+    }
+  },
+  "evaluation_role": "development_assessment_only",
+  "scientific_thresholds": "unchanged"
+}

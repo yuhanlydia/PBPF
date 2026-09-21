@@ -1,0 +1,71 @@
+{
+  "schema": "apbpf-full-replay-cache-proof-v1",
+  "domain": "codearc",
+  "family": "deepseek",
+  "generator": {
+    "family": "deepseek",
+    "id": "deepseek-ai/deepseek-coder-6.7b-instruct",
+    "revision": "e5d64addd26a6a1db0f9b863abf6ee3141936807",
+    "role": "replication"
+  },
+  "counts": {
+    "train": 1696,
+    "development": 3200,
+    "test": 4000
+  },
+  "problem_counts": {
+    "train": 212,
+    "development": 400,
+    "test": 500
+  },
+  "source_bindings": [
+    {
+      "bank": "/data/cwj/PBPF/local/longgoal/codearc-deepseek-full-evaluation-v2/train-extracted",
+      "bank_complete_sha256": "081ef35507e8a3b468b60a87f65f6b75738f965e04986240546dedbc927a0b1b",
+      "run_sha256": "1353a4643de9594f98b825a421b250f276c45d3257c807a96a902bce03a302ff",
+      "executions": {
+        "all": "3ed173ed0eb95afb88883887058cd4c609bc44a950596b01e105b689cfd3728f"
+      }
+    },
+    {
+      "bank": "/data/cwj/PBPF/local/longgoal/codearc-deepseek-full-evaluation-v2/development-pilot-extracted",
+      "bank_complete_sha256": "fe5264f7c01435c8061265d0440fab1fdc63455010ca4cb93131c7e420d4e424",
+      "run_sha256": "3a4eedad81cebd1b09a6be9401e41ed58375888628ed1b4cb5a4132349be1e12",
+      "executions": {
+        "all": "7f576bde1d467219754f3ccc655917f9c25eb2c4277b6bb1daaf8f76c23a545a"
+      }
+    },
+    {
+      "bank": "/data/cwj/PBPF/local/longgoal/codearc-deepseek-full-evaluation-v2/development-remainder-extracted",
+      "bank_complete_sha256": "f01dc56255180157a0b2737445d40bb52f7c78fcd5d0722d3c289e80a2391199",
+      "run_sha256": "5ad3dfc900d5489937540f2faf802f7ed4fa50b056df89ae3d82b506ba1e3205",
+      "executions": {
+        "all": "899c45b1398b628ed16d10fcdcaf4e7f1eba86a08fc63573e37af5b79a21f45a"
+      }
+    },
+    {
+      "bank": "/data/cwj/PBPF/local/longgoal/codearc-deepseek-full-evaluation-v2/primary-extracted",
+      "bank_complete_sha256": "7f35528a0581b73e94915771c8019ffa00c213244e0a086d7ec6242a9a36c995",
+      "run_sha256": "bd537ad03985b8d0087382c443f0c6edf48d1e373afafadabdc74131663b6d37",
+      "executions": {
+        "visible": "9caecbda929f39cdac028b8c1b1517eb2a51b1c21c66b974b30949d758180518",
+        "hidden": "8da86fb13de597518fc36058f3ddfa1fb3d9afb7c5748e7eb4b6e3a96b497029",
+        "pre_hidden_lock": "e116861b2229ff48763451d704eb92d766a26beff6a265cd83bd9e4da35ef7a6"
+      }
+    }
+  ],
+  "task_bindings": {
+    "public": {
+      "tasks_sha256": "3fba74e22331ee2a18a35c62e92c3a5509fd8b27d2cd3e502dd9bb2bedf23a6c",
+      "manifest_sha256": "4cf11e4f33d6d555cb49c49bbc58560a41a27390d637038a3f9d03d36afa204a"
+    },
+    "evaluator": {
+      "tasks_sha256": "73d632f758d82b764f69e0c300b1b0297c95f19640a096c57ba5b40e94e146c2",
+      "manifest_sha256": "3ef20a07b7f9714f57f13af3980c67fa7c3c9c1c4fcc9ec298a6a4b6f464e0fd"
+    }
+  },
+  "evaluation_status_sha256": "b35cde2e9ae25d130b4ea98f5f2a472f86c788b8e838ab560b3acd2e0c1c6f05",
+  "scope": "assembly from existing full replay; not fresh stage execution or efficacy evidence",
+  "cache_sha256": "fbbe930dfa26b7463210d9f21939b6f4f1c5a2b6fea01349f07e53f5bbffce99",
+  "builder_sha256": "9d9793604a7c5223ab1897e1edbc3c0d212701e31b32062496a29ee0f6d56fa2"
+}

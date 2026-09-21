@@ -1,0 +1,68 @@
+{
+  "status": "complete",
+  "pid": 408068,
+  "command": [
+    "bash",
+    "local/sandbox.sh",
+    "/data/cwj/PBPF/.venv/bin/python",
+    "-u",
+    "scripts/run_rbr_prediction_gate.py",
+    "--data-root",
+    "/data/cwj/PBPF/local/data/runbugrun-v0.0.1",
+    "--descriptions-root",
+    "/data/cwj/PBPF/local/data/project_codenet/problem_descriptions",
+    "--descriptions-archive",
+    "/data/cwj/PBPF/local/data/project_codenet/problem_descriptions.tar.gz",
+    "--cache",
+    "/data/cwj/PBPF/local/longgoal/rbr_expanded_cache_stdin_v4.json",
+    "--prepare",
+    "--prepare-only",
+    "--source-split-policy",
+    "expanded-train-exclusive-test",
+    "--train-problems",
+    "1000",
+    "--dev-problems",
+    "200",
+    "--test-problems",
+    "96",
+    "--candidates-per-problem",
+    "8",
+    "--tests-per-candidate",
+    "10",
+    "--workers",
+    "12",
+    "--timeout",
+    "2",
+    "--seed",
+    "1701"
+  ],
+  "started_at": "2026-09-16T18:02:45.878018+00:00",
+  "scope": "regenerate raw selected population after official stdin newline correction; preserve old cache and exclude heldout from subsequent tuning",
+  "timeout_note": "2 seconds explicitly fixed for this rebuild; old cache omitted timeout metadata so exact original timeout cannot be attested",
+  "original_population_reconstruction": {
+    "train_selected_candidates": 6523,
+    "development_selected_candidates": 1290,
+    "test_selected_candidates": 121,
+    "total": 7934,
+    "matches_original_prepare_log_jobs": true
+  },
+  "source_sha256": {
+    "scripts/run_rbr_prediction_gate.py": "3598e2641c2b26e099d80f2c558ddb5722deff678b1612b0e0d0d7bebcabe884",
+    "src/pbpf/apbpf/rbr_execution.py": "b7f1dfc3044e9d35364a60b68be3a3355db784ab2cf7ad09b16c8bfda880a659",
+    "src/pbpf/apbpf/development.py": "ae541b5f141b77319f6cd4d0774ea4befec43b1790f4e953801a5dfcad1788f9",
+    "src/pbpf/real_gate.py": "33af0b5cd294a24328f10d8df108098cd270b4cca60f5c5ee2f733e6e475117f"
+  },
+  "returncode": 0,
+  "cache_sha256": "ce9acd40ae2ee178532c777e318595b08a8965662c3355f9afc9666fe6e1f2a7",
+  "counts": {
+    "development": 1267,
+    "test": 117,
+    "train": 6392
+  },
+  "problem_counts": {
+    "development": 200,
+    "test": 92,
+    "train": 995
+  },
+  "rejected_fixed_candidates": 158
+}

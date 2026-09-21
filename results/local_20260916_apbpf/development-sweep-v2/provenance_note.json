@@ -1,0 +1,7 @@
+{
+  "recorded_at": "2026-09-16T23:45:24.642541+08:00",
+  "source": "src/pbpf/real_gate.py",
+  "post_launch_sha256": "33af0b5cd294a24328f10d8df108098cd270b4cca60f5c5ee2f733e6e475117f",
+  "change": "Added dataset identity validation conditional only on CodeARC schema; RBR validation/training behavior unchanged. Original source preserved in source/real_gate.py.",
+  "scope": "development diagnostics only; not confirmatory stage evidence"
+}

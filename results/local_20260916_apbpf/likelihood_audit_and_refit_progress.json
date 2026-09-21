@@ -1,0 +1,511 @@
+{
+  "captured_at": "2026-09-16T22:59:18.013192+00:00",
+  "previous_turn_classification": "progress: complete pooled proposal diagnostic and verified second repair checkpoint",
+  "current_progress": "Complete common-prior-support likelihood audit, reference predictions reproduced; new fixed3seed prior/noresampling development refits running",
+  "audit_results_sha256": "ccba8d0645f0fa1802ee05d0fd5fa8dbba2ba0d8d2cf431ea97417ecf0215c8a",
+  "audit_results": {
+    "plan_sha256": "29216fcf9d5b6310f6c591083bfd52d8d8a658a17a1aae3550514cffc4e89abd",
+    "seeds": {
+      "1701": {
+        "centered_log_likelihood_ratio_rms": {
+          "full": {
+            "count": 3200,
+            "mean": 0.0012893213424831629,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.003915864834561944,
+              0.016801863275468242,
+              0.04384331405162811
+            ]
+          },
+          "mixed_visible": {
+            "count": 1025,
+            "mean": 0.004025198519229889,
+            "quantiles_0_50_90_99_100": [
+              0.00012856567627750337,
+              0.002471289597451687,
+              0.008617342077195648,
+              0.025598197281360622,
+              0.04384331405162811
+            ]
+          },
+          "constant_visible": {
+            "count": 2175,
+            "mean": 0.0,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "posterior_total_variation": {
+          "full": {
+            "count": 3200,
+            "mean": 0.00031214571208693087,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.0009143237548414618,
+              0.004013606100343048,
+              0.01064950693398714
+            ]
+          },
+          "mixed_visible": {
+            "count": 1025,
+            "mean": 0.0009745037532411516,
+            "quantiles_0_50_90_99_100": [
+              5.635485649690963e-06,
+              0.0006008363561704755,
+              0.0021328688599169263,
+              0.007274349015206096,
+              0.01064950693398714
+            ]
+          },
+          "constant_visible": {
+            "count": 2175,
+            "mean": 0.0,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "future_probability_max_difference": {
+          "full": {
+            "count": 3200,
+            "mean": 7.234974327730015e-05,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.00020878911018371577,
+              0.0011333245038986164,
+              0.0034182071685791016
+            ]
+          },
+          "mixed_visible": {
+            "count": 1025,
+            "mean": 0.00022587236890103668,
+            "quantiles_0_50_90_99_100": [
+              1.0132789611816406e-06,
+              0.00010979175567626953,
+              0.0005111217498779297,
+              0.0019697952270507795,
+              0.0034182071685791016
+            ]
+          },
+          "constant_visible": {
+            "count": 2175,
+            "mean": 0.0,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "1702": {
+        "centered_log_likelihood_ratio_rms": {
+          "full": {
+            "count": 3200,
+            "mean": 0.0020349465776234865,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.006181630119681353,
+              0.0269073766842484,
+              0.0648765116930008
+            ]
+          },
+          "mixed_visible": {
+            "count": 1025,
+            "mean": 0.006353003438562155,
+            "quantiles_0_50_90_99_100": [
+              8.209954103222117e-05,
+              0.003911539912223816,
+              0.014173920638859272,
+              0.04038550898432731,
+              0.0648765116930008
+            ]
+          },
+          "constant_visible": {
+            "count": 2175,
+            "mean": 0.0,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "posterior_total_variation": {
+          "full": {
+            "count": 3200,
+            "mean": 0.0005478046368807554,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.0016788272885605682,
+              0.007833092929795366,
+              0.0153376255184412
+            ]
+          },
+          "mixed_visible": {
+            "count": 1025,
+            "mean": 0.0017102193087339401,
+            "quantiles_0_50_90_99_100": [
+              2.4563920305809006e-05,
+              0.0010483695659786463,
+              0.003628027439117432,
+              0.01108529157936573,
+              0.0153376255184412
+            ]
+          },
+          "constant_visible": {
+            "count": 2175,
+            "mean": 0.0,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "future_probability_max_difference": {
+          "full": {
+            "count": 3200,
+            "mean": 0.00013373669935390353,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.0003822088241577147,
+              0.0019828236103057745,
+              0.005639553070068359
+            ]
+          },
+          "mixed_visible": {
+            "count": 1025,
+            "mean": 0.00041751941898837686,
+            "quantiles_0_50_90_99_100": [
+              1.6689300537109375e-06,
+              0.00021988153457641602,
+              0.0009241700172424317,
+              0.003277313709259033,
+              0.005639553070068359
+            ]
+          },
+          "constant_visible": {
+            "count": 2175,
+            "mean": 0.0,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "1703": {
+        "centered_log_likelihood_ratio_rms": {
+          "full": {
+            "count": 3200,
+            "mean": 0.0012984472559764981,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.004095493210479617,
+              0.013920660344883796,
+              0.040538933128118515
+            ]
+          },
+          "mixed_visible": {
+            "count": 1025,
+            "mean": 0.004053689539432526,
+            "quantiles_0_50_90_99_100": [
+              0.00013449715333990753,
+              0.002625246997922659,
+              0.008895407244563103,
+              0.0247884327918291,
+              0.040538933128118515
+            ]
+          },
+          "constant_visible": {
+            "count": 2175,
+            "mean": 0.0,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "posterior_total_variation": {
+          "full": {
+            "count": 3200,
+            "mean": 0.0004068779235240072,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.0012670565978623928,
+              0.004951881715096532,
+              0.010605733841657639
+            ]
+          },
+          "mixed_visible": {
+            "count": 1025,
+            "mean": 0.0012702529784291983,
+            "quantiles_0_50_90_99_100": [
+              1.8035586890619015e-06,
+              0.0008481118711642921,
+              0.002637584088370205,
+              0.008148846291005608,
+              0.010605733841657639
+            ]
+          },
+          "constant_visible": {
+            "count": 2175,
+            "mean": 0.0,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "future_probability_max_difference": {
+          "full": {
+            "count": 3200,
+            "mean": 5.1366911065997556e-05,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.00015647411346435546,
+              0.0006709587574005088,
+              0.003583461046218872
+            ]
+          },
+          "mixed_visible": {
+            "count": 1025,
+            "mean": 0.0001603649725439027,
+            "quantiles_0_50_90_99_100": [
+              5.960464477539062e-07,
+              8.845329284667969e-05,
+              0.00038354396820068366,
+              0.0010417652130126948,
+              0.003583461046218872
+            ]
+          },
+          "constant_visible": {
+            "count": 2175,
+            "mean": 0.0,
+            "quantiles_0_50_90_99_100": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      }
+    },
+    "bindings": {
+      "1701": {
+        "diagnostics_sha256": "ed1b8768a4cce6bd6c53ceb81e0d7eb1df94969586b146da739acaaf26130855",
+        "reference_reproduction_errors": {
+          "aligned": 4.172325134277344e-07,
+          "outcome_shuffled": 4.172325134277344e-07
+        }
+      },
+      "1702": {
+        "diagnostics_sha256": "8067fe2fa274a5e163fd77632c000ddb5e3a738c3eaa58d6c6dbd37273b2c39c",
+        "reference_reproduction_errors": {
+          "aligned": 4.172325134277344e-07,
+          "outcome_shuffled": 4.172325134277344e-07
+        }
+      },
+      "1703": {
+        "diagnostics_sha256": "5372233f6fa14ad95e6a7fbc3fc9aa8fe55601e2d269167b4f7ae58e154d3a5d",
+        "reference_reproduction_errors": {
+          "aligned": 4.76837158203125e-07,
+          "outcome_shuffled": 4.172325134277344e-07
+        }
+      }
+    },
+    "candidate_counts": {
+      "full": 3200,
+      "mixed_visible": 1025,
+      "constant_visible": 2175
+    },
+    "scope": "descriptive development-only mechanism audit on common32-prior-draw support; not exact continuous posterior, new fit, gate or primary evaluation"
+  },
+  "prior_training_plan_sha256": "0a4187dd8e086ed46bd0a49eb16b04346945cef10fae0b769320ebee0d0a46c6",
+  "live": {
+    "rbr_qwen_generation_status.json": {
+      "status": "running",
+      "pid": 296032,
+      "current": "rbr-qwen-primary500",
+      "process_exists_at_snapshot": true,
+      "process_command": "/usr/bin/python3 -u - ",
+      "process_start_ticks": "63262182"
+    },
+    "rbr_deepseek_generation_status.json": {
+      "status": "running",
+      "pid": 1117848,
+      "current": "rbr-deepseek-train321",
+      "process_exists_at_snapshot": true,
+      "process_command": ".venv/bin/python -u scripts/run_local_rbr_replication_generation.py --run-root local/longgoal --previous-pid 3469598 ",
+      "process_start_ticks": "63664004"
+    },
+    "rbr-qwen-full-evaluation-v1/status.json": {
+      "status": "waiting_for_generation",
+      "pid": 593161,
+      "current": "evaluate-development-remainder",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_bank_evaluation.py --domain rbr --public-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public --evaluator-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator --train-bank /data/cwj/PBPF/local/longgoal/rbr-qwen-train321 --development-pilot-bank /data/cwj/PBPF/local/longgoal/rbr-qwen-development-pilot16 --development-remainder-bank /data/cwj/PBPF/local/longgoal/rbr-qwen-development384 --primary-bank /data/cwj/PBPF/local/longgoal/rbr-qwen-primary500 --output /data/cwj/PBPF/local/longgoal/rbr-qwen-full-evaluation-v1 --generation-status /data/cwj/PBPF/local/longgoal/rbr_qwen_generation_status.json ",
+      "process_start_ticks": "63371596"
+    },
+    "rbr-deepseek-full-evaluation-v1/status.json": {
+      "status": "waiting_for_generation",
+      "pid": 1118014,
+      "current": "evaluate-development-pilot",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_bank_evaluation.py --domain rbr --public-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public --evaluator-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator --train-bank /data/cwj/PBPF/local/longgoal/rbr-deepseek-train321 --development-pilot-bank /data/cwj/PBPF/local/longgoal/rbr-deepseek-development-pilot16 --development-remainder-bank /data/cwj/PBPF/local/longgoal/rbr-deepseek-development384 --primary-bank /data/cwj/PBPF/local/longgoal/rbr-deepseek-primary500 --output /data/cwj/PBPF/local/longgoal/rbr-deepseek-full-evaluation-v1 --generation-status /data/cwj/PBPF/local/longgoal/rbr_deepseek_generation_status.json ",
+      "process_start_ticks": "63664127"
+    },
+    "rbr-qwen-generated-prediction-v1/status.json": {
+      "status": "complete",
+      "pid": 1172374,
+      "current": "prediction-seed1703",
+      "process_exists_at_snapshot": false
+    },
+    "rbr-deepseek-generated-prediction-v1/status.json": {
+      "status": "waiting_for_development_execution",
+      "pid": 1172375,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_generated_prediction.py --domain rbr --evaluation-root /data/cwj/PBPF/local/longgoal/rbr-deepseek-full-evaluation-v1 --public-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public --evaluator-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator --output /data/cwj/PBPF/local/longgoal/rbr-deepseek-generated-prediction-v1 ",
+      "process_start_ticks": "63712042"
+    },
+    "codearc-deepseek-full-replication-cell-v1/status.json": {
+      "status": "complete",
+      "pid": 2668935,
+      "current": "selection",
+      "process_exists_at_snapshot": false
+    },
+    "rbr-qwen-full-replication-cell-v1/status.json": {
+      "status": "waiting_for_full_execution",
+      "pid": 2668938,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_full_replication_cell.py --evaluation-root /data/cwj/PBPF/local/longgoal/rbr-qwen-full-evaluation-v1 --public-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public --evaluator-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator --domain rbr --family qwen --output /data/cwj/PBPF/local/longgoal/rbr-qwen-full-replication-cell-v1 ",
+      "process_start_ticks": "64404822"
+    },
+    "rbr-deepseek-full-replication-cell-v1/status.json": {
+      "status": "waiting_for_full_execution",
+      "pid": 2668942,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_full_replication_cell.py --evaluation-root /data/cwj/PBPF/local/longgoal/rbr-deepseek-full-evaluation-v1 --public-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-public --evaluator-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs/rbr-evaluator --domain rbr --family deepseek --output /data/cwj/PBPF/local/longgoal/rbr-deepseek-full-replication-cell-v1 ",
+      "process_start_ticks": "64404822"
+    },
+    "codearc-packet-repair-v1/status.json": {
+      "status": "running",
+      "pid": 2533538,
+      "current": "train-seed1703",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_packet_repair.py --packet-root /data/cwj/PBPF/local/longgoal/codearc-repair-packets-v1 --output /data/cwj/PBPF/local/longgoal/codearc-packet-repair-v1 --domain codearc --gpu 2 ",
+      "process_start_ticks": "64331942"
+    },
+    "codearc-packet-repair-evaluation-v1/status.json": {
+      "status": "waiting_for_generation",
+      "pid": 2546736,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_packet_repair_evaluation.py --generation-root /data/cwj/PBPF/local/longgoal/codearc-packet-repair-v1 --packet-root /data/cwj/PBPF/local/longgoal/codearc-repair-packets-v1 --evaluator-root /data/cwj/PBPF/local/longgoal/codearc-evaluator-v1 --output /data/cwj/PBPF/local/longgoal/codearc-packet-repair-evaluation-v1 ",
+      "process_start_ticks": "64337760"
+    },
+    "apbpf-real-full-pipeline-v2/status.json": {
+      "status": "waiting_for_full_banks_and_replication_replay",
+      "pid": 3137406,
+      "waiting_on": [
+        "qwen_public_banks",
+        "rbr_deepseek_full_replay"
+      ],
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_local_apbpf_full_pipeline.py --run-root /data/cwj/PBPF/local/longgoal --materialized-root /data/cwj/PBPF/local/longgoal/apbpf-real-materialize-v2/1d078c5c1204e79fd132d0de0923e6284e0f21b16ffd54fbb22d5b5174edbec6/stages/materialize/attempt-000001/outputs --output /data/cwj/PBPF/local/longgoal/apbpf-real-full-pipeline-v2 --gpu 0 ",
+      "process_start_ticks": "64605641"
+    },
+    "codearc-qwen-history-rate-v1/status.json": {
+      "status": "complete",
+      "pid": 3107872,
+      "process_exists_at_snapshot": false
+    },
+    "codearc-deepseek-history-rate-v1/status.json": {
+      "status": "complete",
+      "pid": 3107873,
+      "process_exists_at_snapshot": false
+    },
+    "rbr-qwen-history-rate-v1/status.json": {
+      "status": "waiting_for_fitting",
+      "pid": 3107874,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_apbpf_history_rate_ablation.py --wait-for-cell /data/cwj/PBPF/local/longgoal/rbr-qwen-full-replication-cell-v1 --output /data/cwj/PBPF/local/longgoal/rbr-qwen-history-rate-v1 ",
+      "process_start_ticks": "64590786"
+    },
+    "rbr-deepseek-history-rate-v1/status.json": {
+      "status": "waiting_for_fitting",
+      "pid": 3107878,
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_apbpf_history_rate_ablation.py --wait-for-cell /data/cwj/PBPF/local/longgoal/rbr-deepseek-full-replication-cell-v1 --output /data/cwj/PBPF/local/longgoal/rbr-deepseek-history-rate-v1 ",
+      "process_start_ticks": "64590787"
+    },
+    "codearc-particle-sensitivity-v1/status.json": {
+      "status": "complete",
+      "pid": 3271959,
+      "current": "semantic-seed1703-p128",
+      "process_exists_at_snapshot": false
+    },
+    "codearc-semantic-p32-training-v1/status.json": {
+      "status": "complete",
+      "pid": 3553251,
+      "current": "semantic-p32-seed1703",
+      "process_exists_at_snapshot": false
+    },
+    "codearc-semantic-p32-comparison-v1/status.json": {
+      "status": "complete",
+      "pid": 3905918,
+      "process_exists_at_snapshot": false
+    },
+    "codearc-prior-training-v1/status.json": {
+      "status": "running",
+      "pid": 326300,
+      "current": "prior-no-resample-seed1701",
+      "process_exists_at_snapshot": true,
+      "process_command": "/data/cwj/PBPF/.venv/bin/python -u scripts/run_apbpf_prior_training_debug.py --development-root /data/cwj/PBPF/local/longgoal/codearc-semantic-debug-v1 --likelihood-audit /data/cwj/PBPF/local/longgoal/codearc-likelihood-assignment-v1 --output /data/cwj/PBPF/local/longgoal/codearc-prior-training-v1 ",
+      "process_start_ticks": "65100595"
+    }
+  },
+  "generation_counts": {
+    "rbr-qwen-primary500": 234,
+    "rbr-deepseek-train321": 121
+  },
+  "sealed_real_stages_completed": 1,
+  "real_stage_adapters_provided": 21,
+  "scope": "local exploratory development diagnosis/refitting; no primary retuning, new successful-method claim or formal-stage completion"
+}

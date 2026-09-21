@@ -1,0 +1,21 @@
+{
+  "status": "complete",
+  "pid": 190980,
+  "runs": {
+    "1701": {
+      "predictions_sha256": "7e95c4955f6c290160e047a0eb2cf5291d7442570a9722a91335fcb48554e160",
+      "max_pair_order_prediction_difference": 4.76837158203125e-07
+    },
+    "1702": {
+      "predictions_sha256": "c451f789275e3820f00f5091dc7ad59257ef217abdfe1f713d8ed03fba43175a",
+      "max_pair_order_prediction_difference": 4.76837158203125e-07
+    },
+    "1703": {
+      "predictions_sha256": "f5056581872d7df94edcfb36d961b0d508270e1a0ac5ea7f34646a11d84b4f3e",
+      "max_pair_order_prediction_difference": 4.76837158203125e-07
+    }
+  },
+  "plan_sha256": "8308da5ae91617ef05cb5b9738ee41c24d51a0039b6dd176eab58d56a4275d9f",
+  "current_seed": 1703,
+  "results_sha256": "2ec97cc51c36ddf1a5ba72705dc703af0e47a0b343629f540d2be92b00a94e73"
+}
