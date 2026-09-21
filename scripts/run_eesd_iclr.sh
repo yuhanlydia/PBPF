@@ -1,1 +1,28 @@
-#!/usr/bin/env bash\nset -euo pipefail\n\nCONFIG="${EESD_CONFIG:-configs/experiments/eesd_iclr2027.yaml}"\nMANIFEST="${EESD_MANIFEST:-configs/experiments/eesd_cache_manifest.yaml}"\nOUTPUT="${EESD_OUTPUT:-runs/eesd-iclr2027}"\n\nif [[ ! -f "$MANIFEST" ]]; then\n  echo "Missing $MANIFEST" >&2\n  echo "Copy configs/experiments/eesd_cache_manifest.example.yaml, bind immutable cache paths, and retry." >&2\n  exit 2\nfi\n\npython scripts/run_eesd_matrix.py --config "$CONFIG" --manifest "$MANIFEST" --output "$OUTPUT" --stage mechanism\npython scripts/run_eesd_matrix.py --config "$CONFIG" --manifest "$MANIFEST" --output "$OUTPUT" --stage prepare-corrections\n\ncat <<EOF\nMechanism and correction-scoring stages are complete/resumed.\nTraining is intentionally a separate explicit GPU stage:\n  python scripts/run_eesd_matrix.py --config "$CONFIG" --manifest "$MANIFEST" --output "$OUTPUT" --stage train\n  python scripts/run_eesd_matrix.py --config "$CONFIG" --manifest "$MANIFEST" --output "$OUTPUT" --stage fresh\n  python scripts/run_eesd_matrix.py --config "$CONFIG" --manifest "$MANIFEST" --output "$OUTPUT" --stage transfer\n  python scripts/run_eesd_matrix.py --config "$CONFIG" --manifest "$MANIFEST" --output "$OUTPUT" --stage recursive\n  python scripts/run_eesd_matrix.py --config "$CONFIG" --manifest "$MANIFEST" --output "$OUTPUT" --stage render\nSet CUDA_VISIBLE_DEVICES before launching each GPU worker.\nEOF\n
+#!/usr/bin/env bash
+set -euo pipefail
+
+CONFIG="${EESD_CONFIG:-configs/experiments/eesd_iclr2027.yaml}"
+MANIFEST="${EESD_MANIFEST:-configs/experiments/eesd_cache_manifest.yaml}"
+OUTPUT="${EESD_OUTPUT:-runs/eesd-iclr2027}"
+
+if [[ ! -f "$MANIFEST" ]]; then
+  echo "Missing $MANIFEST" >&2
+  echo "Copy configs/experiments/eesd_cache_manifest.example.yaml, bind immutable cache paths, and retry." >&2
+  exit 2
+fi
+
+python scripts/run_eesd_matrix.py --config "$CONFIG" --manifest "$MANIFEST" --output "$OUTPUT" --stage mechanism
+python scripts/run_eesd_matrix.py --config "$CONFIG" --manifest "$MANIFEST" --output "$OUTPUT" --stage prepare-corrections
+
+cat <<EOF
+Mechanism and correction preparation stages are complete/resumed.
+Continue with correction generation/scoring and the GPU stages:
+  python scripts/run_eesd_matrix.py --config "$CONFIG" --manifest "$MANIFEST" --output "$OUTPUT" --stage generate-corrections
+  python scripts/run_eesd_matrix.py --config "$CONFIG" --manifest "$MANIFEST" --output "$OUTPUT" --stage score
+  python scripts/run_eesd_matrix.py --config "$CONFIG" --manifest "$MANIFEST" --output "$OUTPUT" --stage train
+  python scripts/run_eesd_matrix.py --config "$CONFIG" --manifest "$MANIFEST" --output "$OUTPUT" --stage fresh
+  python scripts/run_eesd_matrix.py --config "$CONFIG" --manifest "$MANIFEST" --output "$OUTPUT" --stage transfer
+  python scripts/run_eesd_matrix.py --config "$CONFIG" --manifest "$MANIFEST" --output "$OUTPUT" --stage recursive
+  python scripts/run_eesd_matrix.py --config "$CONFIG" --manifest "$MANIFEST" --output "$OUTPUT" --stage render
+Set CUDA_VISIBLE_DEVICES before launching each GPU worker.
+EOF

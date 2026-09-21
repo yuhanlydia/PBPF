@@ -73,83 +73,106 @@ def latex_mean_std(values, *, percent=False):
     return f"{scale*mean:.2f} $\\pm$ {scale*std:.2f}"
 
 
-def mechanism_table(root: Path, coverage: dict):
+def seed_reports(root: Path, dataset, model, seeds):
+    reports, runs = {}, {}
+    for seed in seeds:
+        path = root / "mechanism" / dataset / model / f"seed{seed}" / "report.json"
+        report = read_json(path)
+        runs[str(seed)] = {"path": str(path), "present": bool(report)}
+        if report:
+            reports[seed] = report
+    return reports, {
+        "complete": len(reports) == len(seeds),
+        "expected_seeds": list(seeds),
+        "present_seeds": list(reports),
+        "missing_seeds": [seed for seed in seeds if seed not in reports],
+        "runs": runs,
+    }
+
+
+def seed_summary(values):
+    # Each generation seed is one replicate, irrespective of its query count.
+    values = list(values)
+    mean, std = mean_std(values)
+    return {"n": len(values), "mean": mean, "std": std if len(values) > 1 else None}
+
+
+def latex_seed_summary(summary):
+    if not summary["n"]:
+        return "--"
+    if summary["std"] is None:
+        return f'{summary["mean"]:.4f} (n=1)'
+    return f'{summary["mean"]:.4f} $\\pm$ {summary["std"]:.4f} (n={summary["n"]})'
+
+
+def mechanism_values(report):
+    return {
+        "ordinary_nll": report["metrics"]["ordinary"]["nll"],
+        "fixed_nll": report["metrics"]["fixed"]["nll"],
+        "effective_nll": report["metrics"]["effective"]["nll"],
+        "same_alpha_gain": report["bootstraps"]["effective_vs_fixed_at_effective_params"]["gain"],
+        "global_mass_gain": report["bootstraps"]["effective_vs_tuned_global_mass"]["gain"],
+    }
+
+
+def mechanism_table(root: Path, coverage: dict, seeds=(1701, 1702, 1703), order=None):
     lines = [
-        r"\begin{table*}[t]",
-        r"\centering",
-        r"\caption{Effective-evidence mechanism across datasets and generator models. Same-$\alpha$ gain compares EED with fixed mass at the validation-selected EED $\alpha$ and relevance strength; global-mass gain compares EED with a validation-tuned constant evidence mass. Positive gains mean lower NLL for EED.}",
-        r"\label{tab:eesd-mechanism-generated}",
-        r"\small",
-        r"\begin{tabular}{llrrrr}",
-        r"\toprule",
-        r"Dataset & Generator & Fixed NLL & EED NLL & Same-$\alpha$ gain & Global-mass gain \\",
+        r"\begin{table*}[t]", r"\centering",
+        r"\caption{Effective-evidence mechanism across datasets and generator models. Values are means and sample standard deviations across generation seeds (n shown); queries are not pooled across seeds. A single seed has no estimated standard deviation. Same-$\alpha$ gain compares EED with fixed mass at the validation-selected EED $\alpha$ and relevance strength; global-mass gain compares EED with a validation-tuned constant evidence mass. Positive gains mean lower NLL for EED.}",
+        r"\label{tab:eesd-mechanism-generated}", r"\small",
+        r"\begin{tabular}{llrrrrr}", r"\toprule",
+        r"Dataset & Generator & Ordinary NLL & Fixed NLL & EED NLL & Same-$\alpha$ gain & Global-mass gain \\",
         r"\midrule",
     ]
-    for dataset, model, dataset_label, model_label in MECHANISM_ORDER:
-        path = root / "mechanism" / dataset / model / "report.json"
-        report = read_json(path)
-        coverage["mechanism"][f"{dataset}/{model}"] = bool(report)
-        if report:
-            fixed = report["metrics"]["fixed"]["nll"]
-            eed = report["metrics"]["effective"]["nll"]
-            same = report["bootstraps"]["effective_vs_fixed_at_effective_params"]["gain"]
-            global_gain = report["bootstraps"]["effective_vs_tuned_global_mass"]["gain"]
-        else:
-            fixed = eed = same = global_gain = None
-        lines.append(
-            f"{dataset_label} & {model_label} & {f4(fixed)} & {f4(eed)} & "
-            f"{f4(same)} & {f4(global_gain)} \\\\"
-        )
+    keys = ("ordinary_nll", "fixed_nll", "effective_nll", "same_alpha_gain", "global_mass_gain")
+    for dataset, model, dataset_label, model_label in (MECHANISM_ORDER if order is None else order):
+        reports, cell = seed_reports(root, dataset, model, seeds)
+        values = {seed: mechanism_values(report) for seed, report in reports.items()}
+        for seed, metrics in values.items():
+            cell["runs"][str(seed)]["metrics"] = metrics
+        cell["summary"] = {key: seed_summary(v[key] for v in values.values()) for key in keys}
+        coverage["mechanism"][f"{dataset}/{model}"] = cell
+        columns = [latex_seed_summary(cell["summary"][key]) for key in keys]
+        lines.append(f"{dataset_label} & {model_label} & " + " & ".join(columns) + r" \\")
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table*}", ""]
     return lines
 
 
-def ablation_table(root: Path, coverage: dict):
-    # Main causal ablation uses the primary Qwen2.5-7B RunBugRun cell.
-    report = read_json(root / "mechanism" / "runbugrun" / "qwen25_7b" / "report.json")
-    coverage["tables"]["causal_ablation"] = bool(report)
-    rows = []
-    if report:
-        m = report["metrics"]
-        b = report["bootstraps"]
-        fixed = m["fixed"]["nll"]
-        rows = [
-            ("EED vs fixed at fixed-selected params", fixed, m["effective_at_fixed_params"]["nll"],
-             b["effective_vs_fixed_at_fixed_params"]["gain"]),
-            ("EED vs fixed at EED-selected params", m["fixed_at_effective_params"]["nll"], m["effective"]["nll"],
-             b["effective_vs_fixed_at_effective_params"]["gain"]),
-            ("EED vs tuned global mass", m["global_mass"]["nll"], m["effective"]["nll"],
-             b["effective_vs_tuned_global_mass"]["gain"]),
-            ("EED vs constant mean EED mass", m["constant_mean_mass"]["nll"], m["effective"]["nll"],
-             m["constant_mean_mass"]["nll"] - m["effective"]["nll"]),
-            ("EED vs mean permuted mass", m["permuted_mass"]["mean_nll"], m["effective"]["nll"],
-             m["permuted_mass"]["mean_nll"] - m["effective"]["nll"]),
-            ("PASS/non-PASS: EED vs fixed", m["binary_fixed_at_effective_params"]["nll"],
-             m["binary_effective"]["nll"],
-             m["binary_fixed_at_effective_params"]["nll"] - m["binary_effective"]["nll"]),
-        ]
-    else:
-        rows = [(name, None, None, None) for name in (
-            "EED vs fixed at fixed-selected params",
-            "EED vs fixed at EED-selected params",
-            "EED vs tuned global mass",
-            "EED vs constant mean EED mass",
-            "EED vs mean permuted mass",
-            "PASS/non-PASS: EED vs fixed",
-        )]
-    lines = [
-        r"\begin{table}[t]",
-        r"\centering",
-        r"\caption{Causal mechanism ablations on the primary RunBugRun/Qwen2.5-Coder-7B cell. Positive NLL gain favors EED.}",
-        r"\label{tab:eesd-ablation-generated}",
-        r"\small",
-        r"\begin{tabular}{lrrr}",
-        r"\toprule",
-        r"Comparison & Control NLL & EED NLL & NLL gain \\",
-        r"\midrule",
+def ablation_values(report):
+    m, b = report["metrics"], report["bootstraps"]
+    return [
+        (m["fixed"]["nll"], m["effective_at_fixed_params"]["nll"], b["effective_vs_fixed_at_fixed_params"]["gain"]),
+        (m["fixed_at_effective_params"]["nll"], m["effective"]["nll"], b["effective_vs_fixed_at_effective_params"]["gain"]),
+        (m["global_mass"]["nll"], m["effective"]["nll"], b["effective_vs_tuned_global_mass"]["gain"]),
+        (m["constant_mean_mass"]["nll"], m["effective"]["nll"], m["constant_mean_mass"]["nll"] - m["effective"]["nll"]),
+        (m["permuted_mass"]["mean_nll"], m["effective"]["nll"], m["permuted_mass"]["mean_nll"] - m["effective"]["nll"]),
+        (m["binary_fixed_at_effective_params"]["nll"], m["binary_effective"]["nll"], m["binary_fixed_at_effective_params"]["nll"] - m["binary_effective"]["nll"]),
     ]
-    for name, control, eed, gain in rows:
-        lines.append(f"{name} & {f4(control)} & {f4(eed)} & {f4(gain)} \\\\")
+
+
+def ablation_table(root: Path, coverage: dict, seeds=(1701, 1702, 1703)):
+    reports, cell = seed_reports(root, "runbugrun", "qwen25_7b", seeds)
+    coverage["tables"]["causal_ablation"] = cell
+    rows = {seed: ablation_values(report) for seed, report in reports.items()}
+    for seed, values in rows.items():
+        cell["runs"][str(seed)]["comparisons"] = values
+    names = (
+        "EED vs fixed at fixed-selected params", "EED vs fixed at EED-selected params",
+        "EED vs tuned global mass", "EED vs constant mean EED mass",
+        "EED vs mean permuted mass", "PASS/non-PASS: EED vs fixed",
+    )
+    lines = [
+        r"\begin{table}[t]", r"\centering",
+        r"\caption{Causal mechanism ablations on the primary RunBugRun/Qwen2.5-Coder-7B cell. Values are means and sample standard deviations across generation seeds (n shown). Positive NLL gain favors EED.}",
+        r"\label{tab:eesd-ablation-generated}", r"\small",
+        r"\begin{tabular}{lrrr}", r"\toprule",
+        r"Comparison & Control NLL & EED NLL & NLL gain \\", r"\midrule",
+    ]
+    cell["summary"] = {}
+    for index, name in enumerate(names):
+        summaries = [seed_summary(row[index][col] for row in rows.values()) for col in range(3)]
+        cell["summary"][name] = dict(zip(("control_nll", "effective_nll", "gain"), summaries))
+        lines.append(name + " & " + " & ".join(latex_seed_summary(x) for x in summaries) + r" \\")
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}", ""]
     return lines
 
@@ -256,6 +279,23 @@ def recursive_table(root: Path, seeds, coverage: dict):
     return lines
 
 
+def configured_mechanism_order(config):
+    # Config model paths define the declared scope; labels do not imply active cells.
+    aliases = {
+        'qwen2.5-coder-1.5b': ('qwen25_1p5b', 'Qwen2.5-Coder-1.5B'),
+        'qwen2.5-coder-7b': ('qwen25_7b', 'Qwen2.5-Coder-7B'),
+        'qwen3-8b': ('qwen3_8b', 'Qwen3-8B'),
+        'deepseek-coder-6.7b': ('deepseek_6p7b', 'DeepSeek-Coder-6.7B'),
+        'seed-coder-8b': ('seed_coder_8b', 'Seed-Coder-8B'),
+        'qwen3-coder-30b-a3b': ('qwen3_coder_30b', 'Qwen3-Coder-30B-A3B'),
+        'starcoder2-15b': ('starcoder2_15b', 'StarCoder2-15B'),
+    }
+    models = [aliases[Path(path).stem] for path in config['models'].values()]
+    return [(dataset, model, label, model_label)
+            for dataset, label in [('runbugrun', 'RunBugRun'), ('codearc', 'CodeARC-Replay')]
+            for model, model_label in models]
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--results", type=Path, required=True)
@@ -279,8 +319,8 @@ def main() -> None:
         "% Missing artifacts are rendered as --; never hand-fill generated cells.",
         "",
     ]
-    lines += mechanism_table(args.results, coverage)
-    lines += ablation_table(args.results, coverage)
+    lines += mechanism_table(args.results, coverage, seeds, configured_mechanism_order(cfg))
+    lines += ablation_table(args.results, coverage, seeds)
     lines += fresh_table(args.results, seeds, coverage)
     lines += transfer_table(args.results, seeds, coverage)
     lines += recursive_table(args.results, seeds, coverage)

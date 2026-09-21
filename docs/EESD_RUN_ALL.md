@@ -35,10 +35,13 @@ Required model configs:
 
 - Qwen2.5-Coder-7B-Instruct
 - DeepSeek-Coder-6.7B-Instruct
-- Qwen3-8B
-- Qwen2.5-Coder-1.5B-Instruct
+- Seed-Coder-8B-Instruct
+- StarCoder2-15B-Instruct-v0.1
 
-Run all predeclared cells on RunBugRun and CodeARC.
+Run all 8 predeclared dataset/model cells on RunBugRun and CodeARC for each
+of seeds 1701, 1702, 1703 (24 seed-specific reports). `--seed` selects one seed.
+Banks, caches and reports use `seed{seed}` subdirectories. Sampling and missing
+technical settings are locked in [execution supplement](EESD_EXECUTION_LOCK_20260920.md).
 
 ## Phase 3 — correction trust analysis
 
@@ -64,8 +67,9 @@ each round. Report retained correctness and accumulated regressions.
 
 ## Phase 6 — downstream transfer
 
-Evaluate the learned adapters/policies on EvalPlus (HumanEval+ and MBPP+) and the
-locked LiveCodeBench temporal slice. These are downstream correctness evaluations,
+Evaluate the learned adapters/policies on EvalPlus (HumanEval+ and MBPP+).
+The locked LiveCodeBench temporal slice is an optional later extension, as specified
+in the main experiment contract. These are downstream correctness evaluations,
 not reinterpreted as public-input/private-outcome mechanism data.
 
 ## Phase 7 — paper aggregation
@@ -75,3 +79,25 @@ Every JSON result must map to a row in:
 
 The paper is experiment-complete only when all mandatory checkboxes in that file
 are filled or explicitly reported as null/negative.
+
+## 2026-09-21 execution amendment and consolidated coverage
+
+See [execution review and direct-execution amendment](EESD_EXECUTION_REVIEW_20260921.md).
+The user explicitly authorized execution without bubblewrap. New execution outputs
+must identify the direct profile and use new receipts; historical sandbox locks
+and failed probes remain intact.
+
+| Mechanism population | Models | Seeds | Required generation/scoring cells |
+|---|---:|---:|---:|
+| RunBugRun + CodeARC | 4 | 3 | 24 |
+| APPS-Replay + CodeContests-Replay | 4 | 3 | 24 |
+| Total | 4 families | 3 | 48 |
+
+The Replay extension is mechanism-only; see
+[EESD_REPLAY_EXTENSION_SPEC_20260920.md](EESD_REPLAY_EXTENSION_SPEC_20260920.md).
+Do not add its datasets to the training or recursive scope implicitly.
+
+As soon as both development and primary banks for a cell are sealed, execute its
+locked tests and produce the evidence report. GPU generation and bounded CPU
+scoring can proceed concurrently. Complete original and extension statistical
+families separately; a single-cell report is not the final cross-seed conclusion.

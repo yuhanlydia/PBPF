@@ -15,9 +15,12 @@ import re
 import time
 
 from pbpf.apbpf.code_extraction import extract_solution
+from pbpf.apbpf.rbr_prompt import generation_stop_kwargs, decode_completion
+from pbpf.apbpf.codearc_prompt import prompt_for
 
 
 MODELS = {
+    'starcoder2_15b': ('bigcode/starcoder2-15b-instruct-v0.1', 'ffb8dd9776ba9a66d655ecd962e882f3013e9f7c'),
     "qwen": ("Qwen/Qwen2.5-Coder-7B-Instruct", "c03e6d358207e414f1eca0bb1891e29f1db0e242"),
     "deepseek": ("deepseek-ai/deepseek-coder-6.7b-instruct", "e5d64addd26a6a1db0f9b863abf6ee3141936807"),
     "qwen25_1p5b": ("Qwen/Qwen2.5-Coder-1.5B-Instruct", "2e1fd397ee46e1388853d2af2c993145b0f1098a"),
@@ -66,11 +69,12 @@ def main():
     parser.add_argument("--offset", type=int, default=0)
     parser.add_argument("--candidates", type=int, default=8)
     parser.add_argument("--max-new-tokens", type=int, default=512)
+    parser.add_argument("--max-input-tokens", type=int, default=4096)
     parser.add_argument("--temperature", type=float, default=.8)
     parser.add_argument("--greedy", action="store_true")
     parser.add_argument("--seed", type=int, default=1701)
     args = parser.parse_args()
-    if min(args.candidates, args.max_new_tokens) < 1 or args.temperature <= 0 or min(args.offset, args.components) < 0:
+    if min(args.candidates, args.max_new_tokens, args.max_input_tokens) < 1 or args.temperature <= 0 or min(args.offset, args.components) < 0:
         parser.error("invalid candidate/generation bounds")
     manifest = json.loads((args.public_root / "manifest.json").read_text())
     if sha(args.public_root / "tasks.jsonl") != manifest["public_tasks_sha256"]:
@@ -81,7 +85,10 @@ def main():
     # One representative per pre-locked source component avoids duplicate groups.
     grouped = {}
     for row in tasks:
-        grouped.setdefault(row["source_component_id"], row)
+        component = row["source_component_id"]
+        if component not in grouped or row["task_id"] < grouped[component]["task_id"]:
+            # Updating a representative preserves the materializer's source order.
+            grouped[component] = row
     tasks = list(grouped.values())[args.offset:]
     if args.components:
         tasks = tasks[:args.components]
@@ -96,10 +103,13 @@ def main():
     adapter_sha256 = tree_sha(args.adapter) if args.adapter else None
     config = {"schema": "apbpf-codearc-generation-v1", "family": args.family, "model": model_id, "revision": revision,
               "adapter_sha256": adapter_sha256,
-              "source_sha256": sha(__file__), "public_manifest_sha256": sha(args.public_root / "manifest.json"),
+              "source_sha256": sha(__file__),
+              "prompt_source_sha256": sha(Path(__file__).resolve().parents[1] / "src/pbpf/apbpf/rbr_prompt.py"), "public_manifest_sha256": sha(args.public_root / "manifest.json"),
               "public_tasks_sha256": manifest["public_tasks_sha256"], "split": args.split,
               "components": len(tasks), "offset": args.offset, "candidates": args.candidates,
-              "max_new_tokens": args.max_new_tokens,
+              "max_new_tokens": args.max_new_tokens, "max_input_tokens": args.max_input_tokens,
+              "prompt_policy": "adaptively cap public fields while retaining all four example slots",
+              "codearc_prompt_source_sha256": sha(Path(__file__).resolve().parents[1] / "src/pbpf/apbpf/codearc_prompt.py"),
               "temperature": None if args.greedy else args.temperature,
               "top_p": None if args.greedy else .95,
               "decode_policy": "greedy" if args.greedy else f"temperature{args.temperature}-top_p0.95",
@@ -138,10 +148,11 @@ def main():
         task_seed = int.from_bytes(hashlib.sha256(f"{args.seed}:{row['task_id']}".encode()).digest()[:4], "big")
         torch.manual_seed(task_seed)
         template_kwargs = {"enable_thinking": False} if args.family in {"qwen3_8b", "qwen3_coder_30b"} else {}
-        prompt = tokenizer.apply_chat_template([
-            {"role": "system", "content": "You write Python code that generalizes from observed input-output examples."},
-            {"role": "user", "content": row["task_text"]}], tokenize=False, add_generation_prompt=True, **template_kwargs)
+        prompt, metadata = prompt_for(tokenizer, row, family=args.family,
+            max_input_tokens=args.max_input_tokens, chat_template_kwargs=template_kwargs)
         inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+        if inputs.input_ids.shape[1] != metadata["input_tokens"]:
+            raise ValueError("token count changed after prompt construction")
         begin = time.monotonic()
         generation_kwargs = dict(
             do_sample=not args.greedy,
@@ -149,6 +160,7 @@ def main():
             max_new_tokens=args.max_new_tokens,
             pad_token_id=tokenizer.pad_token_id,
         )
+        generation_kwargs.update(generation_stop_kwargs(tokenizer, args.family))
         if not args.greedy:
             generation_kwargs.update(temperature=args.temperature, top_p=.95)
         with torch.inference_mode():
@@ -156,15 +168,13 @@ def main():
         continuations = generated[:, inputs.input_ids.shape[1]:]
         candidates = []
         for candidate_index, tokens in enumerate(continuations):
-            text = tokenizer.decode(tokens, skip_special_tokens=True)
-            ids = tokens.cpu().tolist()
-            stop = ids.index(tokenizer.eos_token_id) + 1 if tokenizer.eos_token_id in ids else len(ids)
+            text, stop, hit_cap = decode_completion(tokenizer, tokens.cpu().tolist(), args.family)
             candidates.append({"candidate_id": f"{row['task_id']}/{args.family}/{candidate_index}",
                                "code": extract_solution(text), "raw_completion": text,
-                               "generated_tokens": stop, "hit_token_cap": tokenizer.eos_token_id not in ids})
+                               "generated_tokens": stop, "hit_token_cap": hit_cap})
         result = {"task_id": row["task_id"], "source_component_id": row["source_component_id"],
                   "split": row["split"], "seed": task_seed, "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
-                  "candidates": candidates, "elapsed_seconds": time.monotonic() - begin}
+                  "candidates": candidates, "prompt_metadata": metadata, "elapsed_seconds": time.monotonic() - begin}
         temporary = output.with_suffix(".partial")
         write_once(temporary, result)
         os.replace(temporary, output)

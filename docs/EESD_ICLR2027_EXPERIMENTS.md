@@ -35,15 +35,18 @@ hardware with 4-bit loading.
 
 | Key | Model | Role |
 |---|---|---|
-| qwen25_1p5b | Qwen2.5-Coder-1.5B-Instruct | scale transfer / low-cost full matrix |
 | qwen25_7b | Qwen2.5-Coder-7B-Instruct | primary |
-| qwen3_8b | Qwen3-8B, thinking disabled | same-family architecture/post-training replication |
 | deepseek_6p7b | DeepSeek-Coder-6.7B-Instruct | cross-family replication |
-| seed_coder_8b | Seed-Coder-8B-Instruct | second cross-family coder replication |
-| qwen3_coder_30b | Qwen3-Coder-30B-A3B-Instruct | stronger MoE coder replication (mechanism only) |
+| seed_coder_8b | Seed-Coder-8B-Instruct | second cross-family replication |
+| starcoder2_15b | StarCoder2-15B-Instruct-v0.1 | third cross-family replication |
+
+Execution scope amendment (2026-09-20, before new generation): the user limited
+the required matrix to four different model families above. Qwen2.5-Coder-1.5B,
+Qwen3-8B and Qwen3-Coder-30B-A3B remain optional historical configs.
+No observed mechanism result was used to reduce this scope.
 
 Minimum paper breadth:
-- all six model settings on RunBugRun and CodeARC mechanism experiments;
+- all four model settings on RunBugRun and CodeARC mechanism experiments;
 - qwen25_7b and deepseek_6p7b adapters trained on RunBugRun, then evaluated on HumanEval+ and MBPP+ with the official EvalPlus sanitizer/evaluator;
 - qwen25_7b on LiveCodeBench temporal transfer if the cheaper gates pass;
 - qwen25_7b plus one cross-family model for full one-round EESD;

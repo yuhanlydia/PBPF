@@ -12,6 +12,9 @@ MODELS = {
     "seed_coder_replication": ModelSpec(
         "ByteDance-Seed/Seed-Coder-8B-Instruct", "cross_family_replication"
     ),
+    "starcoder2_replication": ModelSpec(
+        "bigcode/starcoder2-15b-instruct-v0.1", "cross_family_replication"
+    ),
     "flagship_coder_replication": ModelSpec(
         "Qwen/Qwen3-Coder-30B-A3B-Instruct", "flagship_coder_replication"
     ),

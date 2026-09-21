@@ -1,12 +1,14 @@
 schema: eesd-iclr2027-v1
 claim: evidence_aware_self_distillation
 seeds: [1701, 1702, 1703]
+bootstrap_seed: 314159
+# See docs/EESD_EXECUTION_LOCK_20260920.md for prospective technical settings.
 
 models:
   primary: configs/models/qwen2.5-coder-7b.yaml
   cross_family: configs/models/deepseek-coder-6.7b.yaml
-  architecture_replication: configs/models/qwen3-8b.yaml
-  scale_ablation: configs/models/qwen2.5-coder-1.5b.yaml
+  second_cross_family: configs/models/seed-coder-8b.yaml
+  third_cross_family: configs/models/starcoder2-15b.yaml
 
 datasets:
   mechanism:
@@ -23,6 +25,10 @@ evidence:
   strengths: [0.0, 1.0, 4.0, 16.0]
   visible_counts: [1, 2, 4, 8]
   bootstrap_draws: 10000
+  global_mass_grid: [0.25, 0.5, 1, 2, 4, 8, 16]
+  ece_bins: 10
+  permutation_seeds: [1701, 1702, 1703]
+  concentration_bins_for_n4: [1, 2, 3, 4]
   primary_metric: nll
   secondary_metrics: [brier, ece, accuracy]
 

@@ -24,6 +24,8 @@ from pbpf.apbpf.codearc_execution import execute_call
 from pbpf.apbpf.rbr_execution import execute_stdin
 from pbpf.apbpf.rbr_prompt import extract_program
 from pbpf.eesd.evidence import cosine_relevance_weights
+from pbpf.eesd import correction_prompt
+from pbpf.eesd.correction_prompt import prepare_correction_prompt, user_prompt
 from pbpf.real_gate import FrozenTextEncoder
 
 
@@ -46,24 +48,6 @@ def tree_sha(directory: Path) -> str:
         digest.update(hashlib.sha256(path.read_bytes()).digest())
     return digest.hexdigest()
 
-
-def user_prompt(row, domain: str) -> str:
-    mode = "stdin/stdout Python program" if domain == "rbr" else "Python function solution"
-    evidence = [
-        {k: test[k] for k in ("id","input","expected","actual","stderr","outcome")}
-        | ({"expected_error": test["expected_error"]} if "expected_error" in test else {})
-        for test in row["tests"]
-    ]
-    payload = {
-        "task": row["task_text"],
-        "program": row["candidate"],
-        "public_executions": evidence,
-    }
-    return (
-        f"Repair the following {mode}. Use only the public execution evidence. "
-        "Return only complete Python source code.\n" +
-        json.dumps(payload, sort_keys=True, ensure_ascii=False)
-    )
 
 
 def patch_text(before: str, after: str) -> str:
@@ -89,10 +73,11 @@ def main() -> None:
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--adapter", type=Path)
     p.add_argument("--max-new-tokens", type=int, default=512)
+    p.add_argument("--max-input-tokens", type=int, default=4096)
     p.add_argument("--relevance-strength", type=float, default=16.0)
     p.add_argument("--timeout", type=float, default=6.0)
     args = p.parse_args()
-    if args.max_new_tokens < 1 or args.relevance_strength < 0 or args.timeout <= 0:
+    if args.max_input_tokens < 1 or args.max_new_tokens < 1 or args.relevance_strength < 0 or args.timeout <= 0:
         raise ValueError("invalid generation/relevance/execution budget")
 
     rows = [json.loads(line) for line in args.public_bank.read_text().splitlines() if line.strip()]
@@ -111,6 +96,9 @@ def main() -> None:
     from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
     tokenizer = AutoTokenizer.from_pretrained(model_id, revision=revision, local_files_only=True)
+    prepared = [prepare_correction_prompt(
+        tokenizer, row, args.domain, args.max_input_tokens, model_id
+    ) for row in rows]
     quant = BitsAndBytesConfig(
         load_in_4bit=True,
         bnb_4bit_compute_dtype=torch.bfloat16,
@@ -135,16 +123,15 @@ def main() -> None:
     generated = []
     with output_path.open("x") as stream:
         for index, row in enumerate(rows):
-            prompt = user_prompt(row, args.domain)
-            kwargs = {"enable_thinking": False} if "Qwen3" in model_id else {}
-            messages = [
-                {"role": "system", "content": "You repair Python programs using public execution feedback."},
-                {"role": "user", "content": prompt},
-            ]
-            input_ids = tokenizer.apply_chat_template(
-                messages, tokenize=True, add_generation_prompt=True,
-                return_tensors="pt", **kwargs
-            ).to(model.device)
+            view = prepared[index]
+            prompt, messages = view["prompt"], view["messages"]
+            input_ids = tokenizer(
+                view["rendered"], add_special_tokens=False, return_token_type_ids=False,
+                return_tensors="pt",
+            )["input_ids"]
+            if input_ids[0].tolist() != view["input_ids"]:
+                raise ValueError("correction prompt tokenization changed after preflight")
+            input_ids = input_ids.to(model.device)
             started = time.monotonic()
             with torch.inference_mode():
                 generated_ids = model.generate(
@@ -181,6 +168,9 @@ def main() -> None:
                 "task_id": row["task_id"],
                 "split": row["split"],
                 "prompt": prompt,
+                "messages": messages,
+                "prompt_metadata": view["prompt_metadata"],
+                "prompt_token_ids_sha256": view["prompt_token_ids_sha256"],
                 "original": row["candidate"],
                 "correction": correction,
                 "before_outcomes": row["outcomes"],
@@ -228,6 +218,10 @@ def main() -> None:
         "revision": revision,
         "adapter_sha256": adapter_hash,
         "domain": args.domain,
+        "prompt_policy": correction_prompt.POLICY,
+        "max_input_tokens": args.max_input_tokens,
+        "max_new_tokens": args.max_new_tokens,
+        "prompt_helper_sha256": sha(Path(correction_prompt.__file__)),
         "trajectories": len(generated),
         "split_counts": {
             split: sum(row["split"] == split for row in generated)

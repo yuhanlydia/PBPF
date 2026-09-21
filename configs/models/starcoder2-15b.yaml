@@ -1,0 +1,4 @@
+role: cross_family_replication
+model_id: bigcode/starcoder2-15b-instruct-v0.1
+revision: ffb8dd9776ba9a66d655ecd962e882f3013e9f7c
+license: bigcode-openrail-m

@@ -9,10 +9,13 @@ a separately declared query-free relevance rule.
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 from functools import lru_cache
 import hashlib
 import json
 from pathlib import Path
+import tempfile
+import traceback
 
 import numpy as np
 import yaml
@@ -44,6 +47,28 @@ def write_json(path: Path, value) -> None:
     with path.open("x") as stream:
         json.dump(value, stream, sort_keys=True, indent=2, allow_nan=False)
         stream.write("\n")
+
+
+@contextmanager
+def output_transaction(destination: Path):
+    """Publish a whole report directory; retain failed attempts for diagnosis."""
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    if destination.exists():
+        if (destination / "complete.json").exists():
+            raise FileExistsError(f"refusing to overwrite completed result: {destination}")
+        archive = Path(tempfile.mkdtemp(prefix=destination.name + ".incomplete-", dir=destination.parent))
+        destination.rename(archive / "previous-output")
+    staging = Path(tempfile.mkdtemp(prefix=destination.name + ".partial-", dir=destination.parent))
+    try:
+        yield staging
+        if destination.exists():
+            raise FileExistsError(f"another worker published result: {destination}")
+        staging.rename(destination)
+    except BaseException:
+        (staging / "failure.json").write_text(json.dumps({
+            "destination": str(destination), "traceback": traceback.format_exc(),
+        }, indent=2) + "\n")
+        raise
 
 
 def _outcome_index(value: str, *, binary: bool) -> int:
@@ -195,6 +220,7 @@ def main() -> None:
     parser.add_argument("--validation-split", default="development")
     parser.add_argument("--assessment-split", default="primary")
     parser.add_argument("--visible", type=int, default=4)
+    parser.add_argument("--seed", type=int, default=None, help="candidate bank seed (provenance)")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
 
@@ -212,272 +238,303 @@ def main() -> None:
     assessment_rows = _rows(payload, args.assessment_split)
     _validate_rows(validation_rows, args.visible)
     _validate_rows(assessment_rows, args.visible)
+    validation_sources = {r.get("source_component_id", r.get("problem_id")) for r in validation_rows}
+    assessment_sources = {r.get("source_component_id", r.get("problem_id")) for r in assessment_rows}
+    if validation_sources & assessment_sources:
+        raise ValueError("development/assessment source component overlap")
 
-    args.output.mkdir(parents=True, exist_ok=False)
-    alphas = [float(x) for x in evidence["alpha_grid"]]
-    strengths = [float(x) for x in evidence["strength_grid"]]
+    alphas = [float(x) for x in evidence["alphas"]]
+    strengths = [float(x) for x in evidence["strengths"]]
     global_masses = [float(x) for x in evidence["global_mass_grid"]]
     ece_bins = int(evidence["ece_bins"])
     bootstrap_seed = int(config["bootstrap_seed"])
-    bootstrap_reps = int(config["bootstrap_replicates"])
+    bootstrap_reps = int(evidence["bootstrap_draws"])
 
-    cached = {}
-    def example_cache(split_key, history_size, strength, binary):
-        key = split_key, int(history_size), float(strength), bool(binary)
-        if key not in cached:
-            rows = validation_rows if split_key == "validation" else assessment_rows
-            cached[key] = build_examples(rows, history_size, strength, binary=binary)
-        return cached[key]
+    with output_transaction(args.output) as output:
 
-    ordinary_sel, ordinary_grid = select_arm(
-        example_cache, "validation", args.visible, alphas, [0.0], "ordinary", ece_bins=ece_bins
-    )
-    fixed_sel, fixed_grid = select_arm(
-        example_cache, "validation", args.visible, alphas, strengths, "fixed", ece_bins=ece_bins
-    )
-    eed_sel, eed_grid = select_arm(
-        example_cache, "validation", args.visible, alphas, strengths, "effective", ece_bins=ece_bins
-    )
-    global_sel, global_grid = select_arm(
-        example_cache, "validation", args.visible, alphas, strengths, "global",
-        masses=global_masses, ece_bins=ece_bins
-    )
+        cached = {}
+        def example_cache(split_key, history_size, strength, binary):
+            key = split_key, int(history_size), float(strength), bool(binary)
+            if key not in cached:
+                rows = validation_rows if split_key == "validation" else assessment_rows
+                cached[key] = build_examples(rows, history_size, strength, binary=binary)
+            return cached[key]
 
-    ordinary = evaluate(
-        example_cache("assessment", args.visible, 0.0, False), ordinary_sel, "ordinary", ece_bins=ece_bins
-    )
-    fixed = evaluate(
-        example_cache("assessment", args.visible, fixed_sel["strength"], False),
-        fixed_sel, "fixed", ece_bins=ece_bins
-    )
-    eed = evaluate(
-        example_cache("assessment", args.visible, eed_sel["strength"], False),
-        eed_sel, "effective", ece_bins=ece_bins
-    )
-    global_arm = evaluate(
-        example_cache("assessment", args.visible, global_sel["strength"], False),
-        global_sel, "global", ece_bins=ece_bins
-    )
+        ordinary_sel, ordinary_grid = select_arm(
+            example_cache, "validation", args.visible, alphas, [0.0], "ordinary", ece_bins=ece_bins
+        )
+        fixed_sel, fixed_grid = select_arm(
+            example_cache, "validation", args.visible, alphas, strengths, "fixed", ece_bins=ece_bins
+        )
+        eed_sel, eed_grid = select_arm(
+            example_cache, "validation", args.visible, alphas, strengths, "effective", ece_bins=ece_bins
+        )
+        global_sel, global_grid = select_arm(
+            example_cache, "validation", args.visible, alphas, strengths, "global",
+            masses=global_masses, ece_bins=ece_bins
+        )
 
-    # Same-alpha/same-strength controls isolate mass while holding relevance fixed.
-    fixed_parameter_examples = example_cache("assessment", args.visible, fixed_sel["strength"], False)
-    eed_at_fixed = evaluate(fixed_parameter_examples, fixed_sel, "effective", ece_bins=ece_bins)
-    eed_parameter_examples = example_cache("assessment", args.visible, eed_sel["strength"], False)
-    fixed_at_eed = evaluate(eed_parameter_examples, eed_sel, "fixed", ece_bins=ece_bins)
+        ordinary = evaluate(
+            example_cache("assessment", args.visible, 0.0, False), ordinary_sel, "ordinary", ece_bins=ece_bins
+        )
+        fixed = evaluate(
+            example_cache("assessment", args.visible, fixed_sel["strength"], False),
+            fixed_sel, "fixed", ece_bins=ece_bins
+        )
+        eed = evaluate(
+            example_cache("assessment", args.visible, eed_sel["strength"], False),
+            eed_sel, "effective", ece_bins=ece_bins
+        )
+        global_arm = evaluate(
+            example_cache("assessment", args.visible, global_sel["strength"], False),
+            global_sel, "global", ece_bins=ece_bins
+        )
 
-    # Constant mean effective mass: same EED alpha/strength but no query adaptivity.
-    validation_eed_examples = example_cache("validation", args.visible, eed_sel["strength"], False)
-    mean_effective_mass = float(np.mean([x["mass"] for x in validation_eed_examples]))
-    constant_mean = evaluate(
-        eed_parameter_examples,
-        eed_sel,
-        "global",
-        ece_bins=ece_bins,
-        global_mass=mean_effective_mass,
-    )
+        # Same-alpha/same-strength controls isolate mass while holding relevance fixed.
+        fixed_parameter_examples = example_cache("assessment", args.visible, fixed_sel["strength"], False)
+        eed_at_fixed = evaluate(fixed_parameter_examples, fixed_sel, "effective", ece_bins=ece_bins)
+        eed_parameter_examples = example_cache("assessment", args.visible, eed_sel["strength"], False)
+        fixed_at_eed = evaluate(eed_parameter_examples, eed_sel, "fixed", ece_bins=ece_bins)
 
-    # Alignment control: keep the exact assessment mass multiset and permute it.
-    aligned_masses = np.asarray([x["mass"] for x in eed_parameter_examples], dtype=float)
-    permutation_metrics = []
-    for seed in evidence["permutation_seeds"]:
-        rng = np.random.default_rng(int(seed))
-        permuted = rng.permutation(aligned_masses)
-        arm = evaluate(
+        # Constant mean effective mass: same EED alpha/strength but no query adaptivity.
+        validation_eed_examples = example_cache("validation", args.visible, eed_sel["strength"], False)
+        development_mean_mass = float(np.mean([x["mass"] for x in validation_eed_examples]))
+        mean_effective_mass = float(np.mean([x["mass"] for x in eed_parameter_examples]))
+        constant_mean = evaluate(
             eed_parameter_examples,
             eed_sel,
             "global",
             ece_bins=ece_bins,
-            mass_overrides=permuted,
+            global_mass=mean_effective_mass,
         )
-        permutation_metrics.append({"seed": int(seed), **arm["metrics"]})
 
-    # Full same-parameter factorial; no assessment-based reselection.
-    factorial = []
-    for strength in strengths:
-        examples = example_cache("assessment", args.visible, strength, False)
-        labels, _ = labels_clusters(examples)
-        for alpha in alphas:
-            pf, _ = predictions(examples, alpha, "fixed")
-            pe, _ = predictions(examples, alpha, "effective")
-            mf = score_predictions(labels, pf, ece_bins=ece_bins)
-            me = score_predictions(labels, pe, ece_bins=ece_bins)
-            factorial.append(
+        development_mean = evaluate(
+            eed_parameter_examples, eed_sel, "global", ece_bins=ece_bins,
+            global_mass=development_mean_mass,
+        )
+
+        # Alignment control: keep the exact assessment mass multiset and permute it.
+        aligned_masses = np.asarray([x["mass"] for x in eed_parameter_examples], dtype=float)
+        permutation_metrics = []
+        for seed in evidence["permutation_seeds"]:
+            rng = np.random.default_rng(int(seed))
+            permuted = rng.permutation(aligned_masses)
+            arm = evaluate(
+                eed_parameter_examples,
+                eed_sel,
+                "global",
+                ece_bins=ece_bins,
+                mass_overrides=permuted,
+            )
+            permutation_metrics.append({"seed": int(seed), **arm["metrics"]})
+
+        # Full same-parameter factorial; no assessment-based reselection.
+        factorial = []
+        for strength in strengths:
+            examples = example_cache("assessment", args.visible, strength, False)
+            labels, clusters = labels_clusters(examples)
+            for alpha in alphas:
+                pf, _ = predictions(examples, alpha, "fixed")
+                pe, _ = predictions(examples, alpha, "effective")
+                mf = score_predictions(labels, pf, ece_bins=ece_bins)
+                me = score_predictions(labels, pe, ece_bins=ece_bins)
+                factorial.append(
+                    {
+                        "alpha": alpha,
+                        "strength": strength,
+                        "fixed_nll": mf["nll"],
+                        "effective_nll": me["nll"],
+                        "nll_gain": mf["nll"] - me["nll"],
+                        "fixed_brier": mf["brier"],
+                        "effective_brier": me["brier"],
+                        "accuracy_agreement": float(np.mean(pf.argmax(1) == pe.argmax(1))),
+                    }
+                )
+                if alpha in (0.10, 0.01):
+                    factorial[-1]["paired_bootstrap"] = source_cluster_bootstrap_gain(
+                        labels, pe, pf, clusters, seed=bootstrap_seed, replicates=bootstrap_reps,
+                    )
+
+        # History-size sweep: retune on validation for each declared history length.
+        history_sweep = []
+        min_tests = min(len(r["tests"]) for r in validation_rows + assessment_rows)
+        for history_size in evidence["visible_counts"]:
+            history_size = int(history_size)
+            if history_size >= min_tests:
+                history_sweep.append({
+                    "history_size": history_size, "status": "unavailable",
+                    "reason": "history size leaves no future outcome for at least one record",
+                    "minimum_tests": min_tests,
+                })
+                continue
+            fsel, _ = select_arm(
+                example_cache, "validation", history_size, alphas, strengths, "fixed", ece_bins=ece_bins
+            )
+            esel, _ = select_arm(
+                example_cache, "validation", history_size, alphas, strengths, "effective", ece_bins=ece_bins
+            )
+            fa = evaluate(
+                example_cache("assessment", history_size, fsel["strength"], False),
+                fsel, "fixed", ece_bins=ece_bins
+            )
+            ea = evaluate(
+                example_cache("assessment", history_size, esel["strength"], False),
+                esel, "effective", ece_bins=ece_bins
+            )
+            history_sweep.append(
                 {
-                    "alpha": alpha,
-                    "strength": strength,
-                    "fixed_nll": mf["nll"],
-                    "effective_nll": me["nll"],
-                    "nll_gain": mf["nll"] - me["nll"],
-                    "fixed_brier": mf["brier"],
-                    "effective_brier": me["brier"],
-                    "accuracy_agreement": float(np.mean(pf.argmax(1) == pe.argmax(1))),
+                    "history_size": history_size,
+                    "fixed_selected": fsel,
+                    "effective_selected": esel,
+                    "fixed_metrics": fa["metrics"],
+                    "effective_metrics": ea["metrics"],
                 }
             )
 
-    # History-size sweep: retune on validation for each declared history length.
-    history_sweep = []
-    min_tests = min(len(r["tests"]) for r in validation_rows + assessment_rows)
-    for history_size in evidence["history_sizes"]:
-        history_size = int(history_size)
-        if history_size >= min_tests:
-            continue
-        fsel, _ = select_arm(
-            example_cache, "validation", history_size, alphas, strengths, "fixed", ece_bins=ece_bins
-        )
-        esel, _ = select_arm(
-            example_cache, "validation", history_size, alphas, strengths, "effective", ece_bins=ece_bins
-        )
-        fa = evaluate(
-            example_cache("assessment", history_size, fsel["strength"], False),
-            fsel, "fixed", ece_bins=ece_bins
-        )
-        ea = evaluate(
-            example_cache("assessment", history_size, esel["strength"], False),
-            esel, "effective", ece_bins=ece_bins
-        )
-        history_sweep.append(
-            {
-                "history_size": history_size,
-                "fixed_selected": fsel,
-                "effective_selected": esel,
-                "fixed_metrics": fa["metrics"],
-                "effective_metrics": ea["metrics"],
-            }
-        )
+        # Binary outcome taxonomy sensitivity using the selected multiclass EED hyperparameters.
+        binary_examples = example_cache("assessment", args.visible, eed_sel["strength"], True)
+        binary_fixed = evaluate(binary_examples, eed_sel, "fixed", ece_bins=ece_bins)
+        binary_eed = evaluate(binary_examples, eed_sel, "effective", ece_bins=ece_bins)
 
-    # Binary outcome taxonomy sensitivity using the selected multiclass EED hyperparameters.
-    binary_examples = example_cache("assessment", args.visible, eed_sel["strength"], True)
-    binary_fixed = evaluate(binary_examples, eed_sel, "fixed", ece_bins=ece_bins)
-    binary_eed = evaluate(binary_examples, eed_sel, "effective", ece_bins=ece_bins)
+        # Concentration-bin mechanism analysis at identical alpha/strength.
+        same_fixed_probs = fixed_at_eed["probabilities"]
+        same_eed_probs = eed["probabilities"]
+        y = eed["labels"]
+        losses_fixed = -np.log(same_fixed_probs[np.arange(len(y)), y].clip(1e-12, 1.0))
+        losses_eed = -np.log(same_eed_probs[np.arange(len(y)), y].clip(1e-12, 1.0))
+        masses = eed["masses"]
+        if args.visible == 4:
+            edges = np.asarray(evidence["concentration_bins_for_n4"], dtype=float)
+        else:
+            edges = np.quantile(masses, np.linspace(0, 1, 5))
+            edges[0] -= 1e-9
+            edges[-1] += 1e-9
+        concentration_bins = []
+        for i in range(len(edges) - 1):
+            upper = masses <= edges[i + 1] if i == len(edges) - 2 else masses < edges[i + 1]
+            mask = (masses >= edges[i]) & upper
+            concentration_bins.append(
+                {
+                    "lo": float(edges[i]),
+                    "hi": float(edges[i + 1]),
+                    "count": int(mask.sum()),
+                    "mean_mass": float(masses[mask].mean()) if mask.any() else None,
+                    "fixed_nll": float(losses_fixed[mask].mean()) if mask.any() else None,
+                    "effective_nll": float(losses_eed[mask].mean()) if mask.any() else None,
+                    "nll_gain": float((losses_fixed[mask] - losses_eed[mask]).mean()) if mask.any() else None,
+                }
+            )
 
-    # Concentration-bin mechanism analysis at identical alpha/strength.
-    same_fixed_probs = fixed_at_eed["probabilities"]
-    same_eed_probs = eed["probabilities"]
-    y = eed["labels"]
-    losses_fixed = -np.log(same_fixed_probs[np.arange(len(y)), y].clip(1e-12, 1.0))
-    losses_eed = -np.log(same_eed_probs[np.arange(len(y)), y].clip(1e-12, 1.0))
-    masses = eed["masses"]
-    if args.visible == 4:
-        edges = np.asarray(evidence["concentration_bins_for_n4"], dtype=float)
-    else:
-        edges = np.quantile(masses, np.linspace(0, 1, 5))
-        edges[0] -= 1e-9
-        edges[-1] += 1e-9
-    concentration_bins = []
-    for i in range(len(edges) - 1):
-        mask = (masses >= edges[i]) & (masses < edges[i + 1])
-        concentration_bins.append(
-            {
-                "lo": float(edges[i]),
-                "hi": float(edges[i + 1]),
-                "count": int(mask.sum()),
-                "mean_mass": float(masses[mask].mean()) if mask.any() else None,
-                "fixed_nll": float(losses_fixed[mask].mean()) if mask.any() else None,
-                "effective_nll": float(losses_eed[mask].mean()) if mask.any() else None,
-                "nll_gain": float((losses_fixed[mask] - losses_eed[mask]).mean()) if mask.any() else None,
-            }
-        )
-
-    bootstraps = {
-        "tuned_effective_vs_tuned_fixed": source_cluster_bootstrap_gain(
-            eed["labels"], eed["probabilities"], fixed["probabilities"], eed["clusters"],
-            seed=bootstrap_seed, replicates=bootstrap_reps,
-        ),
-        "effective_vs_fixed_at_fixed_params": source_cluster_bootstrap_gain(
-            eed_at_fixed["labels"], eed_at_fixed["probabilities"], fixed["probabilities"],
-            eed_at_fixed["clusters"], seed=bootstrap_seed, replicates=bootstrap_reps,
-        ),
-        "effective_vs_fixed_at_effective_params": source_cluster_bootstrap_gain(
-            eed["labels"], eed["probabilities"], fixed_at_eed["probabilities"], eed["clusters"],
-            seed=bootstrap_seed, replicates=bootstrap_reps,
-        ),
-        "effective_vs_tuned_global_mass": source_cluster_bootstrap_gain(
-            eed["labels"], eed["probabilities"], global_arm["probabilities"], eed["clusters"],
-            seed=bootstrap_seed, replicates=bootstrap_reps,
-        ),
-    }
-
-    report = {
-        "schema": "eesd-evidence-matrix-v1",
-        "claim_status": (
-            "locked-primary-assessment" if args.assessment_split in {"primary", "test"}
-            else "exploratory-development-assessment"
-        ),
-        "dataset": args.dataset,
-        "model": args.model,
-        "cache_sha256": sha(args.cache),
-        "config_sha256": sha(args.config),
-        "validation_split": args.validation_split,
-        "assessment_split": args.assessment_split,
-        "visible": args.visible,
-        "counts": {
-            "validation_records": len(validation_rows),
-            "assessment_records": len(assessment_rows),
-            "assessment_examples": int(len(eed["labels"])),
-            "assessment_sources": int(len(np.unique(eed["clusters"]))),
-        },
-        "selected": {
-            "ordinary": ordinary_sel,
-            "fixed": fixed_sel,
-            "effective": eed_sel,
-            "global_mass": global_sel,
-            "constant_mean_effective_mass": mean_effective_mass,
-        },
-        "metrics": {
-            "ordinary": ordinary["metrics"],
-            "fixed": fixed["metrics"],
-            "effective": eed["metrics"],
-            "global_mass": global_arm["metrics"],
-            "effective_at_fixed_params": eed_at_fixed["metrics"],
-            "fixed_at_effective_params": fixed_at_eed["metrics"],
-            "constant_mean_mass": constant_mean["metrics"],
-            "permuted_mass": {
-                "runs": permutation_metrics,
-                "mean_nll": float(np.mean([x["nll"] for x in permutation_metrics])),
-                "std_nll": float(np.std([x["nll"] for x in permutation_metrics], ddof=1)),
-            },
-            "binary_fixed_at_effective_params": binary_fixed["metrics"],
-            "binary_effective": binary_eed["metrics"],
-        },
-        "argmax": {
-            "fixed_vs_effective_tuned_agreement": float(
-                np.mean(fixed["probabilities"].argmax(1) == eed["probabilities"].argmax(1))
-            ) if len(fixed["probabilities"]) == len(eed["probabilities"]) else None,
-            "same_effective_params_agreement": float(
-                np.mean(fixed_at_eed["probabilities"].argmax(1) == eed["probabilities"].argmax(1))
+        bootstraps = {
+            "tuned_effective_vs_tuned_fixed": source_cluster_bootstrap_gain(
+                eed["labels"], eed["probabilities"], fixed["probabilities"], eed["clusters"],
+                seed=bootstrap_seed, replicates=bootstrap_reps,
             ),
-        },
-        "bootstraps": bootstraps,
-        "factorial": factorial,
-        "history_sweep": history_sweep,
-        "concentration_bins": concentration_bins,
-        "selection_grids": {
-            "ordinary": ordinary_grid,
-            "fixed": fixed_grid,
-            "effective": eed_grid,
-            "global_mass": global_grid,
-        },
-    }
-    write_json(args.output / "report.json", report)
-    np.savez_compressed(
-        args.output / "predictions.npz",
-        labels=eed["labels"],
-        clusters=eed["clusters"],
-        ordinary=ordinary["probabilities"],
-        fixed=fixed["probabilities"],
-        effective=eed["probabilities"],
-        global_mass=global_arm["probabilities"],
-        fixed_at_effective_params=fixed_at_eed["probabilities"],
-        effective_at_fixed_params=eed_at_fixed["probabilities"],
-        effective_mass=eed["masses"],
-    )
-    write_json(
-        args.output / "complete.json",
-        {
-            "report_sha256": sha(args.output / "report.json"),
-            "predictions_sha256": sha(args.output / "predictions.npz"),
-        },
-    )
+            "effective_vs_fixed_at_fixed_params": source_cluster_bootstrap_gain(
+                eed_at_fixed["labels"], eed_at_fixed["probabilities"], fixed["probabilities"],
+                eed_at_fixed["clusters"], seed=bootstrap_seed, replicates=bootstrap_reps,
+            ),
+            "effective_vs_fixed_at_effective_params": source_cluster_bootstrap_gain(
+                eed["labels"], eed["probabilities"], fixed_at_eed["probabilities"], eed["clusters"],
+                seed=bootstrap_seed, replicates=bootstrap_reps,
+            ),
+            "effective_vs_tuned_global_mass": source_cluster_bootstrap_gain(
+                eed["labels"], eed["probabilities"], global_arm["probabilities"], eed["clusters"],
+                seed=bootstrap_seed, replicates=bootstrap_reps,
+            ),
+        }
+
+        report = {
+            "schema": "eesd-evidence-matrix-v1",
+            "claim_status": (
+                "locked-primary-assessment" if args.assessment_split in {"primary", "test"}
+                else "exploratory-development-assessment"
+            ),
+            "dataset": args.dataset,
+            "model": args.model,
+            "seed": args.seed,
+            "history_sweep_protocol": "post-generation history; future target set changes with history size",
+            "cache_sha256": sha(args.cache),
+            "config_sha256": sha(args.config),
+            "runner_source_sha256": sha(Path(__file__)),
+            "evidence_source_sha256": sha(Path(__file__).resolve().parents[1] / "src/pbpf/eesd/evidence.py"),
+            "validation_split": args.validation_split,
+            "assessment_split": args.assessment_split,
+            "visible": args.visible,
+            "counts": {
+                "validation_records": len(validation_rows),
+                "assessment_records": len(assessment_rows),
+                "assessment_examples": int(len(eed["labels"])),
+                "assessment_sources": int(len(np.unique(eed["clusters"]))),
+            },
+            "selected": {
+                "ordinary": ordinary_sel,
+                "fixed": fixed_sel,
+                "effective": eed_sel,
+                "global_mass": global_sel,
+                "constant_mean_effective_mass": mean_effective_mass,
+                "development_mean_effective_mass": development_mean_mass,
+            },
+            "metrics": {
+                "ordinary": ordinary["metrics"],
+                "fixed": fixed["metrics"],
+                "effective": eed["metrics"],
+                "global_mass": global_arm["metrics"],
+                "effective_at_fixed_params": eed_at_fixed["metrics"],
+                "fixed_at_effective_params": fixed_at_eed["metrics"],
+                "constant_mean_mass": constant_mean["metrics"],
+                "development_mean_mass": development_mean["metrics"],
+                "permuted_mass": {
+                    "runs": permutation_metrics,
+                    "mean_nll": float(np.mean([x["nll"] for x in permutation_metrics])),
+                    "std_nll": float(np.std([x["nll"] for x in permutation_metrics], ddof=1)),
+                },
+                "binary_fixed_at_effective_params": binary_fixed["metrics"],
+                "binary_effective": binary_eed["metrics"],
+            },
+            "argmax": {
+                "fixed_vs_effective_tuned_agreement": float(
+                    np.mean(fixed["probabilities"].argmax(1) == eed["probabilities"].argmax(1))
+                ) if len(fixed["probabilities"]) == len(eed["probabilities"]) else None,
+                "same_effective_params_agreement": float(
+                    np.mean(fixed_at_eed["probabilities"].argmax(1) == eed["probabilities"].argmax(1))
+                ),
+            },
+            "bootstraps": bootstraps,
+            "factorial": factorial,
+            "same_alpha": {
+                f"{alpha:.2f}": [row for row in factorial if row["alpha"] == alpha]
+                for alpha in (0.10, 0.01)
+            },
+            "history_sweep": history_sweep,
+            "concentration_bins": concentration_bins,
+            "selection_grids": {
+                "ordinary": ordinary_grid,
+                "fixed": fixed_grid,
+                "effective": eed_grid,
+                "global_mass": global_grid,
+            },
+        }
+        write_json(output / "report.json", report)
+        np.savez_compressed(
+            output / "predictions.npz",
+            labels=eed["labels"],
+            clusters=eed["clusters"],
+            ordinary=ordinary["probabilities"],
+            fixed=fixed["probabilities"],
+            effective=eed["probabilities"],
+            global_mass=global_arm["probabilities"],
+            fixed_at_effective_params=fixed_at_eed["probabilities"],
+            effective_at_fixed_params=eed_at_fixed["probabilities"],
+            effective_mass=eed["masses"],
+        )
+        write_json(
+            output / "complete.json",
+            {
+                "report_sha256": sha(output / "report.json"),
+                "predictions_sha256": sha(output / "predictions.npz"),
+            },
+        )
     print(json.dumps({"status": "complete", "report": report["metrics"]}, sort_keys=True), flush=True)
 
 

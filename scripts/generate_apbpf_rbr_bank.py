@@ -7,10 +7,11 @@ import os
 from pathlib import Path
 import time
 
-from pbpf.apbpf.rbr_prompt import prompt_for, extract_program
+from pbpf.apbpf.rbr_prompt import prompt_for, extract_program, generation_stop_kwargs, decode_completion
 from pbpf.apbpf.codearc_bank import load_bank
 
 MODELS = {
+    'starcoder2_15b': ('bigcode/starcoder2-15b-instruct-v0.1', 'ffb8dd9776ba9a66d655ecd962e882f3013e9f7c'),
     'qwen': ('Qwen/Qwen2.5-Coder-7B-Instruct', 'c03e6d358207e414f1eca0bb1891e29f1db0e242'),
     'deepseek': ('deepseek-ai/deepseek-coder-6.7b-instruct', 'e5d64addd26a6a1db0f9b863abf6ee3141936807'),
     'qwen25_1p5b': ('Qwen/Qwen2.5-Coder-1.5B-Instruct', '2e1fd397ee46e1388853d2af2c993145b0f1098a'),
@@ -122,7 +123,7 @@ def main():
             continue
         template_kwargs = {'enable_thinking': False} if args.family in {'qwen3_8b', 'qwen3_coder_30b'} else None
         prompt, metadata = prompt_for(tokenizer, row, max_input_tokens=args.max_input_tokens,
-                                      chat_template_kwargs=template_kwargs)
+                                      chat_template_kwargs=template_kwargs, family=args.family)
         task_seed = int.from_bytes(hashlib.sha256(f'{args.seed}:{row["task_id"]}'.encode()).digest()[:4], 'big')
         torch.manual_seed(task_seed)
         inputs = tokenizer(prompt, add_special_tokens=False, return_tensors='pt').to(model.device)
@@ -134,16 +135,16 @@ def main():
             max_new_tokens=args.max_new_tokens,
             pad_token_id=tokenizer.pad_token_id,
         )
+        generation_kwargs.update(generation_stop_kwargs(tokenizer, args.family))
         if not args.greedy:
             generation_kwargs.update(temperature=.8, top_p=.95)
         with torch.inference_mode():
             generated = model.generate(**inputs, **generation_kwargs)
         candidates = []
         for j, tokens in enumerate(generated[:, inputs.input_ids.shape[1]:]):
-            text = tokenizer.decode(tokens, skip_special_tokens=True); ids = tokens.cpu().tolist()
-            count = ids.index(tokenizer.eos_token_id)+1 if tokenizer.eos_token_id in ids else len(ids)
+            text, count, hit_cap = decode_completion(tokenizer, tokens.cpu().tolist(), args.family)
             candidates.append({'candidate_id': f'{row["task_id"]}/{args.family}/{j}', 'code': extract_program(text),
-                               'raw_completion': text, 'generated_tokens': count, 'hit_token_cap': tokenizer.eos_token_id not in ids})
+                               'raw_completion': text, 'generated_tokens': count, 'hit_token_cap': hit_cap})
         value = {k: row[k] for k in ('task_id', 'source_component_id', 'split')}
         value.update(seed=task_seed, prompt_sha256=hashlib.sha256(prompt.encode()).hexdigest(), candidates=candidates,
                      prompt_metadata=metadata)

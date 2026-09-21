@@ -1,4 +1,5 @@
 from pathlib import Path
+import shlex
 
 import yaml
 import pytest
@@ -63,7 +64,10 @@ def test_experiment_configs_are_no_claim_plans_with_fixed_equal_budget_protocol(
         if raw.get("schema") == "eesd-cache-manifest-v1":
             cells = raw["mechanism_cells"]
             assert {cell["dataset"] for cell in cells} == {"runbugrun", "codearc"}
-            assert len({(cell["dataset"], cell["model"]) for cell in cells}) == 12
+            required_models = {"qwen25_7b", "deepseek_6p7b", "seed_coder_8b", "starcoder2_15b"}
+            expected_cells = {(dataset, model) for dataset in ("runbugrun", "codearc") for model in required_models}
+            assert {(cell["dataset"], cell["model"]) for cell in cells} == expected_cells
+            assert len(cells) == len(expected_cells)
             assert all(cell["public_root"] != cell["evaluator_root"] for cell in cells)
             continue
         if raw.get("schema") == "apbpf-iclr-v1":
@@ -119,11 +123,18 @@ def test_required_documentation_and_ci_files_exist():
     assert all(path.is_file() and path.stat().st_size > 200 for path in required)
 
 
-def test_cpu_ci_keeps_neural_tests_optional():
-    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
-    assert "-e '.[test]'" in workflow
-    prediction_tests = (ROOT / "tests/arms/test_prediction_arms.py").read_text()
-    assert 'pytest.importorskip("torch")' in prediction_tests
+def test_cpu_ci_installs_dependencies_required_for_test_collection():
+    workflow = load_yaml(ROOT / ".github/workflows/ci.yml")
+    extras = set()
+    for step in workflow["jobs"]["cpu"]["steps"]:
+        command = shlex.split(step.get("run", ""))
+        if "pip" not in command or "install" not in command:
+            continue
+        for argument in command:
+            if argument.startswith(".[") and argument.endswith("]"):
+                extras.update(argument[2:-1].split(","))
+    # APBPF tests import torch during collection even on the CPU CI job.
+    assert {"test", "neural"} <= extras
 
 
 def test_real_evalplus_launchers_use_executable_dataset_matched_configs():

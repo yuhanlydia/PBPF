@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""Generate and optionally evaluate HumanEval+/MBPP+ with a base or EESD adapter.
+"""Generate EvalPlus samples using only explicitly locked public prompt material.
 
-Generation writes the official EvalPlus custom sample schema (task_id, solution).
-With --evaluate, the script delegates code post-processing and execution to the
-installed EvalPlus CLI, then summarizes one-sample pass@1 from its result JSON.
+Writes official task_id/solution samples. Candidate execution is disabled here;
+official evaluation requires a separate isolated interface.
 """
 from __future__ import annotations
 
@@ -11,11 +10,11 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
-import shutil
-import subprocess
 import time
 
 import yaml
+
+from pbpf.eesd.evalplus_public import load_public_dataset
 
 
 def sha(path: Path) -> str:
@@ -36,11 +35,13 @@ def tree_sha(directory: Path) -> str:
     return digest.hexdigest()
 
 
-def summarize_evalplus(path: Path) -> dict:
+def summarize_evalplus(path: Path, *, expected_task_ids) -> dict:
     result = json.loads(path.read_text())
     rows = result.get("eval")
     if not isinstance(rows, dict) or not rows:
         raise ValueError("EvalPlus result JSON has no eval rows")
+    if set(rows) != set(expected_task_ids) or len(rows) != len(expected_task_ids):
+        raise ValueError("EvalPlus result task coverage differs from locked public inventory")
     base, plus, total = 0, 0, 0
     for task_id, samples in rows.items():
         if not isinstance(samples, list) or len(samples) != 1:
@@ -63,6 +64,8 @@ def summarize_evalplus(path: Path) -> dict:
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--dataset", choices=["humaneval", "mbpp"], required=True)
+    p.add_argument("--public-data-root", type=Path, required=True)
+    p.add_argument("--public-manifest-sha256", required=True)
     p.add_argument("--model-config", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--adapter", type=Path)
@@ -72,13 +75,12 @@ def main() -> None:
     if args.max_new_tokens < 1:
         raise ValueError("positive generation budget required")
 
-    from evalplus.data import get_human_eval_plus, get_mbpp_plus
-    if args.dataset == "humaneval":
-        problems = get_human_eval_plus()
-    else:
-        problems = get_mbpp_plus()
-    if not problems:
-        raise ValueError("EvalPlus dataset is empty")
+    if args.evaluate:
+        p.error("official evaluation requires a separate isolated EvalPlus CLI interface; "
+                "unisolated execution is disabled")
+    public_rows, data_binding = load_public_dataset(
+        args.public_data_root, args.dataset, args.public_manifest_sha256)
+    problems = {row['task_id']: row for row in public_rows}
 
     cfg = yaml.safe_load(args.model_config.read_text())
     model_id, revision = cfg.get("model_id"), cfg.get("revision")
@@ -160,37 +162,14 @@ def main() -> None:
         "generation_tokens": sum(x["tokens"] for x in generated),
         "generation_seconds": sum(x["seconds"] for x in generated),
         "decode": "greedy",
+        "max_new_tokens": args.max_new_tokens,
         "evalplus_summary": None,
+        "data_lock": data_binding,
+        "evaluation_status": "pending-isolated-official-evaluation",
+        "claim_status": "generation-only-no-efficacy-claim",
+        "generator_source_sha256": sha(Path(__file__)),
+        "model_config_sha256": sha(args.model_config),
     }
-
-    if args.evaluate:
-        sanitize = shutil.which("evalplus.sanitize")
-        evaluate = shutil.which("evalplus.evaluate")
-        if not sanitize or not evaluate:
-            raise RuntimeError("EvalPlus console scripts are not installed")
-        subprocess.check_call(
-            [sanitize, "--samples", str(samples_path), "--dataset", args.dataset]
-        )
-        sanitized = samples_path.with_name(samples_path.stem + "-sanitized.jsonl")
-        if not sanitized.exists():
-            raise FileNotFoundError(f"EvalPlus sanitizer did not create {sanitized}")
-        subprocess.check_call(
-            [
-                evaluate,
-                "--dataset", args.dataset,
-                "--samples", str(sanitized),
-                "--i-just-wanna-run",
-            ]
-        )
-        result_path = sanitized.with_name(sanitized.name.replace(".jsonl", ".eval_results.json"))
-        if not result_path.exists():
-            legacy = sanitized.with_name(sanitized.name.replace(".jsonl", "_eval_results.json"))
-            result_path = legacy if legacy.exists() else result_path
-        if not result_path.exists():
-            raise FileNotFoundError("EvalPlus result JSON not found")
-        report["sanitized_samples_sha256"] = sha(sanitized)
-        report["evalplus_result_sha256"] = sha(result_path)
-        report["evalplus_summary"] = summarize_evalplus(result_path)
 
     (args.output / "report.json").write_text(
         json.dumps(report, sort_keys=True, indent=2) + "\n"

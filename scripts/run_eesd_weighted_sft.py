@@ -31,26 +31,78 @@ def sha(path: Path) -> str:
 
 
 def load_rows(path: Path, rule: str):
-    rows = []
-    with path.open() as stream:
-        for line in stream:
-            if not line.strip():
-                continue
-            row = json.loads(line)
-            if row.get("split") not in {"train", "development"}:
-                raise ValueError("scored correction split must be train or development")
-            weights = row.get("training_weights", {})
-            if rule not in weights:
-                raise ValueError(f"training rule {rule} absent from scored correction")
-            weight = float(weights[rule])
-            if not math.isfinite(weight) or not 0 <= weight <= 1:
-                raise ValueError("trajectory weight must lie in [0,1]")
-            rows.append({**row, "_weight": weight})
-    if not rows:
-        raise ValueError("no scored correction rows")
-    if not any(row["_weight"] > 0 for row in rows):
-        raise ValueError("selected rule has no positive-weight trajectories")
-    return rows
+    from pbpf.eesd.training_outcomes import read_training_rows
+    return read_training_rows(path, rule)[0]
+
+
+def training_schedule(lengths, *, seed, max_steps, gradient_accumulation,
+                      response_token_budget=None):
+    """Yield (row index, usable response tokens), cutting only the final response."""
+    if not lengths or any(n < 1 for n in lengths):
+        raise ValueError("positive response lengths are required")
+    if max_steps < 1 or gradient_accumulation < 1:
+        raise ValueError("positive step and accumulation limits required")
+    if response_token_budget is not None and response_token_budget < 1:
+        raise ValueError("response token budget must be positive")
+    rng = random.Random(seed)
+    order = list(range(len(lengths)))
+    cursor = len(order)
+    consumed = 0
+    micro_steps = 0
+    while (consumed < response_token_budget if response_token_budget is not None
+           else micro_steps < max_steps * gradient_accumulation):
+        if cursor == len(order):
+            rng.shuffle(order)
+            cursor = 0
+        index = order[cursor]
+        cursor += 1
+        count = lengths[index]
+        if response_token_budget is not None:
+            count = min(count, response_token_budget - consumed)
+        yield index, count
+        consumed += count
+        micro_steps += 1
+
+
+def normalize_gradients(parameters, *, denominator):
+    if denominator <= 0:
+        raise ValueError("gradient denominator must be positive")
+    for parameter in parameters:
+        if parameter.grad is not None:
+            parameter.grad.div_(denominator)
+
+
+def encode_training_row(tokenizer, row, *, max_length, model_id):
+    prompt, correction = row["prompt"], row["correction"]
+    if not isinstance(prompt, str) or not isinstance(correction, str) or not correction.strip():
+        raise ValueError("prompt/correction must be nonempty strings")
+    kwargs = {"enable_thinking": False} if "Qwen3" in model_id else {}
+    messages = row.get("messages", [{"role": "user", "content": prompt}])
+    if (not isinstance(messages, list) or not messages
+            or any(not isinstance(m, dict) or m.get("role") not in {"system", "user"}
+                   or not isinstance(m.get("content"), str) for m in messages)
+            or messages[-1] != {"role": "user", "content": prompt}):
+        raise ValueError("generation messages do not match the saved user prompt")
+    prefix = tokenizer.apply_chat_template(messages, tokenize=False,
+        add_generation_prompt=True, **kwargs)
+    prompt_ids = tokenizer(prefix, add_special_tokens=False)["input_ids"]
+    if "messages" in row:
+        token_sha = hashlib.sha256(json.dumps(prompt_ids, separators=(",", ":")).encode()).hexdigest()
+        if (row.get("prompt_token_ids_sha256") != token_sha
+                or row.get("prompt_metadata", {}).get("input_tokens") != len(prompt_ids)):
+            raise ValueError("generation/training prompt token identity mismatch")
+    if not prompt_ids:
+        raise ValueError("empty prompt token sequence")
+    completion_ids = tokenizer(correction + (tokenizer.eos_token or ""),
+                               add_special_tokens=False)["input_ids"]
+    room = max_length - len(prompt_ids)
+    if room <= 0:
+        raise ValueError("prompt exceeds max_length before response")
+    if not completion_ids:
+        raise ValueError("correction has no trainable tokens")
+    return {"prompt_ids": prompt_ids, "completion_ids": completion_ids[:room],
+            "response_tokens_before_truncation": len(completion_ids),
+            "response_truncated": len(completion_ids) > room}
 
 
 def main() -> None:
@@ -61,9 +113,12 @@ def main() -> None:
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--previous-adapter", type=Path)
     p.add_argument("--seed", type=int, default=1701)
-    p.add_argument("--max-steps", type=int, default=200)
+    p.add_argument("--max-steps", type=int, default=200,
+                   help="Legacy stopping budget; used only without --response-token-budget")
+    p.add_argument("--response-token-budget", type=int,
+                   help="Exact response loss-token budget; overrides max-steps stopping")
     p.add_argument("--gradient-accumulation", type=int, default=16)
-    p.add_argument("--max-length", type=int, default=1536)
+    p.add_argument("--max-length", type=int, default=4608)
     p.add_argument("--learning-rate", type=float, default=2e-4)
     p.add_argument("--anchor-beta", type=float, default=0.03)
     p.add_argument("--lora-r", type=int, default=16)
@@ -75,6 +130,7 @@ def main() -> None:
         raise ValueError("train one of the seven update rules; no_update evaluates the previous policy directly")
     if (
         args.max_steps < 1
+        or (args.response_token_budget is not None and args.response_token_budget < 1)
         or args.gradient_accumulation < 1
         or args.max_length < 64
         or args.learning_rate <= 0
@@ -89,9 +145,22 @@ def main() -> None:
     if not isinstance(model_id, str) or not isinstance(revision, str) or len(revision) != 40:
         raise ValueError("model config requires pinned model_id and 40-character revision")
 
-    rows = load_rows(args.input, args.rule)
-    args.output.mkdir(parents=True, exist_ok=False)
+    from pbpf.eesd.training_outcomes import read_training_rows, zero_report, NON_ESTIMABLE, protocol_binding
+    rows, eligibility = read_training_rows(args.input, args.rule)
     anchor_beta = args.anchor_beta if args.rule in ANCHORED_RULES else 0.0
+    protocol = protocol_binding(Path(__file__).resolve().parents[1])
+    if eligibility['status'] == NON_ESTIMABLE:
+        report = zero_report(root=Path(__file__).resolve().parents[1], input_path=args.input,
+            model_config=args.model_config, trainer=Path(__file__), rule=args.rule, seed=args.seed,
+            budget=args.response_token_budget, previous_adapter=args.previous_adapter,
+            anchor_beta=anchor_beta, eligibility=eligibility)
+        args.output.mkdir(parents=True, exist_ok=False)
+        with (args.output / 'training-outcome.json').open('x') as stream:
+            json.dump(report, stream, sort_keys=True, indent=2, allow_nan=False)
+            stream.write('\n')
+        print(json.dumps(report, sort_keys=True), flush=True)
+        return
+    args.output.mkdir(parents=True, exist_ok=False)
 
     import torch
     import torch.nn.functional as F
@@ -110,6 +179,24 @@ def main() -> None:
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "right"
+    # Audit all arms' common train/dev population before allocating model weights.
+    encoded_rows = [encode_training_row(tokenizer, row, max_length=args.max_length,
+                                       model_id=model_id) for row in rows]
+    positive_indices = [i for i, row in enumerate(rows)
+                        if row["split"] == "train" and row["_weight"] > 0]
+    positive = [rows[i] for i in positive_indices]
+    positive_encoded = [encoded_rows[i] for i in positive_indices]
+    development = [row for row in rows if row["split"] == "development"]
+    if not positive:
+        raise ValueError("no positive-weight training rows")
+    if not development:
+        raise ValueError("development correction rows are required but never used for gradients")
+    token_audit = {"rows": len(rows),
+                   "max_prompt_tokens": max(len(r["prompt_ids"]) for r in encoded_rows),
+                   "response_truncated_rows": sum(r["response_truncated"] for r in encoded_rows),
+                   "max_length": args.max_length,
+                   "sealed_generation_message_rows": sum("messages" in row for row in rows)}
+    (args.output / "tokenization-audit.json").write_text(json.dumps(token_audit, indent=2) + "\n")
 
     def load_base():
         return AutoModelForCausalLM.from_pretrained(
@@ -157,65 +244,32 @@ def main() -> None:
     trainable = [parameter for parameter in student.parameters() if parameter.requires_grad]
     optimizer = torch.optim.AdamW(trainable, lr=args.learning_rate, weight_decay=0.0)
 
-    def tokenize(row):
-        prompt = row["prompt"]
-        correction = row["correction"]
-        if not isinstance(prompt, str) or not isinstance(correction, str) or not correction.strip():
-            raise ValueError("prompt/correction must be nonempty strings")
-        kwargs = {"enable_thinking": False} if "Qwen3" in model_id else {}
-        prefix = tokenizer.apply_chat_template(
-            [{"role": "user", "content": prompt}],
-            tokenize=False,
-            add_generation_prompt=True,
-            **kwargs,
-        )
-        prompt_ids = tokenizer(prefix, add_special_tokens=False)["input_ids"]
-        completion_ids = tokenizer(
-            correction + (tokenizer.eos_token or ""),
-            add_special_tokens=False,
-        )["input_ids"]
-        room = args.max_length - len(prompt_ids)
-        if room <= 0:
-            raise ValueError("prompt exceeds max_length before response")
-        completion_ids = completion_ids[:room]
-        if not completion_ids:
-            raise ValueError("correction has no trainable tokens after truncation")
-        ids = prompt_ids + completion_ids
-        labels = [-100] * len(prompt_ids) + completion_ids
-        return (
-            torch.tensor([ids], dtype=torch.long, device=student.device),
-            torch.tensor([labels], dtype=torch.long, device=student.device),
-        )
-
-    positive = [row for row in rows if row["split"] == "train" and row["_weight"] > 0]
-    development = [row for row in rows if row["split"] == "development"]
-    if not positive:
-        raise ValueError("no positive-weight training rows")
-    if not development:
-        raise ValueError("development correction rows are required but never used for gradients")
-    rng = random.Random(args.seed)
-    order = list(range(len(positive)))
-    rng.shuffle(order)
-    cursor = 0
     optimizer.zero_grad(set_to_none=True)
     optimizer_steps = 0
     micro_steps = 0
+    response_tokens = 0
+    group_tokens = 0
+    group_examples = 0
     totals = {"loss": 0.0, "ce": 0.0, "kl": 0.0, "weight": 0.0}
-
-    while optimizer_steps < args.max_steps:
-        if cursor >= len(order):
-            rng.shuffle(order)
-            cursor = 0
-        row = positive[order[cursor]]
-        cursor += 1
-        input_ids, labels = tokenize(row)
+    token_totals = {"loss": 0.0, "ce": 0.0, "kl": 0.0, "weight": 0.0}
+    schedule = training_schedule([len(r["completion_ids"]) for r in positive_encoded],
+        seed=args.seed, max_steps=args.max_steps,
+        gradient_accumulation=args.gradient_accumulation,
+        response_token_budget=args.response_token_budget)
+    for index, token_count in schedule:
+        row = positive[index]
+        encoded = positive_encoded[index]
+        prompt_ids = encoded["prompt_ids"]
+        completion_ids = encoded["completion_ids"][:token_count]
+        input_ids = torch.tensor([prompt_ids + completion_ids], dtype=torch.long, device=student.device)
+        labels = torch.tensor([[-100] * len(prompt_ids) + completion_ids], dtype=torch.long, device=student.device)
         attention_mask = torch.ones_like(input_ids)
         output = student(input_ids=input_ids, attention_mask=attention_mask, use_cache=False)
         shift_logits = output.logits[:, :-1, :]
         shift_labels = labels[:, 1:]
         mask = shift_labels.ne(-100)
-        if not mask.any():
-            raise ValueError("trajectory produced no response-token loss")
+        if int(mask.sum().item()) != token_count:
+            raise ValueError("response loss mask does not match scheduled token budget")
         ce_tokens = F.cross_entropy(
             shift_logits.reshape(-1, shift_logits.shape[-1]).float(),
             shift_labels.reshape(-1),
@@ -242,24 +296,40 @@ def main() -> None:
 
         weight = float(row["_weight"])
         loss = weight * ce + anchor_beta * kl
-        (loss / args.gradient_accumulation).backward()
+        # In exact-budget mode each response token contributes equally before
+        # trajectory weighting. Normalize by the actual group count at the step,
+        # including a partially filled final accumulation group.
+        (loss * (token_count if args.response_token_budget is not None else 1)).backward()
+        response_tokens += token_count
+        group_tokens += token_count
+        group_examples += 1
         micro_steps += 1
         totals["loss"] += float(loss.detach())
         totals["ce"] += float(ce.detach())
         totals["kl"] += float(kl.detach())
         totals["weight"] += weight
+        for name, value in (("loss", loss), ("ce", ce), ("kl", kl)):
+            token_totals[name] += float(value.detach()) * token_count
+        token_totals["weight"] += weight * token_count
 
-        if micro_steps % args.gradient_accumulation == 0:
+        final_budget = (response_tokens == args.response_token_budget
+                        if args.response_token_budget is not None
+                        else micro_steps == args.max_steps * args.gradient_accumulation)
+        if group_examples == args.gradient_accumulation or final_budget:
+            normalize_gradients(trainable, denominator=(group_tokens
+                if args.response_token_budget is not None else group_examples))
             torch.nn.utils.clip_grad_norm_(trainable, 1.0)
             optimizer.step()
             optimizer.zero_grad(set_to_none=True)
             optimizer_steps += 1
-            if optimizer_steps % 10 == 0 or optimizer_steps == args.max_steps:
+            group_tokens = group_examples = 0
+            if optimizer_steps % 10 == 0 or final_budget:
                 print(
                     json.dumps(
                         {
                             "optimizer_step": optimizer_steps,
                             "micro_steps": micro_steps,
+                            "response_tokens": response_tokens,
                             "mean_loss": totals["loss"] / micro_steps,
                             "mean_ce": totals["ce"] / micro_steps,
                             "mean_kl": totals["kl"] / micro_steps,
@@ -270,10 +340,13 @@ def main() -> None:
                     flush=True,
                 )
 
+    if args.response_token_budget is not None and response_tokens != args.response_token_budget:
+        raise RuntimeError("response token budget mismatch")
     adapter_dir = args.output / "adapter"
     student.save_pretrained(adapter_dir)
     report = {
         "schema": "eesd-weighted-sft-v1",
+        **protocol,
         "rule": args.rule,
         "model_id": model_id,
         "revision": revision,
@@ -286,12 +359,25 @@ def main() -> None:
         "all_trajectories": len(rows),
         "sources": len({row["source_component_id"] for row in positive}),
         "max_steps": args.max_steps,
+        "response_token_budget": args.response_token_budget,
+        "response_tokens": response_tokens,
+        "optimizer_steps": optimizer_steps,
+        "micro_steps": micro_steps,
+        "loss_normalization": "response_tokens" if args.response_token_budget is not None else "trajectories",
+        "budget_policy": "exact response tokens; final response prefix cut" if args.response_token_budget is not None else "legacy optimizer steps",
+        "tokenization_audit": token_audit,
+        "trainer_source_sha256": sha(Path(__file__)),
         "gradient_accumulation": args.gradient_accumulation,
         "max_length": args.max_length,
         "learning_rate": args.learning_rate,
         "anchor_beta": anchor_beta,
         "lora_r": args.lora_r,
         "lora_alpha": args.lora_alpha,
+        "token_mean_loss": token_totals["loss"] / response_tokens,
+        "token_mean_ce": token_totals["ce"] / response_tokens,
+        "token_mean_kl": token_totals["kl"] / response_tokens,
+        "token_mean_training_weight": token_totals["weight"] / response_tokens,
+        "legacy_mean_fields_unit": "microbatch / trajectory",
         "mean_loss": totals["loss"] / micro_steps,
         "mean_ce": totals["ce"] / micro_steps,
         "mean_kl": totals["kl"] / micro_steps,
