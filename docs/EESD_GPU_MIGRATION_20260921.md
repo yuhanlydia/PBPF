@@ -1,4 +1,4 @@
-> Final storage destination: https://huggingface.co/datasets/humanlong/PBPF
+> Large-file storage destination: https://huggingface.co/datasets/humanlong/PBPF
 > This supersedes references below to the uncreated GitHub Release.
 > Restore using the HF repository RESTORE.md and bundled exact source commit.
 
@@ -156,30 +156,19 @@ Do not remove it on that host as part of upload. On the replacement host preserv
 its snapshot as history, then establish a fresh owner after confirming there are
 no local workers; copying the old pause file unchanged can stall a new queue.
 
-## Published handoff details
+## Final delivery and restoration
 
-The release description and STOP_RECEIPT.json record the verified source commit,
-asset checksums, final cutoff and original-host shutdown requested by the user.
-No migration is claimed complete by this document alone.
+- Small files/source/plans/eval outputs: GitHub branch `research/eesd-iclr2027`.
+- Complete backup and browsable source mirror: https://huggingface.co/datasets/humanlong/PBPF
+- No GitHub Release is used. Earlier provisional Release references are superseded.
+- All experiment processes have stopped. STOP_RECEIPT.json records the identities.
+- On Hugging Face, follow RESTORE.md: verify SHA256SUMS, join the numbered base
+  chunks, restore, replace mutable run trees with the final overlay, then verify
+  FINAL_ARTIFACT_FILES.jsonl. The source Git bundle is also split into chunks.
+- GitHub login expired after commit 8628ea1; later small-file sync requires renewed
+  authentication. The source bundle and browsable HF mirror include the latest notes.
+- Base weights/package caches/credentials are excluded; no trained SFT adapter exists.
 
-## Published checkpoint location
-
-- Branch: `research/eesd-iclr2027`
-- Release/tag: `eesd-checkpoint-20260921`
-- Release URL: https://github.com/yuhanlydia/PBPF/releases/tag/eesd-checkpoint-20260921
-- Snapshot assets: `eesd-runs-20260921.tar.gz.part-000`, subsequent numbered parts,
-  `ARTIFACT_FILES.jsonl`, `SHA256SUMS`, `RESTORE.md`, and `verify_artifacts.py`.
-- The release description records the exact source commit and verification outcome.
-- Restore command after verifying `SHA256SUMS`:
-
-```bash
-cat "$EESD_STAGE"/eesd-runs-20260921.tar.gz.part-* | tar -xzf - -C /root/PBPF
-# Apply the final run-state overlay following RESTORE.md before file verification.
-```
-
-The snapshot briefly stopped eight related processes for 4.31 seconds while
-copying mutable run trees, then resumed every surviving process. Dataset files
-were immutable and archived directly. The snapshot is a point-in-time backup;
-the release additionally includes a final stopped-state overlay. Follow RESTORE.md
-to apply that overlay before validating FINAL_ARTIFACT_FILES.jsonl. The final stop
-receipt distinguishes interrupted jobs from completed experiments.
+Twelve existing direct eval cells are complete and checksum-verified. The full
+four-model/four-domain experiment remains incomplete. Stopping and backing up does
+not turn partial generation into a completed experiment.

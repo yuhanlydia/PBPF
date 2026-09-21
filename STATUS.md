@@ -78,3 +78,9 @@ GitHub already has source/eval commit 8628ea1. The latest migration notes and fu
 source history are also preserved in the HF backup as PBPF-source.bundle because
 GitHub CLI authentication expired after that successful push. No experiment jobs
 were resumed.
+
+## Final storage split requested by user
+
+Large artifacts go to Hugging Face `humanlong/PBPF`. Small files, code, docs,
+plans and eval outputs also sync to GitHub. The HF mirror contains all source
+and full Git history. Experiments stay stopped until a future explicit resume.
