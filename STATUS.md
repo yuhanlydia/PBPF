@@ -63,3 +63,24 @@ verified complete (all sealed file SHA-256 values match); their artifacts are
 checked in under `artifacts/eesd-eval-20260921`. Experiment controllers/workers
 were stopped and GPU compute-process inventory is empty. Full 4×4 experiment
 and SFT remain incomplete. No full-data Release was published.
+
+## Final user decision: full backup re-authorized
+
+User requested the large files after all. Publish the complete base archive plus
+final stopped-state overlay at Release `eesd-checkpoint-20260921`. The earlier
+cancellation is superseded. Experiments remain stopped; do not resume generation
+or training during upload. Final receipt/checksums in that Release are authoritative.
+
+## Final backup destination: Hugging Face
+
+User selected `https://huggingface.co/datasets/humanlong/PBPF` for complete backup.
+GitHub already has source/eval commit 8628ea1. The latest migration notes and full
+source history are also preserved in the HF backup as PBPF-source.bundle because
+GitHub CLI authentication expired after that successful push. No experiment jobs
+were resumed.
+
+## Final storage split requested by user
+
+Large artifacts go to Hugging Face `humanlong/PBPF`. Small files, code, docs,
+plans and eval outputs also sync to GitHub. The HF mirror contains all source
+and full Git history. Experiments stay stopped until a future explicit resume.
