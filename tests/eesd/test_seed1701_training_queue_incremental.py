@@ -63,3 +63,14 @@ def test_oom_attempt_is_archived_for_bounded_retry(tmp_path):
             'tokenization-audit.json').exists()
     assert entry['failed_attempt_output'].endswith('seed1701-oom-attempt1')
     assert not module['archive_oom_attempt'](entry)
+
+
+def test_fresh_oom_retry_gets_distinct_log_path():
+    module = runpy.run_path(str(QUEUE))
+    log_path = module['training_log_path']
+    key = 'runbugrun/qwen25_7b/fixed_mass_dirichlet'
+    original = log_path(key, {'retry_count': 0, 'resume': False})
+    retry = log_path(key, {'retry_count': 1, 'resume': False})
+    assert original.name == 'train-runbugrun-qwen25_7b-fixed_mass_dirichlet.log'
+    assert retry.name == 'train-runbugrun-qwen25_7b-fixed_mass_dirichlet-retry1.log'
+    assert retry != original

@@ -225,14 +225,20 @@ def checkpoint_available(entry):
     return True
 
 
+def training_log_path(key, entry):
+    retry = entry.get('retry_count', 0)
+    suffix = (f'-resume{retry}' if entry.get('resume') else
+              f'-retry{retry}' if retry else '')
+    return ops / ('train-' + key.replace('/', '-') + suffix + '.log')
+
+
 def launch(key, entry, gpu):
     task = entry['task']
     retry = entry.get('retry_count', 0)
     resume = bool(entry.get('resume'))
     if Path(task['output']).exists() and not (resume and checkpoint_available(entry)):
         raise FileExistsError('unbound training output: ' + task['output'])
-    path = ops / ('train-' + key.replace('/', '-') +
-                  (f'-resume{retry}' if resume else '') + '.log')
+    path = training_log_path(key, entry)
     log = path.open('x')
     env = {**os.environ, 'CUDA_VISIBLE_DEVICES': str(gpu) if gpu is not None else '',
            'HF_HUB_OFFLINE': '1', 'TRANSFORMERS_OFFLINE': '1',
