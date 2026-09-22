@@ -45,3 +45,21 @@ def test_incremental_plan_admission_is_idempotent_and_sealed(tmp_path):
     path.write_text(json.dumps(plan))
     with pytest.raises(ValueError, match='changed after admission'):
         globals_['add_plans'](state, available())
+
+
+def test_oom_attempt_is_archived_for_bounded_retry(tmp_path):
+    module = runpy.run_path(str(QUEUE))
+    output = tmp_path / 'seed1701'
+    output.mkdir()
+    (output / 'tokenization-audit.json').write_text('{}')
+    log = tmp_path / 'train.log'
+    log.write_text('torch.OutOfMemoryError: CUDA out of memory\n')
+    entry = {'task': {'output': str(output)}, 'log': str(log),
+             'returncode': 1, 'retry_count': 0}
+
+    assert module['archive_oom_attempt'](entry)
+    assert not output.exists()
+    assert (tmp_path / 'seed1701-oom-attempt1' /
+            'tokenization-audit.json').exists()
+    assert entry['failed_attempt_output'].endswith('seed1701-oom-attempt1')
+    assert not module['archive_oom_attempt'](entry)

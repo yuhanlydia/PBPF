@@ -258,6 +258,27 @@ def seal(key, entry):
     entry['finished_at'] = time.time()
 
 
+def archive_oom_attempt(entry):
+    """Preserve an incomplete OOM output before one more fresh attempt."""
+    if entry.get('retry_count', 0) >= 2:
+        return False
+    log = Path(entry['log'])
+    output = Path(entry['task']['output'])
+    if (not log.is_file() or not output.is_dir()
+            or {path.name for path in output.iterdir()} != {'tokenization-audit.json'}):
+        return False
+    tail = log.read_text(errors='replace')[-16000:]
+    if 'torch.OutOfMemoryError' not in tail and 'CUDA out of memory' not in tail:
+        return False
+    archived = output.with_name(output.name + '-oom-attempt' +
+                                str(entry.get('retry_count', 0) + 1))
+    if archived.exists():
+        return False
+    output.rename(archived)
+    entry['failed_attempt_output'] = str(archived)
+    return True
+
+
 def main():
     import sys
     if '--preflight-only' in sys.argv:
@@ -300,6 +321,10 @@ def main():
                     if (entry.get('retry_count', 0) < 2
                             and checkpoint_available(entry)):
                         entry.update(status='pending', resume=True,
+                                     retry_count=entry.get('retry_count', 0) + 1,
+                                     last_failure=repr(error))
+                    elif archive_oom_attempt(entry):
+                        entry.update(status='pending', resume=False,
                                      retry_count=entry.get('retry_count', 0) + 1,
                                      last_failure=repr(error))
                     else:
