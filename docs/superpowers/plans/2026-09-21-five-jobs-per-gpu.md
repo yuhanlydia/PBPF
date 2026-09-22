@@ -141,3 +141,5 @@ GPU 2 的 DeepSeek 任务完成后，槽 1 改为 Gemma／APPS Replay 分片 E�
 当前执行以 seed 1701 的 84 个方法训练臂、12 个 no_update 基线和独立 fresh evaluation 为准。训练及评估调度器分别使用文件锁和 GPU 准入锁；`scripts/supervise_seed1701.py` 每 60 秒检查调度器与监控进程，缺失时重启，并把四卡实际进程数写入 `operations/seed1701-supervisor.json`。完整或失败的队列不会被自动重启；失败记录需要排查。
 
 恢复时，六个已经产生完整训练报告、但因调度器退出未封存的训练臂已经重新校验并封存。恢复后的队列为 20/84 完成、4 运行、60 待运行；评估为 11 项完成、3 项不可估计、6 项待评估。四张 RTX A6000 已重新承担训练与评估工作。每卡最多五个任务；显存准入不足时保持较少的真实任务，不能为了凑数启动重复任务。
+
+06:08 UTC 一项 Qwen／RunBugRun `fixed_mass_dirichlet` 在反向传播时 OOM：同卡已有三个 fresh evaluation 生成分片，模型加载时的显存检查低估了训练峰值。失败尝试的日志、队列快照和 tokenization audit 已归档；该臂已返回待运行，仍用原 seed 和预算。评估调度器现在对每个活跃训练进程额外保留 8 GiB 峰值余量，后续新分片须通过这一准入检查。

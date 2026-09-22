@@ -48,4 +48,21 @@ def test_fresh_queue_counts_invisible_training_and_own_shard(tmp_path, monkeypat
         'shards': [{'status': 'running', 'gpu': 1, 'pid': 2345}]}}}
     counts, free = gpu_state(state)
     assert counts[0] == counts[1] == 1
-    assert free[0] == 26000 and free[1] == 42500
+    assert free[0] == 18000 and free[1] == 42500
+
+
+def test_fresh_queue_preserves_training_backward_headroom(tmp_path, monkeypatch):
+    module = runpy.run_path(str(FRESH))
+    gpu_state = module['gpu_state']
+    receipt = tmp_path / 'training.json'
+    receipt.write_text(json.dumps({'tasks': {'task': {
+        'status': 'running', 'gpu': 0, 'pid': 1234,
+        'family': 'qwen25_7b', 'started_at': time.time() - 300}}}))
+    gpu_state.__globals__['training_receipt'] = receipt
+    gpu_state.__globals__['active'] = lambda pid: True
+    monkeypatch.setattr(gpu_state.__globals__['subprocess'], 'check_output',
+        lambda command, text: (
+        '0, uuid0, 20000\n1, uuid1, 48000\n2, uuid2, 48000\n3, uuid3, 48000\n'
+        if '--query-gpu=index,uuid,memory.free' in command else 'uuid0, 1234\n'))
+    _, free = gpu_state({'cells': {}})
+    assert free[0] == 12000
