@@ -11,10 +11,13 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import itertools
 import json
 import math
+import os
 from pathlib import Path
 import random
+import tempfile
 
 import yaml
 
@@ -24,6 +27,66 @@ ANCHORED_RULES = {
     "eed_mean_no_uncertainty",
     "eesd_full",
 }
+
+
+def checkpoint_identity(args, *, model_id, revision):
+    return {"schema": "eesd-weighted-sft-checkpoint-v1",
+            "trainer_source_sha256": sha(Path(__file__)),
+            "input_sha256": sha(args.input),
+            "model_config_sha256": sha(args.model_config),
+            "model_id": model_id, "revision": revision,
+            "rule": args.rule, "seed": args.seed,
+            "response_token_budget": args.response_token_budget,
+            "max_steps": args.max_steps,
+            "gradient_accumulation": args.gradient_accumulation,
+            "max_length": args.max_length,
+            "learning_rate": args.learning_rate,
+            "anchor_beta": args.anchor_beta,
+            "lora_r": args.lora_r, "lora_alpha": args.lora_alpha,
+            "previous_adapter": str(args.previous_adapter) if args.previous_adapter else None}
+
+
+def load_checkpoint(output, identity):
+    from pbpf.eesd.training_outcomes import tree_sha
+    pointer = output / 'checkpoints/latest.json'
+    record = json.loads(pointer.read_text())
+    if record.get('identity') != identity:
+        raise ValueError('training checkpoint request or source differs')
+    directory = output / 'checkpoints' / record['directory']
+    if not directory.is_dir() or sha(directory / 'state.pt') != record['state_sha256']:
+        raise ValueError('training checkpoint state checksum differs')
+    if tree_sha(directory / 'adapter') != record['adapter_sha256']:
+        raise ValueError('training checkpoint adapter checksum differs')
+    return directory
+
+
+def save_checkpoint(output, identity, student, optimizer, progress):
+    import torch
+    from pbpf.eesd.training_outcomes import tree_sha
+    root = output / 'checkpoints'
+    root.mkdir(parents=True, exist_ok=True)
+    name = f"step-{progress['optimizer_steps']:06d}"
+    target = root / name
+    if target.exists():
+        raise FileExistsError('training checkpoint step already exists: ' + str(target))
+    temporary = Path(tempfile.mkdtemp(prefix='.partial-', dir=root))
+    try:
+        student.save_pretrained(temporary / 'adapter')
+        payload = {**progress, 'python_rng': random.getstate(),
+                   'torch_rng': torch.get_rng_state(),
+                   'cuda_rng': torch.cuda.get_rng_state_all()}
+        torch.save(payload, temporary / 'state.pt')
+        temporary.rename(target)
+    except BaseException:
+        import shutil
+        shutil.rmtree(temporary, ignore_errors=True)
+        raise
+    pointer = {'identity': identity, 'directory': name,
+               'state_sha256': sha(target / 'state.pt'),
+               'adapter_sha256': tree_sha(target / 'adapter')}
+    temporary_pointer = root / f'.latest-{os.getpid()}.json'
+    temporary_pointer.write_text(json.dumps(pointer, sort_keys=True, indent=2) + '\n')
+    temporary_pointer.replace(root / 'latest.json')
 
 
 def sha(path: Path) -> str:
@@ -123,6 +186,10 @@ def main() -> None:
     p.add_argument("--anchor-beta", type=float, default=0.03)
     p.add_argument("--lora-r", type=int, default=16)
     p.add_argument("--lora-alpha", type=int, default=32)
+    p.add_argument("--checkpoint-every", type=int, default=10,
+                   help="Save a resumable optimizer boundary every N optimizer steps")
+    p.add_argument("--resume", action="store_true",
+                   help="Resume the latest verified checkpoint in --output")
     args = p.parse_args()
 
     from pbpf.eesd.distillation import TRAIN_RULES
@@ -137,6 +204,7 @@ def main() -> None:
         or args.anchor_beta < 0
         or args.lora_r < 1
         or args.lora_alpha < 1
+        or args.checkpoint_every < 1
     ):
         raise ValueError("invalid training hyperparameters")
 
@@ -149,7 +217,10 @@ def main() -> None:
     rows, eligibility = read_training_rows(args.input, args.rule)
     anchor_beta = args.anchor_beta if args.rule in ANCHORED_RULES else 0.0
     protocol = protocol_binding(Path(__file__).resolve().parents[1])
+    identity = checkpoint_identity(args, model_id=model_id, revision=revision)
     if eligibility['status'] == NON_ESTIMABLE:
+        if args.resume:
+            raise ValueError('non-estimable training arm cannot resume')
         report = zero_report(root=Path(__file__).resolve().parents[1], input_path=args.input,
             model_config=args.model_config, trainer=Path(__file__), rule=args.rule, seed=args.seed,
             budget=args.response_token_budget, previous_adapter=args.previous_adapter,
@@ -160,7 +231,9 @@ def main() -> None:
             stream.write('\n')
         print(json.dumps(report, sort_keys=True), flush=True)
         return
-    args.output.mkdir(parents=True, exist_ok=False)
+    resume_directory = load_checkpoint(args.output, identity) if args.resume else None
+    if resume_directory is None:
+        args.output.mkdir(parents=True, exist_ok=False)
 
     import torch
     import torch.nn.functional as F
@@ -237,7 +310,11 @@ def main() -> None:
             raise ValueError('Gemma 3 text decoder LoRA targets not found')
     else:
         lora_targets = 'all-linear'
-    if args.previous_adapter:
+    if resume_directory is not None:
+        student = PeftModel.from_pretrained(
+            student_base, str(resume_directory / 'adapter'), is_trainable=True
+        )
+    elif args.previous_adapter:
         student = PeftModel.from_pretrained(
             student_base, str(args.previous_adapter), is_trainable=True
         )
@@ -279,10 +356,34 @@ def main() -> None:
     group_examples = 0
     totals = {"loss": 0.0, "ce": 0.0, "kl": 0.0, "weight": 0.0}
     token_totals = {"loss": 0.0, "ce": 0.0, "kl": 0.0, "weight": 0.0}
+    if resume_directory is not None:
+        saved = torch.load(resume_directory / 'state.pt', map_location='cpu',
+                           weights_only=False)
+        optimizer.load_state_dict(saved['optimizer'])
+        optimizer_steps = saved['optimizer_steps']
+        micro_steps = saved['micro_steps']
+        response_tokens = saved['response_tokens']
+        totals = saved['totals']
+        token_totals = saved['token_totals']
+        if saved['group_tokens'] or saved['group_examples']:
+            raise ValueError('training checkpoint is not at an optimizer boundary')
+        if args.response_token_budget is not None and not (
+                0 <= response_tokens < args.response_token_budget):
+            raise ValueError('training checkpoint token progress differs')
+        if (args.response_token_budget is None
+                and not (0 <= micro_steps < args.max_steps * args.gradient_accumulation)):
+            raise ValueError('training checkpoint step progress differs')
+        random.setstate(saved['python_rng'])
+        torch.set_rng_state(saved['torch_rng'])
+        torch.cuda.set_rng_state_all(saved['cuda_rng'])
     schedule = training_schedule([len(r["completion_ids"]) for r in positive_encoded],
         seed=args.seed, max_steps=args.max_steps,
         gradient_accumulation=args.gradient_accumulation,
         response_token_budget=args.response_token_budget)
+    if resume_directory is not None:
+        skipped = list(itertools.islice(schedule, micro_steps))
+        if sum(count for _, count in skipped) != response_tokens:
+            raise ValueError('training checkpoint schedule differs')
     for index, token_count in schedule:
         row = positive[index]
         encoded = positive_encoded[index]
@@ -350,6 +451,15 @@ def main() -> None:
             optimizer.zero_grad(set_to_none=True)
             optimizer_steps += 1
             group_tokens = group_examples = 0
+            if (not final_budget and optimizer_steps % args.checkpoint_every == 0):
+                save_checkpoint(args.output, identity, student, optimizer,
+                    {'optimizer': optimizer.state_dict(),
+                     'optimizer_steps': optimizer_steps,
+                     'micro_steps': micro_steps,
+                     'response_tokens': response_tokens,
+                     'group_tokens': group_tokens,
+                     'group_examples': group_examples,
+                     'totals': totals, 'token_totals': token_totals})
             if optimizer_steps % 10 == 0 or final_budget:
                 print(
                     json.dumps(

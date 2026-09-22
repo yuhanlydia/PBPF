@@ -91,14 +91,14 @@ def check_training_binding(task, *, seal=False):
 
 
 def make_training_task(*, root, scored, model_config, rule, previous_adapter, output,
-                       seed, budget, max_steps, anchor_beta):
+                       seed, budget, max_steps, anchor_beta, trainer=None):
     """One direct trainer request and the exact receipt used by both protocols."""
     if budget < 1:
         raise ValueError('response token budget must be positive')
     scored, model_config, output = scored.resolve(), model_config.resolve(), output.resolve()
     if not scored.is_file() or not model_config.is_file():
         raise FileNotFoundError('training scored input/model config missing')
-    trainer = root / 'scripts/run_eesd_weighted_sft.py'
+    trainer = Path(trainer).resolve() if trainer else root / 'scripts/run_eesd_weighted_sft.py'
     anchored = runpy.run_path(str(trainer))['ANCHORED_RULES']
     _, eligibility = read_training_rows(scored, rule)
     model_value = yaml.safe_load(model_config.read_text())

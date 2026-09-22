@@ -19,6 +19,10 @@ def load(path: Path):
     return value, rows
 
 
+def canonical_domain(value):
+    return "runbugrun" if value == "rbr" else value
+
+
 def bootstrap(diff, *, seed=314159, replicates=10000):
     rng = np.random.default_rng(seed)
     draws = np.empty(replicates)
@@ -36,6 +40,16 @@ def main() -> None:
     args = p.parse_args()
     base_report, base = load(args.baseline)
     method_report, method = load(args.method)
+    if (base_report.get("execution_profile", "sandbox")
+            != method_report.get("execution_profile", "sandbox")
+            or base_report.get("execution_lock_sha256")
+            != method_report.get("execution_lock_sha256")):
+        raise ValueError("paired evaluations require the same execution profile and lock")
+    if canonical_domain(base_report.get("domain")) != canonical_domain(method_report.get("domain")):
+        raise ValueError("paired evaluations differ in domain")
+    for key in ("model", "revision", "task_manifest_sha256"):
+        if base_report.get(key) != method_report.get(key):
+            raise ValueError(f"paired evaluations differ in {key}")
     if set(base) != set(method):
         raise ValueError("paired source populations differ")
     keys = sorted(base)
@@ -60,6 +74,12 @@ def main() -> None:
         "fix_rate_on_previously_wrong": fixes / baseline_wrong if baseline_wrong else None,
         "baseline_adapter_sha256": base_report.get("adapter_sha256"),
         "method_adapter_sha256": method_report.get("adapter_sha256"),
+        "domain": canonical_domain(base_report.get("domain")),
+        "model": base_report.get("model"),
+        "revision": base_report.get("revision"),
+        "task_manifest_sha256": base_report.get("task_manifest_sha256"),
+        "execution_profile": base_report.get("execution_profile", "sandbox"),
+        "execution_lock_sha256": base_report.get("execution_lock_sha256"),
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(summary, sort_keys=True, indent=2) + "\n")

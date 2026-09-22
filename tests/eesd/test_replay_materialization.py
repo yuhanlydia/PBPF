@@ -3,7 +3,7 @@ import hashlib
 
 import pytest
 
-from pbpf.eesd.replay_materialization import choose_representatives, select_population
+from pbpf.eesd.replay_materialization import choose_representatives, select_population, select_training_reserve
 
 
 MODELS = ('qwen25_7b', 'deepseek_6p7b', 'seed_coder_8b', 'starcoder2_15b')
@@ -88,3 +88,24 @@ def test_insufficient_domain_does_not_silently_reduce_population():
     rows = [member('apps_replay', f'apps:{i}', str(i)) for i in range(5)]
     with pytest.raises(ValueError, match='codecontests_replay'):
         select_population(rows, token_rows(rows), set(), development=2, primary=3)
+
+
+def test_training_reserve_follows_assessment_prefix_without_source_overlap():
+    rows = [member(domain, f'{domain}:{i}', f'{domain}:source:{i}')
+            for domain in ('apps_replay', 'codecontests_replay') for i in range(9)]
+    assessment = select_population(rows, token_rows(rows), set(), development=2, primary=3)
+    train = select_training_reserve(rows, token_rows(rows), set(), development=2, primary=3, train=2)
+    assert train == select_training_reserve(rows[::-1], token_rows(rows)[::-1], set(),
+                                            development=2, primary=3, train=2)
+    assessment_sources = {r['source_id'] for values in assessment.values() for _, r in values}
+    training_sources = {r['source_id'] for values in train.values() for split, r in values if split == 'train'}
+    assert len(assessment_sources) == 10
+    assert len(training_sources) == 4
+    assert assessment_sources.isdisjoint(training_sources)
+
+
+def test_training_reserve_requires_full_population():
+    rows = [member(domain, f'{domain}:{i}', f'{domain}:source:{i}')
+            for domain in ('apps_replay', 'codecontests_replay') for i in range(6)]
+    with pytest.raises(ValueError, match='requires 7'):
+        select_training_reserve(rows, token_rows(rows), set(), development=2, primary=3, train=2)

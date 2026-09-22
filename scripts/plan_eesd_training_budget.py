@@ -12,7 +12,7 @@ import runpy
 import yaml
 
 ROOT=Path(__file__).resolve().parents[1]
-TRAINER=ROOT/'scripts/run_eesd_weighted_sft.py'
+TRAINER=ROOT/'scripts/run_eesd_weighted_sft_checkpointed.py'
 SFT=runpy.run_path(str(TRAINER))
 
 
@@ -66,7 +66,9 @@ def main():
     if not train or not dev or {r['source_component_id'] for r in train}&{r['source_component_id'] for r in dev}:
         raise ValueError('require disjoint nonempty train and development populations')
     from transformers import AutoTokenizer
-    tokenizer=AutoTokenizer.from_pretrained(model,revision=revision,local_files_only=True)
+    tokenizer_source = '/root/PBPF-models/gemma3_4b' if model == 'google/gemma-3-4b-it' else model
+    tokenizer=AutoTokenizer.from_pretrained(tokenizer_source,
+        revision=None if tokenizer_source != model else revision, local_files_only=True)
     encoded=[SFT['encode_training_row'](tokenizer,r,max_length=args.max_length,model_id=model) for r in rows]
     lengths=[len(e['completion_ids']) for r,e in zip(rows,encoded) if r['split']=='train']
     report={'schema':'eesd-reference-token-budget-v1','status':'plan_only_no_training',

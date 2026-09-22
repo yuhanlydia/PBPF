@@ -110,6 +110,26 @@ def select_population(public_rows, token_rows, quarantined_sources, *, developme
     return result
 
 
+def select_training_reserve(public_rows, token_rows, quarantined_sources, *,
+                            development=200, primary=500, train=200):
+    """Select unused sources after the fixed development/primary hash prefix."""
+    if any(type(value) is not int or value < 1 for value in (development, primary, train)):
+        raise ValueError('development, primary and train counts must be positive integers')
+    representatives = choose_representatives(public_rows, token_rows, quarantined_sources)
+    result = {}
+    for domain in DOMAINS:
+        rows = sorted(
+            (row for row in representatives if row['domain'] == domain),
+            key=lambda row: (
+                _rank('eesd-replay-split-v1|1701|', domain, row['source_id']), row['source_id']),
+        )
+        start = development + primary
+        if len(rows) < start + train:
+            raise ValueError(f'{domain} has {len(rows)} fitting sources; requires {start + train}')
+        result[domain] = [('train', row) for row in rows[start:start + train]]
+    return result
+
+
 def _normalized_io(value: str) -> str:
     """Match inventory fingerprints; never use this value as execution input."""
     return '\n'.join(line.rstrip() for line in value.replace('\r\n', '\n').strip().splitlines())
@@ -120,7 +140,7 @@ def _valid_sha256(value) -> bool:
             and all(character in '0123456789abcdef' for character in value))
 
 
-def project_views(selected, private_rows):
+def project_views(selected, private_rows, *, allowed_splits=('development', 'primary')):
     """Validate selected member bindings and return (public, evaluator) lists.
 
     Raw statement and IO strings are preserved. Fingerprints check normalized
@@ -150,7 +170,7 @@ def project_views(selected, private_rows):
                 raise ValueError('selected entries must be (split, member) pairs')
             split, member = entry
             identity = _identity(member)
-            if identity[0] != domain or split not in ('development', 'primary'):
+            if identity[0] != domain or split not in allowed_splits:
                 raise ValueError('selected domain/split mismatch')
             _, task_id, source_id = identity
             if task_id in seen_tasks or source_id in seen_sources:
