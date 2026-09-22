@@ -207,7 +207,7 @@ def gpu_state(state):
                 counts[task['gpu']] += 1
             # Model loading understates the later backward peak. Keep this
             # margin even after nvidia-smi begins reporting the trainer.
-            free[task['gpu']] -= 8000
+            free[task['gpu']] -= 6000
             if (task['pid'] not in visible
                     or time.time() - task.get('started_at', 0) < 120):
                 free[task['gpu']] -= 16000 if task['family'] == 'gemma3_4b' else 22000
