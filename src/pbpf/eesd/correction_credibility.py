@@ -99,8 +99,7 @@ def load_public_bundle(generation_dir, scored_dir, public_dir, config_path, *, d
             or gen_report.get('trajectories') != len(generated)
             or summary.get('trajectories') != len(scored) or audit.get('rows') != len(public)):
         raise ValueError('sealed population missing or inconsistent')
-    alpha, penalty = summary['alpha'], summary['uncertainty_penalty']
-    utility = cfg['distillation']['transition_utility']
+    alpha = summary['alpha']
     records = []
     for tid, row in gen_by_id.items():
         identity(row)
@@ -124,16 +123,16 @@ def load_public_bundle(generation_dir, scored_dir, public_dir, config_path, *, d
             expected = before if k == 'before_outcomes' else after if k == 'after_outcomes' else value
             if score.get(k) != expected:
                 raise ValueError(f'scored trajectory differs from sealed generation: {k}')
-        diagnostics = score_trajectory(before, after, row['relevance'], alpha=alpha,
-                                       utility=utility, uncertainty_penalty=penalty)
+        diagnostics = score_trajectory(before, after, row['relevance'], alpha=alpha)
         weights = diagnostics.pop('weights')
         if score.get('eesd_diagnostics') != diagnostics or score.get('training_weights') != weights:
             raise ValueError('public scoring diagnostics do not reproduce')
         records.append({**identity(row), 'evaluator_task_id': row.get('problem_id') or row['task_id'], 'original': row['original'], 'correction': row['correction'],
             'original_sha256': code_hash(row['original']), 'correction_sha256': code_hash(row['correction']),
             'public_tests': pub['tests'],
-            'public_conservative_utility': diagnostics['effective_conservative_utility']['conservative'],
-            'public_effective_evidence_mass': sum(diagnostics['effective_posterior']) - 4 * alpha})
+            'public_conservative_utility': diagnostics['effective_update_weight'],
+            'public_benefit_probability': diagnostics['effective_benefit_probability'],
+            'public_effective_evidence_mass': sum(diagnostics['effective_posterior']) - 3 * alpha})
     return {'records': records, 'input_binding': {
         'domain': domain, 'generation_sha256': gen_sha, 'generation_report_sha256': gen_report_sha,
         'scored_sha256': scored_sha, 'scoring_summary_sha256': summary_sha,
@@ -243,14 +242,14 @@ def summarize_credibility(bundle, evaluation, *, bins=4):
         before, after = outcomes(record.get('before_hidden')), outcomes(record.get('after_hidden'))
         if len(before) != 6 or len(after) != 6:
             raise ValueError('hidden test coverage missing')
-        if any(not math.isfinite(row[key]) for key in ('public_conservative_utility', 'public_effective_evidence_mass')):
+        if any(not math.isfinite(row[key]) for key in ('public_conservative_utility', 'public_benefit_probability', 'public_effective_evidence_mass')):
             raise ValueError('nonfinite public scoring value')
         splits[row['split']].append({**row, 'before_correct': all(v == 0 for v in before),
                                     'after_correct': all(v == 0 for v in after)})
     by_split = {}
     for split, rows in splits.items():
         groupings = {}
-        for key in ('public_conservative_utility', 'public_effective_evidence_mass'):
+        for key in ('public_conservative_utility', 'public_benefit_probability', 'public_effective_evidence_mass'):
             cutpoints = np.quantile([r[key] for r in rows], np.arange(1, bins) / bins).tolist()
             partitions = [[] for _ in range(bins)]
             for row in rows:
