@@ -168,6 +168,21 @@ def collect_experience(
             command += ["--adapter", str(adapter)]
         call(command, root=root)
 
+    attributed = output / "shapley-relevance"
+    if not (attributed / "report.json").exists():
+        attributed.parent.mkdir(parents=True, exist_ok=True)
+        command = [
+            sys.executable,
+            "scripts/score_eesd_shapley_relevance.py",
+            "--input", str(generated / "corrections.jsonl"),
+            "--model-config", str(model_config),
+            "--output", str(attributed),
+            "--mode", "exact",
+        ]
+        if adapter is not None:
+            command += ["--adapter", str(adapter)]
+        call(command, root=root)
+
     scored = output / "scored"
     if not (scored / "summary.json").exists():
         scored.parent.mkdir(parents=True, exist_ok=True)
@@ -175,11 +190,10 @@ def collect_experience(
             [
                 sys.executable,
                 "scripts/score_eesd_corrections.py",
-                "--input", str(generated / "corrections.jsonl"),
+                "--input", str(attributed / "corrections-shapley.jsonl"),
                 "--config", str(config),
                 "--output", str(scored),
                 "--alpha", str(alpha),
-                "--uncertainty-penalty", str(uncertainty_penalty),
             ],
             root=root,
         )
@@ -240,10 +254,6 @@ def main() -> None:
         raise ValueError("locked EESD config required")
     if args.seed not in [int(x) for x in cfg["seeds"]]:
         raise ValueError("recursive seed must be one of the locked seeds")
-    utility = cfg.get("distillation", {}).get("transition_utility")
-    if (not isinstance(utility, list) or len(utility) != 4 or any(
-            isinstance(x, bool) or not isinstance(x, (int, float)) or not math.isfinite(x) for x in utility)):
-        raise ValueError("explicit four finite distillation.transition_utility values required")
     public_root = args.public_root.resolve()
     evaluator_root = args.evaluator_root.resolve()
     model_config = args.model_config.resolve()
@@ -257,8 +267,12 @@ def main() -> None:
         "zero_weight_adoption_sha256": digest(root / "docs/EESD_ZERO_WEIGHT_ADOPTION_20260920.md"),
         "seed": args.seed, "rounds": args.rounds, "response_token_budget": args.response_token_budget,
         "max_steps": args.max_steps, "experience_policy": args.experience_policy,
-        "alpha": args.alpha, "uncertainty_penalty": args.uncertainty_penalty,
-        "anchor_beta": args.anchor_beta, "relevance_strength": args.relevance_strength,
+        "alpha": args.alpha,
+        "trust_rule": "posterior_excess_benefit_confidence",
+        "relevance_method": "exact_evidence_shapley_edit_logprob_contrast",
+        "anchor_beta": args.anchor_beta,
+        "legacy_uncertainty_penalty_argument_ignored": args.uncertainty_penalty,
+        "legacy_generation_relevance_strength_ignored_by_eesd": args.relevance_strength,
         "public_root": str(public_root), "evaluator_root": str(evaluator_root),
         "config_sha256": digest(args.config), "model_config_sha256": digest(model_config),
         "public_manifest_sha256": digest(public_root / 'manifest.json'),
