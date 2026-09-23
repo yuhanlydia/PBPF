@@ -21,6 +21,8 @@ datasets:
     - configs/benchmarks/swebench_lite.yaml
 
 evidence:
+  main_alpha: 0.5
+  prior: symmetric_jeffreys_dirichlet
   relevance_method: exact_evidence_shapley_edit_logprob_contrast
   exact_coalitions_for_four_public_executions: 16
   effective_mass: renyi2_effective_support
