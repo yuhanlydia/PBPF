@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """Score original->correction trajectories for every locked EESD training rule.
 
-Input JSONL fields:
-  trajectory_id, source_component_id, prompt, correction,
-  before_outcomes, after_outcomes, relevance
-
-Outcomes may be integer registry indices or strings from pbpf.registry.OUTCOMES.
-The script never drops a trajectory; zero-weight rows remain in the scored file.
+The axiomatic EESD path uses only before/after execution outcomes, nonnegative
+relevance, a symmetric Dirichlet prior, and posterior benefit confidence. Legacy
+utility and uncertainty-penalty arguments are accepted only for command-line
+compatibility and do not affect the score.
 """
 from __future__ import annotations
 
@@ -44,15 +42,19 @@ def main() -> None:
     p.add_argument("--config", type=Path, default=Path("configs/experiments/eesd_iclr2027.yaml"))
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--alpha", type=float, default=0.5)
-    p.add_argument("--uncertainty-penalty", type=float, default=0.5)
+    p.add_argument(
+        "--uncertainty-penalty",
+        type=float,
+        default=None,
+        help="Deprecated compatibility argument; ignored by axiomatic EESD.",
+    )
     args = p.parse_args()
 
     cfg = yaml.safe_load(args.config.read_text())
     if cfg.get("schema") != "eesd-iclr2027-v1":
         raise ValueError("unexpected EESD config")
-    utility = [float(x) for x in cfg["distillation"]["transition_utility"]]
-    if len(utility) != 4:
-        raise ValueError("transition utility must contain four entries")
+    if args.alpha <= 0:
+        raise ValueError("alpha must be positive")
 
     rows = []
     with args.input.open() as stream:
@@ -71,8 +73,7 @@ def main() -> None:
             if len(before) != len(after) or len(before) != len(row["relevance"]):
                 raise ValueError(f"line {line_no} trajectory vector lengths differ")
             scored = score_trajectory(
-                before, after, row["relevance"], alpha=args.alpha, utility=utility,
-                uncertainty_penalty=args.uncertainty_penalty,
+                before, after, row["relevance"], alpha=args.alpha
             )
             rows.append({
                 **row,
@@ -98,7 +99,9 @@ def main() -> None:
         "input_sha256": sha(args.input),
         "config_sha256": sha(args.config),
         "alpha": args.alpha,
-        "uncertainty_penalty": args.uncertainty_penalty,
+        "prior": "symmetric_dirichlet",
+        "trust_rule": "posterior_excess_benefit_confidence",
+        "legacy_uncertainty_penalty_argument_ignored": args.uncertainty_penalty,
         "trajectories": len(rows),
         "sources": len({row["source_component_id"] for row in rows}),
         "split_counts": {
