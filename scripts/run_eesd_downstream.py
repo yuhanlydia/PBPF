@@ -4,8 +4,8 @@
 Training launches the seven trainers directly with an explicit response-token
 budget; recursive runs explicitly select shared EESD teacher (main) or arm-specific (supplemental) experience. Other stages
 use the frozen matrix runner. No mechanism execution source
-is modified. A separate config must declare the four transition utilities; this
-entry point never chooses those scientific values or edits the mechanism config.
+is modified. The main EESD trust path is parameter-free beyond the Dirichlet prior and KL anchor;
+legacy transition utilities may remain in historical configs but are not consumed.
 """
 from __future__ import annotations
 
@@ -339,12 +339,6 @@ def main() -> None:
         parser.error('expected eesd-iclr2027-v1 config')
     if not isinstance(manifest, dict) or manifest.get('schema') != 'eesd-cache-manifest-v1':
         parser.error('expected eesd-cache-manifest-v1 manifest')
-    utility = config.get('distillation', {}).get('transition_utility')
-    if (not isinstance(utility, list) or len(utility) != 4
-            or any(isinstance(x, bool) or not isinstance(x, (int, float))
-                   or not math.isfinite(x) for x in utility)):
-        parser.error('config must explicitly declare four finite numeric distillation.transition_utility '
-                     'values in FIX, REGRESSION, PRESERVED, UNRESOLVED order')
     seeds = config.get('seeds')
     if (not isinstance(seeds, list) or not seeds
             or any(isinstance(seed, bool) or not isinstance(seed, int) for seed in seeds)
@@ -423,12 +417,11 @@ def main() -> None:
         'source_sha256': source_hashes,
         'parameters': {'stage': args.stage, 'output': str(output), 'seed': args.seed,
             'seeds': [args.seed] if args.seed is not None else seeds, 'max_steps': args.max_steps,
-            'rules': rules, 'transition_utility': utility,
+            'rules': rules, 'trust_rule': 'posterior_excess_benefit_confidence',
             'response_token_budget': args.response_token_budget,
             'experience_policy': args.experience_policy,
             'public_data_root': str(args.public_data_root.resolve()) if args.public_data_root else None,
-            'public_manifest_sha256': args.public_manifest_sha256,
-            'utility_order': ['FIX', 'REGRESSION', 'PRESERVED', 'UNRESOLVED']},
+            'public_manifest_sha256': args.public_manifest_sha256},
     }
     record_path = launch / 'launch.json'
     def save() -> None:
