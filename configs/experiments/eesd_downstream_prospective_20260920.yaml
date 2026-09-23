@@ -20,6 +20,9 @@ datasets:
   optional_repository:
   - configs/benchmarks/swebench_lite.yaml
 evidence:
+  relevance_method: exact_evidence_shapley_edit_logprob_contrast
+  exact_coalitions_for_four_public_executions: 16
+  effective_mass: renyi2_effective_support
   alphas:
   - 0.01
   - 0.1
@@ -96,11 +99,9 @@ distillation:
   - net_gain
   - retained_correct_rate
   - policy_kl
-  transition_utility:
-  - 1
-  - -1
-  - 0
-  - 0
+  trust_rule: posterior_excess_benefit_confidence
+  benefit_states: [improved, unchanged, regressed]
+  update_weight: max_0_2p_benefit_minus_1
 statistics:
   unit: source_problem
   paired_bootstrap: true
@@ -119,12 +120,11 @@ paper_tables:
 - appendix_costs
 downstream_provenance:
   base_config_sha256: ae3712ab7eee2fa10f6fd28b72cc29a1253dbc2d9e9dd2c4346bae373f5dd2ad
-  utility_order:
-  - FIX
-  - REGRESSION
-  - PRESERVED
-  - UNRESOLVED
-  utility_rationale: net repair gain; prospectively chosen before any scored outcomes
+  trust_rule: posterior_excess_benefit_confidence
+  benefit_state_order: [improved, unchanged, regressed]
+  relevance_method: exact_evidence_shapley_edit_logprob_contrast
+  hand_authored_transition_utility: false
+  uncertainty_penalty: none
   scope: downstream preparation; does not modify active mechanism execution lock
   training_budget: derive exact per-cell/seed response-token budget with plan_eesd_training_budget.py
     from the equal-weight reference schedule before any arm training
