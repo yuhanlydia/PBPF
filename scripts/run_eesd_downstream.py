@@ -337,6 +337,19 @@ def main() -> None:
     manifest = yaml.safe_load(manifest_bytes)
     if not isinstance(config, dict) or config.get('schema') != 'eesd-iclr2027-v1':
         parser.error('expected eesd-iclr2027-v1 config')
+    evidence_contract = config.get('evidence', {})
+    distillation_contract = config.get('distillation', {})
+    if (
+        evidence_contract.get('relevance_method') != 'exact_evidence_shapley_edit_logprob_contrast'
+        or evidence_contract.get('effective_mass') != 'renyi2_effective_support'
+        or float(evidence_contract.get('main_alpha', -1)) != 0.5
+        or evidence_contract.get('prior') != 'symmetric_jeffreys_dirichlet'
+        or distillation_contract.get('trust_rule') != 'posterior_excess_benefit_confidence'
+        or distillation_contract.get('benefit_states') != ['improved', 'unchanged', 'regressed']
+        or distillation_contract.get('hand_authored_transition_utility') is not False
+        or distillation_contract.get('uncertainty_penalty') != 'none'
+    ):
+        parser.error('config must declare the locked axiomatic EESD relevance, prior, benefit states, and trust rule')
     if not isinstance(manifest, dict) or manifest.get('schema') != 'eesd-cache-manifest-v1':
         parser.error('expected eesd-cache-manifest-v1 manifest')
     seeds = config.get('seeds')
