@@ -1,0 +1,50 @@
+schema: eesd-axiomatic-validation-v1
+date: 2026-09-24
+seed: 1701
+method:
+  relevance: exact_evidence_shapley_edit_logprob_contrast
+  public_executions: 4
+  coalitions: 16
+  effective_mass: renyi2_effective_support
+  prior: symmetric_jeffreys_dirichlet
+  alpha: 0.5
+  benefit_states: [improved, unchanged, regressed]
+  update_weight: max_0_2p_benefit_minus_1
+  anchor_beta: 0.03
+comparators:
+  - lexical_eed
+  - shapley_fixed_mass
+  - scalar_confidence
+  - final_correctness
+  - equal_weight
+mechanism:
+  metrics:
+    - hidden_soft_nll
+    - hidden_brier
+    - spearman_hidden_net_gain
+    - effective_mass_distribution
+    - game_span_distribution
+    - attribution_l1_distribution
+  bootstrap_replicates: 10000
+downstream_cells:
+  - dataset: codearc
+    model: deepseek_6p7b
+    rationale: strongest sealed seed1701 positive cell (+5.4 pp old EESD)
+  - dataset: runbugrun
+    model: qwen25_7b
+    rationale: positive but uncertain sealed seed1701 cell (+2.4 pp old EESD)
+  - dataset: runbugrun
+    model: gemma3_4b
+    rationale: negative sealed seed1701 cell (-2.0 pp old EESD)
+downstream:
+  matched_response_token_budget: true
+  fresh_primary_sources: 500
+  paired_bootstrap_replicates: 10000
+  primary_metric: all_tests_pass_at_1
+  secondary_metrics: [fix_rate, regression_rate, net_gain, retained_correct_rate, policy_kl]
+decision_questions:
+  - Does exact Shapley create non-degenerate effective-mass variation relative to lexical relevance?
+  - Does public Shapley-EED trust predict hidden correction benefit better than lexical EED and fixed mass?
+  - Does the new trust rule preserve the positive DeepSeek-CodeARC gain?
+  - Does it reduce harmful updating in the negative Gemma-RunBugRun cell?
+  - Does EED outperform fixed-mass Shapley under identical relevance?
