@@ -252,6 +252,19 @@ def main() -> None:
     cfg = yaml.safe_load(args.config.read_text())
     if cfg.get("schema") != "eesd-iclr2027-v1":
         raise ValueError("locked EESD config required")
+    evidence_contract = cfg.get("evidence", {})
+    distillation_contract = cfg.get("distillation", {})
+    if (
+        evidence_contract.get("relevance_method") != "exact_evidence_shapley_edit_logprob_contrast"
+        or evidence_contract.get("effective_mass") != "renyi2_effective_support"
+        or float(evidence_contract.get("main_alpha", -1)) != 0.5
+        or evidence_contract.get("prior") != "symmetric_jeffreys_dirichlet"
+        or distillation_contract.get("trust_rule") != "posterior_excess_benefit_confidence"
+        or distillation_contract.get("benefit_states") != ["improved", "unchanged", "regressed"]
+        or distillation_contract.get("hand_authored_transition_utility") is not False
+        or distillation_contract.get("uncertainty_penalty") != "none"
+    ):
+        raise ValueError("locked axiomatic EESD contract required")
     if args.seed not in [int(x) for x in cfg["seeds"]]:
         raise ValueError("recursive seed must be one of the locked seeds")
     public_root = args.public_root.resolve()
