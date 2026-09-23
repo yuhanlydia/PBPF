@@ -240,7 +240,7 @@ def main() -> None:
     p.add_argument("--response-token-budget", type=int, required=True)
     p.add_argument("--experience-policy", choices=["shared_eesd_teacher", "arm-specific"], required=True,
                    help="Main shared teacher protocol, or explicit supplemental arm-specific protocol")
-    p.add_argument("--alpha", type=float, default=0.1)
+    p.add_argument("--alpha", type=float, default=0.5)
     p.add_argument("--uncertainty-penalty", type=float, default=0.5)
     p.add_argument("--anchor-beta", type=float, default=0.03)
     p.add_argument("--relevance-strength", type=float, default=16.0)
