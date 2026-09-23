@@ -43,7 +43,7 @@ def main() -> None:
     p.add_argument("--input", type=Path, required=True)
     p.add_argument("--config", type=Path, default=Path("configs/experiments/eesd_iclr2027.yaml"))
     p.add_argument("--output", type=Path, required=True)
-    p.add_argument("--alpha", type=float, default=0.1)
+    p.add_argument("--alpha", type=float, default=0.5)
     p.add_argument("--uncertainty-penalty", type=float, default=0.5)
     args = p.parse_args()
 
