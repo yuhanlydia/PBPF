@@ -264,9 +264,9 @@ def main() -> None:
                 "relevance": relevance.tolist(),
                 "relevance_kernel": {
                     "type": (
-                        "exact_evidence_shapley_edit_logodds"
+                        "exact_evidence_shapley_edit_logprob_contrast"
                         if args.mode == "exact"
-                        else "leave_one_evidence_out_edit_logodds"
+                        else "leave_one_evidence_out_edit_logprob_contrast"
                     ),
                     "players": players,
                     "coalitions": len(values),
