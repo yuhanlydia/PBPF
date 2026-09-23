@@ -1,4 +1,10 @@
-"""Correction-trajectory trust rules for EESD ablations."""
+"""Correction-trajectory trust rules for EESD ablations.
+
+The main EESD path has no hand-authored transition utility or uncertainty penalty.
+Execution outcomes induce improve/unchanged/regress states; relevance controls the
+Dirichlet evidence distribution and effective mass; posterior benefit confidence
+directly determines the update weight.
+"""
 from __future__ import annotations
 
 import math
@@ -6,7 +12,12 @@ from typing import Iterable, Mapping
 
 import numpy as np
 
-from .evidence import conservative_utility, correction_posterior
+from .evidence import (
+    correction_benefit_posterior,
+    posterior_benefit_probability,
+    posterior_mean_advantage,
+    posterior_update_weight,
+)
 
 
 TRAIN_RULES = (
@@ -34,11 +45,15 @@ def score_trajectory(
     relevance,
     *,
     alpha: float,
-    utility,
-    uncertainty_penalty: float,
+    utility=None,
+    uncertainty_penalty=None,
     pass_index: int = 0,
 ) -> dict:
-    """Return all predeclared training weights for one correction trajectory."""
+    """Return all predeclared training weights for one correction trajectory.
+
+    utility and uncertainty_penalty remain accepted only for compatibility with
+    sealed older orchestration. They do not affect the axiomatic EESD path.
+    """
     before = _as_int_vector(before, name="before")
     after = _as_int_vector(after, name="after")
     relevance = np.asarray(list(relevance), dtype=float)
@@ -53,21 +68,16 @@ def score_trajectory(
     if not math.isfinite(float(alpha)) or alpha <= 0:
         raise ValueError("alpha must be positive")
 
-    fixed = correction_posterior(
+    fixed = correction_benefit_posterior(
         before, after, relevance, alpha=alpha, mass_rule="fixed", pass_index=pass_index
     )
-    effective = correction_posterior(
+    effective = correction_benefit_posterior(
         before, after, relevance, alpha=alpha, mass_rule="effective", pass_index=pass_index
     )
-    fixed_u = conservative_utility(
-        fixed, utility, uncertainty_penalty=uncertainty_penalty
-    )
-    effective_mean = conservative_utility(
-        effective, utility, uncertainty_penalty=0.0
-    )
-    effective_u = conservative_utility(
-        effective, utility, uncertainty_penalty=uncertainty_penalty
-    )
+
+    fixed_probability = posterior_benefit_probability(fixed)
+    effective_probability = posterior_benefit_probability(effective)
+    effective_mean = posterior_mean_advantage(effective)
 
     after_pass = after == pass_index
     final_correctness = float(after_pass.all())
@@ -78,21 +88,25 @@ def score_trajectory(
         "equal_weight": 1.0,
         "final_correctness": final_correctness,
         "scalar_confidence": scalar_confidence,
-        "fixed_mass_dirichlet": fixed_u["positive_weight"],
-        "eed_mean_no_uncertainty": effective_mean["positive_weight"],
-        "eed_no_anchor": effective_u["positive_weight"],
-        "eesd_full": effective_u["positive_weight"],
+        "fixed_mass_dirichlet": posterior_update_weight(fixed),
+        "eed_mean_no_uncertainty": float(max(effective_mean, 0.0)),
+        "eed_no_anchor": posterior_update_weight(effective),
+        "eesd_full": posterior_update_weight(effective),
     }
     if set(weights) != set(TRAIN_RULES):
         raise RuntimeError("training rule registry drift")
     return {
         "fixed_posterior": fixed.tolist(),
         "effective_posterior": effective.tolist(),
-        "fixed_utility": fixed_u,
-        "effective_mean_utility": effective_mean,
-        "effective_conservative_utility": effective_u,
+        "fixed_benefit_probability": fixed_probability,
+        "effective_benefit_probability": effective_probability,
+        "effective_mean_advantage": effective_mean,
+        "fixed_update_weight": weights["fixed_mass_dirichlet"],
+        "effective_update_weight": weights["eesd_full"],
         "final_correctness": final_correctness,
         "scalar_confidence": scalar_confidence,
+        "deprecated_utility_argument_used": utility is not None,
+        "deprecated_uncertainty_penalty_argument_used": uncertainty_penalty is not None,
         "weights": weights,
     }
 
