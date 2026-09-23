@@ -268,3 +268,159 @@ def conservative_utility(parameters, utility, *, uncertainty_penalty: float) -> 
         "conservative": float(value),
         "positive_weight": float(max(value, 0.0)),
     }
+
+
+# Parameter-free three-state correction trust used by the axiomatic EESD path.
+# These categories are induced directly by execution success changes; no
+# hand-authored utility vector is required.
+IMPROVED, UNCHANGED, REGRESSED = range(3)
+
+
+def transition_benefit_categories(before, after, *, pass_index: int = 0) -> np.ndarray:
+    """Map before/after execution outcomes to improve/unchanged/regress."""
+    before = np.asarray(before, dtype=np.int64)
+    after = np.asarray(after, dtype=np.int64)
+    if before.ndim != 1 or before.shape != after.shape or not len(before):
+        raise ValueError("before/after outcomes must be matching nonempty vectors")
+    before_pass = before == pass_index
+    after_pass = after == pass_index
+    result = np.full(len(before), UNCHANGED, dtype=np.int64)
+    result[(~before_pass) & after_pass] = IMPROVED
+    result[before_pass & (~after_pass)] = REGRESSED
+    return result
+
+
+def correction_benefit_posterior(
+    before,
+    after,
+    relevance,
+    *,
+    alpha: float = 0.5,
+    mass_rule: str = "effective",
+    fixed_mass: float | None = None,
+    pass_index: int = 0,
+) -> np.ndarray:
+    """Dirichlet parameters over improve/unchanged/regress correction effects."""
+    categories = transition_benefit_categories(before, after, pass_index=pass_index)
+    raw = _vector(relevance, name="relevance", nonnegative=True)
+    if len(raw) != len(categories):
+        raise ValueError("relevance must match transition count")
+    if raw.sum() <= 0:
+        raise ValueError("relevance must contain positive mass")
+    if mass_rule == "effective":
+        weights = effective_evidence_weights(raw)
+    elif mass_rule == "fixed":
+        weights = fixed_mass_weights(raw)
+    elif mass_rule == "global":
+        if fixed_mass is None:
+            raise ValueError("global mass rule requires fixed_mass")
+        weights = mass_rescaled_weights(raw, fixed_mass)
+    else:
+        raise ValueError("unknown mass rule")
+    if not math.isfinite(float(alpha)) or alpha <= 0:
+        raise ValueError("alpha must be positive")
+    return np.bincount(categories, weights=weights, minlength=3) + float(alpha)
+
+
+def _beta_continued_fraction(a: float, b: float, x: float) -> float:
+    """Stable continued fraction for the regularized incomplete beta function."""
+    max_iterations = 256
+    epsilon = 3e-14
+    floor = 1e-300
+    qab = a + b
+    qap = a + 1.0
+    qam = a - 1.0
+    c = 1.0
+    d = 1.0 - qab * x / qap
+    if abs(d) < floor:
+        d = floor
+    d = 1.0 / d
+    h = d
+    for m in range(1, max_iterations + 1):
+        m2 = 2 * m
+        aa = m * (b - m) * x / ((qam + m2) * (a + m2))
+        d = 1.0 + aa * d
+        if abs(d) < floor:
+            d = floor
+        c = 1.0 + aa / c
+        if abs(c) < floor:
+            c = floor
+        d = 1.0 / d
+        h *= d * c
+
+        aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2))
+        d = 1.0 + aa * d
+        if abs(d) < floor:
+            d = floor
+        c = 1.0 + aa / c
+        if abs(c) < floor:
+            c = floor
+        d = 1.0 / d
+        delta = d * c
+        h *= delta
+        if abs(delta - 1.0) <= epsilon:
+            return float(h)
+    raise RuntimeError("incomplete-beta continued fraction failed to converge")
+
+
+def regularized_incomplete_beta(x: float, a: float, b: float) -> float:
+    """Return I_x(a,b) without requiring SciPy."""
+    x, a, b = float(x), float(a), float(b)
+    if (
+        not math.isfinite(x)
+        or not math.isfinite(a)
+        or not math.isfinite(b)
+        or not 0.0 <= x <= 1.0
+        or a <= 0.0
+        or b <= 0.0
+    ):
+        raise ValueError("beta arguments require x in [0,1] and positive finite shapes")
+    if x == 0.0:
+        return 0.0
+    if x == 1.0:
+        return 1.0
+    log_beta_factor = (
+        math.lgamma(a + b)
+        - math.lgamma(a)
+        - math.lgamma(b)
+        + a * math.log(x)
+        + b * math.log1p(-x)
+    )
+    factor = math.exp(log_beta_factor)
+    if x < (a + 1.0) / (a + b + 2.0):
+        value = factor * _beta_continued_fraction(a, b, x) / a
+    else:
+        value = 1.0 - factor * _beta_continued_fraction(b, a, 1.0 - x) / b
+    return float(min(1.0, max(0.0, value)))
+
+
+def posterior_benefit_probability(parameters) -> float:
+    """P(theta_improved > theta_regressed) under a 3-state Dirichlet posterior.
+
+    The neutral component integrates out. The normalized improve-vs-regress share
+    is Beta(alpha_improved, alpha_regressed), so the probability has a closed
+    one-dimensional beta-CDF form.
+    """
+    values = _vector(parameters, name="parameters", nonnegative=True)
+    if len(values) != 3 or (values <= 0).any():
+        raise ValueError("benefit posterior requires three strictly positive parameters")
+    return float(1.0 - regularized_incomplete_beta(0.5, values[IMPROVED], values[REGRESSED]))
+
+
+def posterior_mean_advantage(parameters) -> float:
+    """Posterior mean of improve-minus-regress probability mass."""
+    values = _vector(parameters, name="parameters", nonnegative=True)
+    if len(values) != 3 or (values <= 0).any() or values.sum() <= 0:
+        raise ValueError("benefit posterior requires three strictly positive parameters")
+    return float((values[IMPROVED] - values[REGRESSED]) / values.sum())
+
+
+def posterior_update_weight(parameters) -> float:
+    """Parameter-free bounded trust: positive posterior confidence above chance.
+
+    If c=P(improvement mass > regression mass), then 2c-1 equals
+    tanh(logit(c)/2). Clipping at zero means corrections without posterior
+    evidence of net benefit do not induce a positive self-distillation pull.
+    """
+    confidence = posterior_benefit_probability(parameters)
+    return float(max(0.0, 2.0 * confidence - 1.0))
