@@ -21,6 +21,9 @@ datasets:
     - configs/benchmarks/swebench_lite.yaml
 
 evidence:
+  relevance_method: exact_evidence_shapley_edit_logprob_contrast
+  exact_coalitions_for_four_public_executions: 16
+  effective_mass: renyi2_effective_support
   alphas: [0.01, 0.10, 0.25, 0.50, 1.0, 2.0, 5.0, 10.0]
   strengths: [0.0, 1.0, 4.0, 16.0]
   visible_counts: [1, 2, 4, 8]
