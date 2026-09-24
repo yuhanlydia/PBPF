@@ -112,7 +112,7 @@ def main():
     p.add_argument("--corrections-shapley", type=Path, required=True)
     p.add_argument("--hidden-eval", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
-    p.add_argument("--alpha", type=float, default=0.1)
+    p.add_argument("--alpha", type=float, default=0.5)
     p.add_argument("--bootstrap-seed", type=int, default=314159)
     p.add_argument("--bootstrap-replicates", type=int, default=10000)
     args = p.parse_args()
