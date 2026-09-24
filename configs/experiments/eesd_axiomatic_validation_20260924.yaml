@@ -9,7 +9,7 @@ method:
   prior: symmetric_jeffreys_dirichlet
   alpha: 0.5
   benefit_states: [improved, unchanged, regressed]
-  update_weight: max_0_2p_benefit_minus_1
+  update_weight: positive_posterior_mean_advantage
   anchor_beta: 0.03
 comparators:
   - lexical_eed
