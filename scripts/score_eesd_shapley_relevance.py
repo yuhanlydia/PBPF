@@ -24,6 +24,7 @@ from pbpf.eesd.shapley_relevance import (
     edited_token_masks,
     exact_shapley_values,
     leave_one_out_values,
+    select_trajectory_indices,
     subset_execution_messages,
 )
 
@@ -121,6 +122,8 @@ def main() -> None:
     p.add_argument("--adapter", type=Path)
     p.add_argument("--mode", choices=["exact", "loo"], default="exact")
     p.add_argument("--zero-tolerance", type=float, default=1e-12)
+    p.add_argument("--sample-size", type=int, help="uniform no-replacement signal-gate subset")
+    p.add_argument("--sample-seed", type=int, default=1701)
     args = p.parse_args()
     if not np.isfinite(args.zero_tolerance) or args.zero_tolerance < 0:
         raise ValueError("zero-tolerance must be finite and nonnegative")
@@ -134,6 +137,9 @@ def main() -> None:
         row.get("schema") != "eesd-correction-trajectory-v1" for row in rows
     ):
         raise ValueError("EESD correction trajectories required")
+    population = len(rows)
+    selected_indices = select_trajectory_indices(population, args.sample_size, seed=args.sample_seed)
+    rows = [rows[i] for i in selected_indices]
 
     cfg = yaml.safe_load(args.model_config.read_text())
     model_id, revision = cfg.get("model_id"), cfg.get("revision")
@@ -178,6 +184,8 @@ def main() -> None:
     fallbacks = 0
     changed_tokens = []
     masses = []
+    game_spans = []
+    attribution_l1 = []
 
     with output_path.open("x") as stream:
         for index, row in enumerate(rows):
@@ -256,6 +264,9 @@ def main() -> None:
             probabilities = normalize_relevance(relevance)
             mass = effective_mass(relevance)
             masses.append(mass)
+            game_span = float(max(values.values()) - min(values.values()))
+            game_spans.append(game_span)
+            attribution_l1.append(float(np.abs(signed).sum()))
 
             record = {
                 **row,
@@ -278,6 +289,8 @@ def main() -> None:
                     "signed_attribution": signed.tolist(),
                     "normalized_relevance": probabilities.tolist(),
                     "effective_mass": mass,
+                    "game_span": game_span,
+                    "attribution_l1": float(np.abs(signed).sum()),
                     "zero_attribution_policy": "uniform_relevance",
                 },
                 "evidence_attribution": {
@@ -298,6 +311,7 @@ def main() -> None:
                 "total": len(rows),
                 "task_id": row.get("task_id"),
                 "effective_mass": mass,
+                "game_span": game_span,
                 "signed_attribution": signed.tolist(),
             }, sort_keys=True), flush=True)
 
@@ -313,12 +327,19 @@ def main() -> None:
             "contrastive mean teacher-forced log-probability "
             "on edit tokens only"
         ),
+        "population_trajectories": population,
         "trajectories": len(rows),
+        "sample_size": args.sample_size,
+        "sample_seed": args.sample_seed,
+        "selected_input_indices": selected_indices,
         "uniform_fallbacks": fallbacks,
         "mean_changed_tokens": float(np.mean(changed_tokens)),
         "mean_effective_mass": float(np.mean(masses)),
         "min_effective_mass": float(np.min(masses)),
         "max_effective_mass": float(np.max(masses)),
+        "mean_game_span": float(np.mean(game_spans)),
+        "median_game_span": float(np.median(game_spans)),
+        "mean_attribution_l1": float(np.mean(attribution_l1)),
         "output_sha256": sha(output_path),
         "hidden_evidence_used": False,
     }
