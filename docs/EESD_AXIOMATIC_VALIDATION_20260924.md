@@ -18,9 +18,11 @@ For one correction and its four public executions:
    of three states: improved, unchanged, regressed.
 5. **Bayesian trust.** A symmetric Jeffreys Dirichlet prior (alpha=1/2 per state)
    plus effective evidence yields a posterior over the three states.
-6. **No hand utility.** Trust is the posterior probability that improvement mass
-   exceeds regression mass. If `c=P(theta_improved > theta_regressed)`, the bounded
-   training weight is `max(0, 2c-1)`. This is zero at posterior indifference.
+6. **No hand utility.** The training weight is the positive posterior-predictive mean execution advantage,
+   `max(0, E[theta_improved-theta_regressed | E])`. Because the prior is symmetric,
+   weak effective evidence is automatically shrunk toward zero. The posterior
+   probability `P(theta_improved > theta_regressed)` is retained only as a
+   calibration diagnostic, not as the training weight.
 7. **Policy stability.** `eesd_full` retains the existing KL anchor to the previous
    policy; `eed_no_anchor` uses the identical trust weights without the anchor.
 
@@ -79,11 +81,16 @@ regenerating corrections:
 python scripts/score_eesd_shapley_relevance.py \
   --input <cell>/generated-corrections/corrections.jsonl \
   --model-config <pinned-model-yaml> \
-  --output <cell>/shapley-relevance \
-  --mode exact
+  --output <cell>/shapley-signal-gate \
+  --mode exact \
+  --sample-size 64 \
+  --sample-seed 1701
 ```
 
 For a correction bank generated from an adapter, pass that exact `--adapter`.
+The 64-trajectory run is a compute gate only. If its attribution signal is non-degenerate,
+rerun without `--sample-size` to produce the full population used by hidden
+credibility and downstream scoring. Never choose trajectories by observed outcome.
 
 Inspect `report.json`:
 - `mean_game_span` / `median_game_span`: does evidence actually alter edit preference?
@@ -120,12 +127,14 @@ This report compares, on exactly the same trajectories:
 Hidden outcomes never feed training, hyperparameter selection, correction generation,
 or stopping. The report uses hidden fix-vs-regression direction only for evaluation.
 
-Primary mechanism evidence:
-- paired soft-NLL gain of Shapley-effective over lexical-effective;
-- paired soft-NLL gain of Shapley-effective over Shapley-fixed.
+Mechanism evidence is reported in two aligned views:
+- posterior benefit probability: soft-NLL/Brier for hidden beneficial-vs-harmful direction;
+- actual Bayes training weight: MSE/MAE and Spearman against hidden positive net gain.
 
-Also report Brier score and Spearman correlation with hidden net fix-minus-regression
-rate. Use the 10,000 whole-source paired bootstrap interval; do not drop negative cells.
+The two key paired probability comparisons are Shapley-effective vs lexical-effective
+(isolating attribution) and Shapley-effective vs Shapley-fixed (isolating adaptive
+effective mass). Use the 10,000 whole-source paired bootstrap interval; do not drop
+negative cells.
 
 ## Validation 3 — matched-budget downstream gate
 
@@ -156,6 +165,8 @@ python scripts/run_eesd_axiomatic_cell.py \
   --seed 1701 \
   --alpha 0.5 \
   --anchor-beta 0.03 \
+  --execution-lock <sealed-direct-execution-lock.json> \
+  --execution-lock-sha256 <exact-lock-sha256> \
   --output <new-create-once-output>
 ```
 
@@ -187,3 +198,32 @@ A negative outcome is informative:
   no relevance estimator based on its conditional likelihood can recover causal signal.
 
 Do not rewrite these distinctions after seeing the results.
+
+
+## Minimal run order
+
+Do not start with the full matrix.
+
+### Gate A — software
+Run the two axiomatic unit-test files and compile all Python sources.
+
+### Gate B — 64-trajectory exact-Shapley signal
+Run exactly the three predeclared seed-1701 cells:
+DeepSeek/CodeARC, Qwen/RunBugRun, Gemma/RunBugRun. Use the same fixed sample seed
+1701 and do not inspect outcome quality to choose trajectories. Record game-span,
+attribution-L1 and effective-mass distributions.
+
+### Gate C — full attribution + hidden credibility
+If Gate B executes correctly, score the full correction population for all three cells
+and run the independent hidden credibility report. This gate determines whether the
+new attribution and adaptive mass are actually informative before any SFT cost.
+
+### Gate D — matched-budget one-round learning
+Only then run `run_eesd_axiomatic_cell.py` on the same three cells using the exact
+sealed old response-token budgets and direct execution lock. Compare to the already
+sealed no-update and old-EESD seed-1701 reports.
+
+### Expansion
+If the method survives all three roles (strong-positive, moderate-positive,
+negative-robustness), expand to all 12 seed-1701 benchmark/model cells. Only after
+that repeat the main and key ablations for seeds 1702/1703.
