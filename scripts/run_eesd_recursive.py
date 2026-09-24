@@ -259,7 +259,7 @@ def main() -> None:
         or evidence_contract.get("effective_mass") != "renyi2_effective_support"
         or float(evidence_contract.get("main_alpha", -1)) != 0.5
         or evidence_contract.get("prior") != "symmetric_jeffreys_dirichlet"
-        or distillation_contract.get("trust_rule") != "posterior_excess_benefit_confidence"
+        or distillation_contract.get("trust_rule") != "posterior_positive_mean_advantage"
         or distillation_contract.get("benefit_states") != ["improved", "unchanged", "regressed"]
         or distillation_contract.get("hand_authored_transition_utility") is not False
         or distillation_contract.get("uncertainty_penalty") != "none"
@@ -281,7 +281,7 @@ def main() -> None:
         "seed": args.seed, "rounds": args.rounds, "response_token_budget": args.response_token_budget,
         "max_steps": args.max_steps, "experience_policy": args.experience_policy,
         "alpha": args.alpha,
-        "trust_rule": "posterior_excess_benefit_confidence",
+        "trust_rule": "posterior_positive_mean_advantage",
         "relevance_method": "exact_evidence_shapley_edit_logprob_contrast",
         "anchor_beta": args.anchor_beta,
         "legacy_uncertainty_penalty_argument_ignored": args.uncertainty_penalty,
