@@ -102,9 +102,9 @@ distillation:
   - net_gain
   - retained_correct_rate
   - policy_kl
-  trust_rule: posterior_excess_benefit_confidence
+  trust_rule: posterior_positive_mean_advantage
   benefit_states: [improved, unchanged, regressed]
-  update_weight: max_0_2p_benefit_minus_1
+  update_weight: positive_posterior_mean_advantage
 statistics:
   unit: source_problem
   paired_bootstrap: true
@@ -123,7 +123,7 @@ paper_tables:
 - appendix_costs
 downstream_provenance:
   base_config_sha256: ae3712ab7eee2fa10f6fd28b72cc29a1253dbc2d9e9dd2c4346bae373f5dd2ad
-  trust_rule: posterior_excess_benefit_confidence
+  trust_rule: posterior_positive_mean_advantage
   benefit_state_order: [improved, unchanged, regressed]
   relevance_method: exact_evidence_shapley_edit_logprob_contrast
   hand_authored_transition_utility: false
