@@ -167,3 +167,20 @@ def subset_execution_messages(messages: Sequence[Mapping[str, str]], keep_indice
     body["public_executions"] = [executions[i] for i in indices]
     result[position]["content"] = prefix + "\n" + json.dumps(body, sort_keys=True, ensure_ascii=False)
     return result
+
+
+def select_trajectory_indices(population: int, sample_size: int | None, *, seed: int) -> list[int]:
+    """Deterministically sample trajectories for a signal-gate run.
+
+    Full-population runs preserve input order. Subsamples are uniform without
+    replacement and returned in sorted input order so output artifacts remain
+    stable and easy to diff.
+    """
+    if type(population) is not int or population < 1 or type(seed) is not int:
+        raise ValueError("population must be positive and seed must be an integer")
+    if sample_size is None or sample_size == population:
+        return list(range(population))
+    if type(sample_size) is not int or not 1 <= sample_size <= population:
+        raise ValueError("sample_size must be in [1, population] or None")
+    rng = np.random.default_rng(seed)
+    return sorted(map(int, rng.choice(population, size=sample_size, replace=False)))
