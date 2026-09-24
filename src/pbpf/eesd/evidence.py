@@ -416,11 +416,14 @@ def posterior_mean_advantage(parameters) -> float:
 
 
 def posterior_update_weight(parameters) -> float:
-    """Parameter-free bounded trust: positive posterior confidence above chance.
+    """Bayes-optimal nonnegative update strength under execution delta reward.
 
-    If c=P(improvement mass > regression mass), then 2c-1 equals
-    tanh(logit(c)/2). Clipping at zero means corrections without posterior
-    evidence of net benefit do not induce a positive self-distillation pull.
+    A future public execution has reward +1 for improvement, 0 for unchanged,
+    and -1 for regression. Under the Dirichlet posterior, its posterior-predictive
+    expected reward is E[theta_improved-theta_regressed]. Updating has that value;
+    abstaining has value zero. The Bayes action therefore uses the positive part
+    of the posterior mean advantage. Weak effective evidence is automatically
+    shrunk toward zero by the symmetric prior; no confidence threshold or
+    uncertainty-penalty hyperparameter is introduced.
     """
-    confidence = posterior_benefit_probability(parameters)
-    return float(max(0.0, 2.0 * confidence - 1.0))
+    return float(max(0.0, posterior_mean_advantage(parameters)))
