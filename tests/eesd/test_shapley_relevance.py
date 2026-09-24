@@ -8,6 +8,7 @@ from pbpf.eesd.shapley_relevance import (
     edited_token_masks,
     exact_shapley_values,
     leave_one_out_values,
+    select_trajectory_indices,
     subset_execution_messages,
 )
 
@@ -94,3 +95,24 @@ def test_exact_shapley_efficiency_matches_full_minus_empty_value():
     values = {0: -2.0, 1: -1.0, 2: -1.5, 3: 0.25}
     phi = exact_shapley_values(values, 2)
     assert np.isclose(phi.sum(), values[3] - values[0])
+
+
+def test_select_trajectory_indices_is_deterministic_and_without_replacement():
+    a = select_trajectory_indices(100, 16, seed=1701)
+    b = select_trajectory_indices(100, 16, seed=1701)
+    assert a == b
+    assert len(a) == 16
+    assert len(set(a)) == 16
+    assert all(0 <= i < 100 for i in a)
+
+
+def test_select_trajectory_indices_full_population_preserves_order():
+    assert select_trajectory_indices(5, None, seed=1701) == [0, 1, 2, 3, 4]
+    assert select_trajectory_indices(5, 5, seed=999) == [0, 1, 2, 3, 4]
+
+
+def test_select_trajectory_indices_rejects_invalid_sample_size():
+    with pytest.raises(ValueError):
+        select_trajectory_indices(4, 5, seed=1701)
+    with pytest.raises(ValueError):
+        select_trajectory_indices(4, 0, seed=1701)
