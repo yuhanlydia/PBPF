@@ -36,13 +36,18 @@ def main():
     p.add_argument("--alpha", type=float, default=0.5)
     p.add_argument("--anchor-beta", type=float, default=0.03)
     p.add_argument("--previous-adapter", type=Path)
+    p.add_argument("--execution-lock", type=Path, required=True)
+    p.add_argument("--execution-lock-sha256", required=True)
+    p.add_argument("--workers", type=int, default=4)
+    p.add_argument("--timeout", type=float, default=6.0)
     args = p.parse_args()
-    if args.response_token_budget < 1 or args.alpha <= 0 or args.anchor_beta < 0:
-        raise ValueError("invalid budget/prior/anchor")
+    if (args.response_token_budget < 1 or args.alpha <= 0 or args.anchor_beta < 0
+            or args.workers < 1 or args.timeout <= 0):
+        raise ValueError("invalid budget/prior/anchor/evaluation settings")
 
     root = Path(__file__).resolve().parents[1]
     for path in (
-        args.corrections, args.model_config, args.config, args.baseline_report
+        args.corrections, args.model_config, args.config, args.baseline_report, args.execution_lock
     ):
         if not path.resolve().is_file():
             raise FileNotFoundError(path)
@@ -112,6 +117,11 @@ def main():
         "--evaluator-root", str(args.evaluator_root.resolve()),
         "--bank", str(bank),
         "--output", str(evaluation),
+        "--workers", str(args.workers),
+        "--timeout", str(args.timeout),
+        "--execution-profile", "direct-no-sandbox",
+        "--execution-lock", str(args.execution_lock.resolve()),
+        "--execution-lock-sha256", args.execution_lock_sha256,
     ], root=root)
 
     comparison = output / "vs-no-update.json"
@@ -134,6 +144,9 @@ def main():
         "effective_mass": "renyi2_effective_support",
         "trust_rule": "posterior_excess_benefit_confidence",
         "anchor_beta": args.anchor_beta,
+        "execution_profile": "direct-no-sandbox",
+        "execution_lock": str(args.execution_lock.resolve()),
+        "execution_lock_sha256": args.execution_lock_sha256,
         "comparison": json.loads(comparison.read_text()),
         "attribution_report": json.loads((attributed / "report.json").read_text()),
         "scoring_summary": json.loads((scored / "summary.json").read_text()),
