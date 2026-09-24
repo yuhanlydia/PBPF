@@ -51,9 +51,9 @@ mandatory_ablations:
   - five_class_vs_binary
 
 distillation:
-  trust_rule: posterior_excess_benefit_confidence
+  trust_rule: posterior_positive_mean_advantage
   benefit_states: [improved, unchanged, regressed]
-  update_weight: max_0_2p_benefit_minus_1
+  update_weight: positive_posterior_mean_advantage
   hand_authored_transition_utility: false
   uncertainty_penalty: none
   rounds: [0, 1, 2, 3]
