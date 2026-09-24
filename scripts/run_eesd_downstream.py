@@ -344,7 +344,7 @@ def main() -> None:
         or evidence_contract.get('effective_mass') != 'renyi2_effective_support'
         or float(evidence_contract.get('main_alpha', -1)) != 0.5
         or evidence_contract.get('prior') != 'symmetric_jeffreys_dirichlet'
-        or distillation_contract.get('trust_rule') != 'posterior_excess_benefit_confidence'
+        or distillation_contract.get('trust_rule') != 'posterior_positive_mean_advantage'
         or distillation_contract.get('benefit_states') != ['improved', 'unchanged', 'regressed']
         or distillation_contract.get('hand_authored_transition_utility') is not False
         or distillation_contract.get('uncertainty_penalty') != 'none'
@@ -430,7 +430,7 @@ def main() -> None:
         'source_sha256': source_hashes,
         'parameters': {'stage': args.stage, 'output': str(output), 'seed': args.seed,
             'seeds': [args.seed] if args.seed is not None else seeds, 'max_steps': args.max_steps,
-            'rules': rules, 'trust_rule': 'posterior_excess_benefit_confidence',
+            'rules': rules, 'trust_rule': 'posterior_positive_mean_advantage',
             'response_token_budget': args.response_token_budget,
             'experience_policy': args.experience_policy,
             'public_data_root': str(args.public_data_root.resolve()) if args.public_data_root else None,
